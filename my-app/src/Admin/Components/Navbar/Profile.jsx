@@ -39,14 +39,14 @@ const Profile = () => {
             </Typography>
           </MenuItem>
           <MenuItem className="px-7">
-            <Typography as={Link} to='/adminLogin' variant="small" className="font-medium font-custom flex items-center gap-2 text-buttonBg">
+            <Typography as={Link} to='/admin-login' variant="small" className="font-medium font-custom flex items-center gap-2 text-buttonBg">
               <AiOutlineLogin className='text-2xl' />
               Log in
             </Typography>
           </MenuItem>
           <hr className="my-2 border-blue-gray-50" />
           <MenuItem className="px-7">
-            <Typography as={Link} to='/adminLogin' variant="small" className="font-medium font-custom flex items-center gap-2 text-deleteBg">
+            <Typography as={Link} to='/admin-login' variant="small" className="font-medium font-custom flex items-center gap-2 text-deleteBg">
               <AiOutlineLogout className='text-2xl' />
               Log Out
             </Typography>

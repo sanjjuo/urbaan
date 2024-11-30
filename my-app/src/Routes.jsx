@@ -47,7 +47,7 @@ const RoutesWithLocation = () => {
                 <Route path='/home' element={<UserHome />} />
 
                 {/* Routes of admin section */}
-                <Route path='/adminLogin' element={<LoginSignUp />} />
+                <Route path='/admin-login' element={<LoginSignUp />} />
                 <Route path='/adminHome' element={<Home />}>
                     <Route path='' element={<Dashboard />} />
                     <Route path='product' element={<Products />} />
