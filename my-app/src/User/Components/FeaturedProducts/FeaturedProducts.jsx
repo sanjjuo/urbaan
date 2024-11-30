@@ -44,7 +44,7 @@ const FeaturedProducts = () => {
     return (
         <>
             <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center'>Featured Products</h1>
-            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-20 xl:pb-0 lg:pb-0'>
+            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
                 {
                     products.map((product, index) => (
                         <div key={index} className='group'>

@@ -12,7 +12,7 @@ import { FaRegClock } from "react-icons/fa6";
 
 export function Notification() {
     return (
-        <Menu>
+        <Menu placement="bottom-end">
             <MenuHandler>
                 <IconButton variant="text" className='relative'>
                     <GoBellFill className="text-3xl text-blue-900" />

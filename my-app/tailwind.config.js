@@ -17,6 +17,7 @@ module.exports = withMT({
         tertiary: "#F5F6FA",
         quaternary: "#F1F4F9",
         userBg: "#F2F6FF",
+        footerBg: "#021526",
         loginIconBg: "#ECECEC",
         buttonBg: "#4880FF",
         ratingBg: "#FFCA28",

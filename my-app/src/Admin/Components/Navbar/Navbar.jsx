@@ -2,8 +2,6 @@ import React from "react";
 import {
     Navbar,
 } from "@material-tailwind/react";
-import { GoBellFill } from "react-icons/go";
-import { LanguageSelector } from "./Language";
 import { IoIosSearch } from "react-icons/io";
 import Profile from "./Profile";
 import { Notification } from "./Notification";
@@ -28,7 +26,6 @@ export function AppNavbar() {
                             <li className="relative text-secondary text-xl cursor-pointer">
                                 <Notification />
                             </li>
-                            <li><LanguageSelector /></li>
                             <li><Profile /></li>
                         </ul>
                     </div>

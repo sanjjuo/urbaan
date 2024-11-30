@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     Navbar,
     Collapse,
@@ -10,6 +10,9 @@ import { RiHeart3Line } from "react-icons/ri";
 import { LuShoppingCart } from "react-icons/lu";
 import { GiHamburgerMenu } from "react-icons/gi";
 import BottomBar from '../BottomBar/BottomBar';
+import { AppContext } from '../../../StoreContext/StoreContext';
+import MobileSidebar from './MobileSidebar';
+
 
 const NavList = () => {
     return (
@@ -17,41 +20,37 @@ const NavList = () => {
             <Typography
                 as="li"
                 variant="small"
-                color="blue-gray"
-                className="p-1 font-medium"
+                className="p-1 font-medium font-custom"
             >
                 <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
-                    Pages
+                    Home
                 </a>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
-                color="blue-gray"
-                className="p-1 font-medium"
+                className="p-1 font-medium font-custom"
             >
                 <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
-                    Account
+                    About
                 </a>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
-                color="blue-gray"
-                className="p-1 font-medium"
+                className="p-1 font-medium font-custom"
             >
                 <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
-                    Blocks
+                    Categories
                 </a>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
-                color="blue-gray"
-                className="p-1 font-medium"
+                className="p-1 font-medium font-custom"
             >
                 <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
-                    Docs
+                    Contact
                 </a>
             </Typography>
         </ul>
@@ -60,6 +59,7 @@ const NavList = () => {
 
 const UserNavbar = () => {
     const [openNav, setOpenNav] = React.useState(false);
+    const { openDrawer, handleOpenDrawer, handleCloseDrawer } = useContext(AppContext)
 
     const handleWindowResize = () =>
         window.innerWidth >= 960 && setOpenNav(false);
@@ -99,7 +99,7 @@ const UserNavbar = () => {
             {/* mobile view */}
             <div className='xl:hidden lg:hidden sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-6 px-4'>
                 <ul className='flex items-center gap-5'>
-                    <li className='text-xl text-secondary'><GiHamburgerMenu /></li>
+                    <li onClick={handleOpenDrawer} className='text-xl text-secondary hover:text-primary'><GiHamburgerMenu /></li>
                     <li className="w-20">
                         <img src="/logo.png" alt="" className='w-full object-contain' />
                     </li>
@@ -111,6 +111,10 @@ const UserNavbar = () => {
             </div>
 
             <BottomBar />
+            <MobileSidebar
+                openDrawer={openDrawer}
+                handleCloseDrawer={handleCloseDrawer}
+            />
         </>
     )
 }

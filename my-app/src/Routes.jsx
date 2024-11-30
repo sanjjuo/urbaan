@@ -18,6 +18,7 @@ import { LoginSignUpUser } from './User/LoginSignUpUser/LoginSignUpUser';
 import { Otp } from './User/Otp/Otp';
 import UserHome from './User/Home/Home';
 import UserNavbar from './User/Components/Navbar/Navbar';
+import Footer from './User/Components/Footer/Footer';
 
 const FullRoutes = () => {
     return (
@@ -62,6 +63,8 @@ const RoutesWithLocation = () => {
                     <Route path='editProduct' element={<EditProduct />} />
                 </Route>
             </Routes>
+            {/* Hide Footer on login and OTP pages and Show Footer only if not on an admin route */}
+            {!isAdminRoute && !isLoginOrOtpPage && <Footer />}
         </>
     );
 }
