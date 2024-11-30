@@ -33,7 +33,7 @@ const RoutesWithLocation = () => {
     // Check if the current path belongs to the admin section
     const isAdminRoute = location.pathname.startsWith('/admin');
     // Check if the current path is the login or OTP page
-    const isLoginOrOtpPage = location.pathname === '/' || location.pathname === '/otp';
+    const isLoginOrOtpPage = location.pathname === '/login-user' || location.pathname === '/otp';
 
     return (
         <>
@@ -42,9 +42,9 @@ const RoutesWithLocation = () => {
             {!isAdminRoute && !isLoginOrOtpPage && <UserNavbar />}
             <Routes>
                 {/* Routes of user section */}
-                <Route path='/' element={<LoginSignUpUser />} />
+                <Route path='/' element={<UserHome />} />
+                <Route path='/login-user' element={<LoginSignUpUser />} />
                 <Route path='/otp' element={<Otp />} />
-                <Route path='/home' element={<UserHome />} />
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />
