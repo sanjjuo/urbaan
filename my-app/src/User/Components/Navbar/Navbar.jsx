@@ -5,7 +5,7 @@ import {
     Typography,
     IconButton,
 } from "@material-tailwind/react";
-import { IoSearch } from "react-icons/io5";
+import { FiSearch } from "react-icons/fi";
 import { RiHeart3Line } from "react-icons/ri";
 import { LuShoppingCart } from "react-icons/lu";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -84,7 +84,7 @@ const UserNavbar = () => {
                         </div>
                         <div>
                             <ul className='flex items-center gap-8'>
-                                <li className='text-2xl text-primary'><IoSearch /></li>
+                                <li className='text-2xl text-primary'><FiSearch /></li>
                                 <li className='text-2xl text-primary'><RiHeart3Line /></li>
                                 <li className='text-2xl text-primary'><LuShoppingCart /></li>
                             </ul>
@@ -97,16 +97,16 @@ const UserNavbar = () => {
             </div>
 
             {/* mobile view */}
-            <div className='xl:hidden lg:hidden sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-6 px-4'>
+            <div className='xl:hidden lg:hidden sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-4 px-4'>
                 <ul className='flex items-center gap-5'>
                     <li onClick={handleOpenDrawer} className='text-xl text-secondary hover:text-primary'><GiHamburgerMenu /></li>
-                    <li className="w-20">
+                    <li className="w-24">
                         <img src="/logo.png" alt="" className='w-full object-contain' />
                     </li>
                 </ul>
-                <ul className='flex items-center gap-5'>
-                    <li className='text-xl text-secondary'><IoSearch /></li>
-                    <li className='text-xl text-secondary'><RiHeart3Line /></li>
+                <ul className='flex items-center gap-3'>
+                    <li className='text-xl text-secondary hover:text-primary'><FiSearch /></li>
+                    <li className='text-xl text-secondary hover:text-primary'><RiHeart3Line /></li>
                 </ul>
             </div>
 

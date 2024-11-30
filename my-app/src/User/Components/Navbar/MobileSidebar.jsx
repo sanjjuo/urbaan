@@ -5,42 +5,50 @@ import {
     Typography,
     IconButton,
 } from "@material-tailwind/react";
+import { HiMiniXMark } from "react-icons/hi2";
+import { Link } from "react-router-dom";
+
 
 const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
     return (
         <>
-            <Drawer open={openDrawer} onClose={handleCloseDrawer} className="p-4">
-                <div className="mb-6 flex items-center justify-between">
-                    <Typography variant="h5" color="blue-gray">
-                        Material Tailwind
-                    </Typography>
-                    <IconButton variant="text" color="blue-gray" onClick={handleCloseDrawer}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                            stroke="currentColor"
-                            className="h-5 w-5"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </IconButton>
+            <Drawer open={openDrawer} onClose={handleCloseDrawer} className="p-4 overflow-y-scroll">
+                <div className="flex justify-between border-b-2 pb-5">
+                    <div className='flex items-center gap-3'>
+                        <div className='w-16 h-16'>
+                            <img src="/user.png" alt="" className='w-full h-full object-cover' />
+                        </div>
+                        <Link>
+                            <p className='text-primary font-medium underline'>SIGN IN</p>
+                        </Link>
+                    </div>
+                    <div>
+                        <HiMiniXMark onClick={handleCloseDrawer} className='text-2xl text-gray-500' />
+                    </div>
                 </div>
-                <Typography color="gray" className="mb-8 pr-4 font-normal">
-                    Material Tailwind features multiple React and HTML components, all
-                    written with Tailwind CSS classes and Material Design guidelines.
-                </Typography>
-                <div className="flex gap-2">
-                    <Button size="sm" variant="outlined">
-                        Documentation
-                    </Button>
-                    <Button size="sm">Get Started</Button>
+                <div className="my-8 p-0">
+                    <h2 className='text-sm font-medium tracking-wider'>CATEGORIES</h2>
+                    <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
+                        <li>Kurti</li>
+                        <li>Bottom</li>
+                        <li>Kurti Set</li>
+                        <li>Maternity Wear</li>
+                        <li>Night Wear</li>
+                        <li>Running Material</li>
+                        <li>Churidar Material</li>
+                        <li>Offer zone</li>
+                    </ul>
                 </div>
+
+                <div className="my-8 p-0">
+                    <h2 className='text-sm font-medium tracking-wider'>ORDER INFO</h2>
+                    <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
+                        <li>Cart</li>
+                        <li>Wishlist</li>
+                        <li>track Order</li>
+                    </ul>
+                </div>
+
             </Drawer>
         </>
     )
