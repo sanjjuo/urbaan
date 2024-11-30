@@ -9,6 +9,7 @@ import { IoSearch } from "react-icons/io5";
 import { RiHeart3Line } from "react-icons/ri";
 import { LuShoppingCart } from "react-icons/lu";
 import { GiHamburgerMenu } from "react-icons/gi";
+import BottomBar from '../BottomBar/BottomBar';
 
 const NavList = () => {
     return (
@@ -72,8 +73,8 @@ const UserNavbar = () => {
     }, []);
     return (
         <>
-            <div className='hidden xl:block lg:block bg-white shadow-md'>
-                <Navbar className="mx-auto max-w-screen-xl p-6 shadow-none rounded-none">
+            <div className='hidden sticky top-0 w-full z-50 xl:block lg:block bg-white shadow-lg'>
+                <Navbar className="mx-auto max-w-screen-xl py-6 px-0 shadow-none rounded-none">
                     <div className="flex items-center justify-between text-blue-gray-900">
                         <div className="w-28">
                             <img src="/logo.png" alt="" className='w-full object-contain' />
@@ -96,7 +97,7 @@ const UserNavbar = () => {
             </div>
 
             {/* mobile view */}
-            <div className='xl:hidden lg:hidden sticky top-0 z-10 flex justify-between items-center bg-white shadow-md p-4'>
+            <div className='xl:hidden lg:hidden sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-6 px-4'>
                 <ul className='flex items-center gap-5'>
                     <li className='text-xl text-secondary'><GiHamburgerMenu /></li>
                     <li className="w-20">
@@ -108,6 +109,8 @@ const UserNavbar = () => {
                     <li className='text-xl text-secondary'><RiHeart3Line /></li>
                 </ul>
             </div>
+
+            <BottomBar />
         </>
     )
 }

@@ -25,13 +25,13 @@ export function Otp() {
 
   return (
     <>
-      <div className='bg-userBg h-screen px-4 xl:py-28 lg:py-28 xl:px-0 lg:px-0'>
+      <div className='bg-userBg h-screen px-4 flex items-center justify-center'>
         <Card color='transparent' shadow={false} className='flex justify-center items-center'>
-          <Typography variant="h4" className='text-primary font-custom text-center text-3xl xl:text-3xl lg:text-3xl'>
+          <Typography variant="h4" className='text-primary font-custom text-center text-4xl xl:text-3xl lg:text-3xl'>
             Verification
           </Typography>
           <Typography color="gray" className="mt-8 xl:mt-1 lg:mt-1 font-normal font-custom text-secondary text-center 
-          text-sm xl:text-lg">
+          text-lg xl:text-lg">
             We have sent a verification code to (+971) 123-4567
           </Typography>
           <div className="w-full max-w-sm mt-10 xl:mt-14 lg:mt-14 flex flex-col">

@@ -15,14 +15,14 @@ export function LoginSignUpUser() {
     const [loginSignUpUser, setLoginSignUpUser] = useState("login")
     return (
         <>
-            <div className='lg:flex lg:justify-center lg:items-center h-[100%] lg:h-screen bg-userBg px-4 py-20 lg:py-0'>
+            <div className='lg:flex lg:justify-center lg:items-center min-h-screen lg:h-screen bg-userBg px-4 py-20 lg:py-0'>
                 <Card color="transparent" shadow={false}>
-                    <Typography variant="h4" className='text-primary font-custom text-center text-3xl xl:text-3xl lg:text-3xl'>
+                    <Typography variant="h4" className='text-primary font-custom text-center text-4xl xl:text-3xl lg:text-3xl'>
                         {
                             loginSignUpUser === "login" ? "Login here" : "Create Account"
                         }
                     </Typography>
-                    <Typography color="gray" className="mt-8 xl:mt-1 lg:mt-1 font-semibold font-custom text-secondary text-center text-xl xl:text-xl">
+                    <Typography color="gray" className="mt-8 xl:mt-1 lg:mt-1 font-semibold font-custom text-secondary text-center text-2xl xl:text-xl">
                         {
                             loginSignUpUser === "login" ? "Welcome! Let’s find your perfect style!" : "Sign up to explore our collections!"
                         }
@@ -31,7 +31,7 @@ export function LoginSignUpUser() {
                         <div className="mb-1 flex flex-col gap-6">
                             <Input
                                 maxLength={16}
-                                placeholder="e.g., +91 123-456-7890"
+                                placeholder="Phone Number"
                                 pattern="^\+\d{1,3}\s\d{1,4}-\d{1,4}-\d{4}$"
                                 className=" !border-gray-300 bg-white py-6 placeholder:text-blue-gray-300 font-custom placeholder:font-custom 
                                 placeholder:opacity-100 focus:border-gray-300 focus:border-[1px]"
