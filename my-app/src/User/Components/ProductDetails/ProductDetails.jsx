@@ -77,8 +77,28 @@ const ProductDetails = () => {
         <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg'>
             <div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 gap-5 xl:gap-10 lg:gap-10">
                 <div className='col-span-2 xl:space-y-3 lg:space-y-3 xl:sticky xl:top-0 lg:sticky lg:top-0 h-[350px] xl:h-[600px] lg:h-[600px]'>
-                    <div className='w-full h-full'>
+                    <div className='w-full h-full relative'>
                         <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-xl' />
+                        <ul className='absolute bottom-3 right-8 left-8 xl:right-32 xl:left-32 lg:right-32 lg:left-32 flex items-center justify-center gap-1 bg-white p-1 rounded-md shadow-md'>
+                            <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
+                                <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
+                            </li>
+                            <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
+                                <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
+                            </li>
+                            <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
+                                <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
+                            </li>
+                            <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
+                                <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
+                            </li>
+                            <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
+                                <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
+                            </li>
+                            <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
+                                <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
+                            </li>
+                        </ul>
                     </div>
                     <Button className='hidden xl:flex lg:flex items-center justify-center gap-2 font-normal capitalize font-custom tracking-wide text-sm
                         w-full bg-primary'><FiShoppingCart />Add to cart</Button>
@@ -101,10 +121,10 @@ const ProductDetails = () => {
                         </div>
 
                         <div className='mt-5'>
-                            <ul className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-4 lg:gap-4'>
-                                <li className='font-semibold text-base xl:text-lg lg:text-lg'>₹500</li>
-                                <li className='text-gray-600 font-normal text-base xl:text-lg lg:text-lg'><s>MRP ₹1000</s></li>
-                                <li className='text-shippedBg font-semibold text-base xl:text-lg lg:text-lg'>( 50% OFF )</li>
+                            <ul className='flex items-center gap-8 xl:gap-4 lg:gap-4'>
+                                <li className='font-semibold text-xl xl:text-2xl lg:text-2xl'>₹500</li>
+                                <li className='text-gray-600 font-normal text-sm xl:text-base lg:text-base'><s>MRP ₹1000</s></li>
+                                <li className='text-shippedBg font-semibold text-sm xl:text-base lg:text-base'>( 50% OFF )</li>
                             </ul>
                         </div>
 
@@ -116,13 +136,13 @@ const ProductDetails = () => {
                                 <h4 className='text-primary underline font-medium text-xs xl:text-sm lg:text-sm'>Size chart</h4>
                             </div>
                             <ul className='flex items-center gap-3'>
-                                <li className='bg-white shadow-md rounded-md w-8 h-8 flex items-center justify-center text-xs
+                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>M</li>
-                                <li className='bg-white shadow-md rounded-md w-8 h-8 flex items-center justify-center text-xs
+                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>L</li>
-                                <li className='bg-white shadow-md rounded-md w-8 h-8 flex items-center justify-center text-xs
+                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>XL</li>
-                                <li className='bg-white shadow-md rounded-md w-8 h-8 flex items-center justify-center text-xs
+                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>XXL</li>
                             </ul>
                         </div>
@@ -131,11 +151,11 @@ const ProductDetails = () => {
                         <div className='mt-5'>
                             <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Color</h4>
                             <ul className='flex items-center gap-3 mt-3'>
-                                <li className='text-primary text-2xl cursor-pointer'><FaCircle /></li>
-                                <li className='text-green-700 text-2xl cursor-pointer'><FaCircle /></li>
-                                <li className='text-buttonBg text-2xl cursor-pointer'><FaCircle /></li>
-                                <li className='text-processingBg text-2xl cursor-pointer'><FaCircle /></li>
-                                <li className='text-pendingBg text-2xl cursor-pointer'><FaCircle /></li>
+                                <li className='text-primary text-3xl cursor-pointer'><FaCircle /></li>
+                                <li className='text-green-700 text-3xl cursor-pointer'><FaCircle /></li>
+                                <li className='text-buttonBg text-3xl cursor-pointer'><FaCircle /></li>
+                                <li className='text-processingBg text-3xl cursor-pointer'><FaCircle /></li>
+                                <li className='text-pendingBg text-3xl cursor-pointer'><FaCircle /></li>
                             </ul>
                         </div>
 
@@ -183,7 +203,7 @@ const ProductDetails = () => {
                                     <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Manufacturer Address</span>
                                     <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">SVS Market</span>
                                 </div>
-                                <p className='text-sm text-buttonBg font-semibold underline'>See more</p>
+                                <p className='text-sm text-buttonBg font-semibold underline cursor-pointer'>See more</p>
                             </div>
                         </div>
 
