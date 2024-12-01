@@ -3,6 +3,7 @@ import UserSlider from '../Components/Slider/Slider'
 import UserCategory from '../Components/UserCategory/UserCategory'
 import LatestProducts from '../Components/LatestProducts/LatestProducts'
 import FeaturedProducts from '../Components/FeaturedProducts/FeaturedProducts'
+import Footer from '../Components/Footer/Footer'
 
 const UserHome = () => {
     return (
@@ -12,6 +13,9 @@ const UserHome = () => {
                 <UserCategory />
                 <LatestProducts />
                 <FeaturedProducts />
+            </div>
+            <div>
+                <Footer />
             </div>
         </>
     )

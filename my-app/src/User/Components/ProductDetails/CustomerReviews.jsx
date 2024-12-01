@@ -1,9 +1,9 @@
-import { Progress, Typography } from '@material-tailwind/react';
+import { Button, Progress, Typography } from '@material-tailwind/react';
 import React from 'react'
 import { FaStar } from 'react-icons/fa6';
 import { IoIosArrowBack } from "react-icons/io";
 import { IoStarOutline } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const reviews = [
     {
@@ -44,7 +44,7 @@ const CustomerReviews = () => {
             </div>
 
             {/* Customer Reviews */}
-            <div className='p-4 xl:p-16 lg:p-16 bg-userBg'>
+            <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg'>
                 <div className='flex items-center justify-between gap-0 pb-6 border-b-2 border-gray-300'>
                     <div className='flex flex-col justify-between gap-10 w-3/4 xl:w-1/4 lg:w-1/4'>
                         <h1 className='uppercase font-normal flex items-center gap-2 text-sm xl:text-xl lg:text-xl'>
@@ -118,6 +118,15 @@ const CustomerReviews = () => {
                         ))
                     }
                 </div>
+
+                <div className='hidden xl:flex lg:flex justify-center mt-10'>
+                    <Link to='/write-review'><Button className='bg-primary font-custom font-normal text-sm capitalize w-52'>Write a Review</Button></Link>
+                </div>
+
+                <div className="bg-white shadow-md fixed bottom-0 inset-x-0 flex justify-center z-50 p-4 lg:hidden xl:hidden md:hidden">
+                <Link to='/write-review' className='w-full'><Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Write a Review</Button></Link>
+                </div>
+
             </div>
         </>
     )

@@ -21,6 +21,7 @@ import UserNavbar from './User/Components/Navbar/Navbar';
 import Footer from './User/Components/Footer/Footer';
 import ProductDetails from './User/Components/ProductDetails/ProductDetails';
 import CustomerReviews from './User/Components/ProductDetails/CustomerReviews';
+import WriteReview from './User/Components/ProductDetails/WriteReview';
 
 const FullRoutes = () => {
     return (
@@ -50,6 +51,7 @@ const RoutesWithLocation = () => {
                 <Route path='/otp' element={<Otp />} />
                 <Route path='/product-details' element={<ProductDetails />} />
                 <Route path='/customer-reviews' element={<CustomerReviews />} />
+                <Route path='/write-review' element={<WriteReview />} />
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />
@@ -67,8 +69,6 @@ const RoutesWithLocation = () => {
                     <Route path='editProduct' element={<EditProduct />} />
                 </Route>
             </Routes>
-            {/* Hide Footer on login and OTP pages and Show Footer only if not on an admin route */}
-            {!isAdminRoute && !isLoginOrOtpPage && <Footer />}
         </>
     );
 }
