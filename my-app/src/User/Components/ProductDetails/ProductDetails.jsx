@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { RxHeart } from 'react-icons/rx';
 import { FiShoppingCart } from "react-icons/fi";
 import { AppContext } from '../../../StoreContext/StoreContext';
+import { IoHeartOutline } from "react-icons/io5";
 
 
 const reviews = [
@@ -81,6 +82,7 @@ const ProductDetails = () => {
                 <div className='col-span-2 xl:space-y-3 lg:space-y-3 xl:sticky xl:top-0 lg:sticky lg:top-0 h-[350px] xl:h-[600px] lg:h-[600px]'>
                     <div className='w-full h-full relative'>
                         <img src={selectedProduct.img} alt={selectedProduct.title} className='w-full h-full object-cover rounded-xl' />
+                        <IoHeartOutline className='absolute top-5 right-5 xl:text-3xl lg:text-3xl text-2xl text-white' />
                         {/* <ul className='absolute bottom-3 right-8 left-8 xl:right-32 xl:left-32 lg:right-32 lg:left-32 flex items-center justify-center gap-1 bg-white p-1 rounded-md shadow-md'>
                             <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
                                 <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
@@ -109,7 +111,7 @@ const ProductDetails = () => {
                     <h1 className='text-secondary font-semibold text-xl xl:text-2xl lg:text-2xl'>{selectedProduct.title}</h1>
                     <p className='text-gray-600 text-xs xl:text-base lg:text-base'>{selectedProduct.description}</p>
                     <div>
-                        <div className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-10 lg:gap-10 mt-5'>
+                        <div className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-10 lg:gap-10 mt-2'>
                             <p className='text-xs xl:text-sm lg:text-sm font-semibold text-shippedBg'>Free Shipping</p>
                             <ul className='flex items-center gap-1 xl:gap-3 lg:gap-3'>
                                 <li className='text-sm xl:text-base lg:text-base'>4.1</li>
@@ -122,35 +124,38 @@ const ProductDetails = () => {
                             <p className='text-gray-600 text-xs xl:text-sm lg:text-sm'>103 Ratings</p>
                         </div>
 
-                        <div className='mt-5'>
-                            <ul className='flex items-center gap-8 xl:gap-4 lg:gap-4'>
+                        <div className='mt-2'>
+                            <ul className='flex items-center gap-6 xl:gap-4 lg:gap-4'>
                                 <li className='font-semibold text-xl xl:text-2xl lg:text-2xl'>₹{selectedProduct.price}</li>
-                                <li className='text-gray-600 font-normal text-sm xl:text-base lg:text-base'><s>MRP ₹1000</s></li>
+                                <li className="text-gray-600 font-normal text-sm xl:text-base lg:text-base">
+                                    <s className="text-red-500">MRP: ₹1000</s>
+                                </li>
+
                                 <li className='text-shippedBg font-semibold text-sm xl:text-base lg:text-base'>( 50% OFF )</li>
                             </ul>
                         </div>
 
                         {/* Select Size */}
-                        <div className='mt-5'>
+                        <div className='mt-4'>
                             <div className='flex items-center justify-between xl:justify-normal lg:justify-normal 
                             xl:gap-32 lg:gap-32 mb-5'>
                                 <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Size</h4>
                                 <h4 className='text-primary underline font-medium text-xs xl:text-sm lg:text-sm'>Size chart</h4>
                             </div>
                             <ul className='flex items-center gap-3'>
-                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
+                                <li className='bg-white shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>M</li>
-                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
+                                <li className='bg-white shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>L</li>
-                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
+                                <li className='bg-white shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>XL</li>
-                                <li className='bg-white shadow-md rounded-md w-12 h-12 flex items-center justify-center text-sm
+                                <li className='bg-white shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm
                                     xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>XXL</li>
                             </ul>
                         </div>
 
                         {/* Select Color */}
-                        <div className='mt-5'>
+                        <div className='mt-4'>
                             <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Color</h4>
                             <ul className='flex items-center gap-3 mt-3'>
                                 <li className='text-primary text-3xl cursor-pointer'><FaCircle /></li>
@@ -162,51 +167,42 @@ const ProductDetails = () => {
                         </div>
 
                         {/* Specifications */}
-                        <div className="mt-10">
+                        <div className="mt-7">
                             <h4 className="font-medium mb-3 text-sm xl:text-base lg:text-base">Specifications</h4>
-                            <div className="space-y-2">
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Net weight/Content</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">300</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Fit</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">Comfy</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Sleeves Type</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">Full Sleeves</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Kurta length</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">30</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Net Quantity</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">1</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Occassion</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">Casual</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Inner Lining</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">Available</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Brand</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">A.B Designers</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Manufacturer Name</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">A.B Designers</span>
-                                </div>
-                                <div className="flex justify-between xl:justify-normal lg:justify-normal">
-                                    <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Manufacturer Address</span>
-                                    <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">SVS Market</span>
-                                </div>
-                                <p className='text-xs text-buttonBg font-semibold underline cursor-pointer'>See more</p>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Net weight/Content</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">300</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Fit</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">Comfy</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Sleeves Type</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">Full Sleeves</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Kurta length</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">30</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Net Quantity</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">1</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Occasion</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">Casual</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Inner Lining</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">Available</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Brand</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">A.B Designers</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Name</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">A.B Designers</span>
+
+                                <span className="font-normal text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Address</span>
+                                <span className="text-left text-xs xl:text-sm lg:text-sm">SVS Market</span>
                             </div>
+                            <p className="text-xs text-buttonBg text-left font-semibold underline cursor-pointer mt-5">
+                                See more
+                            </p>
                         </div>
 
                         {/* Customer Reviews */}
@@ -221,25 +217,25 @@ const ProductDetails = () => {
                                         <p className='font-normal text-xs xl:text-sm lg:text-sm'>1.4K Verified Buyers</p>
                                     </div>
                                 </div>
-                                <div className="flex w-full flex-col gap-0">
+                                <div className="flex w-full flex-col gap-2">
                                     <div className='flex items-center gap-2'>
-                                        <Typography>5</Typography>
+                                        <Typography className='text-xs xl:text-sm lg:text-sm'>5</Typography>
                                         <Progress value={75} size="sm" color='pink' />
                                     </div>
                                     <div className='flex items-center gap-2'>
-                                        <Typography>4</Typography>
+                                        <Typography className='text-xs xl:text-sm lg:text-sm'>4</Typography>
                                         <Progress value={55} size="sm" color='pink' />
                                     </div>
                                     <div className='flex items-center gap-2'>
-                                        <Typography>3</Typography>
+                                        <Typography className='text-xs xl:text-sm lg:text-sm'>3</Typography>
                                         <Progress value={35} size="sm" color='pink' />
                                     </div>
                                     <div className='flex items-center gap-2'>
-                                        <Typography>2</Typography>
+                                        <Typography className='text-xs xl:text-sm lg:text-sm'>2</Typography>
                                         <Progress value={25} size="sm" color='pink' />
                                     </div>
                                     <div className='flex items-center gap-2'>
-                                        <Typography>1</Typography>
+                                        <Typography className='text-xs xl:text-sm lg:text-sm'>1</Typography>
                                         <Progress value={15} size="sm" color='pink' />
                                     </div>
                                 </div>
@@ -247,8 +243,8 @@ const ProductDetails = () => {
 
                             <div className='mt-5'>
                                 {
-                                    reviews.map((review, index) => (
-                                        <div className='space-y-2 mb-3' key={index}>
+                                    reviews.map((review) => (
+                                        <div className='space-y-2 mb-3' key={review.id}>
                                             <ul className='flex items-center gap-3 xl:gap-5 lg:gap-5 font-medium'>
                                                 <li className='w-12 h-12 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
                                                     <img src={review.img} alt={review.customer} className='w-full h-full object-cover rounded-full' />
@@ -270,8 +266,8 @@ const ProductDetails = () => {
                                     ))
                                 }
 
-                                <Button variant='outlined' className='mt-5 xl:mt-10 lg:mt-10 rounded-full px-5 py-1 flex items-center gap-1 text-xs capitalize font-custom font-normal
-                                 tracking-wide'>View all reviews <BsArrowRight /></Button>
+                                <Link to='/customer-reviews'><Button variant='outlined' className='mt-5 xl:mt-10 lg:mt-10 rounded-full px-2 py-1 flex items-center gap-1 text-xs capitalize font-custom font-normal
+                                 tracking-wide'>View all reviews <BsArrowRight /></Button></Link>
                             </div>
                         </div>
                     </div>

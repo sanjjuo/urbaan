@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <>
-      <div className='bg-footerBg text-white pt-16 pb-32 px-4 xl:p-16 lg:p-16 cursor-default'>
+      <div className='bg-footerBg text-white pt-16 pb-20 px-4 xl:p-16 lg:p-16 cursor-default'>
         <div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 gap-16">
           {/* About */}
           <div className='xl:col-span-2 lg:col-span-2'>
@@ -16,6 +16,9 @@ const Footer = () => {
             <p className='text-xs xl:text-sm lg:text-sm md:text-sm font-light mt-5 leading-normal cursor-default'><strong className='text-primary font-bold uppercase'>Urbaan</strong> is your one-stop shop for stylish and comfortable women's fashion. We offer a wide range of Kurtis,
               Kurti sets, bottoms, nightwear, home wear, maternity wear, accessories, and kidswear, blending elegance with
               everyday comfort. Discover fashion that fits every occasion at Urbaan!</p>
+            <div className="w-36 mt-10">
+              <img src="/logo.png" alt="" className='w-full object-contain' />
+            </div>
           </div>
 
           {/* sitemap */}

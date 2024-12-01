@@ -1,9 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {
     Navbar,
-    Collapse,
     Typography,
-    IconButton,
     Button,
 } from "@material-tailwind/react";
 import { FiSearch } from "react-icons/fi";
@@ -15,72 +13,81 @@ import { AppContext } from '../../../StoreContext/StoreContext';
 import MobileSidebar from './MobileSidebar';
 import { CategoryMenu } from './CategoryMenu';
 import SearchBar from './SearchBar';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
 const NavList = () => {
+    const [navActive, setNavActive] = useState("home")
+
     return (
         <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
             <Typography
                 as="li"
                 variant="small"
-                className="p-1 font-medium font-custom"
+                onClick={() => setNavActive("home")}
+                className={`p-1 font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                    hover:text-primary ${navActive === "home" ? "text-primary scale-110" : ""}`}
             >
-                <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+                <Link to="/" >
                     Home
-                </a>
+                </Link>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
-                className="p-1 font-medium font-custom"
+                onClick={() => setNavActive("about")}
+                className={`p-1 font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                    hover:text-primary ${navActive === "about" ? "text-primary scale-110" : ""}`}
             >
-                <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+                <Link to="/about" >
                     About
-                </a>
+                </Link>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
-                className="p-1 font-medium font-custom cursor-pointer"
+                onClick={() => setNavActive("categories")}
+                className={`p-1 font-medium cursor-pointer font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                    hover:text-primary ${navActive === "categories" ? "text-primary scale-110" : ""}`}
             >
                 <CategoryMenu />
             </Typography>
             <Typography
                 as="li"
                 variant="small"
-                className="p-1 font-medium font-custom"
+                onClick={() => setNavActive("contact")}
+                className={`p-1 font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                    hover:text-primary ${navActive === "contact" ? "text-primary scale-110" : ""}`}
             >
-                <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+                <Link to="/contact" >
                     Contact
-                </a>
+                </Link>
             </Typography>
         </ul>
     );
 }
 
 const UserNavbar = () => {
-    const [openNav, setOpenNav] = React.useState(false);
     const { openDrawer, handleOpenDrawer, handleCloseDrawer } = useContext(AppContext)
+    const location = useLocation();
 
-    const handleWindowResize = () =>
-        window.innerWidth >= 960 && setOpenNav(false);
+    // pages where navbar don't visible
+    const noNavbar = ["/customer-reviews", "/write-review", "/add-delivery-address", "/select-delivery-address", "/orders-tracking",
+        "/select-tracking", "/view-orders-tracking"]
 
-    React.useEffect(() => {
-        window.addEventListener("resize", handleWindowResize);
+    // Check if current path matches any of the visible routes
+    if (noNavbar.includes(location.pathname)) {
+        return null // dont render navbar
+    }
 
-        return () => {
-            window.removeEventListener("resize", handleWindowResize);
-        };
-    }, []);
     return (
         <>
             <div className='hidden sticky top-0 w-full z-50 xl:block lg:block bg-white shadow-lg'>
                 <Navbar className="mx-auto max-w-screen-xl py-6 px-0 shadow-none rounded-none">
                     <div className="flex items-center justify-between text-blue-gray-900">
-                        <div className="w-28">
+                        <Link to='/'><div className="w-28">
                             <img src="/logo.png" alt="" className='w-full object-contain' />
-                        </div>
+                        </div></Link>
                         <div className="hidden lg:block xl:flex xl:items-center xl:gap-10">
                             <NavList />
                             <SearchBar />
