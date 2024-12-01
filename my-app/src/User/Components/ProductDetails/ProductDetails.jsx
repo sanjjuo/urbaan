@@ -266,7 +266,7 @@ const ProductDetails = () => {
                                     ))
                                 }
 
-                                <Link to='/customer-reviews'><Button variant='outlined' className='mt-5 xl:mt-10 lg:mt-10 rounded-full px-2 py-1 flex items-center gap-1 text-xs capitalize font-custom font-normal
+                                <Link to='/customer-reviews'><Button variant='outlined' className='mt-5 xl:mt-10 lg:mt-10 rounded-full p-2 flex items-center gap-1 text-xs capitalize font-custom font-normal
                                  tracking-wide'>View all reviews <BsArrowRight /></Button></Link>
                             </div>
                         </div>

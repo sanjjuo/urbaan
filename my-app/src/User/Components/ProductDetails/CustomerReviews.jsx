@@ -39,7 +39,7 @@ const CustomerReviews = () => {
                     className="flex items-center gap-5 text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
-                    <IoIosArrowBack className="text-primary text-2xl cursor-pointer" /> Customer Reviews
+                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Customer Reviews
                 </h1>
             </div>
 
@@ -78,17 +78,18 @@ const CustomerReviews = () => {
                     </div>
                 </div>
 
-                <ul className="flex items-center gap-2 mt-5 overflow-x-auto xl:overflow-hidden lg:overflow-hidden">
+                <ul className="flex items-center gap-2 mt-5 overflow-x-scroll hide-scrollbar">
                     {['Most Helpful', 'Latest', 'Positive', 'Negative'].map((label) => (
                         <li
                             key={label}
-                            className="font-normal capitalize text-sm font-custom border w-28 sm:w-32 py-3 px-5 sm:p-3 flex justify-center items-center 
-                            rounded-3xl border-primary text-primary hover:bg-primary hover:text-white hover:opacity-100 whitespace-nowrap cursor-pointer"
+                            className="font-normal capitalize text-xs xl:text-sm lg:text-sm font-custom min-w-[100px] sm:min-w-[128px] py-2 px-5 sm:p-3 flex justify-center items-center 
+            rounded-2xl border border-primary text-primary hover:bg-primary hover:text-white hover:opacity-100 whitespace-nowrap cursor-pointer"
                         >
                             {label}
                         </li>
                     ))}
                 </ul>
+
 
 
                 {/* reviews */}
