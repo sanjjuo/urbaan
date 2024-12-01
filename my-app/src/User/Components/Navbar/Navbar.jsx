@@ -4,6 +4,7 @@ import {
     Collapse,
     Typography,
     IconButton,
+    Button,
 } from "@material-tailwind/react";
 import { FiSearch } from "react-icons/fi";
 import { RiHeart3Line } from "react-icons/ri";
@@ -12,6 +13,9 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import BottomBar from '../BottomBar/BottomBar';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import MobileSidebar from './MobileSidebar';
+import { CategoryMenu } from './CategoryMenu';
+import SearchBar from './SearchBar';
+import { Link } from 'react-router-dom';
 
 
 const NavList = () => {
@@ -38,11 +42,9 @@ const NavList = () => {
             <Typography
                 as="li"
                 variant="small"
-                className="p-1 font-medium font-custom"
+                className="p-1 font-medium font-custom cursor-pointer"
             >
-                <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
-                    Categories
-                </a>
+                <CategoryMenu />
             </Typography>
             <Typography
                 as="li"
@@ -79,20 +81,24 @@ const UserNavbar = () => {
                         <div className="w-28">
                             <img src="/logo.png" alt="" className='w-full object-contain' />
                         </div>
-                        <div className="hidden lg:block">
+                        <div className="hidden lg:block xl:flex xl:items-center xl:gap-10">
                             <NavList />
+                            <SearchBar />
                         </div>
                         <div>
                             <ul className='flex items-center gap-8'>
-                                <li className='text-2xl text-primary'><FiSearch /></li>
                                 <li className='text-2xl text-primary'><RiHeart3Line /></li>
                                 <li className='text-2xl text-primary'><LuShoppingCart /></li>
                             </ul>
                         </div>
+                        <div>
+                            <ul className='flex items-center gap-1'>
+                                <li><Link to='/login-user'><Button className='bg-primary font-custom font-normal
+                                      capitalize text-sm'>sign in</Button></Link>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <Collapse open={openNav}>
-                        <NavList />
-                    </Collapse>
                 </Navbar>
             </div>
 

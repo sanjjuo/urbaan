@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { FaStar } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa";
 import { IoStarOutline } from "react-icons/io5";
@@ -7,6 +7,7 @@ import { BsArrowRight } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import { RxHeart } from 'react-icons/rx';
 import { FiShoppingCart } from "react-icons/fi";
+import { AppContext } from '../../../StoreContext/StoreContext';
 
 
 const reviews = [
@@ -73,12 +74,13 @@ const products = [
 ]
 
 const ProductDetails = () => {
+    const { selectedProduct } = useContext(AppContext)
     return (
         <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg'>
             <div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 gap-5 xl:gap-10 lg:gap-10">
                 <div className='col-span-2 xl:space-y-3 lg:space-y-3 xl:sticky xl:top-0 lg:sticky lg:top-0 h-[350px] xl:h-[600px] lg:h-[600px]'>
                     <div className='w-full h-full relative'>
-                        <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-xl' />
+                        <img src={selectedProduct.img} alt={selectedProduct.title} className='w-full h-full object-cover rounded-xl' />
                         {/* <ul className='absolute bottom-3 right-8 left-8 xl:right-32 xl:left-32 lg:right-32 lg:left-32 flex items-center justify-center gap-1 bg-white p-1 rounded-md shadow-md'>
                             <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
                                 <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
@@ -104,8 +106,8 @@ const ProductDetails = () => {
                         w-full bg-primary'><FiShoppingCart />Add to cart</Button>
                 </div>
                 <div className='col-span-2'>
-                    <h1 className='text-secondary font-semibold text-xl xl:text-2xl lg:text-2xl'>Stylish crop top</h1>
-                    <p className='text-gray-600 text-xs xl:text-base lg:text-base'>Trendy, comfy, versatile—perfect for any look!</p>
+                    <h1 className='text-secondary font-semibold text-xl xl:text-2xl lg:text-2xl'>{selectedProduct.title}</h1>
+                    <p className='text-gray-600 text-xs xl:text-base lg:text-base'>{selectedProduct.description}</p>
                     <div>
                         <div className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-10 lg:gap-10 mt-5'>
                             <p className='text-xs xl:text-sm lg:text-sm font-semibold text-shippedBg'>Free Shipping</p>
@@ -122,7 +124,7 @@ const ProductDetails = () => {
 
                         <div className='mt-5'>
                             <ul className='flex items-center gap-8 xl:gap-4 lg:gap-4'>
-                                <li className='font-semibold text-xl xl:text-2xl lg:text-2xl'>₹500</li>
+                                <li className='font-semibold text-xl xl:text-2xl lg:text-2xl'>₹{selectedProduct.price}</li>
                                 <li className='text-gray-600 font-normal text-sm xl:text-base lg:text-base'><s>MRP ₹1000</s></li>
                                 <li className='text-shippedBg font-semibold text-sm xl:text-base lg:text-base'>( 50% OFF )</li>
                             </ul>

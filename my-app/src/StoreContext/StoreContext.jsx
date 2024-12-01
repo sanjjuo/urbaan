@@ -5,10 +5,14 @@ export const AppContext = createContext();
 const StoreContext = ({ children }) => {
     const [open, setOpen] = useState(null);
     const [openDrawer, setDrawerOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState([])
 
     const handleOpen = (modal) => setOpen(modal);
     const handleOpenDrawer = () => setDrawerOpen(true);
     const handleCloseDrawer = () => setDrawerOpen(false);
+    const handleProductDetails = (details) => {
+        setSelectedProduct(details)
+      }
 
     return (
         <>
@@ -17,7 +21,10 @@ const StoreContext = ({ children }) => {
                 handleOpen,
                 openDrawer,
                 handleOpenDrawer,
-                handleCloseDrawer
+                handleCloseDrawer,
+                setSelectedProduct,
+                handleProductDetails,
+                selectedProduct
             }}>
                 {children}
             </AppContext.Provider>

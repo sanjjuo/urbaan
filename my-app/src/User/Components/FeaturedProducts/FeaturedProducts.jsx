@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { RxHeart } from "react-icons/rx";
 import { Link } from 'react-router-dom';
+import { AppContext } from '../../../StoreContext/StoreContext';
 
 const products = [
     {
@@ -42,13 +43,14 @@ const products = [
 
 
 const FeaturedProducts = () => {
+    const { handleProductDetails } = useContext(AppContext);
     return (
         <>
             <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center'>Featured Products</h1>
             <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
                 {
                     products.map((product, index) => (
-                        <Link to='/product-details' className='cursor-pointer'>
+                        <Link onClick={() => handleProductDetails(product)} to='/product-details' className='cursor-pointer'>
                             <div key={index} className='group'>
                                 <div className='w-full h-44 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
                                     <img src={product.img} alt={product.title} className='w-full h-full object-cover rounded-xl shadow-md
@@ -58,7 +60,7 @@ const FeaturedProducts = () => {
                                 <div className='mt-3'>
                                     <h4 className='font-medium text-sm xl:text-lg lg:text-lg'>{product.title}</h4>
                                     <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm'>{product.description}</p>
-                                    <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹ {product.price}</p>
+                                    <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹{product.price}</p>
                                 </div>
                             </div>
                         </Link>
