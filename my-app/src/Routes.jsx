@@ -19,6 +19,7 @@ import { Otp } from './User/Otp/Otp';
 import UserHome from './User/Home/Home';
 import UserNavbar from './User/Components/Navbar/Navbar';
 import Footer from './User/Components/Footer/Footer';
+import ProductDetails from './User/Components/ProductDetails/ProductDetails';
 
 const FullRoutes = () => {
     return (
@@ -46,6 +47,7 @@ const RoutesWithLocation = () => {
                 <Route path='/' element={<UserHome />} />
                 <Route path='/login-user' element={<LoginSignUpUser />} />
                 <Route path='/otp' element={<Otp />} />
+                <Route path='/product-details' element={<ProductDetails/>}/>
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />

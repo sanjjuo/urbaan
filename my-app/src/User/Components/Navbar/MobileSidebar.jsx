@@ -18,7 +18,7 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                         <div className='w-16 h-16'>
                             <img src="/user.png" alt="" className='w-full h-full object-cover' />
                         </div>
-                        <Link>
+                        <Link to='/login-user'>
                             <p className='text-primary font-medium underline'>SIGN IN</p>
                         </Link>
                     </div>

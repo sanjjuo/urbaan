@@ -23,10 +23,10 @@ const Profile = () => {
               variant="circular"
               alt="tania andrew"
               className="cursor-pointer"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+              src="/profile.jpg"
             />
-            <ul className='cursor-pointer'>
-              <li className='text-secondary text-base font-bold'>Leo Messi</li>
+            <ul className='cursor-pointer flex flex-col items-center'>
+              <li className='text-secondary text-base font-bold'>Amber Heard</li>
               <li className='text-sm text-gray-400 font-normal'>Admin</li>
             </ul>
           </div>
