@@ -79,7 +79,7 @@ const ProductDetails = () => {
                 <div className='col-span-2 xl:space-y-3 lg:space-y-3 xl:sticky xl:top-0 lg:sticky lg:top-0 h-[350px] xl:h-[600px] lg:h-[600px]'>
                     <div className='w-full h-full relative'>
                         <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-xl' />
-                        <ul className='absolute bottom-3 right-8 left-8 xl:right-32 xl:left-32 lg:right-32 lg:left-32 flex items-center justify-center gap-1 bg-white p-1 rounded-md shadow-md'>
+                        {/* <ul className='absolute bottom-3 right-8 left-8 xl:right-32 xl:left-32 lg:right-32 lg:left-32 flex items-center justify-center gap-1 bg-white p-1 rounded-md shadow-md'>
                             <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
                                 <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
                             </li>
@@ -98,7 +98,7 @@ const ProductDetails = () => {
                             <li className='w-8 h-8 xl:w-14 xl:h-14 lg:w-14 lg:h-14'>
                                 <img src="p1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
                             </li>
-                        </ul>
+                        </ul> */}
                     </div>
                     <Button className='hidden xl:flex lg:flex items-center justify-center gap-2 font-normal capitalize font-custom tracking-wide text-sm
                         w-full bg-primary'><FiShoppingCart />Add to cart</Button>
@@ -203,7 +203,7 @@ const ProductDetails = () => {
                                     <span className="font-normal text-sm xl:w-1/2 lg:w-1/2 text-gray-600">Manufacturer Address</span>
                                     <span className="xl:w-1/2 lg:w-1/2 text-left text-sm">SVS Market</span>
                                 </div>
-                                <p className='text-sm text-buttonBg font-semibold underline cursor-pointer'>See more</p>
+                                <p className='text-xs text-buttonBg font-semibold underline cursor-pointer'>See more</p>
                             </div>
                         </div>
 

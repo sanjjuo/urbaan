@@ -13,6 +13,11 @@ const ScrollToTop = () => {
         top: 0,
         behavior: "smooth",
       });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   }, [pathname]);
 
