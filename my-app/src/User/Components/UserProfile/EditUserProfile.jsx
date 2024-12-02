@@ -87,7 +87,7 @@ const EditUserProfile = () => {
                     </div>
 
                     {/* Date of Birth */}
-                    <div className="flex flex-col w-full gap-1">
+                    <div className="flex flex-col gap-1">
                         <label htmlFor="dob" className="font-medium text-sm xl:text-base lg:text-base">
                             Date of Birth
                         </label>
@@ -95,10 +95,11 @@ const EditUserProfile = () => {
                             type="date"
                             name="date"
                             id="dob"
-                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light 
+                            className="w-full border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light 
                             placeholder:text-gray-500 focus:outline-none text-gray-500"
                         />
                     </div>
+
 
                     {/* Country */}
                     <div className="flex flex-col gap-1">
