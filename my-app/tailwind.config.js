@@ -28,6 +28,7 @@ module.exports = withMT({
         cancelBg: "#FB544B",
         shippedBg: "#66BB6A",
         deliveredBg: "#38BAF4",
+        searchUser: "#D8DFED",
         O1: "#8280FF",
         O2: "#FEC53D",
         O3: "#4AD991",

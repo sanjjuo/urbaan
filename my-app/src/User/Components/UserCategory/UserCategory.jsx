@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const UserCategory = () => {
   const categories = [
@@ -53,7 +54,7 @@ const UserCategory = () => {
     <>
       <div className='flex justify-between items-center'>
         <h1 className='text-secondary text-lg xl:text-xl lg:text-xl font-semibold'>Shop by Category</h1>
-        <p className='text-primary text-sm xl:text-base lg:text-base font-medium underline'>View all</p>
+        <Link to='/view-all-category'><p className='text-primary text-sm xl:text-base lg:text-base font-medium underline'>View all</p></Link>
       </div>
 
       <div className='flex flex-wrap xl:flex-nowrap lg:flex-nowrap items-center justify-between xl:justify-normal 

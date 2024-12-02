@@ -24,6 +24,7 @@ import WriteReview from './User/Components/ProductDetails/WriteReview';
 import FavouriteProduct from './User/Components/FavouriteProduct/FavouriteProduct';
 import UserProfile from './User/Components/UserProfile/UserProfile';
 import EditUserProfile from './User/Components/UserProfile/EditUserProfile';
+import ViewAllCategory from './User/Components/UserCategory/ViewAllCategory';
 
 const FullRoutes = () => {
     return (
@@ -57,6 +58,7 @@ const RoutesWithLocation = () => {
                 <Route path='/favourite' element={<FavouriteProduct />} />
                 <Route path='/user-profile' element={<UserProfile/>}/>
                 <Route path='/edit-user-profile' element={<EditUserProfile/>}/>
+                <Route path='/view-all-category' element={<ViewAllCategory/>}/>
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />

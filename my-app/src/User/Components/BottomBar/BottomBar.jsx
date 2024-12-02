@@ -29,7 +29,7 @@ const BottomBar = () => {
     }, [location]);
 
     // Pages where BottomBar should be visible
-    const visibleRoutes = ["/", "/favourite", "/user-search", "/user-profile", "/user-cart"];
+    const visibleRoutes = ["/", "/view-all-category", "/favourite", "/user-search", "/user-profile", "/user-cart"];
 
     // Check if current path matches any of the visible routes
     if (!visibleRoutes.includes(location.pathname)) {
