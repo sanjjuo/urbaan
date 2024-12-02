@@ -87,7 +87,7 @@ const EditUserProfile = () => {
                     </div>
 
                     {/* Date of Birth */}
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col w-full gap-1">
                         <label htmlFor="dob" className="font-medium text-sm xl:text-base lg:text-base">
                             Date of Birth
                         </label>
@@ -124,7 +124,7 @@ const EditUserProfile = () => {
                 </form>
 
                 <div className='bg-white shadow-md fixed bottom-0 inset-x-0 flex justify-center z-50 p-4 lg:hidden xl:hidden md:hidden'>
-                    <Link to='/user-profile'><Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Save</Button></Link>
+                    <Link to='/user-profile' className='w-full'><Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Save</Button></Link>
                 </div>
 
             </div>
