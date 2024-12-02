@@ -22,6 +22,7 @@ import Footer from './User/Components/Footer/Footer';
 import ProductDetails from './User/Components/ProductDetails/ProductDetails';
 import CustomerReviews from './User/Components/ProductDetails/CustomerReviews';
 import WriteReview from './User/Components/ProductDetails/WriteReview';
+import FavouriteProduct from './User/Components/FavouriteProduct/FavouriteProduct';
 
 const FullRoutes = () => {
     return (
@@ -52,6 +53,7 @@ const RoutesWithLocation = () => {
                 <Route path='/product-details' element={<ProductDetails />} />
                 <Route path='/customer-reviews' element={<CustomerReviews />} />
                 <Route path='/write-review' element={<WriteReview />} />
+                <Route path='/favourite' element={<FavouriteProduct />} />
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />

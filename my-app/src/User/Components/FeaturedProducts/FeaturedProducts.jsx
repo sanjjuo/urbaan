@@ -49,9 +49,9 @@ const FeaturedProducts = () => {
             <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center'>Featured Products</h1>
             <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
                 {
-                    products.map((product, index) => (
-                        <Link onClick={() => handleProductDetails(product)} to='/product-details' className='cursor-pointer'>
-                            <div key={index} className='group'>
+                    products.map((product) => (
+                        <Link onClick={() => handleProductDetails(product)} to='/product-details' className='cursor-pointer' key={product.id}>
+                            <div className='group'>
                                 <div className='w-full h-44 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
                                     <img src={product.img} alt={product.title} className='w-full h-full object-cover rounded-xl shadow-md
                                 transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105' />

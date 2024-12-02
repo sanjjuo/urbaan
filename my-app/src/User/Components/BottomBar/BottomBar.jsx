@@ -10,7 +10,7 @@ const BottomBar = () => {
     const [iconActive, setIconActive] = useState("home")
 
     // Pages where BottomBar should be visible
-    const visibleRoutes = ["/", "/user-search", "/user-profile", "/user-cart"];
+    const visibleRoutes = ["/", "/favourite", "/user-search", "/user-profile", "/user-cart"];
 
     // Check if current path matches any of the visible routes
     if (!visibleRoutes.includes(location.pathname)) {

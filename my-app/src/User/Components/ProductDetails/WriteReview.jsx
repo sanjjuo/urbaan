@@ -30,7 +30,7 @@ const WriteReview = () => {
                 <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-5">
 
                     {/* Image Upload Section */}
-                    <div className="flex flex-col justify-center items-center w-full xl:h-56 lg:h-56 h-32 border-4 border-dashed border-primary rounded-xl">
+                    <div className="flex flex-col justify-center items-center w-full xl:h-56 lg:h-56 h-44 border-4 border-dashed border-primary rounded-xl">
                         {!selectedImage ? (
                             <>
                                 <input
@@ -64,7 +64,7 @@ const WriteReview = () => {
                             <textarea
                                 name="description"
                                 rows="5"
-                                className="w-full h-full border-2 border-gray-400 bg-transparent p-2 rounded-xl resize-none overflow-y-scroll hide-scrollbar focus:outline-none placeholder:text-xs xl:placeholder:text-sm
+                                className="w-full h-full border-2 border-gray-400 bg-transparent p-2 rounded-lg resize-none overflow-y-scroll hide-scrollbar focus:outline-none placeholder:text-xs xl:placeholder:text-sm
                                 lg:placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
                                 placeholder="Would you like to write anything about this Product?"
                             ></textarea>

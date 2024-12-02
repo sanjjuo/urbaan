@@ -44,7 +44,7 @@ const CustomerReviews = () => {
             </div>
 
             {/* Customer Reviews */}
-            <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-full'>
+            <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[100%]'>
                 <div className='flex items-center justify-between gap-0 pb-6 border-b-2 border-gray-300'>
                     <div className='flex flex-col justify-between gap-10 w-3/4 xl:w-1/4 lg:w-1/4'>
                         <h1 className='uppercase font-normal flex items-center gap-2 text-sm xl:text-xl lg:text-xl'>

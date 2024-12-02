@@ -6,6 +6,7 @@ import {
 } from "@material-tailwind/react";
 import { FiSearch } from "react-icons/fi";
 import { RiHeart3Line } from "react-icons/ri";
+import { RiHeart3Fill } from "react-icons/ri";
 import { LuShoppingCart } from "react-icons/lu";
 import { GiHamburgerMenu } from "react-icons/gi";
 import BottomBar from '../BottomBar/BottomBar';
@@ -70,6 +71,8 @@ const NavList = () => {
 const UserNavbar = () => {
     const { openDrawer, handleOpenDrawer, handleCloseDrawer } = useContext(AppContext)
     const location = useLocation();
+    const [favColor, setFavColor] = useState("outlinefav")
+
 
     // pages where navbar don't visible
     const noNavbar = ["/customer-reviews", "/write-review", "/add-delivery-address", "/select-delivery-address", "/orders-tracking",
@@ -94,7 +97,28 @@ const UserNavbar = () => {
                         </div>
                         <div>
                             <ul className='flex items-center gap-8'>
-                                <li className='text-2xl text-primary'><RiHeart3Line /></li>
+                                {
+                                    favColor === "outlinefav" ? (
+                                        <Link to="/favourite">
+                                            <li
+                                                onClick={() => setFavColor("fillfav")}
+                                                className="text-2xl text-secondary"
+                                            >
+                                                <RiHeart3Line />
+                                            </li>
+                                        </Link>
+                                    ) : (
+                                        <Link to="/favourite">
+                                            <li
+                                                onClick={() => setFavColor("outlinefav")}
+                                                className="text-2xl text-primary"
+                                            >
+                                                <RiHeart3Fill />
+                                            </li>
+                                        </Link>
+                                    )
+                                }
+
                                 <li className='text-2xl text-primary'><LuShoppingCart /></li>
                             </ul>
                         </div>
@@ -119,7 +143,28 @@ const UserNavbar = () => {
                 </ul>
                 <ul className='flex items-center gap-3'>
                     <li className='text-xl text-secondary hover:text-primary'><FiSearch /></li>
-                    <li className='text-xl text-secondary hover:text-primary'><RiHeart3Line /></li>
+                    {
+                        favColor === "outlinefav" ? (
+                            <Link to="/favourite">
+                                <li
+                                    onClick={() => setFavColor("fillfav")}
+                                    className="text-xl text-secondary"
+                                >
+                                    <RiHeart3Line />
+                                </li>
+                            </Link>
+                        ) : (
+                            <Link to="/favourite">
+                                <li
+                                    onClick={() => setFavColor("outlinefav")}
+                                    className="text-xl text-primary"
+                                >
+                                    <RiHeart3Fill />
+                                </li>
+                            </Link>
+                        )
+                    }
+
                 </ul>
             </div>
 
