@@ -13,32 +13,32 @@ const UserProfile = () => {
     <>
       <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-screen">
         <div className='flex flex-col justify-center items-center gap-2'>
-          <div className='w-20 h-20'>
+          <div className='w-32 h-32'>
             <img src="/userProfile.jpg" alt="" className='w-full h-full object-cover rounded-3xl' />
           </div>
-          <Typography className='font-custom font-medium text-sm xl:text-base lg:text-base flex items-center gap-1'>
+          <Typography className='font-custom font-medium text-lg xl:text-xl lg:text-xl flex items-center gap-1'>
             <TiEdit className='text-primary' />Natalie Portman</Typography>
         </div>
 
         <div className='mt-10'>
           <ul className='space-y-4'>
             <li className='flex items-center justify-between'>
-              <span className='flex items-center gap-2 text-sm'><RiAccountBoxLine />Account Details</span>
+              <span className='flex items-center gap-2 text-base'><RiAccountBoxLine className='text-lg'/>Account Details</span>
               <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
                 <IoIosArrowForward /></span>
             </li>
             <li className='flex items-center justify-between'>
-              <span className='flex items-center gap-2 text-sm'><TbAddressBook />Address</span>
+              <span className='flex items-center gap-2 text-base'><TbAddressBook className='text-lg'/>Address</span>
               <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
                 <IoIosArrowForward /></span>
             </li>
             <li className='flex items-center justify-between'>
-              <span className='flex items-center gap-2 text-sm'><LiaClipboardListSolid />Orders</span>
+              <span className='flex items-center gap-2 text-base'><LiaClipboardListSolid className='text-lg'/>Orders</span>
               <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
                 <IoIosArrowForward /></span>
             </li>
             <li className='flex items-center justify-between'>
-              <span className='flex items-center gap-2 text-sm'><RiHeart3Line />Wishlist</span>
+              <span className='flex items-center gap-2 text-base'><RiHeart3Line className='text-lg'/>Wishlist</span>
               <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
                 <IoIosArrowForward /></span>
             </li>
