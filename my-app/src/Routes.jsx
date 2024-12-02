@@ -23,6 +23,7 @@ import CustomerReviews from './User/Components/ProductDetails/CustomerReviews';
 import WriteReview from './User/Components/ProductDetails/WriteReview';
 import FavouriteProduct from './User/Components/FavouriteProduct/FavouriteProduct';
 import UserProfile from './User/Components/UserProfile/UserProfile';
+import EditUserProfile from './User/Components/UserProfile/EditUserProfile';
 
 const FullRoutes = () => {
     return (
@@ -55,6 +56,7 @@ const RoutesWithLocation = () => {
                 <Route path='/write-review' element={<WriteReview />} />
                 <Route path='/favourite' element={<FavouriteProduct />} />
                 <Route path='/user-profile' element={<UserProfile/>}/>
+                <Route path='/edit-user-profile' element={<EditUserProfile/>}/>
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />
