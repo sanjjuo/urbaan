@@ -44,7 +44,7 @@ const CustomerReviews = () => {
             </div>
 
             {/* Customer Reviews */}
-            <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[100%]'>
+            <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
                 <div className='flex items-center justify-between gap-0 pb-6 border-b-2 border-gray-300'>
                     <div className='flex flex-col justify-between gap-10 w-3/4 xl:w-1/4 lg:w-1/4'>
                         <h1 className='uppercase font-normal flex items-center gap-2 text-sm xl:text-xl lg:text-xl'>
@@ -93,7 +93,7 @@ const CustomerReviews = () => {
 
 
                 {/* reviews */}
-                <div className='mt-5 pb-20 xl:pb-0 lg:pb-0'>
+                <div className='mt-5'>
                     {
                         reviews.map((review) => (
                             <div className='space-y-2 mb-3' key={review.id}>
@@ -124,7 +124,7 @@ const CustomerReviews = () => {
                 </div>
 
                 <div className="bg-white shadow-md fixed bottom-0 inset-x-0 flex justify-center z-50 p-4 lg:hidden xl:hidden md:hidden">
-                <Link to='/write-review' className='w-full'><Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Write a Review</Button></Link>
+                    <Link to='/write-review' className='w-full'><Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Write a Review</Button></Link>
                 </div>
 
             </div>
