@@ -15,7 +15,7 @@ const FavouriteProduct = () => {
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> My Wishlist
                 </h1>
 
-                <div className='flex flex-col justify-center items-center'>
+                <div className='flex flex-col justify-center items-center h-screen'>
                     <div className='w-20 h-20 mb-10'>
                         <img src="/favorite.png" alt="" className='w-full h-full object-cover'/>
                     </div>
