@@ -18,11 +18,11 @@ import { LoginSignUpUser } from './User/LoginSignUpUser/LoginSignUpUser';
 import { Otp } from './User/Otp/Otp';
 import UserHome from './User/Home/Home';
 import UserNavbar from './User/Components/Navbar/Navbar';
-import Footer from './User/Components/Footer/Footer';
 import ProductDetails from './User/Components/ProductDetails/ProductDetails';
 import CustomerReviews from './User/Components/ProductDetails/CustomerReviews';
 import WriteReview from './User/Components/ProductDetails/WriteReview';
 import FavouriteProduct from './User/Components/FavouriteProduct/FavouriteProduct';
+import UserProfile from './User/Components/UserProfile/UserProfile';
 
 const FullRoutes = () => {
     return (
@@ -54,6 +54,7 @@ const RoutesWithLocation = () => {
                 <Route path='/customer-reviews' element={<CustomerReviews />} />
                 <Route path='/write-review' element={<WriteReview />} />
                 <Route path='/favourite' element={<FavouriteProduct />} />
+                <Route path='/user-profile' element={<UserProfile/>}/>
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />

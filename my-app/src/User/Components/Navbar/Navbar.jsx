@@ -4,11 +4,12 @@ import {
     Typography,
     Button,
 } from "@material-tailwind/react";
-import { FiSearch } from "react-icons/fi";
+import { RiSearch2Line } from "react-icons/ri";
 import { RiHeart3Line } from "react-icons/ri";
 import { RiHeart3Fill } from "react-icons/ri";
-import { LuShoppingCart } from "react-icons/lu";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { RiShoppingCartLine } from "react-icons/ri";
+import { RiShoppingCartFill } from "react-icons/ri";
+import { IoMenu } from "react-icons/io5";
 import BottomBar from '../BottomBar/BottomBar';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import MobileSidebar from './MobileSidebar';
@@ -71,7 +72,8 @@ const NavList = () => {
 const UserNavbar = () => {
     const { openDrawer, handleOpenDrawer, handleCloseDrawer } = useContext(AppContext)
     const location = useLocation();
-    const [favColor, setFavColor] = useState("outlinefav")
+    const isFavouritePage = location.pathname === "/favourite";
+    const isCartPage = location.pathname === "/user-cart";
 
 
     // pages where navbar don't visible
@@ -97,29 +99,16 @@ const UserNavbar = () => {
                         </div>
                         <div>
                             <ul className='flex items-center gap-8'>
-                                {
-                                    favColor === "outlinefav" ? (
-                                        <Link to="/favourite">
-                                            <li
-                                                onClick={() => setFavColor("fillfav")}
-                                                className="text-2xl text-secondary"
-                                            >
-                                                <RiHeart3Line />
-                                            </li>
-                                        </Link>
-                                    ) : (
-                                        <Link to="/favourite">
-                                            <li
-                                                onClick={() => setFavColor("outlinefav")}
-                                                className="text-2xl text-primary"
-                                            >
-                                                <RiHeart3Fill />
-                                            </li>
-                                        </Link>
-                                    )
-                                }
-
-                                <li className='text-2xl text-primary'><LuShoppingCart /></li>
+                                <Link to="/favourite">
+                                    <li className="text-2xl text-secondary cursor-pointer">
+                                        {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
+                                    </li>
+                                </Link>
+                                <Link to='/user-cart'>
+                                    <li className='text-2xl text-secondary cursor-pointer'>
+                                        {isCartPage ? <RiShoppingCartFill className='text-primary' /> : <RiShoppingCartLine />}
+                                    </li>
+                                </Link>
                             </ul>
                         </div>
                         <div>
@@ -136,35 +125,18 @@ const UserNavbar = () => {
             {/* mobile view */}
             <div className='xl:hidden lg:hidden sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-4 px-4'>
                 <ul className='flex items-center gap-5'>
-                    <li onClick={handleOpenDrawer} className='text-xl text-secondary hover:text-primary'><GiHamburgerMenu /></li>
+                    <li onClick={handleOpenDrawer} className='text-2xl text-secondary hover:text-primary'><IoMenu /></li>
                     <li className="w-24">
                         <img src="/logo.png" alt="" className='w-full object-contain' />
                     </li>
                 </ul>
                 <ul className='flex items-center gap-3'>
-                    <li className='text-xl text-secondary hover:text-primary'><FiSearch /></li>
-                    {
-                        favColor === "outlinefav" ? (
-                            <Link to="/favourite">
-                                <li
-                                    onClick={() => setFavColor("fillfav")}
-                                    className="text-xl text-secondary"
-                                >
-                                    <RiHeart3Line />
-                                </li>
-                            </Link>
-                        ) : (
-                            <Link to="/favourite">
-                                <li
-                                    onClick={() => setFavColor("outlinefav")}
-                                    className="text-xl text-primary"
-                                >
-                                    <RiHeart3Fill />
-                                </li>
-                            </Link>
-                        )
-                    }
-
+                    <li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li>
+                    <Link to="/favourite">
+                        <li className="text-2xl text-secondary">
+                            {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
+                        </li>
+                    </Link>
                 </ul>
             </div>
 
