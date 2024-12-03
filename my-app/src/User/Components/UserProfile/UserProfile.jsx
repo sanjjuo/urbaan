@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 const UserProfile = () => {
   return (
     <>
-      <div className="px-8 py-16 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-screen">
+      <div className="px-8 py-16 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
         <div className='flex flex-col justify-center items-center gap-2'>
           <div className='w-32 h-32'>
             <img src="/userProfile.jpg" alt="" className='w-full h-full object-cover rounded-3xl' />
@@ -47,7 +47,7 @@ const UserProfile = () => {
         </div>
 
         <div className='flex items-center justify-center mt-5'>
-          <Link to='/login-user'><Button variant='outlined' className='flex items-center gap-1 w-32 rounded-3xl text-sm font-custom capitalize font-normal text-primary border-primary
+          <Link to='/login-user'><Button variant='outlined' className='flex items-center gap-1 w-32 text-sm font-custom capitalize font-normal text-primary border-primary
             bg-white hover:bg-primary hover:text-white hover:opacity-100 py-2'>
             <RiLogoutCircleRFill className='text-lg' />Logout</Button></Link>
         </div>

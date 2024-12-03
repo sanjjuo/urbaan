@@ -95,8 +95,7 @@ const EditUserProfile = () => {
                             type="date"
                             name="date"
                             id="dob"
-                            className="w-full border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light 
-                            placeholder:text-gray-500 focus:outline-none text-gray-500"
+                            className="w-full border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light focus:outline-none text-gray-500"
                         />
                     </div>
 

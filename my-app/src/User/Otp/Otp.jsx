@@ -25,7 +25,7 @@ export function Otp() {
 
   return (
     <>
-      <div className='bg-userBg h-screen px-4 flex justify-center items-center lg:px-0 xl:px-0'>
+      <div className='lg:flex lg:justify-center lg:items-center min-h-screen lg:h-screen bg-userBg px-4 py-20 lg:py-0'>
         <Card color='transparent' shadow={false} className='flex items-center'>
           <Typography variant="h4" className='text-primary font-custom text-center text-4xl xl:text-3xl lg:text-3xl'>
             Verification
