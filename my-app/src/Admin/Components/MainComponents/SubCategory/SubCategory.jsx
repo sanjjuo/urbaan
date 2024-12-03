@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { IoIosSearch } from 'react-icons/io'
 import CreateSubCategories from './CreateSubCategories'
 import AddedSubCategories from './AddedSubCategories'
 import EditSubCategories from './EditSubCategories'
+import { RiSearch2Line } from 'react-icons/ri'
 
 const SubCategory = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -37,12 +37,12 @@ const SubCategory = () => {
         <div className="lg:col-span-4 space-y-5">
           {/* Search Bar */}
           <div className="border border-gray-300 py-1 px-2 flex items-center gap-1 rounded-xl bg-white h-12 w-96">
-            <IoIosSearch className="text-gray-700 text-xl" />
+            <RiSearch2Line className="text-gray-700 text-xl" />
             <input
               type="search"
               name="search"
               placeholder="Search Category"
-              className="bg-transparent placeholder:text-gray-700 placeholder:text-base font-light focus:outline-none text-secondary w-full"
+              className="bg-transparent placeholder:text-gray-700 placeholder:text-base focus:outline-none text-secondary w-full"
             />
           </div>
 

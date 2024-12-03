@@ -81,7 +81,7 @@ const GridView = () => {
                                                 </IconButton>
                                             </MenuHandler>
                                             <MenuList>
-                                                <Link to='/home/editProduct'>
+                                                <Link to='/adminHome/editProduct'>
                                                     <MenuItem className='font-custom text-buttonBg hover:!text-buttonBg'>Edit</MenuItem>
                                                 </Link>
                                                 <MenuItem onClick={() => handleOpen("deleteProductModal")} className='font-custom text-primary hover:!text-primary'>

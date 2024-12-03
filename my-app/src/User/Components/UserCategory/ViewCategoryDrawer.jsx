@@ -67,7 +67,7 @@ export function ViewCategoryDrawer() {
                 onClose={handleCloseBottomDrawer}
                 className="rounded-t-3xl overflow-y-scroll"
                 placement="bottom"
-                size={750}
+                size={550}
             >
                 <div className="grid grid-flow-col h-full">
                     {/* Left Side */}
@@ -80,7 +80,7 @@ export function ViewCategoryDrawer() {
                                 <li
                                     key={label}
                                     onClick={() => setFilterBy(label)}
-                                    className={`text-xs cursor-pointer ${filterBy === label
+                                    className={`text-sm cursor-pointer ${filterBy === label
                                             ? "text-secondary font-medium font-custom"
                                             : "text-gray-600 font-custom"
                                         }`}

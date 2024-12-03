@@ -46,19 +46,19 @@ const Footer = () => {
             <ul className='mt-5 space-y-5'>
               <li>
                 <Link className='flex items-center gap-2 font-light text-xs xl:text-sm lg:text-sm md:text-sm hover:text-primary'>
-                  <FiPhone className='text-lg xl:text-xl lg:text-xl md:text-xl' />
+                  <FiPhone className='text-sm xl:text-lg lg:text-lg md:text-lg' />
                   +91 1234567890
                 </Link>
               </li>
               <li>
                 <Link className='flex items-center gap-2 font-light text-xs xl:text-sm lg:text-sm md:text-sm hover:text-primary'>
-                  <FaWhatsapp className='text-lg xl:text-xl lg:text-xl md:text-xl' />
+                  <FaWhatsapp className='text-sm xl:text-lg lg:text-lg md:text-lg' />
                   Whatsapp
                 </Link>
               </li>
               <li>
                 <Link className='flex items-center gap-2 font-light text-xs xl:text-sm lg:text-sm md:text-sm hover:text-primary'>
-                  <FaRegEnvelope className='text-lg xl:text-xl lg:text-xl md:text-xl' />
+                  <FaRegEnvelope className='text-sm xl:text-lg lg:text-lg md:text-lg' />
                   support@gmail.com
                 </Link>
               </li>
