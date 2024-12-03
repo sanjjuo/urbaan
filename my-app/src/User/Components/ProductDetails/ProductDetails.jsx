@@ -135,7 +135,7 @@ const ProductDetails = () => {
                             <div className='mt-2'>
                                 <ul className='flex items-center gap-3 xl:gap-4 lg:gap-4'>
                                     <li className='text-deleteBg font-medium text-2xl xl:text-base lg:text-base'>- 50%</li>
-                                    <li className='font-semibold text-3xl xl:text-2xl lg:text-2xl'>₹{selectedProduct.price}</li>
+                                    <li className='font-bold text-3xl xl:text-2xl lg:text-2xl'>₹{selectedProduct.price}</li>
                                 </ul>
                                 <p className="text-gray-600 font-normal text-sm xl:text-base lg:text-base">
                                     M.R.P : <s>₹1000</s>

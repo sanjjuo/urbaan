@@ -51,7 +51,7 @@ const ViewAllCategory = () => {
     return (
         <>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
-                <div className="flex items-center gap-3 text-xl font-medium cursor-pointer">
+                <div className="flex items-center gap-3">
                     <IoIosArrowBack onClick={() => navigate(-1)} className="text-secondary text-2xl cursor-pointer" />
                     <input
                         type="search"
