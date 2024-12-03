@@ -3,6 +3,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import { RxHeart } from 'react-icons/rx';
+import { ViewCategoryDrawer } from './ViewCategoryDrawer';
 
 
 const products = [
@@ -45,7 +46,8 @@ const products = [
 
 const ViewAllCategory = () => {
     const navigate = useNavigate();
-    const { handleProductDetails } = useContext(AppContext);
+    const { handleProductDetails, handleOpenBottomDrawer } = useContext(AppContext);
+
     return (
         <>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
@@ -58,7 +60,7 @@ const ViewAllCategory = () => {
                         placeholder='Churidar Materials'
                         className='w-full text-sm p-2 rounded-lg placeholder:font-normal bg-searchUser placeholder:text-gray-700'
                     />
-                    <div className='bg-searchUser p-2 rounded-lg'>
+                    <div onClick={handleOpenBottomDrawer} className='bg-searchUser p-2 rounded-lg'>
                         <div className='w-5 h-5'>
                             <img src="/filter.png" alt="" className='w-full h-full' />
                         </div>
@@ -86,6 +88,8 @@ const ViewAllCategory = () => {
                     }
                 </div>
             </div>
+
+            <ViewCategoryDrawer />
         </>
     )
 }

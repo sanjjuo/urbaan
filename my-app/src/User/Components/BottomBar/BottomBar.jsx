@@ -55,7 +55,7 @@ const BottomBar = () => {
                     <span className="text-[11px] h-5">Home</span>
                 </li></Link>
 
-                <Link><li onClick={() => setIconActive("search")} className={`text-gray-500 hover:text-primary flex flex-col items-center
+                <Link to='/user-search'><li onClick={() => setIconActive("search")} className={`text-gray-500 hover:text-primary flex flex-col items-center
                         ${iconActive === "search" ? "text-primary" : ""}`}>
                     {
                         iconActive === "search" ? (
@@ -71,7 +71,7 @@ const BottomBar = () => {
                     <span className="text-[11px] h-5">Search</span>
                 </li></Link>
 
-                <Link><li onClick={() => setIconActive("cart")} className={`text-gray-500 hover:text-primary flex flex-col items-center
+                <Link to='/user-cart'><li onClick={() => setIconActive("cart")} className={`text-gray-500 hover:text-primary flex flex-col items-center
                         ${iconActive === "cart" ? "text-primary" : ""}`}>
                     {
                         iconActive === "cart" ? (

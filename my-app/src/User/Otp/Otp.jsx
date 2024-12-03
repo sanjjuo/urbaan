@@ -25,8 +25,8 @@ export function Otp() {
 
   return (
     <>
-      <div className='bg-userBg h-screen px-4 flex justify-center lg:px-0 xl:px-0'>
-        <Card color='transparent' shadow={false} className='flex justify-center items-center'>
+      <div className='bg-userBg h-screen px-4 flex justify-center items-center lg:px-0 xl:px-0'>
+        <Card color='transparent' shadow={false} className='flex items-center'>
           <Typography variant="h4" className='text-primary font-custom text-center text-4xl xl:text-3xl lg:text-3xl'>
             Verification
           </Typography>
@@ -70,7 +70,7 @@ export function Otp() {
             >
               Didn't get the OTP ? <span className="font-light">Resend SMS in 30s</span>
             </Typography>
-            <Link to='/home'>
+            <Link to='/'>
               <Button className='mt-8 bg-primary text-sm font-normal capitalize font-custom w-full'>Confirm</Button>
             </Link>
           </div>
