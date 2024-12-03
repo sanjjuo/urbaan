@@ -25,6 +25,8 @@ import FavouriteProduct from './User/Components/FavouriteProduct/FavouriteProduc
 import UserProfile from './User/Components/UserProfile/UserProfile';
 import EditUserProfile from './User/Components/UserProfile/EditUserProfile';
 import ViewAllCategory from './User/Components/UserCategory/ViewAllCategory';
+import UserSearch from './User/Components/UserSearch/UserSearch';
+import UserCart from './User/Components/UserCart/UserCart';
 
 const FullRoutes = () => {
     return (
@@ -56,9 +58,11 @@ const RoutesWithLocation = () => {
                 <Route path='/customer-reviews' element={<CustomerReviews />} />
                 <Route path='/write-review' element={<WriteReview />} />
                 <Route path='/favourite' element={<FavouriteProduct />} />
-                <Route path='/user-profile' element={<UserProfile/>}/>
-                <Route path='/edit-user-profile' element={<EditUserProfile/>}/>
-                <Route path='/view-all-category' element={<ViewAllCategory/>}/>
+                <Route path='/user-profile' element={<UserProfile />} />
+                <Route path='/edit-user-profile' element={<EditUserProfile />} />
+                <Route path='/view-all-category' element={<ViewAllCategory />} />
+                <Route path='/user-search' element={<UserSearch />} />
+                <Route path='/user-cart' element={<UserCart />} />
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />
