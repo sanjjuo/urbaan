@@ -92,7 +92,7 @@ export function ViewCategoryDrawer() {
                     </div>
 
                     {/* Right Side */}
-                    <div className="col-span-2 bg-gray-100 flex flex-col p-4 rounded-tr-3xl">
+                    <div className="col-span-2 bg-gray-100 flex flex-col p-4 rounded-tr-3xl overflow-y-scroll">
                         <ul className="-space-y-2">
                             {filters[filterBy]?.map((item, index) => (
                                 <li key={index}>
