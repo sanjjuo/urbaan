@@ -18,7 +18,7 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                         <div className='w-16 h-16'>
                             <img src="/user.png" alt="" className='w-full h-full object-cover' />
                         </div>
-                        <Link to='/login-user'>
+                        <Link onClick={handleCloseDrawer} to='/login-user'>
                             <p className='text-primary font-medium underline'>SIGN IN</p>
                         </Link>
                     </div>
@@ -43,9 +43,9 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                 <div className="my-8 p-0">
                     <h2 className='text-sm font-medium tracking-wider'>ORDER INFO</h2>
                     <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
-                        <Link to='/user-cart'><li>Cart</li></Link>
-                        <Link to='/favourite'><li>Wishlist</li></Link>
-                        <Link to='/view-orders-tracking'><li>Track Order</li></Link>
+                        <li onClick={handleCloseDrawer}><Link to='/user-cart'>Cart</Link></li>
+                        <li onClick={handleCloseDrawer}><Link to='/favourite'>Wishlist</Link></li>
+                        <li onClick={handleCloseDrawer}><Link to='/view-orders-tracking'>Track Order</Link></li>
                     </ul>
                 </div>
 

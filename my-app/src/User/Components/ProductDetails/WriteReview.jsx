@@ -63,8 +63,9 @@ const WriteReview = () => {
                         <div className='flex-1 mt-4'>
                             <textarea
                                 name="description"
-                                rows="5"
-                                className="w-full h-full border-2 border-gray-400 bg-transparent p-2 rounded-lg resize-none overflow-y-scroll hide-scrollbar focus:outline-none placeholder:text-xs xl:placeholder:text-sm
+                                // rows="5"
+                                className="w-full h-full border-2 border-gray-400 bg-transparent p-2 rounded-lg resize-none overflow-y-scroll hide-scrollbar focus:outline-none 
+                                placeholder:text-xs xl:placeholder:text-sm
                                 lg:placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
                                 placeholder="Would you like to write anything about this Product?"
                             ></textarea>

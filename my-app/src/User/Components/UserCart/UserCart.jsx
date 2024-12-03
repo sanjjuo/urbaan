@@ -3,8 +3,8 @@ import React from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { Link, useNavigate } from 'react-router-dom';
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { GoPlus } from "react-icons/go";
-import { AiOutlineMinus } from "react-icons/ai";
+import { BsPlusLg } from "react-icons/bs";
+import { HiMinus } from "react-icons/hi2";
 import { RiCoupon4Line } from "react-icons/ri";
 
 const UserCart = () => {
@@ -23,7 +23,7 @@ const UserCart = () => {
                     <Card className='p-2 mt-5'>
                         <div className='flex justify-between'>
                             <div className='flex gap-2'>
-                                <div className='w-20 h-24'>
+                                <div className='w-20 h-28'>
                                     <img src="/p1.jpg" alt="" className='w-full h-full object-cover rounded-lg' />
                                 </div>
                                 <div>
@@ -32,14 +32,26 @@ const UserCart = () => {
                                         <li className='text-sm'>Color: Yellow</li>
                                         <li className='text-sm'>Size: M</li>
                                     </ul>
-                                    <ul className='flex items-center gap-1 mt-3'>
-                                        <li className='bg-searchUser p-1 text-secondary rounded-md w-6'><AiOutlineMinus /></li>
-                                        <li className='text-secondary w-6 text-center'>3</li>
-                                        <li className='bg-searchUser p-1 text-secondary rounded-md w-6'><GoPlus /></li>
+                                    <ul className="flex items-center justify-between mt-3 border border-gray-300 rounded-lg p-1 bg-white shadow-sm">
+                                        {/* Decrease Button */}
+                                        <li className="text-secondary flex items-center justify-center w-7 h-7 rounded-full cursor-pointer">
+                                            <HiMinus className="text-lg" />
+                                        </li>
+
+                                        {/* Quantity */}
+                                        <li className="text-secondary text-center font-medium text-base w-7">
+                                            3
+                                        </li>
+
+                                        {/* Increase Button */}
+                                        <li className="text-secondary flex items-center justify-center w-7 h-7 rounded-full cursor-pointer">
+                                            <BsPlusLg className="text-lg" />
+                                        </li>
                                     </ul>
+
                                 </div>
                             </div>
-                            <div className='flex flex-col items-center justify-between'>
+                            <div className='flex flex-col items-end justify-between'>
                                 <RiDeleteBin5Line className='text-deleteBg' />
                                 <p className='text-secondary font-semibold text-xl'>₹400</p>
                             </div>
@@ -86,7 +98,7 @@ const UserCart = () => {
                             <p className='text-primary underline text-sm font-medium'>Change</p>
                         </div>
                         <p className='text-sm font-normal text-gray-500 mb-3'>
-                        Apartment 304, Building 5,1234 Elm Street, Suite 567 Example City, EX 12345 PO Box 654321
+                            Apartment 304, Building 5,1234 Elm Street, Suite 567 Example City, EX 12345 PO Box 654321
                         </p>
                         <Link to='/add-delivery-address' className='w-full'><Button className='w-full bg-primary font-custom font-normal text-sm capitalize'>Checkout</Button></Link>
                     </Card>

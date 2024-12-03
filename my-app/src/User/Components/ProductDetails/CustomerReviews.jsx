@@ -32,7 +32,7 @@ const reviews = [
 
 const CustomerReviews = () => {
     const navigate = useNavigate();
-    
+
     return (
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
@@ -45,7 +45,7 @@ const CustomerReviews = () => {
             </div>
 
             {/* Customer Reviews */}
-            <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
+            <div className="px-4 py-10 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
                 <div className='flex items-center justify-between gap-0 pb-6 border-b-2 border-gray-300'>
                     <div className='flex flex-col justify-between gap-10 w-3/4 xl:w-1/4 lg:w-1/4'>
                         <h1 className='uppercase font-normal flex items-center gap-2 text-sm xl:text-xl lg:text-xl'>
@@ -84,7 +84,7 @@ const CustomerReviews = () => {
                         <li
                             key={label}
                             className="font-normal capitalize text-xs xl:text-sm lg:text-sm font-custom min-w-[100px] sm:min-w-[128px] py-2 px-5 sm:p-3 flex justify-center items-center 
-            rounded-2xl border border-primary text-primary hover:bg-primary hover:text-white hover:opacity-100 whitespace-nowrap cursor-pointer"
+                            rounded-2xl border border-primary text-primary bg-white hover:bg-primary hover:text-white hover:opacity-100 whitespace-nowrap cursor-pointer"
                         >
                             {label}
                         </li>

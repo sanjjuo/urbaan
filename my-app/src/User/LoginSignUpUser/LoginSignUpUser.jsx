@@ -114,13 +114,13 @@ export function LoginSignUpUser() {
 
                         <div className='flex flex-col items-center justify-center gap-4 mt-10'>
                             <Typography className='font-custom font-medium text-secondary text-sm'>Or continue with</Typography>
-                            <ul className='flex items-center gap-5'>
+                            <ul className='flex items-center gap-3'>
                                 <li className='bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl 
-                                w-16 h-8 p-1 rounded-md flex justify-center items-center cursor-pointer'><RiGoogleFill /></li>
+                                w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer'><RiGoogleFill /></li>
                                 <li className='bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl 
-                                w-16 h-8 p-1 rounded-md flex justify-center items-center cursor-pointer'><FaFacebook /></li>
+                                w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer'><FaFacebook /></li>
                                 <li className='bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl 
-                                w-16 h-8 p-1 rounded-md flex justify-center items-center cursor-pointer'><GrApple /></li>
+                                w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer'><GrApple /></li>
                             </ul>
                         </div>
 
