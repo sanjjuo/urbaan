@@ -43,9 +43,9 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                 <div className="my-8 p-0">
                     <h2 className='text-sm font-medium tracking-wider'>ORDER INFO</h2>
                     <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
-                        <li>Cart</li>
-                        <li>Wishlist</li>
-                        <li>track Order</li>
+                        <Link to='/user-cart'><li>Cart</li></Link>
+                        <Link to='/favourite'><li>Wishlist</li></Link>
+                        <Link to='/view-orders-tracking'><li>Track Order</li></Link>
                     </ul>
                 </div>
 
