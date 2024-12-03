@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 const UserProfile = () => {
   return (
     <>
-      <div className="px-8 py-16 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
+      <div className="px-8 py-16 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] overflow-y-auto">
         <div className='flex flex-col justify-center items-center gap-2'>
           <div className='w-32 h-32'>
             <img src="/userProfile.jpg" alt="" className='w-full h-full object-cover rounded-3xl' />

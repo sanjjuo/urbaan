@@ -27,6 +27,8 @@ import EditUserProfile from './User/Components/UserProfile/EditUserProfile';
 import ViewAllCategory from './User/Components/UserCategory/ViewAllCategory';
 import UserSearch from './User/Components/UserSearch/UserSearch';
 import UserCart from './User/Components/UserCart/UserCart';
+import UserAddress from './User/Components/UserAddress/UserAddress';
+import SelectUserAddress from './User/Components/UserAddress/SelectUserAddress';
 
 const FullRoutes = () => {
     return (
@@ -63,6 +65,8 @@ const RoutesWithLocation = () => {
                 <Route path='/view-all-category' element={<ViewAllCategory />} />
                 <Route path='/user-search' element={<UserSearch />} />
                 <Route path='/user-cart' element={<UserCart />} />
+                <Route path='/add-delivery-address' element={<UserAddress />} />
+                <Route path='/select-delivery-address' element={<SelectUserAddress />} />
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />

@@ -1,7 +1,7 @@
 import { Button, Card } from '@material-tailwind/react'
 import React from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { GoPlus } from "react-icons/go";
 import { AiOutlineMinus } from "react-icons/ai";
@@ -88,7 +88,7 @@ const UserCart = () => {
                         <p className='text-sm font-normal text-gray-500 mb-3'>
                         Apartment 304, Building 5,1234 Elm Street, Suite 567 Example City, EX 12345 PO Box 654321
                         </p>
-                        <Button className='bg-primary font-custom font-normal text-sm capitalize'>Checkout</Button>
+                        <Link to='/add-delivery-address' className='w-full'><Button className='w-full bg-primary font-custom font-normal text-sm capitalize'>Checkout</Button></Link>
                     </Card>
                 </div>
             </div>

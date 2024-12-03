@@ -54,7 +54,7 @@ const EditUserProfile = () => {
                             name="name"
                             id="name"
                             placeholder="Natalie Portman"
-                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
+                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs placeholder:text-gray-500 focus:outline-none"
                         />
                     </div>
 
@@ -68,7 +68,7 @@ const EditUserProfile = () => {
                             name="email"
                             id="email"
                             placeholder="natalieportmanofficial@gmail.com"
-                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
+                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs placeholder:text-gray-500 focus:outline-none"
                         />
                     </div>
 
@@ -82,7 +82,7 @@ const EditUserProfile = () => {
                             name="password"
                             id="password"
                             placeholder="********"
-                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
+                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs placeholder:text-gray-500 focus:outline-none"
                         />
                     </div>
 
@@ -95,7 +95,7 @@ const EditUserProfile = () => {
                             type="date"
                             name="date"
                             id="dob"
-                            className="w-full border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light focus:outline-none text-gray-500"
+                            className="w-full border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs focus:outline-none text-gray-500"
                         />
                     </div>
 
@@ -108,9 +108,10 @@ const EditUserProfile = () => {
                         <select
                             name="country"
                             id="country"
-                            className="border-[1px] bg-transparent placeholder:font-light border-gray-400 p-2 rounded-md text-sm text-gray-500 focus:outline-none"
+                            defaultValue=""
+                            className="border-[1px] text-xs bg-transparent border-gray-400 p-2 rounded-md text-gray-500 focus:outline-none"
                         >
-                            <option value="" disabled selected>
+                            <option value="" disabled >
                                 Select your country
                             </option>
                             <option value="us">United States</option>
