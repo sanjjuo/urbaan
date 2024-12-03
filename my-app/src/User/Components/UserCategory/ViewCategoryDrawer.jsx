@@ -67,7 +67,7 @@ export function ViewCategoryDrawer() {
                 onClose={handleCloseBottomDrawer}
                 className="rounded-t-3xl overflow-y-scroll"
                 placement="bottom"
-                size={920}
+                size={850}
             >
                 <div className="grid grid-flow-col h-full">
                     {/* Left Side */}
