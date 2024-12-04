@@ -10,7 +10,7 @@ const SelectUserAddress = () => {
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
                 <h1
-                    className="flex items-center gap-5 text-xl font-medium cursor-pointer"
+                    className="flex items-center gap-2 text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" />Select Delivery Address
@@ -24,8 +24,8 @@ const SelectUserAddress = () => {
                                     <h1 className='text-secondary font-bold'>Home</h1>
                                     <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
                                     <div className='mt-3 flex items-center gap-2'>
-                                        <Button variant='outlined' className='text-shippedBg border-shippedBg font-normal
-                                    text-xs py-1 px-6 capitalize'>Edit</Button>
+                                    <Link to='/add-delivery-address'><Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
+                                    text-xs py-1 px-6 capitalize'>Edit</Button></Link>
                                         <Button variant='outlined' className='text-deleteBg border-deleteBg font-normal 
                                     text-xs py-1 px-6 capitalize'>Remove</Button>
                                     </div>
@@ -42,8 +42,8 @@ const SelectUserAddress = () => {
                                     <h1 className='text-secondary font-bold'>Work</h1>
                                     <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
                                     <div className='mt-3 flex items-center gap-2'>
-                                        <Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
-                                    text-xs py-1 px-6 capitalize'>Edit</Button>
+                                        <Link to='/add-delivery-address'><Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
+                                    text-xs py-1 px-6 capitalize'>Edit</Button></Link>
                                         <Button variant='outlined' className='text-deleteBg border-deleteBg font-normal 
                                     text-xs py-1 px-6 capitalize'>Remove</Button>
                                     </div>

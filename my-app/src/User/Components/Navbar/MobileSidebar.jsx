@@ -1,10 +1,5 @@
 import React from "react";
-import {
-    Drawer,
-    Button,
-    Typography,
-    IconButton,
-} from "@material-tailwind/react";
+import { Drawer } from "@material-tailwind/react";
 import { HiMiniXMark } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 
@@ -45,7 +40,7 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                     <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
                         <li onClick={handleCloseDrawer}><Link to='/user-cart'>Cart</Link></li>
                         <li onClick={handleCloseDrawer}><Link to='/favourite'>Wishlist</Link></li>
-                        <li onClick={handleCloseDrawer}><Link to='/view-orders-tracking'>Track Order</Link></li>
+                        <li onClick={handleCloseDrawer}><Link to='/orders-tracking'>Track Order</Link></li>
                     </ul>
                 </div>
 

@@ -20,7 +20,7 @@ const WriteReview = () => {
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
                 <h1
-                    className="flex items-center gap-5 text-xl font-medium cursor-pointer"
+                    className="flex items-center gap-2 text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Write a Review
@@ -78,7 +78,7 @@ const WriteReview = () => {
                 </div>
 
                 <div className="bg-white shadow-md fixed bottom-0 inset-x-0 flex justify-center z-50 p-4 lg:hidden xl:hidden md:hidden">
-                    <Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Write a Review</Button>
+                    <Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Submit Review</Button>
                 </div>
             </div>
 

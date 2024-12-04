@@ -9,7 +9,7 @@ const FavouriteProduct = () => {
         <>
             <div className='bg-userBg p-4 xl:p-16 lg:p-16 space-y-8 xl:space-y-14 lg:space-y-14 h-screen'>
                 <h1
-                    className="flex items-center gap-3 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
+                    className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> My Wishlist

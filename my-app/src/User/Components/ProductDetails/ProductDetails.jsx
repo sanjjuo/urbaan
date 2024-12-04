@@ -85,7 +85,7 @@ const ProductDetails = () => {
     return (
         <>
             <div className='sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-4 px-4'>
-                <ul className='flex items-center gap-5'>
+                <ul className='flex items-center gap-2'>
                     <li onClick={() => navigate(-1)} className='text-2xl text-secondary hover:text-primary'><IoIosArrowBack /></li>
                     <li className="w-24">
                         <img src="/logo.png" alt="" className='w-full object-contain' />

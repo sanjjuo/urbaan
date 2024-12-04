@@ -13,6 +13,7 @@ import { TbListCheck } from "react-icons/tb";
 import { RiCouponLine } from "react-icons/ri";
 import { PiUsersBold } from "react-icons/pi";
 import { TbFileInvoice } from "react-icons/tb";
+import { TfiLayoutSlider } from "react-icons/tfi";
 import { Link, useLocation } from "react-router-dom";
 
 export function AppSidebar() {
@@ -28,6 +29,7 @@ export function AppSidebar() {
         if (path === "/adminHome/editProduct") return "product";
         if (path === "/adminHome/category") return "category";
         if (path === "/adminHome/subcategory") return "subcategory";
+        if (path === "/adminHome/adminslider") return "adminslider";
         if (path === "/adminHome/orderlist") return "orderlist";
         if (path === "/adminHome/coupon") return "coupon";
         if (path === "/adminHome/userslist") return "userslist";
@@ -45,6 +47,7 @@ export function AppSidebar() {
         else if (path === "/adminHome/editProduct") setActiveLink("product");
         else if (path === "/adminHome/category") setActiveLink("category");
         else if (path === "/adminHome/subcategory") setActiveLink("subcategory");
+        else if (path === "/adminHome/adminslider") setActiveLink("adminslider");
         else if (path === "/adminHome/orderlist") setActiveLink("orderlist");
         else if (path === "/adminHome/coupon") setActiveLink("coupon");
         else if (path === "/adminHome/userslist") setActiveLink("userslist");
@@ -53,7 +56,7 @@ export function AppSidebar() {
     }, [location]);
     return (
         <>
-            <Card className="hidden lg:block h-screen lg:w-64 pt-4 shadow-none rounded-none">
+            <Card className="hidden lg:block h-screen lg:w-64 pt-4 shadow-none rounded-none overflow-y-auto hide-scrollbar">
                 <div className='flex justify-center items-center'>
                     <div className="mb-2 pt-2 w-28 rounded-3xl">
                         <img src="/logo.png" alt="" className='w-full object-contain' />
@@ -96,6 +99,16 @@ export function AppSidebar() {
                                 <CgListTree className="h-5 w-5" />
                             </ListItemPrefix>
                             Sub Category
+                        </ListItem>
+                    </Link>
+
+                    <Link to='/adminHome/adminslider'>
+                        <ListItem onClick={() => setActiveLink('adminslider')} className={`text-secondary bg-gray-100 p-4 text-base font-medium transition-all duration-300 ease-in-out
+                            ${activeLink === "adminslider" ? "!bg-primary text-white py-7 focus:!text-white" : "bg-none"}`}>
+                            <ListItemPrefix>
+                                <TfiLayoutSlider className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Slider
                         </ListItem>
                     </Link>
 

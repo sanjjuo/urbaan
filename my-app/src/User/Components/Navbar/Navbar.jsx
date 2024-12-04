@@ -78,7 +78,7 @@ const UserNavbar = () => {
 
     // pages where navbar don't visible
     const noNavbar = ["/product-details", "/customer-reviews", "/write-review", "/add-delivery-address", "/select-delivery-address", "/orders-tracking",
-        "/select-tracking", "/view-orders-tracking"]
+        "/select-tracking", "/orders-tracking", "/all-category"]
 
     // Check if current path matches any of the visible routes
     if (noNavbar.includes(location.pathname)) {
@@ -131,7 +131,7 @@ const UserNavbar = () => {
                     </li>
                 </ul>
                 <ul className='flex items-center gap-3'>
-                    <li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li>
+                    <Link to='/user-search'><li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li></Link>
                     <Link to="/favourite">
                         <li className="text-2xl text-secondary">
                             {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}

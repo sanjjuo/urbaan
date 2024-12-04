@@ -22,33 +22,32 @@ const UserProfile = () => {
         </div>
 
         <div className='mt-10'>
-          <ul className='space-y-4 xl:space-y-8 lg:space-y-8 xl:mx-72 lg:mx-72'>
-            <li className='flex items-center justify-between'>
+          <ul className='space-y-3 xl:space-y-8 lg:space-y-8 xl:mx-72 lg:mx-72'>
+            <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
               <span className='flex items-center gap-2 text-base'><RiAccountBoxLine className='text-lg' />Account Details</span>
-              <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
+              <span className='text-sm xl:text-base lg:text-base'>
                 <IoIosArrowForward /></span>
             </li>
-            <li className='flex items-center justify-between'>
+           <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
               <span className='flex items-center gap-2 text-base'><TbAddressBook className='text-lg' />Address</span>
-              <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
+              <span className='text-sm xl:text-base lg:text-base'>
                 <IoIosArrowForward /></span>
             </li>
-            <li className='flex items-center justify-between'>
+           <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
               <span className='flex items-center gap-2 text-base'><LiaClipboardListSolid className='text-lg' />Orders</span>
-              <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
+              <span className='text-sm xl:text-base lg:text-base'>
                 <IoIosArrowForward /></span>
             </li>
-            <li className='flex items-center justify-between'>
+           <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
               <span className='flex items-center gap-2 text-base'><RiHeart3Line className='text-lg' />Wishlist</span>
-              <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>
+              <span className='text-sm xl:text-base lg:text-base'>
                 <IoIosArrowForward /></span>
             </li>
           </ul>
         </div>
 
-        <div className='flex items-center justify-center mt-5'>
-          <Link to='/login-user'><Button variant='outlined' className='flex items-center gap-1 w-32 text-sm font-custom capitalize font-normal text-primary border-primary
-            bg-white hover:bg-primary hover:text-white hover:opacity-100 py-2'>
+        <div className='flex items-center justify-center mt-8'>
+          <Link to='/login-user'><Button className='flex items-center justify-center gap-1 w-36 text-sm font-custom capitalize font-normal text-white bg-primary'>
             <RiLogoutCircleRFill className='text-lg' />Logout</Button></Link>
         </div>
       </div>

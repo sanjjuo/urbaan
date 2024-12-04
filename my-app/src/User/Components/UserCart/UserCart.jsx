@@ -13,7 +13,7 @@ const UserCart = () => {
         <>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
                 <h1
-                    className="flex items-center gap-3 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
+                    className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Cart

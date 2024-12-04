@@ -13,6 +13,8 @@ import Invoice from "./Admin/Components/MainComponents/Invoice/Invoice";
 import AddProduct from "./Admin/Components/MainComponents/Products/AddProduct";
 import ViewUserDetails from "./Admin/Components/MainComponents/UsersList/ViewUserManagement";
 import EditProduct from "./Admin/Components/MainComponents/Products/EditProduct";
+import AdminSlider from './Admin/Components/MainComponents/AdminSlider/AdminSlider';
+
 import ScrollToTop from "./ScrollToTop";
 import { LoginSignUpUser } from './User/LoginSignUpUser/LoginSignUpUser';
 import { Otp } from './User/Otp/Otp';
@@ -27,8 +29,10 @@ import EditUserProfile from './User/Components/UserProfile/EditUserProfile';
 import ViewAllCategory from './User/Components/UserCategory/ViewAllCategory';
 import UserSearch from './User/Components/UserSearch/UserSearch';
 import UserCart from './User/Components/UserCart/UserCart';
-import UserAddress from './User/Components/UserAddress/UserAddress';
 import SelectUserAddress from './User/Components/UserAddress/SelectUserAddress';
+import OrdersTracking from './User/Components/TrackOrder/OrdersTracking';
+import AllCategory from './User/Components/UserCategory/AllCategory';
+import AddUserAddress from './User/Components/UserAddress/AddUserAddress';
 
 const FullRoutes = () => {
     return (
@@ -63,10 +67,12 @@ const RoutesWithLocation = () => {
                 <Route path='/user-profile' element={<UserProfile />} />
                 <Route path='/edit-user-profile' element={<EditUserProfile />} />
                 <Route path='/view-all-category' element={<ViewAllCategory />} />
+                <Route path='/all-category' element={<AllCategory />} />
                 <Route path='/user-search' element={<UserSearch />} />
                 <Route path='/user-cart' element={<UserCart />} />
-                <Route path='/add-delivery-address' element={<UserAddress />} />
+                <Route path='/add-delivery-address' element={<AddUserAddress />} />
                 <Route path='/select-delivery-address' element={<SelectUserAddress />} />
+                <Route path='/orders-tracking' element={<OrdersTracking />} />
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />
@@ -75,6 +81,7 @@ const RoutesWithLocation = () => {
                     <Route path='product' element={<Products />} />
                     <Route path='category' element={<Category />} />
                     <Route path='subcategory' element={<SubCategory />} />
+                    <Route path='adminslider' element={<AdminSlider />} />
                     <Route path='orderlist' element={<OrderList />} />
                     <Route path='coupon' element={<Coupons />} />
                     <Route path='userslist' element={<UsersList />} />

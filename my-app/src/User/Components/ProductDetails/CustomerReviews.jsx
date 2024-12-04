@@ -37,7 +37,7 @@ const CustomerReviews = () => {
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
                 <h1
-                    className="flex items-center gap-5 text-xl font-medium cursor-pointer"
+                    className="flex items-center gap-2 text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Customer Reviews
