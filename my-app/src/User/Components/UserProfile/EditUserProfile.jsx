@@ -43,7 +43,7 @@ const EditUserProfile = () => {
                     </label>
                 </div>
 
-                <form action="" className="space-y-5 mt-10">
+                <form action="" className="space-y-5 mt-10 xl:mx-72 lg:mx-72">
                     {/* Name */}
                     <div className="flex flex-col gap-1">
                         <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">

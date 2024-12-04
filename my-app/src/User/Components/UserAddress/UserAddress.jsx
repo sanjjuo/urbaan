@@ -1,10 +1,12 @@
 import { Button } from '@material-tailwind/react'
 import React from 'react'
+import { useState } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
 import { Link, useNavigate } from 'react-router-dom'
 
 const UserAddress = () => {
     const navigate = useNavigate()
+    const [button, setButton] = useState("home")
     return (
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
@@ -100,14 +102,16 @@ const UserAddress = () => {
 
                     {/* save address */}
                     <div className='flex items-center gap-3'>
-                        <Button variant='outlined' className='text-primary border-primary font-custom text-sm capitalize'>Home</Button>
-                        <Button variant='outlined' className='text-secondary border-secondary font-custom text-sm capitalize'>Work</Button>
+                        <Button onClick={()=>setButton("home")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
+                        ${button === "home" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Home</Button>
+                        <Button onClick={()=>setButton("work")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
+                        ${button === "work" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Work</Button>
                     </div>
 
                     {/* button */}
                     <div className='mb-3'>
                         <Link to='/select-delivery-address'>
-                            <Button className='bg-primary font-custom text-sm capitalize w-full'>Save Address</Button>
+                            <Button className='bg-primary font-custom text-sm capitalize w-full font-normal'>Save Address</Button>
                         </Link>
                     </div>
                 </form>

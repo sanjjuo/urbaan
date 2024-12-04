@@ -17,48 +17,48 @@ const SelectUserAddress = () => {
                 </h1>
             </div>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
-                <div className='space-y-5'>
-                    <Card className='p-4'>
-                        <div className='flex justify-between'>
-                            <div>
-                                <h1 className='text-secondary font-bold'>Home</h1>
-                                <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
-                                <div className='mt-3 flex items-center gap-2'>
-                                    <Button variant='outlined' className='text-shippedBg border-shippedBg font-normal
+                <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-5">
+                        <Card className='p-4 xl:p-10 lg:p-10'>
+                            <div className='flex justify-between'>
+                                <div>
+                                    <h1 className='text-secondary font-bold'>Home</h1>
+                                    <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
+                                    <div className='mt-3 flex items-center gap-2'>
+                                        <Button variant='outlined' className='text-shippedBg border-shippedBg font-normal
                                     text-xs py-1 px-6 capitalize'>Edit</Button>
-                                    <Button variant='outlined' className='text-deleteBg border-deleteBg font-normal 
+                                        <Button variant='outlined' className='text-deleteBg border-deleteBg font-normal 
                                     text-xs py-1 px-6 capitalize'>Remove</Button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Radio name="color" color='pink' className='border-primary border-2' />
                                 </div>
                             </div>
-                            <div>
-                                <Radio name="color" color='pink' className='border-primary border-2' />
-                            </div>
-                        </div>
-                    </Card>
+                        </Card>
 
-                    <Card className='p-4'>
-                        <div className='flex justify-between'>
-                            <div>
-                                <h1 className='text-secondary font-bold'>Work</h1>
-                                <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
-                                <div className='mt-3 flex items-center gap-2'>
-                                    <Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
+                        <Card className='p-4 xl:p-10 lg:p-10'>
+                            <div className='flex justify-between'>
+                                <div>
+                                    <h1 className='text-secondary font-bold'>Work</h1>
+                                    <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
+                                    <div className='mt-3 flex items-center gap-2'>
+                                        <Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
                                     text-xs py-1 px-6 capitalize'>Edit</Button>
-                                    <Button variant='outlined' className='text-deleteBg border-deleteBg font-normal 
+                                        <Button variant='outlined' className='text-deleteBg border-deleteBg font-normal 
                                     text-xs py-1 px-6 capitalize'>Remove</Button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Radio name="color" color='pink' className='border-primary border-2' />
                                 </div>
                             </div>
-                            <div>
-                                <Radio name="color" color='pink' className='border-primary border-2' />
-                            </div>
-                        </div>
-                    </Card>
+                        </Card>
                 </div>
 
-                <div className='mt-5 flex flex-col gap-2'>
-                    <Button variant='outlined' className='border-primary text-primary text-sm capitalize font-custom 
-                    font-normal flex items-center gap-2 justify-center'><GoPlus/>Add new address</Button>
-                    <Button className='bg-primary text-white text-sm capitalize font-custom 
+                <div className='mt-5 flex flex-col xl:flex-row lg:flex-row gap-2 justify-normal xl:justify-center xl:items-center'>
+                    <Link to='/add-delivery-address'><Button variant='outlined' className='w-full xl:w-52 lg:w-52 border-primary text-primary text-sm capitalize font-custom 
+                    font-normal flex items-center gap-2 justify-center'><GoPlus />Add new address</Button></Link>
+                    <Button className='w-full xl:w-52 lg:w-52 bg-primary text-white text-sm capitalize font-custom 
                     font-normal'>Continue</Button>
                 </div>
             </div>

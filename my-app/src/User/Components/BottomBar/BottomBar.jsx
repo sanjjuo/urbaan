@@ -8,6 +8,7 @@ import { RiHome5Fill } from "react-icons/ri";
 import { RiShoppingCartFill } from "react-icons/ri";
 import { RiUser3Fill } from "react-icons/ri";
 import { RiSearch2Fill } from "react-icons/ri";
+import { Chip } from '@material-tailwind/react';
 
 const BottomBar = () => {
     const location = useLocation();
@@ -76,11 +77,19 @@ const BottomBar = () => {
                     {
                         iconActive === "cart" ? (
                             <>
-                                <span><RiShoppingCartFill className="text-2xl" /></span>
+                                <span className='relative'>
+                                    <RiShoppingCartFill className="text-2xl" />
+                                    <Chip value="2" size="sm" className="rounded-full bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex 
+                                        justify-center items-center" />
+                                </span>
                             </>
                         ) : (
                             <>
-                                <span><RiShoppingCartLine className="text-2xl" /></span>
+                                <span className='relative'>
+                                    <RiShoppingCartLine className="text-2xl" />
+                                    <Chip value="2" size="sm" className="rounded-full text-xs bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex 
+                                        justify-center items-center" />
+                                </span>
                             </>
                         )
                     }

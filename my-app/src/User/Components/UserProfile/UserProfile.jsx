@@ -22,7 +22,7 @@ const UserProfile = () => {
         </div>
 
         <div className='mt-10'>
-          <ul className='space-y-4'>
+          <ul className='space-y-4 xl:space-y-8 lg:space-y-8 xl:mx-72 lg:mx-72'>
             <li className='flex items-center justify-between'>
               <span className='flex items-center gap-2 text-base'><RiAccountBoxLine className='text-lg' />Account Details</span>
               <span className='text-sm xl:text-base lg:text-base bg-white rounded-full shadow-md w-5 h-5 flex items-center justify-center'>

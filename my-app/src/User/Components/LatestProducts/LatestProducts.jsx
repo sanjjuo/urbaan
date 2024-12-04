@@ -45,7 +45,7 @@ const LatestProducts = () => {
   const { handleProductDetails } = useContext(AppContext);
   return (
     <>
-      <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center'>Latest Products</h1>
+      <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center xl:text-left'>Latest Products</h1>
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5'>
         {
           products.map((product) => (
