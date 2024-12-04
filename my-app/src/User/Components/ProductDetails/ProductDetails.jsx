@@ -11,6 +11,7 @@ import { AppContext } from '../../../StoreContext/StoreContext';
 import { IoHeartOutline } from "react-icons/io5";
 import { IoIosArrowBack } from 'react-icons/io';
 import { RiHeart3Fill, RiHeart3Line, RiSearch2Line } from 'react-icons/ri';
+import { products } from '../../../data';
 
 
 const reviews = [
@@ -38,46 +39,8 @@ const reviews = [
 
 ]
 
-const products = [
-    {
-        id: "1",
-        img: "/p1.jpg",
-        title: "Kurti",
-        description: "Trendy, comfy crop tops for all.",
-        price: "500"
-    },
-    {
-        id: "2",
-        img: "/p2.jpg",
-        title: "Duppatta",
-        description: "Trendy, comfy crop tops for all.",
-        price: "700"
-    },
-    {
-        id: "3",
-        img: "/p3.jpg",
-        title: "Home wear",
-        description: "Trendy, comfy crop tops for all.",
-        price: "300"
-    },
-    {
-        id: "4",
-        img: "/p4.jpg",
-        title: "Churidar",
-        description: "Trendy, comfy crop tops for all.",
-        price: "800"
-    },
-    {
-        id: "5",
-        img: "/p5.jpg",
-        title: "White printed Pants",
-        description: "Trendy, comfy crop tops for all.",
-        price: "400"
-    },
-]
-
 const ProductDetails = () => {
-    const { selectedProduct } = useContext(AppContext)
+    const { handleProductDetails, selectedProduct } = useContext(AppContext)
     const location = useLocation("")
     const isFavouritePage = location.pathname === "/favourite";
     const navigate = useNavigate();
@@ -286,7 +249,7 @@ const ProductDetails = () => {
                     <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
                         {
                             products.map((product) => (
-                                <Link to='/product-details' className='cursor-pointer' key={product.id}>
+                                <Link onClick={() => handleProductDetails(product)} to='/product-details' className='cursor-pointer' key={product.id}>
                                     <div className='group'>
                                         <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
                                             <img src={product.img} alt={product.title} className='w-full h-full object-cover rounded-xl shadow-md

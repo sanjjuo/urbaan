@@ -2,44 +2,7 @@ import React, { useContext } from 'react';
 import { RxHeart } from "react-icons/rx";
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
-
-const products = [
-    {
-        id: "1",
-        img: "/p1.jpg",
-        title: "Kurti",
-        description: "Trendy, comfy crop tops for all.",
-        price: "500"
-    },
-    {
-        id: "2",
-        img: "/p2.jpg",
-        title: "Duppatta",
-        description: "Trendy, comfy crop tops for all.",
-        price: "700"
-    },
-    {
-        id: "3",
-        img: "/p3.jpg",
-        title: "Home wear",
-        description: "Trendy, comfy crop tops for all.",
-        price: "300"
-    },
-    {
-        id: "4",
-        img: "/p4.jpg",
-        title: "Churidar",
-        description: "Trendy, comfy crop tops for all.",
-        price: "800"
-    },
-    {
-        id: "5",
-        img: "/p5.jpg",
-        title: "White printed Pants",
-        description: "Trendy, comfy crop tops for all.",
-        price: "400"
-    },
-]
+import { products } from '../../../data';
 
 
 const FeaturedProducts = () => {

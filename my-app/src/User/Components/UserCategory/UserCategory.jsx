@@ -1,54 +1,61 @@
 import React from 'react'
+import { useContext } from 'react';
 import { Link } from 'react-router-dom'
+import { AppContext } from '../../../StoreContext/StoreContext';
 
 const UserCategory = () => {
+  const { setSelectedCategory } = useContext(AppContext);
   const categories = [
     {
       id: "1",
       catImg: "/c1.jpg",
-      catTitle: "Kurti"
+      catTitle: "kurti"
     },
     {
       id: "2",
       catImg: "/c2.webp",
-      catTitle: "Bottom"
+      catTitle: "bottoms"
     },
     {
       id: "3",
       catImg: "/c3.webp",
-      catTitle: "Home wear"
+      catTitle: "home wear"
     },
     {
       id: "4",
       catImg: "/c4.jpg",
-      catTitle: "Duppatta"
+      catTitle: "duppatta"
     },
     {
       id: "5",
       catImg: "/c5.avif",
-      catTitle: "Offer zone"
+      catTitle: "offer zone"
     },
     {
       id: "6",
       catImg: "/c6.webp",
-      catTitle: "churidar cloth"
+      catTitle: "churidar material"
     },
     {
       id: "7",
       catImg: "/c7.avif",
-      catTitle: "Kids"
+      catTitle: "kids wear"
     },
     {
       id: "8",
       catImg: "/c8.avif",
-      catTitle: "Footwear"
+      catTitle: "footwear"
     },
     {
       id: "9",
       catImg: "/c9.jpg",
-      catTitle: "Accessories"
+      catTitle: "accessories"
     },
   ]
+
+  const handleCategory = (category) => {
+    setSelectedCategory(category)
+  }
 
   return (
     <>
@@ -63,6 +70,7 @@ const UserCategory = () => {
           <Link
             to="/all-category"
             key={index}
+            onClick={()=>handleCategory(category.catTitle)}
             className="space-y-2 mb-4 w-[30%] transition-opacity duration-500 ease-in-out hover:opacity-75 cursor-pointer block"
           >
             <div className="w-full h-24 xl:w-36 xl:h-36 lg:w-36 lg:h-36">
