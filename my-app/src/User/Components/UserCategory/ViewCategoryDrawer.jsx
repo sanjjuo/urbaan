@@ -65,7 +65,7 @@ export function ViewCategoryDrawer() {
             <Drawer
                 open={openBottomDrawer}
                 onClose={handleCloseBottomDrawer}
-                className="rounded-t-3xl overflow-y-scroll"
+                className="rounded-t-3xl overflow-auto"
                 placement="bottom"
                 size={550}
                 

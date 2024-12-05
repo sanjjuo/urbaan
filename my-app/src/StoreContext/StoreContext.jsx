@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useEffect } from 'react';
 import { products } from '../data';
 
 export const AppContext = createContext();
@@ -7,35 +7,46 @@ const StoreContext = ({ children }) => {
     const [open, setOpen] = useState(null);
     const [openDrawer, setDrawerOpen] = useState(false);
     const [openBottomDrawer, setBottomDrawerOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [openSizeDrawer, setOpenSizeDrawer] = useState(false)
+    const [selectedProduct, setSelectedProduct] = useState({});
+    const [selectedCategory, setSelectedCategory] = useState(
+        localStorage.getItem('selectedCategory') || null
+    );
 
-    // modal
+    // Save selected category to localStorage when it changes
+    useEffect(() => {
+        localStorage.setItem('selectedCategory', selectedCategory || '');
+    }, [selectedCategory]);
+
+    // Handle modal
     const handleOpen = (modal) => setOpen(modal);
 
-    // drawer
+    // Handle drawer
     const handleOpenDrawer = () => setDrawerOpen(true);
     const handleCloseDrawer = () => setDrawerOpen(false);
 
-    // product details
+    // Handle product details
     const handleProductDetails = (details) => {
-        setSelectedProduct(details)
-    }
+        setSelectedProduct(details);
+    };
 
-    // bottom drawer
+    // Handle view all bottom drawer
     const handleOpenBottomDrawer = () => setBottomDrawerOpen(true);
     const handleCloseBottomDrawer = () => setBottomDrawerOpen(false);
 
-    // catgeory handle
-    const filteredByCategory = selectedCategory
-    ? products.filter((product) => product.category === selectedCategory)
-    : products;
-  
+    // handle size chart bottom drawer
+    const handleOpenSizeDrawer = () => setOpenSizeDrawer(true);
+    const handleCloseSizeDrawer = () => setOpenSizeDrawer(false);
 
+
+    // Filter products by category
+    const filteredByCategory = selectedCategory
+        ? products.filter((product) => product.category === selectedCategory)
+        : products;
 
     return (
-        <>
-            <AppContext.Provider value={{
+        <AppContext.Provider
+            value={{
                 open,
                 handleOpen,
                 openDrawer,
@@ -48,12 +59,16 @@ const StoreContext = ({ children }) => {
                 handleOpenBottomDrawer,
                 handleCloseBottomDrawer,
                 setSelectedCategory,
-                filteredByCategory
-            }}>
-                {children}
-            </AppContext.Provider>
-        </>
-    )
-}
+                filteredByCategory,
+                selectedCategory,
+                handleOpenSizeDrawer,
+                handleCloseSizeDrawer,
+                openSizeDrawer
+            }}
+        >
+            {children}
+        </AppContext.Provider>
+    );
+};
 
-export default StoreContext
+export default StoreContext;
