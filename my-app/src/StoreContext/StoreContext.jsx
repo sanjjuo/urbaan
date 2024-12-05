@@ -35,7 +35,10 @@ const StoreContext = ({ children }) => {
     const handleCloseBottomDrawer = () => setBottomDrawerOpen(false);
 
     // handle size chart bottom drawer
-    const handleOpenSizeDrawer = () => setOpenSizeDrawer(true);
+    const handleOpenSizeDrawer = (e) => {
+        e.preventDefault();
+        setOpenSizeDrawer(true);
+    }
     const handleCloseSizeDrawer = () => setOpenSizeDrawer(false);
 
 

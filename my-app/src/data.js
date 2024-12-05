@@ -79,4 +79,63 @@ export const products = [
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
+    {
+        id: "11",
+        img: "/p11.jpg",
+        title: "Swiss Beauty Pure Matte",
+        category:"accessories",
+        description: "Trendy, comfy crop tops for all.",
+        price: "400"
+    },
 ]
+
+
+// categories
+
+export const categories = [
+    {
+      id: "1",
+      catImg: "/c1.jpg",
+      catTitle: "kurti"
+    },
+    {
+      id: "2",
+      catImg: "/c2.webp",
+      catTitle: "bottoms"
+    },
+    {
+      id: "3",
+      catImg: "/c3.webp",
+      catTitle: "home wear"
+    },
+    {
+      id: "4",
+      catImg: "/c4.jpg",
+      catTitle: "duppatta"
+    },
+    {
+      id: "5",
+      catImg: "/c5.avif",
+      catTitle: "offer zone"
+    },
+    {
+      id: "6",
+      catImg: "/c6.webp",
+      catTitle: "churidar material"
+    },
+    {
+      id: "7",
+      catImg: "/c7.avif",
+      catTitle: "kids wear"
+    },
+    {
+      id: "8",
+      catImg: "/c8.avif",
+      catTitle: "footwear"
+    },
+    {
+      id: "9",
+      catImg: "/c9.jpg",
+      catTitle: "accessories"
+    },
+  ]

@@ -2,9 +2,18 @@ import React from "react";
 import { Drawer } from "@material-tailwind/react";
 import { HiMiniXMark } from "react-icons/hi2";
 import { Link } from "react-router-dom";
+import { categories } from "../../../data";
+import { useContext } from "react";
+import { AppContext } from "../../../StoreContext/StoreContext";
 
 
 const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
+    const { setSelectedCategory } = useContext(AppContext);
+
+
+    const handleCategory = (category) => {
+        setSelectedCategory(category)
+    }
     return (
         <>
             <Drawer open={openDrawer} onClose={handleCloseDrawer} className="p-4 overflow-y-scroll">
@@ -24,14 +33,11 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                 <div className="my-8 p-0">
                     <h2 className='text-sm font-medium tracking-wider'>CATEGORIES</h2>
                     <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
-                        <li>Kurti</li>
-                        <li>Bottom</li>
-                        <li>Kurti Set</li>
-                        <li>Maternity Wear</li>
-                        <li>Night Wear</li>
-                        <li>Running Material</li>
-                        <li>Churidar Material</li>
-                        <li>Offer zone</li>
+                        {
+                            categories.map((cat, index) => (
+                                <li key={index} onClick={() => handleCategory(cat.catTitle)}><Link to='/all-category' className="capitalize">{cat.catTitle}</Link></li>
+                            ))
+                        }
                     </ul>
                 </div>
 

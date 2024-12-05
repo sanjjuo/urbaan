@@ -2,56 +2,11 @@ import React from 'react'
 import { useContext } from 'react';
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../../StoreContext/StoreContext';
+import { categories } from '../../../data';
 
 const UserCategory = () => {
   const { setSelectedCategory } = useContext(AppContext);
-  const categories = [
-    {
-      id: "1",
-      catImg: "/c1.jpg",
-      catTitle: "kurti"
-    },
-    {
-      id: "2",
-      catImg: "/c2.webp",
-      catTitle: "bottoms"
-    },
-    {
-      id: "3",
-      catImg: "/c3.webp",
-      catTitle: "home wear"
-    },
-    {
-      id: "4",
-      catImg: "/c4.jpg",
-      catTitle: "duppatta"
-    },
-    {
-      id: "5",
-      catImg: "/c5.avif",
-      catTitle: "offer zone"
-    },
-    {
-      id: "6",
-      catImg: "/c6.webp",
-      catTitle: "churidar material"
-    },
-    {
-      id: "7",
-      catImg: "/c7.avif",
-      catTitle: "kids wear"
-    },
-    {
-      id: "8",
-      catImg: "/c8.avif",
-      catTitle: "footwear"
-    },
-    {
-      id: "9",
-      catImg: "/c9.jpg",
-      catTitle: "accessories"
-    },
-  ]
+ 
 
   const handleCategory = (category) => {
     setSelectedCategory(category)

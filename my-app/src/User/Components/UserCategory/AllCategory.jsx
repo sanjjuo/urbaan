@@ -2,14 +2,9 @@ import React, { useContext } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
-import { useState } from 'react';
 import { RxHeart } from 'react-icons/rx';
+import { categories } from '../../../data';
 
-const categories = [
-    'kurti', 'bottoms', 'Kurti Set', 'maternity wear', 'night wear',
-    'running material', 'churidar material', 'Offer Zone',
-    'home wear', 'duppatta', 'kids wear', 'footwear'
-];
 
 const AllCategory = () => {
     const navigate = useNavigate();
@@ -38,11 +33,11 @@ const AllCategory = () => {
                             {categories.map((category, index) => (
                                 <li
                                     key={index}
-                                    onClick={() => handleCategory(category)}
+                                    onClick={() => handleCategory(category.catTitle)}
                                     className={`text-sm capitalize font-medium text-gray-600 cursor-pointer
-                                            ${selectedCategory === category ? "text-primary" : ""}`}
+                                            ${selectedCategory === category.catTitle ? "text-primary" : ""}`}
                                 >
-                                    {category}
+                                    {category.catTitle}
                                 </li>
                             ))}
                         </ul>
