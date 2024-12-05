@@ -9,7 +9,7 @@ module.exports = withMT({
   theme: {
     extend: {
       fontFamily: {
-        custom: ['Inter', 'sans-serif'],
+        custom: ['Lora', 'sans-serif'],
       },
       colors: {
         primary: "#C21E56",

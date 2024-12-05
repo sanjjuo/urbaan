@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { AppContext } from '../../../StoreContext/StoreContext';
 import { categories } from '../../../data';
 
-const UserCategory = () => {
+const ShopByCategory = () => {
   const { setSelectedCategory } = useContext(AppContext);
  
 
@@ -46,4 +46,4 @@ const UserCategory = () => {
   )
 }
 
-export default UserCategory
+export default ShopByCategory

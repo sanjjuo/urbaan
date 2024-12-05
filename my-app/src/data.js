@@ -3,7 +3,7 @@ export const products = [
         id: "1",
         img: "/p1.jpg",
         title: "Red Printed Kurti",
-        category:"kurti",
+        category: "kurti",
         description: "Trendy, comfy crop tops for all.",
         price: "500"
     },
@@ -11,7 +11,7 @@ export const products = [
         id: "2",
         img: "/p2.jpg",
         title: "Red Designed Duppatta",
-        category:"duppatta",
+        category: "duppatta",
         description: "Trendy, comfy crop tops for all.",
         price: "700"
     },
@@ -19,7 +19,7 @@ export const products = [
         id: "3",
         img: "/p3.jpg",
         title: "Pale Pink Home wear",
-        category:"home wear",
+        category: "home wear",
         description: "Trendy, comfy crop tops for all.",
         price: "300"
     },
@@ -27,7 +27,7 @@ export const products = [
         id: "4",
         img: "/p4.jpg",
         title: "Lavender Churidar",
-        category:"churidar material",
+        category: "churidar material",
         description: "Trendy, comfy crop tops for all.",
         price: "800"
     },
@@ -35,7 +35,7 @@ export const products = [
         id: "5",
         img: "/p5.jpg",
         title: "White printed Pants",
-        category:"bottoms",
+        category: "bottoms",
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
@@ -43,7 +43,7 @@ export const products = [
         id: "6",
         img: "/p6.jpg",
         title: "Kids Wear Pack",
-        category:"kids wear",
+        category: "kids wear",
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
@@ -51,7 +51,7 @@ export const products = [
         id: "7",
         img: "/p7.jpg",
         title: "Brown Sandal",
-        category:"footwear",
+        category: "footwear",
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
@@ -59,7 +59,7 @@ export const products = [
         id: "8",
         img: "/p8.jpg",
         title: "Red linen Wear",
-        category:"night wear",
+        category: "night wear",
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
@@ -67,7 +67,7 @@ export const products = [
         id: "9",
         img: "/p9.jpg",
         title: "Violet dotted Maternity Wear",
-        category:"maternity wear",
+        category: "maternity wear",
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
@@ -75,7 +75,7 @@ export const products = [
         id: "10",
         img: "/p10.jpg",
         title: "Dark brown running material",
-        category:"running material",
+        category: "running material",
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
@@ -83,7 +83,7 @@ export const products = [
         id: "11",
         img: "/p11.jpg",
         title: "Swiss Beauty Pure Matte",
-        category:"accessories",
+        category: "accessories",
         description: "Trendy, comfy crop tops for all.",
         price: "400"
     },
@@ -94,48 +94,49 @@ export const products = [
 
 export const categories = [
     {
-      id: "1",
-      catImg: "/c1.jpg",
-      catTitle: "kurti"
+        id: "1",
+        catImg: "/c1.jpg",
+        catTitle: "kurti"
     },
     {
-      id: "2",
-      catImg: "/c2.webp",
-      catTitle: "bottoms"
+        id: "2",
+        catImg: "/c2.webp",
+        catTitle: "bottoms"
     },
     {
-      id: "3",
-      catImg: "/c3.webp",
-      catTitle: "home wear"
+        id: "3",
+        catImg: "/c3.webp",
+        catTitle: "home wear"
     },
     {
-      id: "4",
-      catImg: "/c4.jpg",
-      catTitle: "duppatta"
+        id: "4",
+        catImg: "/c4.jpg",
+        catTitle: "duppatta"
     },
     {
-      id: "5",
-      catImg: "/c5.avif",
-      catTitle: "offer zone"
+        id: "5",
+        catImg: "/c5.avif",
+        catTitle: "offer zone"
     },
     {
-      id: "6",
-      catImg: "/c6.webp",
-      catTitle: "churidar material"
+        id: "6",
+        catImg: "/c6.webp",
+        catTitle: "churidar material"
     },
     {
-      id: "7",
-      catImg: "/c7.avif",
-      catTitle: "kids wear"
+        id: "7",
+        catImg: "/c7.avif",
+        catTitle: "kids wear"
     },
     {
-      id: "8",
-      catImg: "/c8.avif",
-      catTitle: "footwear"
+        id: "8",
+        catImg: "/c8.avif",
+        catTitle: "footwear"
     },
     {
-      id: "9",
-      catImg: "/c9.jpg",
-      catTitle: "accessories"
+        id: "9",
+        catImg: "/c9.jpg",
+        catTitle: "accessories"
     },
-  ]
+]
+

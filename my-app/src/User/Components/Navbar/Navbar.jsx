@@ -126,9 +126,9 @@ const UserNavbar = () => {
             <div className='xl:hidden lg:hidden sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-4 px-4'>
                 <ul className='flex items-center gap-5'>
                     <li onClick={handleOpenDrawer} className='text-2xl text-secondary hover:text-primary'><IoMenu /></li>
-                    <li className="w-24">
+                    <Link to='/'><li className="w-24 cursor-pointer">
                         <img src="/logo.png" alt="" className='w-full object-contain' />
-                    </li>
+                    </li></Link>
                 </ul>
                 <ul className='flex items-center gap-3'>
                     <Link to='/user-search'><li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li></Link>
