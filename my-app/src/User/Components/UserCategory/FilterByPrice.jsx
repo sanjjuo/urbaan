@@ -40,8 +40,8 @@ const FilterByPrice = () => {
                             value={priceRange}
                             onChange={handlePriceChange}
                             valueLabelDisplay="auto"
-                            min={0}
-                            max={500}
+                            min={300}
+                            max={1500}
                             valueLabelFormat={(value) => `₹${value}`}
                         />
                         <div className='flex items-center justify-between'>

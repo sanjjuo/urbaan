@@ -23,14 +23,14 @@ const AllCategory = () => {
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
                 </h1>
             </div>
-            <div className='h-screen'>
-                <div className='w-full h-44 xl:h-64 lg:h-60 relative'>
+            <div className='min-h-[calc(100vh-4rem)]'>
+                <div className='w-full h-44 relative'>
                     <img src="/banner.jpeg" alt="" className='w-full h-full object-cover' />
                     <div className='absolute inset-0 bg-primary/70'></div>
                     <h1 className='absolute inset-0 flex items-end justify-center z-50 text-white text-4xl font-medium
                         mb-5 capitalize'>{selectedCategory}</h1>
                 </div>
-                <div className="px-4 py-20 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg">
+                <div className="px-4 py-10 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg">
                     <ul className='space-y-3 xl:flex xl:items-center xl:space-y-0 xl:gap-5 xl:justify-center
                         lg:flex lg:items-center lg:space-y-0 lg:gap-5 lg:justify-center'>
                         <li><FilterBySize /></li>

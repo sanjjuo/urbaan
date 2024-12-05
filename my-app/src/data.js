@@ -1,3 +1,30 @@
+// carousel
+export const carousel = [
+    {
+        id: "1",
+        img: "/carousel1.jpg",
+        new: "new arrivals",
+        item: "stylish kurtis",
+        category: "kurti"
+    },
+    {
+        id: "2",
+        img: "/carousel2.jpg",
+        new: "fresh & trending",
+        item: "women's pants",
+        category: "bottoms"
+    },
+    {
+        id: "3",
+        img: "/carousel3.jpg",
+        new: "new season",
+        item: "kids collection",
+        category: "kids wear"
+    },
+]
+
+
+// products
 export const products = [
     {
         id: "1",

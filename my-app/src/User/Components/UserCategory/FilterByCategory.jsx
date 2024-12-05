@@ -25,7 +25,8 @@ const FilterByCategory = () => {
                 <MenuHandler>
                     <Button variant='outlined' className='w-full shadow-none font-custom flex justify-between items-center py-2 px-3 
                          border-gray-400 text-gray-600 font-medium rounded-3xl focus:outline-none'>
-                        Filter by categories<IoIosArrowDown className='text-lg text-gray-400' /></Button>
+                        Filter by categories <span className='text-xs capitalize bg-primary px-2 text-white rounded-md
+                            '>{selectedCategory}</span><IoIosArrowDown className='text-lg text-gray-400' /></Button>
                 </MenuHandler>
                 <MenuList className='w-72 max-h-64 rounded-xl'>
                     {
