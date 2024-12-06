@@ -3,25 +3,26 @@ export const carousel = [
     {
         id: "1",
         img: "/carousel1.jpg",
-        new: "new arrivals",
-        item: "stylish kurtis",
+        label: "New Arrivals",
+        title: "Stylish Kurtis",
         category: "kurti"
     },
     {
         id: "2",
         img: "/carousel2.jpg",
-        new: "fresh & trending",
-        item: "women's pants",
+        label: "Fresh & Trending",
+        title: "Women's Pants",
         category: "bottoms"
     },
     {
         id: "3",
         img: "/carousel3.jpg",
-        new: "new season",
-        item: "kids collection",
+        label: "New Season",
+        title: "Kids Collection",
         category: "kids wear"
     },
-]
+];
+
 
 
 // products

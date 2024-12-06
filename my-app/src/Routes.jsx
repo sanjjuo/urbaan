@@ -13,7 +13,7 @@ import Invoice from "./Admin/Components/MainComponents/Invoice/Invoice";
 import AddProduct from "./Admin/Components/MainComponents/Products/AddProduct";
 import ViewUserDetails from "./Admin/Components/MainComponents/UsersList/ViewUserManagement";
 import EditProduct from "./Admin/Components/MainComponents/Products/EditProduct";
-import AdminSlider from './Admin/Components/MainComponents/AdminSlider/AdminSlider';
+import AdminCarousel from './Admin/Components/MainComponents/AdminCarousel/AdminCarousel';
 
 import ScrollToTop from "./ScrollToTop";
 import { LoginSignUpUser } from './User/LoginSignUpUser/LoginSignUpUser';
@@ -33,6 +33,7 @@ import SelectUserAddress from './User/Components/UserAddress/SelectUserAddress';
 import OrdersTracking from './User/Components/TrackOrder/OrdersTracking';
 import AllCategory from './User/Components/UserCategory/AllCategory';
 import AddUserAddress from './User/Components/UserAddress/AddUserAddress';
+import ApplyCoupon from './User/Components/UserCart/ApplyCoupon';
 
 const FullRoutes = () => {
     return (
@@ -70,6 +71,7 @@ const RoutesWithLocation = () => {
                 <Route path='/all-category' element={<AllCategory />} />
                 <Route path='/user-search' element={<UserSearch />} />
                 <Route path='/user-cart' element={<UserCart />} />
+                <Route path='/apply-coupon' element={<ApplyCoupon/>}/>
                 <Route path='/add-delivery-address' element={<AddUserAddress />} />
                 <Route path='/select-delivery-address' element={<SelectUserAddress />} />
                 <Route path='/orders-tracking' element={<OrdersTracking />} />
@@ -81,7 +83,7 @@ const RoutesWithLocation = () => {
                     <Route path='product' element={<Products />} />
                     <Route path='category' element={<Category />} />
                     <Route path='subcategory' element={<SubCategory />} />
-                    <Route path='adminslider' element={<AdminSlider />} />
+                    <Route path='admincarousel' element={<AdminCarousel />} />
                     <Route path='orderlist' element={<OrderList />} />
                     <Route path='coupon' element={<Coupons />} />
                     <Route path='userslist' element={<UsersList />} />

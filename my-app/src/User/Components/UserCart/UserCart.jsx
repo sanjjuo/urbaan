@@ -53,7 +53,7 @@ const UserCart = () => {
                                     </div>
                                 </div>
                                 <div className='flex flex-col items-end justify-between'>
-                                    <RiDeleteBin5Line className='text-deleteBg' />
+                                    <RiDeleteBin5Line className='text-deleteBg cursor-pointer hover:text-primary' />
                                     <p className='text-secondary font-semibold text-xl'>₹400</p>
                                 </div>
                             </div>
@@ -61,10 +61,11 @@ const UserCart = () => {
 
                         {/* coupon */}
                         <Card className='p-4'>
-                            <div className='flex items-center justify-between'>
-                                <h1 className='flex items-center gap-3 text-base text-secondary font-medium'><RiCoupon4Line />Apply Coupon</h1>
-                                <IoIosArrowForward className='text-secondary' />
-                            </div>
+                            <Link to='/apply-coupon'>
+                                <div className='flex items-center justify-between'>
+                                    <h1 className='flex items-center gap-3 text-base text-secondary font-medium'><RiCoupon4Line />Apply Coupon</h1>
+                                    <IoIosArrowForward className='text-secondary' />
+                                </div></Link>
                         </Card>
                     </div>
 

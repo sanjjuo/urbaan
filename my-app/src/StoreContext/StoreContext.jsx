@@ -5,6 +5,7 @@ export const AppContext = createContext();
 
 const StoreContext = ({ children }) => {
     const [open, setOpen] = useState(null);
+    const [openRemoveModal, setOpenRemoveModal] = useState(false);
     const [openDrawer, setDrawerOpen] = useState(false);
     const [openBottomDrawer, setBottomDrawerOpen] = useState(false);
     const [openSizeDrawer, setOpenSizeDrawer] = useState(false)
@@ -20,6 +21,9 @@ const StoreContext = ({ children }) => {
 
     // Handle modal
     const handleOpen = (modal) => setOpen(modal);
+
+    // remove address modal
+    const handleOpenRemoveModal = () => setOpenRemoveModal(!openRemoveModal);
 
     // Handle drawer
     const handleOpenDrawer = () => setDrawerOpen(true);
@@ -66,7 +70,9 @@ const StoreContext = ({ children }) => {
                 selectedCategory,
                 handleOpenSizeDrawer,
                 handleCloseSizeDrawer,
-                openSizeDrawer
+                openSizeDrawer,
+                openRemoveModal,
+                handleOpenRemoveModal
             }}
         >
             {children}
