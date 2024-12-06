@@ -8,11 +8,13 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import axios from "axios";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const LoginSignUp = () => {
     const [loginSignUp, setLoginSignUp] = useState("login");
     const [formData, setFormData] = useState({ email: "", username: "", password: "" });
     const [error, setError] = useState(null);
+    const [passwordVisible, setPasswordVisible] = useState(false); // Manage visibility state
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
@@ -43,14 +45,12 @@ const LoginSignUp = () => {
                 });
 
                 alert(response.data.message || "Account created successfully. Please log in.");
-                setLoginSignUp("login");
+                navigate("/adminHome");
             }
         } catch (error) {
             setError(error.response?.data?.message || "An error occurred. Please try again.");
         }
     };
-
-
 
     return (
         <div className="relative h-screen w-full bg-cover bg-center bg-[url('/banner.jpeg')] bg-no-repeat">
@@ -96,7 +96,7 @@ const LoginSignUp = () => {
                                         value={formData.username}
                                         onChange={handleInputChange}
                                         required
-                                        className=" border-[1px] border-gray-400 focus:border-[1px] focus:!border-gray-400"
+                                        className="border-[1px] border-gray-400 focus:border-[1px] focus:!border-gray-400"
                                         labelProps={{
                                             className: "before:content-none after:content-none",
                                         }}
@@ -117,19 +117,28 @@ const LoginSignUp = () => {
                                     </Typography>
                                 )}
                             </div>
-                            <Input
-                                type="password"
-                                size="lg"
-                                placeholder="********"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleInputChange}
-                                required
-                                className=" border-[1px] border-gray-400 focus:border-[1px] focus:!border-gray-400"
-                                labelProps={{
-                                    className: "before:content-none after:content-none",
-                                }}
-                            />
+                            <div className="relative">
+                                <Input
+                                    type={passwordVisible ? "text" : "password"} // Toggle visibility
+                                    size="lg"
+                                    placeholder="********"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    required
+                                    className=" border-[1px] border-gray-400 focus:border-[1px] focus:!border-gray-400"
+                                    labelProps={{
+                                        className: "before:content-none after:content-none",
+                                    }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setPasswordVisible(!passwordVisible)} // Toggle visibility
+                                    className="absolute top-3 right-3 text-gray-500 focus:outline-none"
+                                >
+                                    {passwordVisible ? <FaRegEyeSlash /> : <FaRegEye />}
+                                </button>
+                            </div>
                         </div>
 
                         {loginSignUp === "signUp" && (
