@@ -1,7 +1,58 @@
 import { Button } from '@material-tailwind/react'
+import axios from 'axios'
 import React from 'react'
+import { useState } from 'react';
+import { RiDeleteBin5Line } from "react-icons/ri";
 
-const EditCategories = ({ selectedImage, handlImageUpload }) => {
+const EditCategories = ({ initialData }) => {
+    const [categoryName, setCategoryName] = useState(initialData?.name || '')
+    const [categoryImage, setCategoryImage] = useState(initialData?.imageUrl || null)
+    const [categoryDescription, setCategoryDescription] = useState(initialData?.description || '');
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setCategoryImage({ image: file });
+        }
+    }
+
+    const handleEditCategorySubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("Authentication token is missing");
+                return;
+            }
+
+            const editFormData = new FormData();
+            editFormData.append('name', categoryName);
+            editFormData.append('description', categoryDescription);
+            if (categoryImage && categoryImage.image) {
+                editFormData.append('image', categoryImage.image);
+            } else {
+                editFormData.append('image', categoryImage); // Existing image URL
+            }
+
+            const headers = {
+                Authorization: `Bearer ${token}`,
+                'Content-type': 'multipart/form-data'
+            };
+
+            const BASE_URL = import.meta.env.VITE_BASE_URL;
+            console.log("BASE_URL:", BASE_URL);
+            const response = await axios.patch(`${BASE_URL}/admin/category/update/${initialData.id}`, editFormData, { headers });
+            console.log("Category is updated", response.data);
+            alert("Category is Updated successfully!")
+
+            setCategoryName('')
+            setCategoryImage(null)
+            setCategoryDescription('')
+        } catch (error) {
+            console.log("Error:", error.response ? error.response.data : error.message);
+            alert("category is not updated")
+        }
+    }
     return (
         <>
             <div className='bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out'>
@@ -10,27 +61,45 @@ const EditCategories = ({ selectedImage, handlImageUpload }) => {
                 </div>
                 <hr />
                 <div className='p-5'>
-                    <form action="" className='space-y-5'>
+                    <form action="" className='space-y-5' onSubmit={handleEditCategorySubmit}>
                         {/* title */}
                         <div className='flex flex-col gap-1'>
-                            <label htmlFor="" className='font-normal text-base'>Category title</label>
-                            <input type="text" name="name" id="" placeholder='Other Accessories' className='border-[1px] 
+                            <label htmlFor="" className='font-normal text-base'>Category Title</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={categoryName}
+                                onChange={(e) => setCategoryName(e.target.value)}
+                                id=""
+                                placeholder='Other Accessories'
+                                className='border-[1px] 
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                         </div>
 
                         {/* image upload */}
                         <div>
-                            <label htmlFor="" className='font-normal text-base'>Image</label>
+                            <div className='flex items-center justify-between'>
+                                <label htmlFor="" className='font-normal text-base'>Image</label>
+                                <RiDeleteBin5Line onClick={() => setCategoryImage(null)} className='text-deleteBg text-xl hover:text-primary cursor-pointer' />
+                            </div>
                             <div className='w-full h-48 flex justify-center items-center border-2 rounded-xl mt-2'>
-                                {!selectedImage ? (
+                                {categoryImage ? (
+                                    <>
+                                        <img
+                                            src={categoryImage.image ? URL.createObjectURL(categoryImage.image) : categoryImage}
+                                            alt="Uploaded"
+                                            className="w-full h-full rounded-lg"
+                                        />
+                                    </>
+                                ) : (
                                     <>
                                         <input
                                             type="file"
                                             id="file"
                                             className="hidden"
                                             accept="image/*"
-                                            onChange={handlImageUpload}
+                                            onChange={handleImageUpload}
                                         />
                                         <label
                                             htmlFor="file"
@@ -40,12 +109,6 @@ const EditCategories = ({ selectedImage, handlImageUpload }) => {
                                             <p className="text-secondary text-xs">Browse files to upload</p>
                                         </label>
                                     </>
-                                ) : (
-                                    <img
-                                        src={selectedImage}
-                                        alt="Uploaded"
-                                        className="w-full h-full rounded-lg"
-                                    />
                                 )}
                             </div>
                         </div>
@@ -55,8 +118,10 @@ const EditCategories = ({ selectedImage, handlImageUpload }) => {
                             <textarea
                                 name="description"
                                 rows="5"
+                                value={categoryDescription}
+                                onChange={(e) => setCategoryDescription(e.target.value)}
                                 className="w-full border-[1px] bg-gray-100/50 p-2 rounded resize-none overflow-y-scroll focus:outline-none
-                                        placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
+                                placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
                                 placeholder="Enter your description here..."
                                 style={{ maxHeight: '150px' }}
                             ></textarea>
@@ -64,7 +129,7 @@ const EditCategories = ({ selectedImage, handlImageUpload }) => {
 
                         {/* button */}
                         <div className='flex justify-end'>
-                            <Button className='bg-buttonBg font-normal tracking-wider font-custom text-sm'>Submit</Button>
+                            <Button type='submit' className='bg-buttonBg font-normal tracking-wider font-custom text-sm'>Submit</Button>
                         </div>
                     </form>
                 </div>

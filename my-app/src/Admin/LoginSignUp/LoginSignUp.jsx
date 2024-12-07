@@ -3,23 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 import {
     Card,
     Input,
-    Checkbox,
     Button,
     Typography,
 } from "@material-tailwind/react";
 import axios from "axios";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
-const LoginSignUp = () => {
-    const [loginSignUp, setLoginSignUp] = useState("login");
-    const [formData, setFormData] = useState({ email: "", username: "", password: "" });
+const Login = () => {
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState(null);
-    const [passwordVisible, setPasswordVisible] = useState(false); // Manage visibility state
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        setFormData((formData) => ({ ...formData, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
@@ -28,27 +26,18 @@ const LoginSignUp = () => {
             const BASE_URL = import.meta.env.VITE_BASE_URL;
             console.log("BASE_URL:", BASE_URL);
 
-            if (loginSignUp === "login") {
-                const response = await axios.post(`${BASE_URL}/admin/auth/login`, {
-                    email: formData.email,
-                    password: formData.password,
-                });
+            const response = await axios.post(`${BASE_URL}/admin/auth/login`, {
+                email: formData.email,
+                password: formData.password,
+            });
 
-                const { token } = response.data; // Extract token
-                localStorage.setItem("authToken", token); // Save token in localStorage
-                navigate("/adminHome");
-            } else {
-                const response = await axios.post(`${BASE_URL}/admin/register`, {
-                    email: formData.email,
-                    username: formData.username,
-                    password: formData.password,
-                });
-
-                alert(response.data.message || "Account created successfully. Please log in.");
+            if (response.data.token) {
+                localStorage.setItem("token", response.data.token);
                 navigate("/adminHome");
             }
         } catch (error) {
-            setError(error.response?.data?.message || "An error occurred. Please try again.");
+            console.error("Login Error:", error);
+            setError(error?.response?.data?.message || error.message || "An error occurred. Please try again.");
         }
     };
 
@@ -63,11 +52,11 @@ const LoginSignUp = () => {
                         </div>
                     </div>
                     <Typography variant="h4" className="font-custom text-secondary text-center text-xl">
-                        {loginSignUp === "login" ? "Login to Account" : "Create an Account"}
+                        Login to Account
                     </Typography>
                     {error && <Typography color="red" className="text-center mt-2">{error}</Typography>}
                     <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96" onSubmit={handleSubmit}>
-                        <div className="mb-1 flex flex-col gap-6">
+                        <div className="mb-6 flex flex-col gap-6">
                             <Typography variant="h6" className="-mb-3 font-custom text-sm font-medium">
                                 Email address
                             </Typography>
@@ -84,38 +73,16 @@ const LoginSignUp = () => {
                                 }}
                             />
 
-                            {loginSignUp === "signUp" && (
-                                <>
-                                    <Typography variant="h6" className="-mb-3 font-custom text-sm font-medium">
-                                        Username
-                                    </Typography>
-                                    <Input
-                                        size="lg"
-                                        placeholder="Your username"
-                                        name="username"
-                                        value={formData.username}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="border-[1px] border-gray-400 focus:border-[1px] focus:!border-gray-400"
-                                        labelProps={{
-                                            className: "before:content-none after:content-none",
-                                        }}
-                                    />
-                                </>
-                            )}
-
                             <div className="flex items-center justify-between">
                                 <Typography variant="h6" className="-mb-3 font-custom text-sm font-medium">
                                     Password
                                 </Typography>
-                                {loginSignUp === "login" && (
-                                    <Typography
-                                        variant="h6"
-                                        className="-mb-3 font-custom text-sm font-medium cursor-pointer hover:text-buttonBg"
-                                    >
-                                        Forget Password ?
-                                    </Typography>
-                                )}
+                                <Typography
+                                    variant="h6"
+                                    className="-mb-3 font-custom text-sm font-medium cursor-pointer hover:text-buttonBg"
+                                >
+                                    Forget Password ?
+                                </Typography>
                             </div>
                             <div className="relative">
                                 <Input
@@ -133,6 +100,7 @@ const LoginSignUp = () => {
                                 />
                                 <button
                                     type="button"
+                                    aria-label={passwordVisible ? "Hide password" : "Show password"}
                                     onClick={() => setPasswordVisible(!passwordVisible)} // Toggle visibility
                                     className="absolute top-3 right-3 text-gray-500 focus:outline-none"
                                 >
@@ -140,45 +108,13 @@ const LoginSignUp = () => {
                                 </button>
                             </div>
                         </div>
-
-                        {loginSignUp === "signUp" && (
-                            <Checkbox
-                                label={
-                                    <Typography
-                                        variant="small"
-                                        color="gray"
-                                        className="flex items-center font-normal font-custom text-sm"
-                                    >
-                                        I agree to the{" "}
-                                        <a href="#" className="font-medium transition-colors hover:text-gray-900">
-                                            Terms and Conditions
-                                        </a>
-                                    </Typography>
-                                }
-                                color="pink"
-                                className="border-2 border-primary w-4 h-4"
-                                containerProps={{ className: "-ml-2.5" }}
-                            />
-                        )}
-
                         <Button
                             type="submit"
                             className="mt-6 font-custom bg-primary text-sm font-normal capitalize tracking-wider"
                             fullWidth
                         >
-                            {loginSignUp === "login" ? "Sign In" : "Sign Up"}
+                            Sign In
                         </Button>
-                        <Typography color="gray" className="mt-4 text-center text-sm font-normal font-custom">
-                            {loginSignUp === "login"
-                                ? "Don't have an account? "
-                                : "Already have an account? "}
-                            <Link
-                                onClick={() => setLoginSignUp(loginSignUp === "login" ? "signUp" : "login")}
-                                className="font-medium text-buttonBg underline"
-                            >
-                                {loginSignUp === "login" ? "Create Account" : "Sign In"}
-                            </Link>
-                        </Typography>
                     </form>
                 </Card>
             </div>
@@ -186,4 +122,4 @@ const LoginSignUp = () => {
     );
 };
 
-export default LoginSignUp;
+export default Login;

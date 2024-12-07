@@ -21,7 +21,7 @@ export function ReadMoreModal({ handleOpen, open, category }) {
             }}
         >
             <DialogBody className="flex flex-col justify-center items-center space-y-4">
-                <div className="w-full h-32">
+                <div className="w-full h-72">
                     <img
                         src={category.imageUrl}
                         alt={category.name}

@@ -1,76 +1,135 @@
-import { Button } from '@material-tailwind/react'
-import React from 'react'
+import { Button } from '@material-tailwind/react';
+import axios from 'axios';
+import React, { useState } from 'react';
 
-const CreateCategories = ({ selectedImage, handlImageUpload }) => {
+const CreateCategories = () => {
+    const [createCategoryForm, setCreateCategoryForm] = useState({
+        name: '',
+        image: null,
+        description: '',
+    });
+
+    const handleCategoryInputChange = (e) => {
+        const { name, value } = e.target;
+        setCreateCategoryForm({ ...createCategoryForm, [name]: value });
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setCreateCategoryForm({ ...createCategoryForm, image: file });
+        }
+    };
+
+    const handleCategoryFormSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Check for authentication token
+            const token = localStorage.getItem("token");
+            console.log(localStorage.getItem("token"));
+            if (!token) {
+                alert("Authentication token is missing");
+                return;
+            }
+
+            // Prepare FormData
+            const formData = new FormData();
+            formData.append('name', createCategoryForm.name);
+            formData.append('description', createCategoryForm.description);
+            formData.append('image', createCategoryForm.image);
+
+            const headers = {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
+            };
+
+            const BASE_URL = import.meta.env.VITE_BASE_URL;
+            const response = await axios.post(`${BASE_URL}/admin/category/create`, formData, { headers });
+            console.log('Category created:', response.data);
+
+            // Reset form
+            setCreateCategoryForm({ name: '', image: null, description: '' });
+        } catch (error) {
+            console.error('Error creating category:', error.response ? error.response.data : error.message);
+            alert('Failed to create category. Please try again.');
+        }
+    };
+
     return (
-        <>
-            <div className='bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out'>
-                <div className='p-5'>
-                    <h2 className="text-xl font-medium mb-3 lg:mb-0 text-secondary">Create Categories</h2>
-                </div>
-                <hr />
-                <div className='p-5'>
-                    <form action="" className='space-y-5'>
-                        {/* title */}
-                        <div className='flex flex-col gap-1'>
-                            <label htmlFor="" className='font-normal text-base'>Category title</label>
-                            <input type="text" name="name" id="" placeholder='Other Accessories' className='border-[1px] 
-                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
-                                     focus:outline-none'/>
-                        </div>
-
-                        {/* image upload */}
-                        <div>
-                            <label htmlFor="" className='font-normal text-base'>Image</label>
-                            <div className='w-full h-48 flex justify-center items-center border-2 rounded-xl mt-2'>
-                                {!selectedImage ? (
-                                    <>
-                                        <input
-                                            type="file"
-                                            id="file"
-                                            className="hidden"
-                                            accept="image/*"
-                                            onChange={handlImageUpload}
-                                        />
-                                        <label
-                                            htmlFor="file"
-                                            className="flex flex-col items-center cursor-pointer"
-                                        >
-                                            <img src="/imgupload.png" alt="" className='w-16' />
-                                            <p className="text-secondary text-xs">Browse files to upload</p>
-                                        </label>
-                                    </>
-                                ) : (
-                                    <img
-                                        src={selectedImage}
-                                        alt="Uploaded"
-                                        className="w-full h-full rounded-lg"
-                                    />
-                                )}
-                            </div>
-                        </div>
-                        {/* description */}
-                        <div className='flex flex-col gap-1'>
-                            <label htmlFor="" className='font-normal text-base'>Product Description</label>
-                            <textarea
-                                name="description"
-                                rows="5"
-                                className="w-full border-[1px] bg-gray-100/50 p-2 rounded resize-none overflow-y-scroll focus:outline-none
-                                        placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
-                                placeholder="Enter your description here..."
-                                style={{ maxHeight: '150px' }}
-                            ></textarea>
-                        </div>
-
-                        {/* button */}
-                        <div className='flex justify-end'>
-                            <Button className='bg-buttonBg font-normal tracking-wider font-custom text-sm'>Submit</Button>
-                        </div>
-                    </form>
-                </div>
+        <div className="bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out">
+            <div className="p-5">
+                <h2 className="text-xl font-medium mb-3 lg:mb-0 text-secondary">Create Categories</h2>
             </div>
-        </>
-    )
-}
+            <hr />
+            <div className="p-5">
+                <form className="space-y-5" onSubmit={handleCategoryFormSubmit}>
+                    {/* Title */}
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor="name" className="font-normal text-base">Category Title</label>
+                        <input
+                            value={createCategoryForm.name}
+                            onChange={handleCategoryInputChange}
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Other Accessories"
+                            className="border-[1px] bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
+                        />
+                    </div>
 
-export default CreateCategories
+                    {/* Image Upload */}
+                    <div>
+                        <label htmlFor="image" className="font-normal text-base">Image</label>
+                        <div className="w-full h-48 flex justify-center items-center border-2 rounded-xl mt-2">
+                            {!createCategoryForm.image ? (
+                                <>
+                                    <input
+                                        type="file"
+                                        id="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                    />
+                                    <label htmlFor="file" className="flex flex-col items-center cursor-pointer">
+                                        <img src="/imgupload.png" alt="" className="w-16" />
+                                        <p className="text-secondary text-xs">Browse files to upload</p>
+                                    </label>
+                                </>
+                            ) : (
+                                <img
+                                    src={URL.createObjectURL(createCategoryForm.image)}
+                                    alt="Uploaded"
+                                    className="w-full h-full rounded-lg"
+                                />
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="flex flex-col gap-1">
+                        <label htmlFor="description" className="font-normal text-base">Product Description</label>
+                        <textarea
+                            name="description"
+                            value={createCategoryForm.description}
+                            onChange={handleCategoryInputChange}
+                            rows="5"
+                            className="w-full border-[1px] bg-gray-100/50 p-2 rounded resize-none overflow-y-scroll focus:outline-none placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
+                            placeholder="Enter your description here..."
+                            style={{ maxHeight: '150px' }}
+                        ></textarea>
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="flex justify-end">
+                        <Button type="submit" className="bg-buttonBg font-normal tracking-wider font-custom text-sm">
+                            Submit
+                        </Button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default CreateCategories;

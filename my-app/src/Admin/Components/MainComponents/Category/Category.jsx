@@ -6,15 +6,14 @@ import EditCategories from './EditCategories';
 import { RiSearch2Line } from 'react-icons/ri';
 
 const Category = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [createEdit, setCreateEdit] = useState("create")
+  const [createEdit, setCreateEdit] = useState("create");
+  const [initialData, setInitialData] = useState(null);  // for displaying initial input fields on edit catgeory form before editing the form
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const ImageUrl = URL.createObjectURL(file);
-      setSelectedImage(ImageUrl);
-    }
+  const handleEditCategory = (category) => {
+    setCreateEdit('edit');
+    setInitialData(category);
+    console.log(category);
+    
   };
 
   return (
@@ -26,17 +25,14 @@ const Category = () => {
           {
             createEdit === "create" ? (
               <>
-                <CreateCategories
-                  selectedImage={selectedImage}
-                  handleImageUpload={handleImageUpload}
-                />
+                <CreateCategories/>
               </>
             )
               : (
                 <>
                   <EditCategories
-                    selectedImage={selectedImage}
-                    handleImageUpload={handleImageUpload} />
+                    initialData={initialData} 
+                    />
                 </>
               )
           }
@@ -57,7 +53,7 @@ const Category = () => {
 
           {/* Added Categories */}
           <div className="grid lg:grid-cols-2 gap-5">
-            <AddedCategories createEdit={createEdit} setCreateEdit={setCreateEdit} />
+            <AddedCategories createEdit={createEdit} handleEditCategory={handleEditCategory} />
           </div>
         </div>
       </div>

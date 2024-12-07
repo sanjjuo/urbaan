@@ -72,7 +72,7 @@ const StoreContext = ({ children }) => {
                 handleCloseSizeDrawer,
                 openSizeDrawer,
                 openRemoveModal,
-                handleOpenRemoveModal
+                handleOpenRemoveModal,
             }}
         >
             {children}

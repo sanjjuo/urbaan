@@ -7,15 +7,15 @@ import { ReadMoreModal } from '../../ReadMoreModal/ReadMoreModal';
 import axios from 'axios';
 import { Card } from '@material-tailwind/react';
 
-const AddedCategories = ({ createEdit, setCreateEdit }) => {
+const AddedCategories = ({ createEdit, handleEditCategory }) => {
     const { open, handleOpen } = useContext(AppContext);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [readMoreDetails, setReadMoreDetails] = useState(null);
     const [adminCategory, setAdminCategory] = useState([]);
 
     const handleReadmore = (cat) => {
-        setSelectedItem(cat);
+        setReadMoreDetails(cat);
         handleOpen("readMoreModal");
-        console.log(cat);  
+        console.log(cat);
     }
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const AddedCategories = ({ createEdit, setCreateEdit }) => {
         <>
             {adminCategory.map((category) => (
                 <Card className="p-5 space-y-6 relative" key={category.id}>
-                    <div className='w-full h-32'>
+                    <div className='w-full h-72'>
                         <img src={category.imageUrl} alt={category.name} className='h-full w-full object-cover rounded-lg' />
                     </div>
                     <div>
@@ -55,14 +55,14 @@ const AddedCategories = ({ createEdit, setCreateEdit }) => {
                         {/* Buttons */}
                         <div className="flex gap-2 text-sm">
                             <button
-                                onClick={() => setCreateEdit("edit")}
-                                className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg 
-                                hover:text-editBg ${createEdit === "edit" ? "!bg-buttonBg text-editBg" : ""}`}>
+                                onClick={() => handleEditCategory(category)}
+                                className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md
+                                ${createEdit.id === "edit" ? "!bg-buttonBg text-editBg" : ""}`}>
                                 Edit
                             </button>
                             <button
                                 onClick={() => handleOpen('deleteModal')}
-                                className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md hover:bg-primary hover:text-white">
+                                className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md">
                                 Delete
                             </button>
                         </div>
@@ -79,7 +79,7 @@ const AddedCategories = ({ createEdit, setCreateEdit }) => {
             <ReadMoreModal
                 open={open === "readMoreModal"}
                 handleOpen={handleOpen}
-                category={selectedItem}
+                category={readMoreDetails}
             />
         </>
     );
