@@ -1,7 +1,21 @@
 import { Button } from '@material-tailwind/react'
 import React from 'react'
+import { useState } from 'react'
 
 const CreateSubCategories = ({ selectedImage, handlImageUpload }) => {
+    const [createSubCategoryForm, setCreateSubCategoryForm] = useState({
+        name: "",
+        selectField: "",
+        image: null,
+
+    })
+
+    const handleSubCategoryInputChange = (e) => {
+        const { name, value } = e.target;
+        setCreateSubCategoryForm({ ...createSubCategoryForm, [name]: value })
+    }
+
+
     return (
         <>
             <div className='bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out'>
@@ -14,7 +28,14 @@ const CreateSubCategories = ({ selectedImage, handlImageUpload }) => {
                         {/* title */}
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="" className='font-normal text-base'>Sub Category title</label>
-                            <input type="text" name="name" id="" placeholder='Other Accessories' className='border-[1px] 
+                            <input
+                                type="text"
+                                name="name"
+                                value={createSubCategoryForm.name}
+                                onChange={handleSubCategoryInputChange}
+                                id=""
+                                placeholder='Other Accessories'
+                                className='border-[1px] 
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                         </div>
@@ -24,6 +45,8 @@ const CreateSubCategories = ({ selectedImage, handlImageUpload }) => {
                             <label className='font-normal text-base'>Category</label>
                             <select
                                 name="selectField"
+                                value={createSubCategoryForm.selectField}
+                                onChange={handleSubCategoryInputChange}
                                 className="w-full text-sm text-gray-500 font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
                             >
                                 <option value="Option 1">Kurti</option>

@@ -1,13 +1,22 @@
 import { Button } from '@material-tailwind/react'
 import axios from 'axios'
 import React from 'react'
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 const EditCategories = ({ initialData }) => {
-    const [categoryName, setCategoryName] = useState(initialData?.name || '')
-    const [categoryImage, setCategoryImage] = useState(initialData?.imageUrl || null)
-    const [categoryDescription, setCategoryDescription] = useState(initialData?.description || '');
+    const [categoryName, setCategoryName] = useState('');
+    const [categoryImage, setCategoryImage] = useState(null);
+    const [categoryDescription, setCategoryDescription] = useState('');
+
+    useEffect(() => {
+        if (initialData) {
+            setCategoryName(initialData.name);
+            setCategoryImage(initialData.imageUrl);
+            setCategoryDescription(initialData.description);
+        }
+    }, [initialData]); // Update form fields when initialData changes
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];

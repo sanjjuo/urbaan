@@ -128,12 +128,12 @@ export const categories = [
     },
     {
         id: "2",
-        catImg: "/c2.webp",
+        catImg: "/c2.jpg",
         catTitle: "bottoms"
     },
     {
         id: "3",
-        catImg: "/c3.webp",
+        catImg: "/c3.jpg",
         catTitle: "home wear"
     },
     {
@@ -143,22 +143,22 @@ export const categories = [
     },
     {
         id: "5",
-        catImg: "/c5.avif",
+        catImg: "/c5.jpg",
         catTitle: "offer zone"
     },
     {
         id: "6",
-        catImg: "/c6.webp",
+        catImg: "/c6.jpg",
         catTitle: "churidar material"
     },
     {
         id: "7",
-        catImg: "/c7.avif",
+        catImg: "/c7.jpg",
         catTitle: "kids wear"
     },
     {
         id: "8",
-        catImg: "/c8.avif",
+        catImg: "/c8.jpg",
         catTitle: "footwear"
     },
     {

@@ -2,39 +2,32 @@ import React, { useContext } from 'react'
 import { Card, Typography, CardFooter, Button, IconButton } from "@material-tailwind/react";
 import { AppContext } from "../../../../StoreContext/StoreContext"
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
+import axios from 'axios';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const TABLE_HEAD = ["Sub Category", "Category", "Status", "Action"];
 
-const TABLE_ROWS = [
-    {
-        subcategory: "Kurti",
-        category: "Kurti",
-        status: "enabled"
-    },
-    {
-        subcategory: "Kurti Set",
-        category: "Kurti",
-        status: "disabled"
-    },
-    {
-        subcategory: "Ethnic Wear",
-        category: "Kurti",
-        status: "enabled"
-    },
-    {
-        subcategory: "Leggings",
-        category: "Bottom",
-        status: "enabled"
-    },
-    {
-        subcategory: "Pallazo",
-        category: "Bottom",
-        status: "disabled"
-    },
-];
 
 const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
     const { open, handleOpen } = useContext(AppContext)
+    const [subCategory, setSubCategory] = useState([])
+
+    useEffect(() => {
+        const fetchSubCategory = async () => {
+            try {
+                const BASE_URL = import.meta.env.VITE_BASE_URL;
+                const response = await axios.get(`${BASE_URL}/admin/Subcategory/get`);
+                setSubCategory(response.data)
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchSubCategory();
+    }, [])
+
+
     return (
         <>
             <Card className=" w-full shadow-none bg-transparent">
@@ -58,41 +51,49 @@ const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
                         </tr>
                     </thead>
                     <tbody className='bg-transparent'>
-                        {TABLE_ROWS.map((item, index) => {
-                            const isLast = index === TABLE_ROWS.length - 1;
+                        {subCategory.map((subCat, index) => {
+                            const isLast = index === subCategory.length - 1;
                             const classes = isLast
                                 ? "p-4 text-center"
                                 : "p-4 border-b border-gray-300 text-center";
                             return (
-                                <tr key={index} className="bg-transparent">
+                                <tr key={subCat.id} className="bg-transparent">
                                     <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-normal font-custom text-sm"
-                                        >
-                                            {item.subcategory}
-                                        </Typography>
+                                        <div className="flex items-center gap-2">
+                                            <div className='w-[60px] h-[60px] rounded-md'>
+                                                <img src={subCat.SubImageUrl} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
+                                            </div>
+                                            <Typography
+                                                variant="small"
+                                                className="font-normal capitalize font-custom text-sm"
+                                            >
+                                                {subCat.title}
+                                            </Typography>
+                                        </div>
+                                    </td>
+                                    <td className={classes}>
+                                    <div className="flex items-center gap-2">
+                                            <div className='w-[60px] h-[60px] rounded-md'>
+                                                <img src={subCat.MainCategory.imageUrl} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
+                                            </div>
+                                            <Typography
+                                                variant="small"
+                                                className="font-normal capitalize font-custom text-sm"
+                                            >
+                                                
+                                            </Typography>
+                                        </div>
                                     </td>
                                     <td className={classes}>
                                         <Typography
                                             variant="small"
-                                            color="blue-gray"
-                                            className="font-normal font-custom text-sm"
-                                        >
-                                            {item.category}
-                                        </Typography>
-                                    </td>
-                                    <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            color={item.status === "enabled" ? "green" :
-                                                item.status === "disabled" ? "red" : ""
+                                            color={subCat.status === "enabled" ? "green" :
+                                                subCat.status === "disabled" ? "red" : ""
                                             }
                                             className="font-normal font-custom text-sm"
                                         >
-                                            {item.status === "enabled" ? "Enabled" :
-                                                item.status === "disabled" ? "Disabled" : ""}
+                                            {subCat.status === "enabled" ? "Enabled" :
+                                                subCat.status === "disabled" ? "Disabled" : ""}
                                         </Typography>
                                     </td>
                                     <td className={classes}>
@@ -103,7 +104,7 @@ const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
                                                     hover:text-editBg ${createEditSub === "editSub" ? "!bg-buttonBg text-editBg" : ""}`}>
                                                 Edit
                                             </button>
-                                            <button onClick={()=>handleOpen("deleteModal")} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
+                                            <button onClick={() => handleOpen("deleteModal")} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
                                             hover:bg-primary hover:text-white">
                                                 Delete
                                             </button>

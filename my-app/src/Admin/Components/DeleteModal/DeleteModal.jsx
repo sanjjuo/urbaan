@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
-export function DeleteModal({ open, handleOpen, title, description }) {
+export function DeleteModal({ open, handleOpen, title, description, handleDelete, catId }) {
     return (
         <Dialog open={open} handler={handleOpen} size="sm" className="rounded-none">
             <DialogBody className="flex flex-col justify-center items-center py-8 px-10 space-y-5">
@@ -28,7 +28,7 @@ export function DeleteModal({ open, handleOpen, title, description }) {
                     </Button>
                     <Button
                         className="bg-deleteBg text-white font-custom capitalize text-sm tracking-wider font-normal w-36"
-                        onClick={handleOpen}
+                        onClick={() => handleDelete(catId)}
                     >
                         Delete
                     </Button>

@@ -11,11 +11,11 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
     const { open, handleOpen } = useContext(AppContext);
     const [readMoreDetails, setReadMoreDetails] = useState(null);
     const [adminCategory, setAdminCategory] = useState([]);
+    const [selectedCatId, setSelectedCatId] = useState(null); // Track selected category ID for deletion
 
     const handleReadmore = (cat) => {
         setReadMoreDetails(cat);
         handleOpen("readMoreModal");
-        console.log(cat);
     }
 
     useEffect(() => {
@@ -31,6 +31,28 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
 
         fetchCategory();
     }, []);
+
+    const handleDeleteCategory = async (catId) => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("Authentication token is missing");
+                return;
+            }
+
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+            const BASE_URL = import.meta.env.VITE_BASE_URL;
+            await axios.delete(`${BASE_URL}/admin/category/delete/${catId}`, { headers });
+            setAdminCategory(adminCategory.filter(catProduct => catProduct.id !== catId));
+            alert("Category deleted successfully");
+            handleOpen(); // Close modal after deletion
+        } catch (error) {
+            console.error("Error deleting category:", error);
+            alert("Failed to delete category.");
+        }
+    }
 
     return (
         <>
@@ -55,13 +77,19 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
                         {/* Buttons */}
                         <div className="flex gap-2 text-sm">
                             <button
-                                onClick={() => handleEditCategory(category)}
+                                onClick={() => {
+                                    setSelectedCatId(category.id); // Set the currently editing category ID
+                                    handleEditCategory(category);
+                                }}
                                 className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md
-                                ${createEdit.id === "edit" ? "!bg-buttonBg text-editBg" : ""}`}>
+                                ${createEdit === "edit" && selectedCatId === category.id ? "!bg-buttonBg text-editBg" : ""}`}>
                                 Edit
                             </button>
                             <button
-                                onClick={() => handleOpen('deleteModal')}
+                                onClick={() => {
+                                    setSelectedCatId(category.id); // Set the selected category ID
+                                    handleOpen('deleteModal');
+                                }}
                                 className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md">
                                 Delete
                             </button>
@@ -75,6 +103,8 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
                 handleOpen={handleOpen}
                 title="Are you sure?"
                 description="Do you really want to delete this item? This action cannot be undone."
+                handleDelete={handleDeleteCategory}
+                catId={selectedCatId}
             />
             <ReadMoreModal
                 open={open === "readMoreModal"}

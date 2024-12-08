@@ -9,7 +9,7 @@ const reviews = [
     {
         id: "1",
         customer: "Florence Pugh",
-        img: "/review1.webp",
+        img: "/review1.jpg",
         rating: "4.1",
         description: "I recently bought a top from Urbaan, and I love it! The fabric is soft and comfortable"
     },
