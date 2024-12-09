@@ -13,6 +13,7 @@ const StoreContext = ({ children }) => {
     const [selectedCategory, setSelectedCategory] = useState(
         localStorage.getItem('selectedCategory') || null
     );
+    const [modalType, setModalType] = useState(null); // New state for modal type
 
     // Save selected category to localStorage when it changes
     useEffect(() => {
@@ -20,7 +21,10 @@ const StoreContext = ({ children }) => {
     }, [selectedCategory]);
 
     // Handle modal
-    const handleOpen = (modal) => setOpen(modal);
+    const handleOpen = (modal, type) => {
+        setOpen(modal);
+        setModalType(type); // Set the modal type
+    };
 
     // remove address modal
     const handleOpenRemoveModal = () => setOpenRemoveModal(!openRemoveModal);
@@ -73,6 +77,7 @@ const StoreContext = ({ children }) => {
                 openSizeDrawer,
                 openRemoveModal,
                 handleOpenRemoveModal,
+                modalType, // Provide modal type
             }}
         >
             {children}

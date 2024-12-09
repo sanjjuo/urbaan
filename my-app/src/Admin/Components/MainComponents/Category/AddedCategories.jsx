@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Card } from '@material-tailwind/react';
 
 const AddedCategories = ({ createEdit, handleEditCategory }) => {
-    const { open, handleOpen } = useContext(AppContext);
+    const { open, handleOpen, modalType } = useContext(AppContext);
     const [readMoreDetails, setReadMoreDetails] = useState(null);
     const [adminCategory, setAdminCategory] = useState([]);
     const [selectedCatId, setSelectedCatId] = useState(null); // Track selected category ID for deletion
@@ -99,13 +99,15 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
             ))}
 
             <DeleteModal
-                open={open === "deleteModal"}
+                open={open === "deleteModal"} // Distinguish by modalType
                 handleOpen={handleOpen}
                 title="Are you sure?"
                 description="Do you really want to delete this item? This action cannot be undone."
                 handleDelete={handleDeleteCategory}
                 catId={selectedCatId}
+                modalType={modalType}
             />
+
             <ReadMoreModal
                 open={open === "readMoreModal"}
                 handleOpen={handleOpen}

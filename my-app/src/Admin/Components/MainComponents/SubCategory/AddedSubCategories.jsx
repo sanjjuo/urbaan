@@ -9,9 +9,10 @@ import { useEffect } from 'react';
 const TABLE_HEAD = ["Sub Category", "Category", "Status", "Action"];
 
 
-const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
-    const { open, handleOpen } = useContext(AppContext)
+const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
+    const { open, handleOpen, modalType } = useContext(AppContext)
     const [subCategory, setSubCategory] = useState([])
+    const [selectedCatId, setSelectedCatId] = useState(null); // Track selected category ID 
 
     useEffect(() => {
         const fetchSubCategory = async () => {
@@ -28,6 +29,30 @@ const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
     }, [])
 
 
+    const handleSubCategoryDelete = async (subCategoryId) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Authrization is missing")
+                return;
+            }
+
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+
+            const BASE_URL = import.meta.env.VITE_BASE_URL;
+            const response = await axios.delete(`${BASE_URL}/admin/Subcategory/delete/${subCategoryId}`, { headers })
+            console.log(response.data);
+            handleOpen();
+            alert('Sub category is successfully deleted')
+        } catch (error) {
+            console.log(error);
+            alert("Sub category is not deleted")
+        }
+    }
+
+
     return (
         <>
             <Card className=" w-full shadow-none bg-transparent">
@@ -41,7 +66,6 @@ const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
                                 >
                                     <Typography
                                         variant="small"
-                                        color="blue-gray"
                                         className="font-semibold uppercase font-custom text-base leading-none text-secondary"
                                     >
                                         {head}
@@ -59,7 +83,7 @@ const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
                             return (
                                 <tr key={subCat.id} className="bg-transparent">
                                     <td className={classes}>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-3">
                                             <div className='w-[60px] h-[60px] rounded-md'>
                                                 <img src={subCat.SubImageUrl} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
                                             </div>
@@ -72,39 +96,32 @@ const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
                                         </div>
                                     </td>
                                     <td className={classes}>
-                                    <div className="flex items-center gap-2">
-                                            <div className='w-[60px] h-[60px] rounded-md'>
-                                                <img src={subCat.MainCategory.imageUrl} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
-                                            </div>
+                                        <div className="flex items-center gap-2">
                                             <Typography
                                                 variant="small"
                                                 className="font-normal capitalize font-custom text-sm"
                                             >
-                                                
+                                                {subCat.MainCategory.name}
                                             </Typography>
                                         </div>
                                     </td>
                                     <td className={classes}>
-                                        <Typography
-                                            variant="small"
-                                            color={subCat.status === "enabled" ? "green" :
-                                                subCat.status === "disabled" ? "red" : ""
-                                            }
-                                            className="font-normal font-custom text-sm"
-                                        >
-                                            {subCat.status === "enabled" ? "Enabled" :
-                                                subCat.status === "disabled" ? "Disabled" : ""}
-                                        </Typography>
+                                        <div className='space-x-1'>
+                                            <Button className='bg-shippedBg text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl'>
+                                                Enable</Button>
+                                            <Button className='bg-deleteBg text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl'>
+                                                Disable</Button>
+                                        </div>
                                     </td>
                                     <td className={classes}>
                                         <div className="flex justify-center gap-2 text-sm">
                                             <button
-                                                onClick={() => setCreateEditSub("editSub")}
+                                                onClick={() => { handleEditCategory(subCat); setSelectedCatId(subCat.id); }}
                                                 className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg 
-                                                    hover:text-editBg ${createEditSub === "editSub" ? "!bg-buttonBg text-editBg" : ""}`}>
+                                                    hover:text-editBg ${createEditSub === "editSub" && selectedCatId === subCat.id ? "!bg-buttonBg text-editBg" : ""}`}>
                                                 Edit
                                             </button>
-                                            <button onClick={() => handleOpen("deleteModal")} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
+                                            <button onClick={() => { handleOpen("deleteModal"); setSelectedCatId(subCat.id) }} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
                                             hover:bg-primary hover:text-white">
                                                 Delete
                                             </button>
@@ -149,11 +166,15 @@ const AddedSubCategories = ({ createEditSub, setCreateEditSub }) => {
                     </Button>
                 </CardFooter>
             </Card>
+
             <DeleteModal
-                open={open === "deleteModal"}
+                open={open === "deleteModal"} // Distinguish by modalType
                 handleOpen={handleOpen}
-                title="Are you sure ?"
+                title="Are you sure?"
                 description="Do you really want to delete this item? This action cannot be undone."
+                handleDelete={handleSubCategoryDelete}
+                SubCatId={selectedCatId}
+                modalType={modalType}
             />
         </>
     )

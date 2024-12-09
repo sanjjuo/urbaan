@@ -5,16 +5,16 @@ import EditSubCategories from './EditSubCategories'
 import { RiSearch2Line } from 'react-icons/ri'
 
 const SubCategory = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [createEditSub, setCreateEditSub] = useState("createSub")
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const ImageUrl = URL.createObjectURL(file);
-      setSelectedImage(ImageUrl);
-    }
+  const [createEditSub, setCreateEditSub] = useState("createSub");
+  const [initialSubCategory, setInitialSubCategory] = useState(null);
+  
+  const handleEditCategory = (category) => {
+    setCreateEditSub('editSub');
+    setInitialSubCategory(category);
+    console.log(category);
+    
   };
+
   return (
     <>
       <h1 className="text-2xl lg:text-3xl font-semibold">Sub Categories</h1>
@@ -24,11 +24,11 @@ const SubCategory = () => {
           {
             createEditSub === "createSub" ? (
               <>
-                <CreateSubCategories selectedImage={selectedImage} handleImageUpload={handleImageUpload} />
+                <CreateSubCategories />
               </>
             ) : (
               <>
-                <EditSubCategories selectedImage={selectedImage} handleImageUpload={handleImageUpload} />
+                <EditSubCategories initialSubCategory={initialSubCategory} />
               </>
             )
           }
@@ -48,7 +48,7 @@ const SubCategory = () => {
 
           {/* Added Sub Categories */}
           <div>
-            <AddedSubCategories createEditSub={createEditSub} setCreateEditSub={setCreateEditSub}/>
+            <AddedSubCategories createEditSub={createEditSub} handleEditCategory={handleEditCategory}/>
           </div>
         </div>
       </div>

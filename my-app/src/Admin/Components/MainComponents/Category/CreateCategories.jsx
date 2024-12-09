@@ -1,6 +1,7 @@
 import { Button } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { RiDeleteBin5Line } from 'react-icons/ri';
 
 const CreateCategories = () => {
     const [createCategoryForm, setCreateCategoryForm] = useState({
@@ -80,7 +81,10 @@ const CreateCategories = () => {
 
                     {/* Image Upload */}
                     <div>
-                        <label htmlFor="image" className="font-normal text-base">Image</label>
+                        <div className='flex items-center justify-between'>
+                            <label htmlFor="" className='font-normal text-base'>Image</label>
+                            <RiDeleteBin5Line onClick={() => setCreateCategoryForm((prev) => ({ ...prev, image: null }))} className='text-deleteBg text-xl hover:text-primary cursor-pointer' />
+                        </div>
                         <div className="w-full h-48 flex justify-center items-center border-2 rounded-xl mt-2">
                             {!createCategoryForm.image ? (
                                 <>

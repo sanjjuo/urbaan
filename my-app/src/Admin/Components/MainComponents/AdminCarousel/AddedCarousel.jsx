@@ -11,8 +11,22 @@ const AddedCarousel = ({ createEditCarousel, setCreateEdotCarousel }) => {
         <>
             {carousel.map((slider) => (
                 <Card className="p-5 relative" key={slider.id}>
+                    {/* carousel image */}
+                    <div className='w-full h-72'>
+                        <img src={slider.img} alt={slider.title} className='w-full h-full object-cover rounded-lg' />
+                    </div>
                     <div className='flex justify-between items-center'>
-                        <h1 className='text-secondary font-bold capitalize text-2xl'>{slider.category}</h1>
+                        <ul className="mt-5 space-y-2">
+                            <li className='text-secondary font-bold capitalize text-2xl'>{slider.category}</li>
+                            <li className="flex items-center text-secondary">
+                                <span className="font-semibold w-24">Label:</span>
+                                <span>{slider.label}</span>
+                            </li>
+                            <li className="flex items-center text-secondary">
+                                <span className="font-semibold w-24">Title:</span>
+                                <span>{slider.title}</span>
+                            </li>
+                        </ul>
                         <div className="flex gap-2 text-sm">
                             <button
                                 onClick={() => setCreateEdotCarousel("editcarousel")}
@@ -31,21 +45,6 @@ const AddedCarousel = ({ createEditCarousel, setCreateEdotCarousel }) => {
                             </button>
                         </div>
                     </div>
-                    
-                    {/* carousel image */}
-                    <div className='w-full h-32 mt-5'>
-                        <img src={slider.img} alt={slider.title} className='w-full h-full object-cover rounded-lg' />
-                    </div>
-                    <ul className="mt-5 space-y-2">
-                        <li className="flex items-center text-secondary">
-                            <span className="font-semibold w-24">Label:</span>
-                            <span>{slider.label}</span>
-                        </li>
-                        <li className="flex items-center text-secondary">
-                            <span className="font-semibold w-24">Title:</span>
-                            <span>{slider.title}</span>
-                        </li>
-                    </ul>
                 </Card>
             ))}
 
