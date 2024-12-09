@@ -1,4 +1,4 @@
-import { Button } from '@material-tailwind/react';
+import { Button, Radio } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { RiDeleteBin5Line } from 'react-icons/ri';
@@ -8,6 +8,12 @@ const CreateSubCategories = () => {
     const [createSubCategorySelect, setCreateSubCategorySelect] = useState('');
     const [createSubCategoryImage, setCreateSubCategoryImage] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [createSubCategoryStatus, setCreateSubCategoryStatus] = useState('enable'); // Default to 'enable'
+
+    // Handle status change
+    const handleStatusChange = (value) => {
+        setCreateSubCategoryStatus(value);
+    };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -24,7 +30,7 @@ const CreateSubCategories = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-                setCategories(response.data); 
+                setCategories(response.data);
             } catch (error) {
                 console.error("Error fetching categories:", error.response || error.message);
                 alert("Failed to load categories.");
@@ -54,6 +60,7 @@ const CreateSubCategories = () => {
             subCategoryFormData.append('title', createSubCategoryTitle);
             subCategoryFormData.append('category', createSubCategorySelect);
             subCategoryFormData.append('image', createSubCategoryImage);
+            subCategoryFormData.append('status', createSubCategoryStatus); // Add the status here
 
             const headers = {
                 Authorization: `Bearer ${token}`,
@@ -113,8 +120,30 @@ const CreateSubCategories = () => {
                                         </option>
                                     ))}
                             </select>
-
                         </div>
+
+                        {/* status type */}
+
+                        <div className='flex flex-col gap-1 w-full'>
+                            <label className='font-normal text-base'>Status type</label>
+                            <div className="flex gap-10">
+                                <Radio
+                                    name="type"
+                                    color='green'
+                                    label="Enable"
+                                    checked={createSubCategoryStatus === 'enable'}
+                                    onChange={() => handleStatusChange('enable')}
+                                />
+                                <Radio
+                                    name="type"
+                                    color='pink'
+                                    label="Disable"
+                                    checked={createSubCategoryStatus === 'disable'}
+                                    onChange={() => handleStatusChange('disable')}
+                                />
+                            </div>
+                        </div>
+
 
                         {/* image upload */}
                         <div>

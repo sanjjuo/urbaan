@@ -1,4 +1,4 @@
-import { Button } from '@material-tailwind/react'
+import { Button, Radio } from '@material-tailwind/react'
 import axios from 'axios'
 import React from 'react'
 import { useEffect } from 'react'
@@ -10,8 +10,14 @@ const EditSubCategories = ({ initialSubCategory }) => {
     const [editSubCategorySelect, setEditSubCategorySelect] = useState('');
     const [editSubCategoryImage, setEditSubCategoryImage] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [editSubCategoryStatus, setEditSubCategoryStatus] = useState('enable'); // Default to 'enable'
 
     const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+    // Handle status change
+    const handleStatusChange = (value) => {
+        setEditSubCategoryStatus(value);
+    };
 
     useEffect(() => {
         if (initialSubCategory) {
@@ -69,6 +75,7 @@ const EditSubCategories = ({ initialSubCategory }) => {
             } else {
                 editSubCategoryFormData.append('image', editSubCategoryImage); // Existing image URL
             }
+            editSubCategoryFormData.append('status', editSubCategoryStatus); // Add the status here
 
             const headers = {
                 Authorization: `Bearer ${token}`,
@@ -126,6 +133,29 @@ const EditSubCategories = ({ initialSubCategory }) => {
                             ))}
                         </select>
                     </div>
+
+                    {/* status type */}
+
+                    <div className='flex flex-col gap-1 w-full'>
+                        <label className='font-normal text-base'>Status type</label>
+                        <div className="flex gap-10">
+                            <Radio
+                                name="type"
+                                color='green'
+                                label="Enable"
+                                checked={editSubCategoryStatus === 'enable'}
+                                onChange={() => handleStatusChange('enable')}
+                            />
+                            <Radio
+                                name="type"
+                                color='pink'
+                                label="Disable"
+                                checked={editSubCategoryStatus === 'disable'}
+                                onChange={() => handleStatusChange('disable')}
+                            />
+                        </div>
+                    </div>
+
 
                     {/* Image Upload */}
                     <div>
