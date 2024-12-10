@@ -1,9 +1,12 @@
 import { Button } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useContext } from 'react';
 import { RiDeleteBin5Line } from 'react-icons/ri';
+import { AppContext } from '../../../../StoreContext/StoreContext';
 
 const CreateCategories = () => {
+    const { BASE_URL } = useContext(AppContext)
     const [createCategoryForm, setCreateCategoryForm] = useState({
         name: '',
         image: null,
@@ -45,7 +48,6 @@ const CreateCategories = () => {
                 'Content-Type': 'multipart/form-data',
             };
 
-            const BASE_URL = import.meta.env.VITE_BASE_URL;
             const response = await axios.post(`${BASE_URL}/admin/category/create`, formData, { headers });
             console.log('Category created:', response.data);
 

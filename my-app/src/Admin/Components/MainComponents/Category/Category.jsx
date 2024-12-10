@@ -13,7 +13,7 @@ const Category = () => {
     setCreateEdit('edit');
     setInitialData(category);
     console.log(category);
-    
+
   };
 
   return (
@@ -22,20 +22,22 @@ const Category = () => {
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-10 mt-5">
         {/* Create Categories Section */}
         <div className="lg:col-span-2">
-          {
-            createEdit === "create" ? (
-              <>
-                <CreateCategories/>
-              </>
-            )
-              : (
+          <div className="h-[calc(100vh-6rem)] overflow-y-auto hide-scrollbar">
+            {
+              createEdit === "create" ? (
                 <>
-                  <EditCategories
-                    initialData={initialData} 
-                    />
+                  <CreateCategories />
                 </>
               )
-          }
+                : (
+                  <>
+                    <EditCategories
+                      initialData={initialData}
+                    />
+                  </>
+                )
+            }
+          </div>
         </div>
 
         {/* Search and Added Categories Section */}
@@ -52,7 +54,7 @@ const Category = () => {
           </div>
 
           {/* Added Categories */}
-          <div className="grid lg:grid-cols-2 gap-5">
+          <div className="grid lg:grid-cols-2 gap-5 h-[calc(100vh-10rem)] overflow-y-auto hide-scrollbar">
             <AddedCategories createEdit={createEdit} handleEditCategory={handleEditCategory} />
           </div>
         </div>

@@ -4,8 +4,11 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AppContext } from '../../../../StoreContext/StoreContext';
+import { useContext } from 'react';
 
 const EditCategories = ({ initialData }) => {
+    const { BASE_URL } = useContext(AppContext)
     const [categoryName, setCategoryName] = useState('');
     const [categoryImage, setCategoryImage] = useState(null);
     const [categoryDescription, setCategoryDescription] = useState('');
@@ -48,8 +51,6 @@ const EditCategories = ({ initialData }) => {
                 'Content-type': 'multipart/form-data'
             };
 
-            const BASE_URL = import.meta.env.VITE_BASE_URL;
-            console.log("BASE_URL:", BASE_URL);
             const response = await axios.patch(`${BASE_URL}/admin/category/update/${initialData.id}`, editFormData, { headers });
             console.log("Category is updated", response.data);
             alert("Category is Updated successfully!")

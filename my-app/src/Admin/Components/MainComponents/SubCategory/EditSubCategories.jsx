@@ -4,15 +4,17 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { RiDeleteBin5Line } from 'react-icons/ri'
+import { AppContext } from '../../../../StoreContext/StoreContext'
+import { useContext } from 'react'
 
 const EditSubCategories = ({ initialSubCategory }) => {
+    const { BASE_URL } = useContext(AppContext)
     const [editSubCategoryTitle, setEditSubCategoryTitle] = useState('');
     const [editSubCategorySelect, setEditSubCategorySelect] = useState('');
     const [editSubCategoryImage, setEditSubCategoryImage] = useState(null);
     const [categories, setCategories] = useState([]);
     const [editSubCategoryStatus, setEditSubCategoryStatus] = useState('enable'); // Default to 'enable'
 
-    const BASE_URL = import.meta.env.VITE_BASE_URL;
 
     // Handle status change
     const handleStatusChange = (value) => {

@@ -16,29 +16,29 @@ const AdminCarousel = () => {
       setSelectedCarousel(CarouselUrl);
     }
   };
+
   return (
     <>
       <h1 className="text-2xl lg:text-3xl font-semibold">Carousel</h1>
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-10 mt-5">
+        {/* Left Section */}
         <div className="lg:col-span-2">
-          {
-            createEditCarousel === "createcarousel" ? (
-              <>
-                <CreateCarousel
-                  selectedCarousel={selectedCarousel}
-                  handleCarouselUpload={handleCarouselUpload}
-                />
-              </>
+          <div className="h-[calc(100vh-6rem)] overflow-y-auto hide-scrollbar">
+            {createEditCarousel === "createcarousel" ? (
+              <CreateCarousel
+                selectedCarousel={selectedCarousel}
+                handleCarouselUpload={handleCarouselUpload}
+              />
             ) : (
-              <>
-                <EditCarousel
-                  selectedCarousel={selectedCarousel}
-                  handleCarouselUpload={handleCarouselUpload}
-                />
-              </>
-            )
-          }
+              <EditCarousel
+                selectedCarousel={selectedCarousel}
+                handleCarouselUpload={handleCarouselUpload}
+              />
+            )}
+          </div>
         </div>
+
+        {/* Right Section */}
         <div className="lg:col-span-4 space-y-5">
           {/* Search Bar */}
           <div className="border border-gray-300 py-1 px-2 flex items-center gap-1 rounded-xl bg-white h-12 w-96">
@@ -51,14 +51,18 @@ const AdminCarousel = () => {
             />
           </div>
 
-          {/* Added Categories */}
-          <div className="grid grid-cols-1 gap-5">
-            <AddedCarousel createEditCarousel={createEditCarousel} setCreateEdotCarousel={setCreateEdotCarousel} />
+          {/* Added Carousel */}
+          <div className="space-y-10 h-[calc(100vh-10rem)] overflow-y-auto hide-scrollbar">
+            <AddedCarousel
+              createEditCarousel={createEditCarousel}
+              setCreateEdotCarousel={setCreateEdotCarousel}
+            />
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AdminCarousel
+export default AdminCarousel;
+

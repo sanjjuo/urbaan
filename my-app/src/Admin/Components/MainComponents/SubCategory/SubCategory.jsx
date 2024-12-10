@@ -21,6 +21,7 @@ const SubCategory = () => {
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-10 mt-5">
 
         <div className="lg:col-span-2">
+        <div className="h-[calc(100vh-6rem)] overflow-y-auto hide-scrollbar">
           {
             createEditSub === "createSub" ? (
               <>
@@ -32,6 +33,7 @@ const SubCategory = () => {
               </>
             )
           }
+          </div>
         </div>
 
         <div className="lg:col-span-4 space-y-5">
@@ -47,7 +49,7 @@ const SubCategory = () => {
           </div>
 
           {/* Added Sub Categories */}
-          <div>
+          <div className="h-[calc(100vh-10rem)] overflow-y-auto hide-scrollbar">
             <AddedSubCategories createEditSub={createEditSub} handleEditCategory={handleEditCategory}/>
           </div>
         </div>

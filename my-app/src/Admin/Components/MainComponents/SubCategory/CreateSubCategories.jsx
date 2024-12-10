@@ -1,9 +1,12 @@
 import { Button, Radio } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { RiDeleteBin5Line } from 'react-icons/ri';
+import { AppContext } from '../../../../StoreContext/StoreContext';
 
 const CreateSubCategories = () => {
+    const { BASE_URL } = useContext(AppContext)
     const [createSubCategoryTitle, setCreateSubCategoryTitle] = useState('');
     const [createSubCategorySelect, setCreateSubCategorySelect] = useState('');
     const [createSubCategoryImage, setCreateSubCategoryImage] = useState(null);
@@ -24,7 +27,6 @@ const CreateSubCategories = () => {
                     return;
                 }
 
-                const BASE_URL = import.meta.env.VITE_BASE_URL;
                 const response = await axios.get(`${BASE_URL}/admin/category/get`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -67,7 +69,6 @@ const CreateSubCategories = () => {
                 'Content-Type': 'multipart/form-data',
             };
 
-            const BASE_URL = import.meta.env.VITE_BASE_URL;
             const response = await axios.post(`${BASE_URL}/admin/Subcategory/create`, subCategoryFormData, { headers });
             console.log(response.data);
             alert("Subcategory is successfully created");
