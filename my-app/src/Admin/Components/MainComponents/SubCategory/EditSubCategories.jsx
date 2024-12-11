@@ -13,19 +13,20 @@ const EditSubCategories = ({ initialSubCategory }) => {
     const [editSubCategorySelect, setEditSubCategorySelect] = useState('');
     const [editSubCategoryImage, setEditSubCategoryImage] = useState(null);
     const [categories, setCategories] = useState([]);
-    const [editSubCategoryStatus, setEditSubCategoryStatus] = useState('enable'); // Default to 'enable'
+    const [editSubCategoryIsActive, setEditSubCategoryIsActive] = useState(true); // Default to 'enable'
 
 
     // Handle status change
-    const handleStatusChange = (value) => {
-        setEditSubCategoryStatus(value);
+    const handleStatusChange = (status) => {
+        setEditSubCategoryIsActive(status === 'active');
     };
 
     useEffect(() => {
         if (initialSubCategory) {
             setEditSubCategoryTitle(initialSubCategory.title);
-            setEditSubCategorySelect(initialSubCategory.category);
+            setEditSubCategorySelect(initialSubCategory.MainCategory);
             setEditSubCategoryImage(initialSubCategory.SubImageUrl);
+            console.log(initialSubCategory);
         }
     }, [initialSubCategory]);
 
@@ -77,7 +78,7 @@ const EditSubCategories = ({ initialSubCategory }) => {
             } else {
                 editSubCategoryFormData.append('image', editSubCategoryImage); // Existing image URL
             }
-            editSubCategoryFormData.append('status', editSubCategoryStatus); // Add the status here
+            editSubCategoryFormData.append('isActive', editSubCategoryIsActive); // Add the status here
 
             const headers = {
                 Authorization: `Bearer ${token}`,
@@ -115,7 +116,7 @@ const EditSubCategories = ({ initialSubCategory }) => {
                             value={editSubCategoryTitle}
                             onChange={(e) => setEditSubCategoryTitle(e.target.value)}
                             placeholder="Subcategory Title"
-                            className="border-[1px] bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
+                            className="border-[1px] text-secondary bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
                         />
                     </div>
 
@@ -123,9 +124,9 @@ const EditSubCategories = ({ initialSubCategory }) => {
                     <div className="flex flex-col gap-1">
                         <label className="font-normal text-base">Category</label>
                         <select
-                            value={editSubCategorySelect}
+                            value={editSubCategorySelect.id}
                             onChange={(e) => setEditSubCategorySelect(e.target.value)}
-                            className="w-full text-sm text-gray-500 font-light bg-gray-100/50 border p-2 rounded focus:outline-none"
+                            className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none"
                         >
                             <option value="">Select Category</option>
                             {categories.map((category) => (
@@ -136,6 +137,7 @@ const EditSubCategories = ({ initialSubCategory }) => {
                         </select>
                     </div>
 
+
                     {/* status type */}
 
                     <div className='flex flex-col gap-1 w-full'>
@@ -145,15 +147,15 @@ const EditSubCategories = ({ initialSubCategory }) => {
                                 name="type"
                                 color='green'
                                 label="Enable"
-                                checked={editSubCategoryStatus === 'enable'}
-                                onChange={() => handleStatusChange('enable')}
+                                checked={editSubCategoryIsActive}
+                                onChange={() => handleStatusChange('active')}
                             />
                             <Radio
                                 name="type"
                                 color='pink'
                                 label="Disable"
-                                checked={editSubCategoryStatus === 'disable'}
-                                onChange={() => handleStatusChange('disable')}
+                                checked={!editSubCategoryIsActive}
+                                onChange={() => handleStatusChange('inactive')}
                             />
                         </div>
                     </div>

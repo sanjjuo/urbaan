@@ -42,11 +42,10 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
             const headers = {
                 Authorization: `Bearer ${token}`
             }
-            
+
             const response = await axios.delete(`${BASE_URL}/admin/Subcategory/delete/${subCategoryId}`, { headers })
             console.log(response.data);
             handleOpen();
-            alert('Sub category is successfully deleted')
         } catch (error) {
             console.log(error);
             alert("Sub category is not deleted")
@@ -115,18 +114,18 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                                                 </td>
                                                 <td className={classes}>
                                                     <Button className='bg-shippedBg text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl'>
-                                                        {subCat.status}</Button>
+                                                        {subCat.isActive}</Button>
                                                 </td>
                                                 <td className={classes}>
                                                     <div className="flex justify-center gap-2 text-sm">
                                                         <button
                                                             onClick={() => { handleEditCategory(subCat); setSelectedCatId(subCat.id); }}
                                                             className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg 
-                                                    hover:text-editBg ${createEditSub === "editSub" && selectedCatId === subCat.id ? "!bg-buttonBg text-editBg" : ""}`}>
+                                                        hover:text-editBg ${createEditSub === "editSub" && selectedCatId === subCat.id ? "!bg-buttonBg text-editBg" : ""}`}>
                                                             Edit
                                                         </button>
                                                         <button onClick={() => { handleOpen("deleteModal"); setSelectedCatId(subCat.id) }} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
-                                            hover:bg-primary hover:text-white">
+                                                        hover:bg-primary hover:text-white">
                                                             Delete
                                                         </button>
                                                     </div>
@@ -181,7 +180,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                 description="Do you really want to delete this item? This action cannot be undone."
                 handleDelete={handleSubCategoryDelete}
                 SubCatId={selectedCatId}
-                modalType={modalType}
+                modalType="subcategories"
             />
         </>
     )

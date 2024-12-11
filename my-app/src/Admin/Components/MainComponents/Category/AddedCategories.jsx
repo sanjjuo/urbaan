@@ -45,9 +45,8 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
             const headers = {
                 Authorization: `Bearer ${token}`
             }
-            await axios.delete(`${BASE_URL}/admin/category/delete/${catId}`, { headers });
-            setAdminCategory(adminCategory.filter(catProduct => catProduct.id !== catId));
-            alert("Category deleted successfully");
+            const response = await axios.delete(`${BASE_URL}/admin/category/delete/${catId}`, { headers });
+            console.log(response.data);
             handleOpen(); // Close modal after deletion
         } catch (error) {
             console.error("Error deleting category:", error);
@@ -99,7 +98,7 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
                                                 setSelectedCatId(category.id); // Set the selected category ID
                                                 handleOpen('deleteModal');
                                             }}
-                                            className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md">
+                                            className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md hover:bg-primary hover:text-white">
                                             Delete
                                         </button>
                                     </div>
@@ -118,7 +117,7 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
                 description="Do you really want to delete this item? This action cannot be undone."
                 handleDelete={handleDeleteCategory}
                 catId={selectedCatId}
-                modalType={modalType}
+                modalType="categories"
             />
 
             <ReadMoreModal

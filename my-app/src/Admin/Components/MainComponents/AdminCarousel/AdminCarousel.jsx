@@ -6,16 +6,15 @@ import { useState } from 'react'
 import EditCarousel from './EditCarousel'
 
 const AdminCarousel = () => {
-  const [createEditCarousel, setCreateEdotCarousel] = useState("createcarousel");
-  const [selectedCarousel, setSelectedCarousel] = useState(null);
+  const [createEditCarousel, setCreateEditCarousel] = useState("createcarousel");
+  const [initialEditCarouselData, setInitialEditCarouselData] = useState(null)
 
-  const handleCarouselUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const CarouselUrl = URL.createObjectURL(file);
-      setSelectedCarousel(CarouselUrl);
-    }
-  };
+  const handleEditCarousel = (crsl) => {
+    setInitialEditCarouselData(crsl)
+    setCreateEditCarousel('editcarousel')
+    console.log(crsl);
+    
+  }
 
   return (
     <>
@@ -26,13 +25,10 @@ const AdminCarousel = () => {
           <div className="h-[calc(100vh-6rem)] overflow-y-auto hide-scrollbar">
             {createEditCarousel === "createcarousel" ? (
               <CreateCarousel
-                selectedCarousel={selectedCarousel}
-                handleCarouselUpload={handleCarouselUpload}
               />
             ) : (
               <EditCarousel
-                selectedCarousel={selectedCarousel}
-                handleCarouselUpload={handleCarouselUpload}
+                initialEditCarouselData={initialEditCarouselData}
               />
             )}
           </div>
@@ -55,7 +51,7 @@ const AdminCarousel = () => {
           <div className="space-y-10 h-[calc(100vh-10rem)] overflow-y-auto hide-scrollbar">
             <AddedCarousel
               createEditCarousel={createEditCarousel}
-              setCreateEdotCarousel={setCreateEdotCarousel}
+              handleEditCarousel={handleEditCarousel}
             />
           </div>
         </div>

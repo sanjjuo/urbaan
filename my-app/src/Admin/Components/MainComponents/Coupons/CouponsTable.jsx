@@ -3,19 +3,29 @@ import { Button, Card, CardFooter, Chip, IconButton, Menu, MenuHandler, MenuItem
 import { AppContext } from "../../../../StoreContext/StoreContext"
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
-import { AddCouponModal } from './AddCouponModal';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import AppLoader from '../../../../Loader';
+import { EditCouponModal } from './EditCouponModal';
 
-const TABLE_HEAD = ["Discount", "Coupon Title", "Code", "Start Date", "End Date", "Status", "Action"];
+const TABLE_HEAD = ["Discount", "Discount Type", "Coupon Title", "Code", "Start Date", "End Date", "Status", "Action"];
 
 
 const CouponsTable = () => {
-    const { open, handleOpen, BASE_URL } = useContext(AppContext)
+    const { open, handleOpen, BASE_URL, modalType } = useContext(AppContext)
     const [adminCoupon, setAdminCoupon] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
+    const [initialEditCoupon, setInitialEditCoupon] = useState(null)
+    const [selectCouponId, setSelectCouponId] = useState(null)
+
+
+    // handle edit modal
+    const handleEditModal = (couponDetails) => {
+        setInitialEditCoupon(couponDetails)
+        handleOpen('editCouponModal')
+        console.log(couponDetails);
+    }
 
     useEffect(() => {
         const fetchCoupons = async () => {
@@ -38,6 +48,30 @@ const CouponsTable = () => {
         }
         fetchCoupons();
     }, [])
+
+
+    // handle delete coupon
+    const handleDeleteCoupon = async (couponId) => {
+        console.log(couponId);
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Authorization is missing");
+            }
+
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+
+            const response = await axios.delete(`${BASE_URL}/admin/coupon/delete/${couponId}`, { headers })
+            console.log(response.data);
+            handleOpen()
+        } catch (error) {
+            console.log(error, ": Error deleting coupon");
+            alert("Coupon is not deleted")
+        }
+
+    }
     return (
         <>
             {
@@ -80,7 +114,15 @@ const CouponsTable = () => {
                                                         variant="small"
                                                         className="font-normal font-custom text-sm"
                                                     >
-                                                        {coupon.discount}
+                                                        {coupon.discountValue}
+                                                    </Typography>
+                                                </td>
+                                                <td className={classes}>
+                                                    <Typography
+                                                        variant="small"
+                                                        className="font-normal font-custom text-sm"
+                                                    >
+                                                        {coupon.discountType}
                                                     </Typography>
                                                 </td>
                                                 <td className={classes}>
@@ -150,8 +192,15 @@ const CouponsTable = () => {
                                                             </IconButton>
                                                         </MenuHandler>
                                                         <MenuList>
-                                                            <MenuItem onClick={() => handleOpen("couponModal")} className='font-custom text-buttonBg hover:!text-buttonBg'>Edit</MenuItem>
-                                                            <MenuItem onClick={() => handleOpen("deleteModal")} className='font-custom text-primary hover:!text-primary'>
+                                                            <MenuItem onClick={() => {
+                                                                handleEditModal(coupon);
+                                                                setSelectCouponId(coupon._id)
+                                                            }}
+                                                                className={`font-custom text-buttonBg hover:!text-buttonBg ${selectCouponId ? 'bg-buttonBg text-white' : ''}`}>Edit</MenuItem>
+                                                            <MenuItem onClick={() => {
+                                                                setSelectCouponId(coupon._id);
+                                                                handleOpen("deleteModal")
+                                                            }} className='font-custom text-primary hover:!text-primary'>
                                                                 Delete</MenuItem>
                                                         </MenuList>
                                                     </Menu>
@@ -204,11 +253,14 @@ const CouponsTable = () => {
                 handleOpen={handleOpen}
                 title="Are you sure ?"
                 description="Do you really want to delete this item? This action cannot be undone."
+                handleDelete={handleDeleteCoupon}
+                modalType='coupon'
+                couponId={selectCouponId}
             />
-            <AddCouponModal
-                open={open === "couponModal"}
+            <EditCouponModal
+                open={open === "editCouponModal"}
                 handleOpen={handleOpen}
-                title="Edit Coupon"
+                initialEditCoupon={initialEditCoupon}
             />
         </>
     )

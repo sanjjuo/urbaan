@@ -8,10 +8,11 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import AppLoader from '../../../../Loader';
 
-const AddedCarousel = ({ createEditCarousel, setCreateEdotCarousel }) => {
-    const { open, handleOpen, BASE_URL } = useContext(AppContext);
+const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
+    const { open, handleOpen, BASE_URL, modalType } = useContext(AppContext);
     const [adminCarousel, setAdminCarousel] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedCarouselId, setSelectedCarouselId] = useState(null);
 
     useEffect(() => {
         const fetchAdminCarousel = async () => {
@@ -26,6 +27,29 @@ const AddedCarousel = ({ createEditCarousel, setCreateEdotCarousel }) => {
         }
         fetchAdminCarousel();
     }, [])
+
+    // handle delete
+
+    const handleCarouselDelete = async (carouselId) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Authorization is missing");
+                return;
+            }
+
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+
+            const response = await axios.delete(`${BASE_URL}/admin/slider/${carouselId}`, { headers });
+            console.log(response.data);
+            handleOpen()
+        } catch (error) {
+            console.log(error, "error deleting carousel");
+            alert('Carousel is not deleted')
+        }
+    }
     return (
         <>
             {
@@ -68,15 +92,21 @@ const AddedCarousel = ({ createEditCarousel, setCreateEdotCarousel }) => {
                                         </Button>
 
                                         <button
-                                            onClick={() => setCreateEdotCarousel("editcarousel")}
+                                            onClick={() => {
+                                                setSelectedCarouselId(carousel._id)
+                                                handleEditCarousel(carousel)
+                                            }}
                                             className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg 
-                                    hover:text-editBg ${createEditCarousel === "editcarousel" ? "!bg-buttonBg text-editBg" : ""}`}
+                                    hover:text-editBg ${createEditCarousel === "editcarousel" && selectedCarouselId === carousel._id ? "!bg-buttonBg text-editBg" : ""}`}
                                         >
                                             Edit
                                         </button>
                                         <button
-                                            onClick={() =>
-                                                handleOpen('deleteModal')
+                                            onClick={() => {
+                                                setSelectedCarouselId(carousel._id);
+                                                handleOpen('deleteModal');
+                                            }
+
                                             }
                                             className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md hover:bg-primary hover:text-white"
                                         >
@@ -95,6 +125,9 @@ const AddedCarousel = ({ createEditCarousel, setCreateEdotCarousel }) => {
                 handleOpen={handleOpen}
                 title="Are you sure ?"
                 description="Do you really want to delete this Carousel? This action cannot be undone."
+                handleDelete={handleCarouselDelete}
+                carouselId={selectedCarouselId}
+                modalType={"carousel"}
             />
         </>
     )

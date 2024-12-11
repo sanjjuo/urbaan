@@ -1,4 +1,4 @@
-import { Button, Radio } from '@material-tailwind/react'
+import { Button } from '@material-tailwind/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
@@ -11,7 +11,6 @@ const CreateCarousel = () => {
     const [carouselTitle, setCarouselTitle] = useState('')
     const [carouselLink, setCarouselLink] = useState('')
     const [carouselCategory, setCarouselCategory] = useState('')
-    const [carouselIsActive, setCarouselIsActive] = useState(true) // Default to true
     const [categories, setCategories] = useState([])
 
 
@@ -21,11 +20,6 @@ const CreateCarousel = () => {
             setCarouselImage(file);
         }
     }
-
-    // Handle status change
-    const handleStatusChange = (status) => {
-        setCarouselIsActive(status === 'active');
-    };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -62,7 +56,6 @@ const CreateCarousel = () => {
 
             const carouselFormData = new FormData();
             carouselFormData.append('image', carouselImage);
-            carouselFormData.append('isActive', carouselIsActive.toString()); // Convert to string
             carouselFormData.append('label', carouselLabel);
             carouselFormData.append('title', carouselTitle);
             carouselFormData.append('link', carouselLink);
@@ -121,27 +114,6 @@ const CreateCarousel = () => {
                         </div>
                     </div>
 
-                    {/* Status */}
-                    <div className='flex flex-col gap-1 w-full'>
-                        <label className='font-normal text-base'>Status</label>
-                        <div className="flex gap-10">
-                            <Radio
-                                name="status"
-                                color='green'
-                                label="Active"
-                                checked={carouselIsActive}
-                                onChange={() => handleStatusChange('active')}
-                            />
-                            <Radio
-                                name="status"
-                                color='pink'
-                                label="Inactive"
-                                checked={!carouselIsActive}
-                                onChange={() => handleStatusChange('inactive')}
-                            />
-                        </div>
-                    </div>
-
                     {/* Label */}
                     <div className='flex flex-col gap-1'>
                         <label htmlFor="" className='font-normal text-base'>Carousel Label</label>
@@ -150,7 +122,7 @@ const CreateCarousel = () => {
                             value={carouselLabel}
                             onChange={(e) => setCarouselLabel(e.target.value)}
                             placeholder='Eg: Trending, New Season'
-                            className='border-[1px] bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                            className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
                         />
                     </div>
 
@@ -162,7 +134,7 @@ const CreateCarousel = () => {
                             value={carouselTitle}
                             onChange={(e) => setCarouselTitle(e.target.value)}
                             placeholder='Eg: Stylish kurtis, kids Collection'
-                            className='border-[1px] bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                            className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
                         />
                     </div>
 
@@ -174,7 +146,7 @@ const CreateCarousel = () => {
                             value={carouselLink}
                             onChange={(e) => setCarouselLink(e.target.value)}
                             placeholder='www.carousel.com'
-                            className='border-[1px] bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                            className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
                         />
                     </div>
 
@@ -184,11 +156,11 @@ const CreateCarousel = () => {
                         <select
                             value={carouselCategory}
                             onChange={(e) => setCarouselCategory(e.target.value)}
-                            className="w-full text-sm text-gray-500 font-light bg-gray-100/50 border p-2 rounded focus:outline-none"
+                            className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none"
                         >
                             <option value="">Select Category</option>
                             {categories.map((category) => (
-                                <option key={category.id} value={category.id}>{category.name}</option>
+                                <option className='text-gray-500' key={category.id} value={category.id}>{category.name}</option>
                             ))}
                         </select>
                     </div>

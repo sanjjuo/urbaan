@@ -6,9 +6,11 @@ import { FaPlus } from 'react-icons/fa6'
 import { useContext } from 'react'
 import { AppContext } from "../../../../StoreContext/StoreContext"
 import { AddCouponModal } from './AddCouponModal'
+import { useState } from 'react'
 
 const Coupons = () => {
   const { open, handleOpen } = useContext(AppContext)
+ 
   return (
     <>
       <h1 className="text-2xl lg:text-3xl font-semibold">Coupons</h1>
@@ -25,7 +27,6 @@ const Coupons = () => {
       <AddCouponModal
         open={open === "addCouponModal"}
         handleOpen={handleOpen}
-        title="Add Coupon"
       />
     </>
   )

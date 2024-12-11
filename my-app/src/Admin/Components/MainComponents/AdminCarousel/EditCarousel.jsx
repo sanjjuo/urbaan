@@ -1,7 +1,118 @@
-import { Button } from '@material-tailwind/react'
+import { Button, Radio } from '@material-tailwind/react'
 import React from 'react'
+import { useContext } from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react'
+import { AppContext } from '../../../../StoreContext/StoreContext';
+import axios from 'axios';
+import { RiDeleteBin5Line } from 'react-icons/ri';
 
-const EditCarousel = ({ selectedCarousel, handleCarouselUpload }) => {
+const EditCarousel = ({ initialEditCarouselData }) => {
+    const { BASE_URL } = useContext(AppContext)
+    const [editCarouselImage, setEditCarouselImage] = useState(null);
+    const [editCarouselIsActive, setEditCarouselIsActive] = useState(true);
+    const [editCarouselLabel, setEditCarouselLabel] = useState('')
+    const [editCarouselTitle, setEditCarouselTitle] = useState('')
+    const [editCarouselLink, setEditCarouselLink] = useState('')
+    const [editCarouselCategory, setEditCarouselCategory] = useState('')
+    const [categories, setCategories] = useState([])
+
+    const handleCarouselUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setEditCarouselImage({ image: file }); // Updates the state with the new file
+        } else {
+            console.error("No file selected.");
+        }
+    };
+
+    const handleCarouselStatusChange = (status) => {
+        setEditCarouselIsActive(status === 'active')
+    }
+
+    useEffect(() => {
+        if (initialEditCarouselData) {
+            setEditCarouselImage(initialEditCarouselData.image ? `${BASE_URL}/uploads/category/${initialEditCarouselData.image}` : null);
+            setEditCarouselIsActive(initialEditCarouselData.isActive)
+            setEditCarouselLabel(initialEditCarouselData.label)
+            setEditCarouselTitle(initialEditCarouselData.title)
+            setEditCarouselLink(initialEditCarouselData.link)
+            setEditCarouselCategory(initialEditCarouselData.category)
+        }
+    }, [initialEditCarouselData])
+
+
+    // category fetching
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("Authorization is missing");
+                    return;
+                }
+
+                const response = await axios.get(`${BASE_URL}/admin/category/get`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Error fetching categories:", error.response || error.message);
+                alert("Failed to load categories.");
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    // form submission
+    const handleEditCarouselSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("Authorization is missing");
+            }
+
+            const editCarouselFormData = new FormData();
+            if (editCarouselImage && editCarouselImage.image) {
+                editCarouselFormData.append('image', editCarouselImage.image);
+            } else {
+                editCarouselFormData.append('image', editCarouselImage)
+            }
+            editCarouselFormData.append('isActive', editCarouselIsActive);
+            editCarouselFormData.append('label', editCarouselLabel);
+            editCarouselFormData.append('title', editCarouselTitle);
+            editCarouselFormData.append('link', editCarouselLink);
+            editCarouselFormData.append('category', editCarouselCategory);
+
+            // Log FormData to verify its content
+            console.log('FormData content:');
+            for (let pair of editCarouselFormData.entries()) {
+                console.log(`${pair[0]}:`, pair[1]);
+            }
+
+            const headers = {
+                Authorization: `Bearer ${token}`,
+                'Content-type': 'multipart/form-data'
+            }
+
+            const response = await axios.patch(`${BASE_URL}/admin/slider/${initialEditCarouselData._id}`, editCarouselFormData, { headers })
+            console.log(response.data);
+            alert('Carousel is successfully updated !')
+            setEditCarouselImage(null)
+            setEditCarouselIsActive('')
+            setEditCarouselLabel('')
+            setEditCarouselTitle('')
+            setEditCarouselLink('')
+            setEditCarouselCategory('')
+        } catch (error) {
+            console.log(error);
+            alert('Carousel is not updated !')
+        }
+    }
     return (
         <>
             <div className='bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out'>
@@ -10,12 +121,24 @@ const EditCarousel = ({ selectedCarousel, handleCarouselUpload }) => {
                 </div>
                 <hr />
                 <div className='p-5'>
-                    <form action="" className='space-y-5'>
+                    <form action="" className='space-y-5' onSubmit={handleEditCarouselSubmit}>
                         {/* image upload */}
                         <div>
-                            <label htmlFor="" className='font-normal text-base'>Carousel Image</label>
+                            <div className='flex items-center justify-between'>
+                                <label htmlFor="" className='font-normal text-base'>Carousel Image</label>
+                                <RiDeleteBin5Line onClick={() => setEditCarouselImage(null)} className='text-deleteBg text-xl hover:text-primary cursor-pointer' />
+                            </div>
                             <div className='w-full h-48 flex justify-center items-center border-2 rounded-xl mt-2'>
-                                {!selectedCarousel ? (
+                                {editCarouselImage ? (
+                                    <>
+                                        <img
+                                            src={editCarouselImage.image ? URL.createObjectURL(editCarouselImage.image) : editCarouselImage}
+                                            alt="Uploaded"
+                                            className="w-full h-full rounded-lg"
+                                        />
+
+                                    </>
+                                ) : (
                                     <>
                                         <input
                                             type="file"
@@ -32,20 +155,42 @@ const EditCarousel = ({ selectedCarousel, handleCarouselUpload }) => {
                                             <p className="text-secondary text-xs">Browse files to upload</p>
                                         </label>
                                     </>
-                                ) : (
-                                    <img
-                                        src={selectedCarousel}
-                                        alt="Uploaded"
-                                        className="w-full h-full rounded-lg"
-                                    />
                                 )}
+                            </div>
+                        </div>
+
+                        {/* Status */}
+                        <div className='flex flex-col gap-1 w-full'>
+                            <label className='font-normal text-base'>Status</label>
+                            <div className="flex gap-10">
+                                <Radio
+                                    name="status"
+                                    color='green'
+                                    label="Active"
+                                    checked={editCarouselIsActive}
+                                    onChange={() => handleCarouselStatusChange('active')}
+                                />
+                                <Radio
+                                    name="status"
+                                    color='pink'
+                                    label="Inactive"
+                                    checked={!editCarouselIsActive}
+                                    onChange={() => handleCarouselStatusChange('inactive')}
+                                />
                             </div>
                         </div>
 
                         {/* label */}
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="" className='font-normal text-base'>Carousel Label</label>
-                            <input type="text" name="name" id="" placeholder='Eg: Trending, New Season' className='border-[1px] 
+                            <input
+                                type="text"
+                                name="name"
+                                value={editCarouselLabel}
+                                onChange={(e) => setEditCarouselLabel(e.target.value)}
+                                id=""
+                                placeholder='Eg: Trending, New Season'
+                                className='border-[1px] text-sm
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                         </div>
@@ -53,22 +198,56 @@ const EditCarousel = ({ selectedCarousel, handleCarouselUpload }) => {
                         {/* title */}
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="" className='font-normal text-base'>Carousel Title</label>
-                            <input type="text" name="name" id="" placeholder='eg: Stylish kurtis, kids Collection' className='border-[1px] 
+                            <input
+                                type="text"
+                                name="name"
+                                value={editCarouselTitle}
+                                onChange={(e) => setEditCarouselTitle(e.target.value)}
+                                id=""
+                                placeholder='eg: Stylish kurtis, kids Collection'
+                                className='border-[1px] text-sm 
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                         </div>
+
+                        {/* Link */}
+                        <div className='flex flex-col gap-1'>
+                            <label htmlFor="" className='font-normal text-base'>Carousel Link</label>
+                            <input
+                                type="text"
+                                value={editCarouselLink}
+                                onChange={(e) => setEditCarouselLink(e.target.value)}
+                                onBlur={(e) => {
+                                    const value = e.target.value.trim();
+                                    if (value && !/^https?:\/\//i.test(value)) {
+                                        setEditCarouselLink(`https://${value}`);
+                                    }
+                                }}
+                                placeholder='https://www.carousel.com'
+                                className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                            />
+                        </div>
+
 
                         {/* category */}
                         <div className='flex flex-col gap-1'>
-                            <label htmlFor="" className='font-normal text-base'>Carousel Category</label>
-                            <input type="text" name="name" id="" placeholder='eg:Kurti, Churidar' className='border-[1px] 
-                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
-                                     focus:outline-none'/>
+                            <label className='font-normal text-base'>Category</label>
+                            <select
+                                value={editCarouselCategory}
+                                onChange={(e) => setEditCarouselCategory(e.target.value)}
+                                className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none"
+                            >
+                                <option value="">Select Category</option>
+                                {categories.map((category) => (
+                                    <option className='text-gray-500' key={category.id} value={category.id}>{category.name}</option>
+                                ))}
+                            </select>
                         </div>
+
 
                         {/* button */}
                         <div className='flex justify-end'>
-                            <Button className='bg-buttonBg font-normal tracking-wider font-custom text-sm'>Submit</Button>
+                            <Button type='submit' className='bg-buttonBg font-normal tracking-wider font-custom text-sm'>Submit</Button>
                         </div>
                     </form>
                 </div>

@@ -1,4 +1,4 @@
-import { Button, Radio } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useContext } from 'react';
@@ -11,12 +11,6 @@ const CreateSubCategories = () => {
     const [createSubCategorySelect, setCreateSubCategorySelect] = useState('');
     const [createSubCategoryImage, setCreateSubCategoryImage] = useState(null);
     const [categories, setCategories] = useState([]);
-    const [createSubCategoryStatus, setCreateSubCategoryStatus] = useState('enable'); // Default to 'enable'
-
-    // Handle status change
-    const handleStatusChange = (value) => {
-        setCreateSubCategoryStatus(value);
-    };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -62,7 +56,6 @@ const CreateSubCategories = () => {
             subCategoryFormData.append('title', createSubCategoryTitle);
             subCategoryFormData.append('category', createSubCategorySelect);
             subCategoryFormData.append('image', createSubCategoryImage);
-            subCategoryFormData.append('status', createSubCategoryStatus); // Add the status here
 
             const headers = {
                 Authorization: `Bearer ${token}`,
@@ -111,40 +104,17 @@ const CreateSubCategories = () => {
                                 name="selectField"
                                 value={createSubCategorySelect}
                                 onChange={(e) => setCreateSubCategorySelect(e.target.value)}
-                                className="w-full text-sm text-gray-500 font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
+                                className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
                             >
-                                <option value="">Select Category</option>
+                                <option value="" >Select Category</option>
                                 {categories?.length > 0 &&
                                     categories.map((category) => (
-                                        <option key={category.id} value={category.id}>
+                                        <option className='text-gray-500'  key={category.id} value={category.id}>
                                             {category.name}
                                         </option>
                                     ))}
                             </select>
                         </div>
-
-                        {/* status type */}
-
-                        <div className='flex flex-col gap-1 w-full'>
-                            <label className='font-normal text-base'>Status type</label>
-                            <div className="flex gap-10">
-                                <Radio
-                                    name="type"
-                                    color='green'
-                                    label="Enable"
-                                    checked={createSubCategoryStatus === 'enable'}
-                                    onChange={() => handleStatusChange('enable')}
-                                />
-                                <Radio
-                                    name="type"
-                                    color='pink'
-                                    label="Disable"
-                                    checked={createSubCategoryStatus === 'disable'}
-                                    onChange={() => handleStatusChange('disable')}
-                                />
-                            </div>
-                        </div>
-
 
                         {/* image upload */}
                         <div>
