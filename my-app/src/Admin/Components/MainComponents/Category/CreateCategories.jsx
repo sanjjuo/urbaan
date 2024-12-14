@@ -50,7 +50,7 @@ const CreateCategories = () => {
 
             const response = await axios.post(`${BASE_URL}/admin/category/create`, formData, { headers });
             console.log('Category created:', response.data);
-
+            alert("Category is Created")
             // Reset form
             setCreateCategoryForm({ name: '', image: null, description: '' });
         } catch (error) {

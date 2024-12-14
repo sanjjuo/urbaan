@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 // const notify = () => toast('Here is your toast.');
 
-export function DeleteModal({ open, handleOpen, title, description, handleDelete, catId, SubCatId, carouselId, couponId, modalType }) {
+export function DeleteModal({ open, handleOpen, title, description, handleDelete, modalType, catId, SubCatId, carouselId, couponId, productId, }) {
     return (
         <Dialog open={open} handler={handleOpen} size="sm" className="rounded-none" aria-modal="true">
             <div className={`inert ${open ? '' : 'block'}`}>
@@ -42,6 +42,9 @@ export function DeleteModal({ open, handleOpen, title, description, handleDelete
                                 }
                                 else if (modalType === "coupon") {
                                     handleDelete(couponId);
+                                }
+                                else if (modalType === "products") {
+                                    handleDelete(productId);
                                 }
                                 // notify();
                             }}

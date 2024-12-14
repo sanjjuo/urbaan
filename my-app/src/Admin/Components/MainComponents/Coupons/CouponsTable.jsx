@@ -33,6 +33,7 @@ const CouponsTable = () => {
                 const token = localStorage.getItem('token');
                 if (!token) {
                     alert("Authorization is missing");
+                    return;
                 }
 
                 const headers = {

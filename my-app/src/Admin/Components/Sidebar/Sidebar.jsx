@@ -24,6 +24,7 @@ export function AppSidebar() {
         // it is used for avoiding sudden display of initially "dashboard" path before showing current path or page where user on,
         const path = location.pathname;
         if (path === "") return "dashboard";
+        if (path === "/adminHome") return "dashboard";
         if (path === "/adminHome/product") return "product";
         if (path === "/adminHome/addProduct") return "product";
         if (path === "/adminHome/editProduct") return "product";
@@ -42,6 +43,7 @@ export function AppSidebar() {
     useEffect(() => {
         const path = location.pathname;
         if (path === "/") setActiveLink("dashboard");
+        else if (path === "/adminHome") setActiveLink("dashboard");
         else if (path === "/adminHome/product") setActiveLink("product");
         else if (path === "/adminHome/addProduct") setActiveLink("product");
         else if (path === "/adminHome/editProduct") setActiveLink("product");
@@ -58,12 +60,12 @@ export function AppSidebar() {
         <>
             <Card className="hidden lg:block h-screen lg:w-64 pt-4 shadow-none rounded-none overflow-y-auto hide-scrollbar">
                 <div className='flex justify-center items-center'>
-                    <div className="mb-2 pt-2 w-28 rounded-3xl">
+                    <Link to='/adminHome'><div className="mb-2 pt-2 w-28 rounded-3xl">
                         <img src="/logo.png" alt="" className='w-full object-contain' />
-                    </div>
+                    </div></Link>
                 </div>
                 <List className='mt-14 px-4 space-y-1'>
-                    <Link to="">
+                    <Link to="/adminHome">
                         <ListItem onClick={() => setActiveLink('dashboard')} className={` text-secondary bg-gray-100 p-3 text-base font-medium transition-all duration-300 ease-in-out
                             ${activeLink === "dashboard" ? "!bg-primary text-white py-6 focus:!text-white" : "bg-none"}`}>
                             <ListItemPrefix>

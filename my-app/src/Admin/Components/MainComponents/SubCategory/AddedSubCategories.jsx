@@ -35,13 +35,13 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert("Authrization is missing")
+                alert("Authorization is missing")
                 return;
             }
 
             const headers = {
                 Authorization: `Bearer ${token}`
-            }
+            };
 
             const response = await axios.delete(`${BASE_URL}/admin/Subcategory/delete/${subCategoryId}`, { headers })
             console.log(response.data);

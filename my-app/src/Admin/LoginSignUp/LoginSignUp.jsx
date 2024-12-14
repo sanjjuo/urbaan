@@ -67,7 +67,7 @@ const Login = () => {
                                 value={formData.email}
                                 onChange={handleInputChange}
                                 required
-                                className="border-[1px] border-gray-400 focus:border-[1px] focus:!border-gray-400"
+                                className="border-[1px] border-gray-400 focus:border-[1px] focus:!border-gray-400 !font-custom"
                                 labelProps={{
                                     className: "before:content-none after:content-none",
                                 }}
@@ -79,7 +79,7 @@ const Login = () => {
                                 </Typography>
                                 <Typography
                                     variant="h6"
-                                    className="-mb-3 font-custom text-sm font-medium cursor-pointer hover:text-buttonBg"
+                                    className="-mb-3 !font-custom text-sm font-medium cursor-pointer hover:text-buttonBg"
                                 >
                                     Forget Password ?
                                 </Typography>
@@ -110,7 +110,7 @@ const Login = () => {
                         </div>
                         <Button
                             type="submit"
-                            className="mt-6 font-custom bg-primary text-sm font-normal capitalize tracking-wider"
+                            className="mt-6 font-custom bg-primary hover:bg-secondary text-sm font-normal capitalize tracking-wider"
                             fullWidth
                         >
                             Sign In

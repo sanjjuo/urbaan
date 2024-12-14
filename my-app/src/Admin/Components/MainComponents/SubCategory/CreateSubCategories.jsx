@@ -10,6 +10,7 @@ const CreateSubCategories = () => {
     const [createSubCategoryTitle, setCreateSubCategoryTitle] = useState('');
     const [createSubCategorySelect, setCreateSubCategorySelect] = useState('');
     const [createSubCategoryImage, setCreateSubCategoryImage] = useState(null);
+    const [createSubCategoryIsActive, setCreateSubCategoryIsActive] = useState(true)
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -20,6 +21,8 @@ const CreateSubCategories = () => {
                     alert("Authorization is missing");
                     return;
                 }
+
+                // const status = createSubCategoryIsActive ? 'active' : 'expired';
 
                 const response = await axios.get(`${BASE_URL}/admin/category/get`, {
                     headers: {
@@ -56,6 +59,7 @@ const CreateSubCategories = () => {
             subCategoryFormData.append('title', createSubCategoryTitle);
             subCategoryFormData.append('category', createSubCategorySelect);
             subCategoryFormData.append('image', createSubCategoryImage);
+            subCategoryFormData.append('isActive', createSubCategoryIsActive)
 
             const headers = {
                 Authorization: `Bearer ${token}`,
@@ -109,7 +113,7 @@ const CreateSubCategories = () => {
                                 <option value="" >Select Category</option>
                                 {categories?.length > 0 &&
                                     categories.map((category) => (
-                                        <option className='text-gray-500'  key={category.id} value={category.id}>
+                                        <option className='text-gray-500' key={category.id} value={category.id}>
                                             {category.name}
                                         </option>
                                     ))}

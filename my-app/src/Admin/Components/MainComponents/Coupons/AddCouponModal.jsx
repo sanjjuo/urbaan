@@ -143,7 +143,7 @@ export function AddCouponModal({ open, handleOpen }) {
                                         <option value="">Select Category</option>
                                         {
                                             categories.map((category) => (
-                                                <option className='text-gray-500' key={category.id} value={category.id}>{category.name}</option>
+                                                <option className='text-gray-500 capitalize' key={category.id} value={category.id}>{category.name}</option>
                                             ))
                                         }
 
