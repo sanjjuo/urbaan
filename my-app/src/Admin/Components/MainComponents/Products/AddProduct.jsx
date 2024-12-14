@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const AddProduct = () => {
-    const { BASE_URL } = useContext(AppContext)
+    const { BASE_URL } = useContext(AppContext) //BASE URL
     const navigate = useNavigate()
     const [fields, setFields] = useState([{ property: "", value: "" }])
     const [attributeFields, setAttributeFields] = useState([{ color: "", sizes: [{ size: "", stock: "" }] }]);
@@ -77,7 +77,7 @@ const AddProduct = () => {
         }
     };
 
-    // handle add new inputs at attributes section
+    // handle add new inputs at attributes section with color size stock
     const handleAddAttributesFields = () => {
         setAttributeFields([...attributeFields, { color: "", sizes: [{ size: "", stock: "" }] }]);
     };
