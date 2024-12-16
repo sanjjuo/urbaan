@@ -9,14 +9,10 @@ import axios from 'axios';
 import AppLoader from '../../../Loader';
 
 const ShopByCategory = () => {
-  const { setSelectedCategory, BASE_URL } = useContext(AppContext);
+  const { BASE_URL } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
-
-  const handleCategory = (category) => {
-    setSelectedCategory(category)
-  }
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -48,11 +44,13 @@ const ShopByCategory = () => {
           <>
             <div className='flex flex-wrap xl:flex-nowrap lg:flex-nowrap items-center justify-between xl:justify-normal 
       lg:justify-normal xl:gap-8 lg:gap-8 xl:overflow-x-scroll lg:overflow-x-scroll hide-scrollbar'>
-              {categories.map((category, index) => (
+              {categories.map((category) => (
                 <Link
-                  to="/all-category"
-                  key={index}
-                  onClick={() => handleCategory(category.name)}
+                  key={category.id}
+                  to={{
+                    pathname: "/all-category",
+                  }}
+                  state={{ category }}
                   className="space-y-2 mb-4 w-[30%] transition-opacity duration-500 ease-in-out hover:opacity-75 cursor-pointer block"
                 >
                   <div className="w-full h-24 xl:w-36 xl:h-36 lg:w-36 lg:h-36">

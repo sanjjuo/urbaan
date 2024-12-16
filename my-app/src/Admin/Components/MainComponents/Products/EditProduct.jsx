@@ -185,16 +185,17 @@ const EditProduct = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert("Authorization is missing")
+                alert("Authorization is missing");
                 return;
             }
 
-            // Validate inputs
+            // Validate required inputs
             if (!editProdTitle.trim() || !editProdCategory.trim()) {
                 alert("Product title and category are required");
                 return;
             }
 
+            // Initialize FormData
             const editproductFormData = new FormData();
             editproductFormData.append('title', editProdTitle);
             editproductFormData.append('category', editProdCategory);
@@ -211,18 +212,7 @@ const EditProduct = () => {
             editproductFormData.append('isFeaturedProduct', editProdCheckboxes.featured);
             editproductFormData.append('description', editProdDescription);
 
-            // Convert features array to an object
-            const featuresObject = editProdFields.reduce((acc, { property, value }) => {
-                acc[property] = value;
-                return acc;
-            }, {})
-            editproductFormData.append('features', JSON.stringify(featuresObject));
-
-            // Append images to the FormData
-            editProdImage.forEach((image) => {
-                editproductFormData.append('images', image)
-            });
-
+            // Handle colors and sizes
             const colors = editAttributeFields.reduce((acc, field) => {
                 if (field.color.trim()) {
                     const validSizes = field.sizes
@@ -233,44 +223,63 @@ const EditProduct = () => {
                         )
                         .map(size => ({
                             size: size.size.trim(),
-                            stock: Number(size.stock)
+                            stock: Number(size.stock),
                         }));
 
                     if (validSizes.length > 0) {
                         acc.push({
                             color: field.color.trim(),
-                            sizes: validSizes
+                            sizes: validSizes,
                         });
                     }
                 }
                 return acc;
             }, []);
 
+            // Append colors as a JSON string
             if (colors.length > 0) {
                 editproductFormData.append('colors', JSON.stringify(colors));
             }
 
 
+            // // Handle features
+            const featuresObject = editAttributeFields.reduce((acc, { property, value }) => {
+                acc[property] = value;
+                return acc;
+            }, {});
+            editproductFormData.append('features', JSON.stringify(featuresObject));
+
+            // Append images
+            editProdImage.forEach((image) => {
+                editproductFormData.append('images', image);
+            });
+
+            // Append manufacturer details
             editproductFormData.append('manufacturerName', editProdManuName);
             editproductFormData.append('manufacturerBrand', editProdManuBrand);
             editproductFormData.append('manufacturerAddress', editProdManuAddress);
 
-            // Log each entry in the FormData
+            // Debugging FormData
             for (const [key, value] of editproductFormData.entries()) {
                 console.log(key, value);
             }
 
+            // API Request
             const headers = {
                 Authorization: `Bearer ${token}`,
-                'Content-type': 'multipart/form-data',
+                'Content-Type': 'multipart/form-data',
             };
 
-            const response = await axios.patch(`${BASE_URL}/admin/products/update-product/${initialProducts._id}`, editproductFormData, { headers })
+            const response = await axios.patch(
+                `${BASE_URL}/admin/products/update-product/${initialProducts._id}`,
+                editproductFormData,
+                { headers }
+            );
             console.log(response.data);
 
-            toast.success("Product is updated")
+            toast.success("Product is updated");
 
-            // Reset form
+            // Reset form fields
             setEditProdTitle('');
             setEditProdCategory('');
             setEditProdSubCategory('');
@@ -279,7 +288,7 @@ const EditProduct = () => {
             setEditProdOfferPrice('');
             setEditProdCheckboxes({ latest: false, offer: false, featured: false });
             setEditProdFields([{ property: "", value: "" }]);
-            setEditAttributeFields([{ color: "", size: "", stock: "" }]);
+            setEditAttributeFields([{ color: "", sizes: [{ size: "", stock: "" }] }]);
             setEditProdDescription('');
             setEditProdImage([]);
             setEditProdManuName('');
@@ -287,12 +296,12 @@ const EditProduct = () => {
             setEditProdManuAddress('');
         } catch (error) {
             console.error("Error in form submission:", error);
-            alert("Product is not updated")
-            console.log(`${BASE_URL}/admin/products/update-product/${initialProducts._id}`);
-            // console.error("Error:", error.response || error.message);
-            // alert(`Error: ${error.response?.data?.message || "Something went wrong"}`);
+            console.error(error.response?.data || "No additional error details");
+            alert("Product is not updated");
         }
-    }
+    };
+
+
 
     const handleAddColorField = () => {
         setEditAttributeFields([...editAttributeFields, { color: "", sizes: [{ size: "", stock: "" }] }]);
@@ -631,7 +640,7 @@ const EditProduct = () => {
                             <div
                                 key={colorIndex}
                                 className="flex flex-col gap-2 border p-4 rounded-md bg-gray-50">
-                                Color Picker and Header
+                                {/* Color Picker and Header */}
                                 <div className="flex items-center gap-5">
                                     <div className="flex items-center gap-2 w-full">
                                         <div className="w-64 bg-primary text-white rounded-md font-custom tracking-wider flex items-center justify-center gap-2 p-2 cursor-pointer relative">
@@ -659,7 +668,7 @@ const EditProduct = () => {
                                     />
                                 </div>
 
-                                Sizes and Stock Table
+                                {/* Sizes and Stock Table */}
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center justify-between">
                                         <label className="text-sm font-medium">Sizes & Stock</label>

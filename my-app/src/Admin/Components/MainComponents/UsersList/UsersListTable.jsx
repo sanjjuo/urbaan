@@ -117,7 +117,12 @@ const UsersListTable = () => {
                                                     </IconButton>
                                                 </MenuHandler>
                                                 <MenuList>
-                                                    <Link to={`/adminHome/userDetails/${user.id}`}>
+                                                    <Link
+                                                        to={{
+                                                            pathname: '/adminHome/userDetails',
+                                                        }}
+                                                        state={{ user }}
+                                                    >
                                                         <MenuItem className="font-custom text-buttonBg hover:!text-buttonBg">View</MenuItem>
                                                     </Link>
                                                     <MenuItem className="font-custom text-processingBg hover:!text-processingBg">

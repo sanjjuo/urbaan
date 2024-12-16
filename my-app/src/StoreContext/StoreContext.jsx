@@ -4,24 +4,18 @@ import { products } from '../data';
 export const AppContext = createContext();
 
 const StoreContext = ({ children }) => {
-    const BASE_URL = import.meta.env.VITE_BASE_URL; //base url
-
+    const BASE_URL = import.meta.env.VITE_BASE_URL; // base url
     const [open, setOpen] = useState(null);
     const [openRemoveModal, setOpenRemoveModal] = useState(false);
     const [openDrawer, setDrawerOpen] = useState(false);
     const [openBottomDrawer, setBottomDrawerOpen] = useState(false);
-    const [openSizeDrawer, setOpenSizeDrawer] = useState(false)
-    const [selectedProduct, setSelectedProduct] = useState({});
-    const [selectedCategory, setSelectedCategory] = useState(
-        localStorage.getItem('selectedCategory') || null
-    );
-    const [modalType, setModalType] = useState(null); // New state for modal type   
-
-
-    // Save selected category to localStorage when it changes
-    useEffect(() => {
-        localStorage.setItem('selectedCategory', selectedCategory || '');
-    }, [selectedCategory]);
+    const [openSizeDrawer, setOpenSizeDrawer] = useState(false);
+    const [productDetails, setProductDetails] = useState(() => {
+        // Load product details from localStorage
+        const savedDetails = localStorage.getItem('productDetails');
+        return savedDetails ? JSON.parse(savedDetails) : {};
+    });
+    const [modalType, setModalType] = useState(null); // New state for modal type
 
     // Handle modal
     const handleOpen = (modal, type) => {
@@ -38,7 +32,9 @@ const StoreContext = ({ children }) => {
 
     // Handle product details
     const handleProductDetails = (details) => {
-        setSelectedProduct(details);
+        setProductDetails(details);
+        // Persist product details in localStorage
+        localStorage.setItem('productDetails', JSON.stringify(details));
     };
 
     // Handle view all bottom drawer
@@ -52,12 +48,6 @@ const StoreContext = ({ children }) => {
     }
     const handleCloseSizeDrawer = () => setOpenSizeDrawer(false);
 
-
-    // Filter products by category
-    const filteredByCategory = selectedCategory
-        ? products.filter((product) => product.category === selectedCategory)
-        : products;
-
     return (
         <AppContext.Provider
             value={{
@@ -67,15 +57,12 @@ const StoreContext = ({ children }) => {
                 openDrawer,
                 handleOpenDrawer,
                 handleCloseDrawer,
-                setSelectedProduct,
+                setProductDetails,
                 handleProductDetails,
-                selectedProduct,
+                productDetails,
                 openBottomDrawer,
                 handleOpenBottomDrawer,
                 handleCloseBottomDrawer,
-                setSelectedCategory,
-                filteredByCategory,
-                selectedCategory,
                 handleOpenSizeDrawer,
                 handleCloseSizeDrawer,
                 openSizeDrawer,
