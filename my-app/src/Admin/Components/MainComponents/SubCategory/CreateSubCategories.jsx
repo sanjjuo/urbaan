@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { AppContext } from '../../../../StoreContext/StoreContext';
+import toast from 'react-hot-toast';
 
 const CreateSubCategories = () => {
     const { BASE_URL } = useContext(AppContext)
@@ -68,7 +69,7 @@ const CreateSubCategories = () => {
 
             const response = await axios.post(`${BASE_URL}/admin/Subcategory/create`, subCategoryFormData, { headers });
             console.log(response.data);
-            alert("Subcategory is successfully created");
+            toast.success("Subcategory is created");
             setCreateSubCategoryTitle('');
             setCreateSubCategorySelect('');
             setCreateSubCategoryImage(null);

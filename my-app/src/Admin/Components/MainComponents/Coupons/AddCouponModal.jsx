@@ -2,15 +2,14 @@ import React from "react";
 import {
     Button,
     Dialog,
-    DialogHeader,
     DialogBody,
-    DialogFooter,
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../../../../StoreContext/StoreContext";
+import toast from 'react-hot-toast';
 
 export function AddCouponModal({ open, handleOpen }) {
     const { BASE_URL } = useContext(AppContext)
@@ -67,7 +66,7 @@ export function AddCouponModal({ open, handleOpen }) {
             const response = await axios.post(`${BASE_URL}/admin/coupon/create`, couponData, { headers });
             console.log(response.data);
             handleOpen();
-            alert('Coupon is created');
+            toast.success('Coupon is created');
             setCouponTitle('')
             setCouponStartDate('')
             setCouponEndDate('')

@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { AppContext } from '../../../../StoreContext/StoreContext';
 import axios from 'axios';
 import { RiDeleteBin5Line } from 'react-icons/ri';
+import toast from 'react-hot-toast';
 
 const EditCarousel = ({ initialEditCarouselData }) => {
     const { BASE_URL } = useContext(AppContext)
@@ -101,9 +102,9 @@ const EditCarousel = ({ initialEditCarouselData }) => {
 
             const response = await axios.patch(`${BASE_URL}/admin/slider/${initialEditCarouselData._id}`, editCarouselFormData, { headers })
             console.log(response.data);
-            alert('Carousel is successfully updated !')
+            toast.success('Carousel is updated!')
             setEditCarouselImage(null)
-            setEditCarouselIsActive('')
+            setEditCarouselIsActive(true)
             setEditCarouselLabel('')
             setEditCarouselTitle('')
             setEditCarouselLink('')
@@ -166,14 +167,14 @@ const EditCarousel = ({ initialEditCarouselData }) => {
                                 <Radio
                                     name="status"
                                     color='green'
-                                    label="Active"
+                                    label="Enable"
                                     checked={editCarouselIsActive}
                                     onChange={() => handleCarouselStatusChange('active')}
                                 />
                                 <Radio
                                     name="status"
                                     color='pink'
-                                    label="Inactive"
+                                    label="Disable"
                                     checked={!editCarouselIsActive}
                                     onChange={() => handleCarouselStatusChange('inactive')}
                                 />

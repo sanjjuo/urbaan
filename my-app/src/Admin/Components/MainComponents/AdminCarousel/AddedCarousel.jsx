@@ -86,9 +86,9 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
                                     <div className="flex gap-2 text-sm">
                                         <Button
                                             className={`text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl
-                                        ${carousel.isActive === 'true' ? 'bg-shippedBg text-white' : 'bg-cancelBg text-white'}`}
+                                        ${carousel.isActive ? 'bg-shippedBg text-white' : 'bg-cancelBg text-white'}`}
                                         >
-                                            {carousel.isActive === 'true' ? 'Active' : 'Inactive'}
+                                            {carousel.isActive ? 'Active' : 'Inactive'}
                                         </Button>
 
                                         <button

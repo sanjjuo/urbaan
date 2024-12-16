@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { AppContext } from '../../../../StoreContext/StoreContext';
 import { useContext } from 'react';
+import toast from 'react-hot-toast';
 
 const EditCategories = ({ initialData }) => {
     const { BASE_URL } = useContext(AppContext)
@@ -53,7 +54,7 @@ const EditCategories = ({ initialData }) => {
 
             const response = await axios.patch(`${BASE_URL}/admin/category/update/${initialData.id}`, editFormData, { headers });
             console.log("Category is updated", response.data);
-            alert("Category is Updated successfully!")
+            toast.success("Category is Updated!")
 
             setCategoryName('')
             setCategoryImage(null)

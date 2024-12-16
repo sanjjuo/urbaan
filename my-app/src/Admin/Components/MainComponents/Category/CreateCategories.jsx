@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useContext } from 'react';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import { AppContext } from '../../../../StoreContext/StoreContext';
+import toast from 'react-hot-toast';
 
 const CreateCategories = () => {
     const { BASE_URL } = useContext(AppContext)
@@ -50,7 +51,7 @@ const CreateCategories = () => {
 
             const response = await axios.post(`${BASE_URL}/admin/category/create`, formData, { headers });
             console.log('Category created:', response.data);
-            alert("Category is Created")
+            toast.success("Category is Created")
             // Reset form
             setCreateCategoryForm({ name: '', image: null, description: '' });
         } catch (error) {

@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { RiDeleteBin5Line } from 'react-icons/ri'
 import { AppContext } from '../../../../StoreContext/StoreContext'
 import { useContext } from 'react'
+import toast from 'react-hot-toast'
 
 const EditSubCategories = ({ initialSubCategory }) => {
     const { BASE_URL } = useContext(AppContext)
@@ -71,7 +72,7 @@ const EditSubCategories = ({ initialSubCategory }) => {
 
             const editSubCategoryFormData = new FormData();
             editSubCategoryFormData.append('title', editSubCategoryTitle);
-            editSubCategoryFormData.append('category', editSubCategorySelect);
+            editSubCategoryFormData.append('MainCategory', editSubCategorySelect.MainCategory);
 
             if (editSubCategoryImage && editSubCategoryImage.image) {
                 editSubCategoryFormData.append('image', editSubCategoryImage.image); // File upload
@@ -89,11 +90,12 @@ const EditSubCategories = ({ initialSubCategory }) => {
                 editSubCategoryFormData, { headers });
 
             console.log('Subcategory updated:', response.data);
-            alert('Subcategory updated successfully!');
+            toast.success('Subcategory is updated!');
 
             setEditSubCategoryTitle('');
             setEditSubCategorySelect('');
             setEditSubCategoryImage(null);
+            setEditSubCategoryIsActive(true)
         } catch (error) {
             console.error('Error updating subcategory:', error.response?.data || error.message);
             alert('Failed to update subcategory.');

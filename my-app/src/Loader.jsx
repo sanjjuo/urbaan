@@ -6,8 +6,8 @@ const AppLoader = () => {
 
     return (
         <>
-            <div>
-                <Loader type="hourglass" bgColor={color} size={100} />
+            <div >
+                <Loader type="ping-cube" bgColor={color} size={60} />
             </div>
         </>
     );

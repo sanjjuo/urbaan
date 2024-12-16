@@ -3,31 +3,27 @@ import React, { useState } from 'react'
 import { FaPlus } from 'react-icons/fa6';
 import { IoIosArrowBack, IoMdCloudUpload } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
-import { FaCircle } from "react-icons/fa";
 import { useContext } from 'react';
 import { AppContext } from '../../../../StoreContext/StoreContext';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
-
-const sizes = ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '4xl', '5xl'];
 
 const EditProduct = () => {
     const { BASE_URL } = useContext(AppContext)
     const navigate = useNavigate()
     const location = useLocation();
     const initialProducts = location.state.product;
-    const [editProdcolor, setEditProdColor] = useState("#FFFFFF");
-    const [editProdColorIcon, setEditProdColorIcon] = useState([]);
     const [editProdFields, setEditProdFields] = useState([{ property: "", value: "" }])
+    const [editAttributeFields, setEditAttributeFields] = useState([{ color: "", sizes: [{ size: "", stock: "" }] }]);
     const [editProdTitle, setEditProdTitle] = useState('')
     const [editProdCategory, setEditProdCategory] = useState('')
     const [editProdSubCategory, setEditProdSubCategory] = useState('')
     const [editProdActualPrice, setEditProdActualPrice] = useState('')
     const [editProdDiscount, setEditProdDiscount] = useState('')
     const [editProdOfferPrice, setEditProdOfferPrice] = useState('')
-    const [editProdStock, setEditProdStock] = useState('')
     const [editProdCheckboxes, setEditProdCheckboxes] = useState({
         latest: false,
         offer: false,
@@ -38,7 +34,6 @@ const EditProduct = () => {
     const [editProdManuName, setEditProdManuName] = useState('')
     const [editProdManuBrand, setEditProdManuBrand] = useState('')
     const [editProdManuAddress, setEditProdManuAddress] = useState('')
-    const [editProdSize, setEditProdSize] = useState([])
     const [categories, setCategories] = useState([])
     const [subCategories, setSubCategories] = useState([])
     const [filteredSubCategories, setFilteredSubCategories] = useState([]); //for getting subcategory having same catgeory id
@@ -52,7 +47,6 @@ const EditProduct = () => {
             setEditProdActualPrice(initialProducts.actualPrice)
             setEditProdDiscount(initialProducts.discount)
             setEditProdOfferPrice(initialProducts.offerPrice)
-            setEditProdStock(initialProducts.stock)
             setEditProdCheckboxes({
                 latest: initialProducts.isLatestProduct || false,
                 offer: initialProducts.isOfferProduct || false,
@@ -64,13 +58,22 @@ const EditProduct = () => {
                 .map(([key, value]) => ({ property: key, value }));
 
             setEditProdFields(featuresArray);
+
+            // Initialize color, size, and stock data
+            const formattedAttributes = initialProducts.colors.map((color) => ({
+                color: color.color,
+                sizes: color.sizes.map((size) => ({
+                    size: size.size,
+                    stock: size.stock,
+                })),
+            }));
+            setEditAttributeFields(formattedAttributes);
+
             setEditProdDescription(initialProducts.description)
             setEditProdImage(initialProducts.images || [])
             setEditProdManuName(initialProducts.manufacturerName)
             setEditProdManuBrand(initialProducts.manufacturerBrand)
             setEditProdManuAddress(initialProducts.manufacturerAddress)
-            setEditProdColorIcon(initialProducts.colors)
-            setEditProdSize(initialProducts.sizes)
         }
     }, [initialProducts])
 
@@ -82,22 +85,16 @@ const EditProduct = () => {
         setEditProdImage((prevImages) => [...prevImages, ...files]); // Append new files
     };
 
-    // handle Add color on each icon and input field
-    const handleAddColor = (e) => {
-        const newColor = e.target.value;
-        if (!editProdColorIcon.includes(newColor)) {
-            setEditProdColorIcon([...editProdcolor, newColor]);
-        }
+    // manage text color based ob bg-color
+    const getContrastYIQ = (color) => {
+        if (!/^#([0-9A-F]{3}){1,2}$/i.test(color)) return 'text-black'; // Default to black for invalid or empty colors
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+        return yiq >= 128 ? 'text-black' : 'text-white';
     };
 
-    // manage text color based ob bg-color
-    const getContrastYIQ = (hexColor) => {
-        const r = parseInt(hexColor.substr(1, 2), 16);
-        const g = parseInt(hexColor.substr(3, 2), 16);
-        const b = parseInt(hexColor.substr(5, 2), 16);
-        const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-        return yiq >= 128 ? "text-black" : "text-white";
-    };
 
     // handle add new inputs at specification section
     const handleAddInputFields = () => {
@@ -128,12 +125,6 @@ const EditProduct = () => {
     };
 
 
-    // handle size
-    const toggleSize = (size) => {
-        setEditProdSize((prev) =>
-            prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
-        );
-    };
 
     // price computation
     useEffect(() => {
@@ -198,36 +189,75 @@ const EditProduct = () => {
                 return;
             }
 
+            // Validate inputs
+            if (!editProdTitle.trim() || !editProdCategory.trim()) {
+                alert("Product title and category are required");
+                return;
+            }
+
             const editproductFormData = new FormData();
             editproductFormData.append('title', editProdTitle);
             editproductFormData.append('category', editProdCategory);
             editproductFormData.append('subcategory', editProdSubCategory);
             editproductFormData.append('actualPrice', editProdActualPrice);
             editproductFormData.append('discount', editProdDiscount);
-            editproductFormData.append('offerPrice', editProdOfferPrice);
-            editproductFormData.append('stock', editProdStock);
-            // Append checkbox states to the FormData
+
+            // Calculate offer price
+            const calculatedOfferPrice = editProdActualPrice - (editProdActualPrice * (editProdDiscount / 100));
+            editproductFormData.append('offerPrice', calculatedOfferPrice.toFixed(2));
+
             editproductFormData.append('isLatestProduct', editProdCheckboxes.latest);
             editproductFormData.append('isOfferProduct', editProdCheckboxes.offer);
             editproductFormData.append('isFeaturedProduct', editProdCheckboxes.featured);
-            // Iterate over `fields` and append each property and value to the FormData
-            editProdFields.forEach((field) => {
-                editproductFormData.append(`features[${field.property}]`, field.value);
-            });
             editproductFormData.append('description', editProdDescription);
+
+            // Convert features array to an object
+            const featuresObject = editProdFields.reduce((acc, { property, value }) => {
+                acc[property] = value;
+                return acc;
+            }, {})
+            editproductFormData.append('features', JSON.stringify(featuresObject));
+
             // Append images to the FormData
-            editproductFormData.append('images', editProdImage.map((img) => img.url));
+            editProdImage.forEach((image) => {
+                editproductFormData.append('images', image)
+            });
+
+            const colors = editAttributeFields.reduce((acc, field) => {
+                if (field.color.trim()) {
+                    const validSizes = field.sizes
+                        .filter(size =>
+                            size.size.trim() &&
+                            size.stock !== '' &&
+                            !isNaN(Number(size.stock))
+                        )
+                        .map(size => ({
+                            size: size.size.trim(),
+                            stock: Number(size.stock)
+                        }));
+
+                    if (validSizes.length > 0) {
+                        acc.push({
+                            color: field.color.trim(),
+                            sizes: validSizes
+                        });
+                    }
+                }
+                return acc;
+            }, []);
+
+            if (colors.length > 0) {
+                editproductFormData.append('colors', JSON.stringify(colors));
+            }
+
+
             editproductFormData.append('manufacturerName', editProdManuName);
             editproductFormData.append('manufacturerBrand', editProdManuBrand);
             editproductFormData.append('manufacturerAddress', editProdManuAddress);
-            // Append color array as a comma-separated string to FormData
-            editproductFormData.append('colors', editProdColorIcon.map(color => `"${color}"`).join(', '));
-            // Append sizes array as a comma-separated string to FormData
-            editproductFormData.append('sizes', editProdSize.map(size => `"${size}"`).join(','));
 
             // Log each entry in the FormData
             for (const [key, value] of editproductFormData.entries()) {
-                console.log(`Key: ${key}, Value: ${value}`);
+                console.log(key, value);
             }
 
             const headers = {
@@ -235,9 +265,11 @@ const EditProduct = () => {
                 'Content-type': 'multipart/form-data',
             };
 
-            const response = await axios.post(`${BASE_URL}/admin/products/create-product`, editproductFormData, { headers })
+            const response = await axios.patch(`${BASE_URL}/admin/products/update-product/${initialProducts._id}`, editproductFormData, { headers })
             console.log(response.data);
-            alert("Product is created")
+
+            toast.success("Product is updated")
+
             // Reset form
             setEditProdTitle('');
             setEditProdCategory('');
@@ -245,25 +277,63 @@ const EditProduct = () => {
             setEditProdActualPrice('');
             setEditProdDiscount('');
             setEditProdOfferPrice('');
-            setEditProdStock('');
             setEditProdCheckboxes({ latest: false, offer: false, featured: false });
             setEditProdFields([{ property: "", value: "" }]);
+            setEditAttributeFields([{ color: "", size: "", stock: "" }]);
             setEditProdDescription('');
             setEditProdImage([]);
-            setEditProdColor('#FFFFFF');
-            setEditProdColorIcon([]);
             setEditProdManuName('');
             setEditProdManuBrand('');
             setEditProdManuAddress('');
-            setEditProdSize([]);
         } catch (error) {
             console.error("Error in form submission:", error);
-            alert("Product is not created")
-            console.error("Error:", error.response || error.message);
-            alert(`Error: ${error.response?.data?.message || "Something went wrong"}`);
+            alert("Product is not updated")
+            console.log(`${BASE_URL}/admin/products/update-product/${initialProducts._id}`);
+            // console.error("Error:", error.response || error.message);
+            // alert(`Error: ${error.response?.data?.message || "Something went wrong"}`);
         }
     }
 
+    const handleAddColorField = () => {
+        setEditAttributeFields([...editAttributeFields, { color: "", sizes: [{ size: "", stock: "" }] }]);
+    };
+
+    const handleDeleteColorField = (index) => {
+        setEditAttributeFields(editAttributeFields.filter((_, i) => i !== index));
+    };
+
+    const handleAddSizeField = (colorIndex) => {
+        const updatedFields = [...editAttributeFields];
+        updatedFields[colorIndex].sizes.push({ size: "", stock: "" });
+        setEditAttributeFields(updatedFields);
+    };
+    const handleDeleteSizeField = (colorIndex, sizeIndex) => {
+        const updatedFields = [...editAttributeFields];
+
+        // Ensure 'sizes' exists
+        if (updatedFields[colorIndex]?.sizes) {
+            updatedFields[colorIndex].sizes = updatedFields[colorIndex].sizes.filter((_, i) => i !== sizeIndex);
+        }
+
+        setEditAttributeFields(updatedFields);
+    };
+
+    const handleSizeFieldChange = (colorIndex, sizeIndex, key, value) => {
+        const updatedFields = [...editAttributeFields];
+
+        // Check if 'sizes' exists and is an array
+        if (updatedFields[colorIndex]?.sizes) {
+            updatedFields[colorIndex].sizes[sizeIndex][key] = value;
+        }
+        setEditAttributeFields(updatedFields);
+    };
+
+    // Handle input changes
+    const handleAttributeInputChange = (index, key, value) => {
+        const updatedFields = [...editAttributeFields];
+        updatedFields[index][key] = value;
+        setEditAttributeFields(updatedFields);
+    };
 
 
     return (
@@ -277,7 +347,7 @@ const EditProduct = () => {
                         <h2 className="text-xl font-medium mb-3 lg:mb-0 text-secondary">Product Information</h2>
                     </div>
                     <hr />
-                    <div className='p-5 space-y-5'>
+                    <div className='p-5 space-y-6'>
                         {/* title */}
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="" className='font-normal text-base'>Product title</label>
@@ -331,22 +401,22 @@ const EditProduct = () => {
                                 </select>
                             </div>
                         </div>
-                        {/* price */}
+                        {/* price , disvcount, offer price */}
                         <div className='flex justify-between items-center gap-2'>
-                            <div className='flex flex-col gap-1 w-full'>
+                            <div className='flex flex-col gap-1 w-1/3'>
                                 <label className='font-normal text-base'>Actual Price</label>
                                 <input
                                     type="text"
                                     name="name"
                                     value={editProdActualPrice}
-                                    onChange={(e) => editProdActualPrice(e.target.value)}
+                                    onChange={(e) => setEditProdActualPrice(e.target.value)}
                                     id=""
                                     placeholder='Actual Price'
-                                    className='border-[1px] 
+                                    className='border-[1px] w-full
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                             </div>
-                            <div className='flex flex-col gap-1 w-full'>
+                            <div className='flex flex-col gap-1 w-1/3'>
                                 <label className='font-normal text-base'>Discount (%)</label>
                                 <input
                                     type="text"
@@ -355,14 +425,11 @@ const EditProduct = () => {
                                     onChange={(e) => setEditProdDiscount(e.target.value)}
                                     id=""
                                     placeholder='Discount'
-                                    className='border-[1px] 
+                                    className='border-[1px] w-full 
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                             </div>
-                        </div>
-                        {/* offer price */}
-                        <div className='flex items-center gap-2'>
-                            <div className='flex flex-col gap-1 w-1/2'>
+                            <div className='flex flex-col gap-1'>
                                 <label htmlFor="" className='font-normal text-base'>Offer Price</label>
                                 <input
                                     type="text"
@@ -371,20 +438,7 @@ const EditProduct = () => {
                                     onChange={(e) => setEditProdOfferPrice(e.target.value)}
                                     id=""
                                     placeholder='Offer price'
-                                    className='border-[1px] 
-                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
-                                     focus:outline-none'/>
-                            </div>
-                            <div className='flex flex-col gap-1 w-1/2'>
-                                <label htmlFor="" className='font-normal text-base'>Stock</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={editProdStock}
-                                    onChange={(e) => setEditProdStock(e.target.value)}
-                                    id=""
-                                    placeholder='50'
-                                    className='border-[1px] 
+                                    className='border-[1px] w-full
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                             </div>
@@ -467,7 +521,7 @@ const EditProduct = () => {
                                 className="w-full border-[1px] bg-gray-100/50 p-2 rounded resize-none overflow-y-scroll focus:outline-none
                                         placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
                                 placeholder="Enter your description here..."
-                                style={{ maxHeight: '150px' }}
+                                style={{ maxHeight: '250px' }}
                             ></textarea>
                         </div>
                     </div>
@@ -476,7 +530,7 @@ const EditProduct = () => {
                 {/* second col */}
 
                 {/* photo upload */}
-                <div className='bg-white rounded-xl shadow-md p-5 space-y-5'>
+                <div className='bg-white rounded-xl shadow-md p-5 space-y-6'>
                     <div className='flex gap-5'>
                         <div className="flex flex-col justify-center items-center w-72 h-56 border-4 border-dashed border-primary rounded-xl">
                             <input
@@ -503,7 +557,7 @@ const EditProduct = () => {
                                     <li key={index} className="flex items-start justify-between bg-primary/15 rounded-md p-2">
                                         <div className="flex gap-3 items-start">
                                             <div className="w-[60px] h-[60px]">
-                                                <img src={URL.createObjectURL(image)} alt="" className="w-full h-full object-cover rounded-md" />
+                                                <img src={image} alt="" className="w-full h-full object-cover rounded-md" />
                                             </div>
                                             <p className="text-secondary font-normal text-xs">{image.name}</p> {/* Display file name */}
                                         </div>
@@ -563,78 +617,83 @@ const EditProduct = () => {
                             focus:outline-none'/>
                     </div>
 
-                    {/* color */}
-                    <div>
-                        <div className='flex items-center justify-between'>
-                            <label htmlFor="" className='font-normal text-base'>Colour</label>
-                            <MdDelete
-                                className="text-xl text-primary cursor-pointer"
-                                onClick={() => {
-                                    setEditProdColor('#FFFFFF');
-                                    setEditProdColorIcon([])
-                                }}
+                    {/* color size stock */}
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center justify-between">
+                            <label htmlFor="">Set Product Attributes</label>
+                            <FaPlus
+                                className="text-2xl text-primary cursor-pointer"
+                                onClick={handleAddColorField}
                             />
                         </div>
-                        <div className='flex items-center gap-2 mt-2'>
-                            <div className='w-full border-2 h-12 rounded-lg' style={{ backgroundColor: editProdcolor }} >
-                                <input
-                                    type='text'
-                                    value={editProdcolor}
-                                    multiple
-                                    onChange={(e) => setEditProdColor(e.target.value)}
-                                    className={`w-full text-center uppercase rounded-lg bg-transparent text-sm flex justify-center items-center focus:outline-none h-full ${getContrastYIQ(
-                                        editProdcolor
-                                    )}`}
-                                />
-                            </div>
-                            <div className="border-primary rounded-md w-full border-2 text-primary font-custom tracking-wider flex items-center justify-center gap-2 px-3 py-2 cursor-pointer relative">
-                                <input
-                                    type="color"
-                                    value={editProdcolor}
-                                    onChange={(e) => {
-                                        setEditProdColor(e.target.value)
-                                        handleAddColor(e);
-                                    }}
-                                    name="colorPicker"
-                                    id="colorPicker"
-                                    className="w-full bg-transparent absolute opacity-0 pointer-events-none"
-                                />
-                                <label
-                                    htmlFor="colorPicker"
-                                    className="flex items-center gap-1 cursor-pointer"
-                                    onClick={() => document.getElementById('colorPicker').click()}
-                                >
-                                    <FaPlus /> Add Color
-                                </label>
-                            </div>
-                        </div>
-                        <ul className='mt-5 flex items-center gap-3'>
-                            {
-                                editProdColorIcon.map((colorRound, index) => (
-                                    <li key={index} className='cursor-pointer'>
-                                        <FaCircle className='text-3xl' color={colorRound} />
-                                    </li>
-                                ))
-                            }
-                        </ul>
-                    </div>
 
-                    {/* size */}
-                    <div>
-                        <h3 className="text-secondary text-base">Size</h3>
-                        <ul className="mt-2 flex items-center gap-2">
-                            {sizes.map((size, index) => (
-                                <li
-                                    key={index}
-                                    onClick={() => toggleSize(size)}
-                                    className={`uppercase border-2 border-gray-300 w-10 h-10 flex items-center justify-center rounded-md text-xs cursor-pointer 
-                                     ${editProdSize.includes(size) ? "bg-primary text-white border-primary"
-                                            : "border-gray-300"}`}
-                                >
-                                    {size}
-                                </li>
-                            ))}
-                        </ul>
+                        {editAttributeFields.map((field, colorIndex) => (
+                            <div
+                                key={colorIndex}
+                                className="flex flex-col gap-2 border p-4 rounded-md bg-gray-50">
+                                Color Picker and Header
+                                <div className="flex items-center gap-5">
+                                    <div className="flex items-center gap-2 w-full">
+                                        <div className="w-64 bg-primary text-white rounded-md font-custom tracking-wider flex items-center justify-center gap-2 p-2 cursor-pointer relative">
+                                            <input
+                                                type="color"
+                                                value={field.color}
+                                                onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
+                                                className="absolute w-full h-full opacity-0 cursor-pointer"
+                                            />
+                                            <p className='text-sm flex items-center gap-2'><FaPlus className="text-base" />Add Color</p>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={field.color}
+                                            placeholder="Enter color name"
+                                            onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
+                                            className={`w-full p-2 text-center bg-gray-100/50 border rounded-md text-sm uppercase placeholder:capitalize 
+                                                    focus:outline-none ${getContrastYIQ(field.color)}`}
+                                            style={{ backgroundColor: field.color }}
+                                        />
+                                    </div>
+                                    <MdDelete
+                                        className="text-xl text-primary cursor-pointer"
+                                        onClick={() => handleDeleteColorField(colorIndex)}
+                                    />
+                                </div>
+
+                                Sizes and Stock Table
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-sm font-medium">Sizes & Stock</label>
+                                        <p
+                                            onClick={() => handleAddSizeField(colorIndex)}
+                                            className="text-sm text-secondary hover:text-primary hover:underline cursor-pointer">Add</p>
+                                    </div>
+                                    {Array.isArray(field.sizes) && field.sizes.map((sizeField, sizeIndex) => (
+                                        <div
+                                            key={sizeIndex}
+                                            className="flex items-center gap-2">
+                                            <input
+                                                type="text"
+                                                value={sizeField.size}
+                                                placeholder="Enter size (e.g., S, M, L)"
+                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "size", e.target.value)}
+                                                className="border w-64 bg-gray-100/50 p-2 rounded-md uppercase placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={sizeField.stock}
+                                                placeholder="Enter stock quantity"
+                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "stock", e.target.value)}
+                                                className="border w-64 bg-gray-100/50 p-2 rounded-md placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                            />
+                                            <MdDelete
+                                                className="text-xl text-primary cursor-pointer"
+                                                onClick={() => handleDeleteSizeField(colorIndex, sizeIndex)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
 

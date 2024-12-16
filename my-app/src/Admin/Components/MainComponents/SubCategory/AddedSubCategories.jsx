@@ -113,8 +113,12 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                                                     </div>
                                                 </td>
                                                 <td className={classes}>
-                                                    <Button className='bg-shippedBg text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl'>
-                                                        {subCat.isActive}</Button>
+                                                    <Button
+                                                        className={`${subCat.isActive ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                                                            } text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl`}
+                                                    >
+                                                        {subCat.isActive ? "Active" : "Inactive"}
+                                                    </Button>
                                                 </td>
                                                 <td className={classes}>
                                                     <div className="flex justify-center gap-2 text-sm">

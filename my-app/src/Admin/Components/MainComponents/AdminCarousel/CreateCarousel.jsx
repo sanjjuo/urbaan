@@ -3,6 +3,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { AppContext } from '../../../../StoreContext/StoreContext'
+import toast from 'react-hot-toast'
 
 const CreateCarousel = () => {
     const { BASE_URL } = useContext(AppContext)
@@ -10,6 +11,7 @@ const CreateCarousel = () => {
     const [carouselLabel, setCarouselLabel] = useState('')
     const [carouselTitle, setCarouselTitle] = useState('')
     const [carouselLink, setCarouselLink] = useState('')
+    const [carouselIsActive, setCarouselIsActive] = useState(true)
     const [carouselCategory, setCarouselCategory] = useState('')
     const [categories, setCategories] = useState([])
 
@@ -60,6 +62,7 @@ const CreateCarousel = () => {
             carouselFormData.append('title', carouselTitle);
             carouselFormData.append('link', carouselLink);
             carouselFormData.append('category', carouselCategory);
+            carouselFormData.append('isActive', carouselIsActive)
 
             console.log('FormData values:', Object.fromEntries(carouselFormData.entries())); // Debug log
 
@@ -70,7 +73,13 @@ const CreateCarousel = () => {
 
             const response = await axios.post(`${BASE_URL}/admin/slider/create`, carouselFormData, { headers });
             console.log(response.data);
-            alert('Carousel created successfully!');
+            toast.success('Carousel is created!');
+            setCarouselImage('')
+            setCarouselCategory('')
+            setCarouselLabel('')
+            setCarouselTitle('')
+            setCarouselLink('')
+            setCarouselIsActive(true)
         } catch (error) {
             console.error("Error creating carousel:", error.response || error.message);
             alert('Carousel is not created');

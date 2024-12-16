@@ -1,4 +1,3 @@
-import { Button } from '@material-tailwind/react'
 import React from 'react'
 
 const UserDetails = () => {
@@ -28,16 +27,16 @@ const UserDetails = () => {
                         </div>
 
                         {/* City and State */}
-                        <div className='flex items-center justify-between gap-0'>
-                            <div className='flex flex-col gap-1 w-48'>
+                        <div className='flex items-center justify-between gap-2'>
+                            <div className='flex flex-col gap-1 w-1/2'>
                                 <label htmlFor="" className='font-normal text-base'>City</label>
-                                <input type="text" name="name" id="" placeholder='' className='border-[1px] 
+                                <input type="text" name="name" id="" placeholder='' className='border-[1px] w-full 
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                             </div>
-                            <div className='flex flex-col gap-1 w-48'>
+                            <div className='flex flex-col gap-1 w-1/2'>
                                 <label htmlFor="" className='font-normal text-base'>State</label>
-                                <input type="text" name="name" id="" placeholder='' className='border-[1px] 
+                                <input type="text" name="name" id="" placeholder='' className='border-[1px] w-full
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                             </div>

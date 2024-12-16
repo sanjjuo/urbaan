@@ -8,6 +8,7 @@ import {
 } from "@material-tailwind/react";
 import axios from "axios";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -35,6 +36,7 @@ const Login = () => {
                 localStorage.setItem("token", response.data.token);
                 navigate("/adminHome");
             }
+            toast.success("Logined successfully!")
         } catch (error) {
             console.error("Login Error:", error);
             setError(error?.response?.data?.message || error.message || "An error occurred. Please try again.");

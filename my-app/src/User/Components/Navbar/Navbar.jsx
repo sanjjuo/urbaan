@@ -37,17 +37,6 @@ const NavList = () => {
             <Typography
                 as="li"
                 variant="small"
-                onClick={() => setNavActive("about")}
-                className={`p-1 font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
-                    hover:text-primary ${navActive === "about" ? "text-primary scale-110" : ""}`}
-            >
-                <Link to="/about" >
-                    About
-                </Link>
-            </Typography>
-            <Typography
-                as="li"
-                variant="small"
                 onClick={() => setNavActive("categories")}
                 className={`p-1 font-medium cursor-pointer font-custom text-secondary transition-all transform duration-500 ease-in-out 
                     hover:text-primary ${navActive === "categories" ? "text-primary scale-110" : ""}`}
@@ -62,7 +51,7 @@ const NavList = () => {
                     hover:text-primary ${navActive === "contact" ? "text-primary scale-110" : ""}`}
             >
                 <Link to="/contact" >
-                    Contact
+                    Track Order
                 </Link>
             </Typography>
         </ul>
@@ -90,15 +79,17 @@ const UserNavbar = () => {
             <div className='hidden sticky top-0 w-full z-50 xl:block lg:block bg-white shadow-lg'>
                 <Navbar className="mx-auto max-w-screen-xl py-6 px-0 shadow-none rounded-none">
                     <div className="flex items-center justify-between text-blue-gray-900">
-                        <Link to='/'><div className="w-28">
-                            <img src="/logo.png" alt="" className='w-full object-contain' />
-                        </div></Link>
-                        <div className="hidden lg:block xl:flex xl:items-center xl:gap-10">
+                        <div className="w-28">
+                            <Link to='/'>
+                                <img src="/logo.png" alt="" className='w-full object-contain' />
+                            </Link>
+                        </div>
+                        <div className="hidden lg:block xl:flex xl:items-center xl:gap-10 lg:items-center lg:gap-10">
                             <NavList />
                             <SearchBar />
                         </div>
                         <div>
-                            <ul className='flex items-center gap-8'>
+                            <ul className='flex items-center gap-10'>
                                 <Link to="/favourite">
                                     <li className="text-2xl text-secondary cursor-pointer">
                                         {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
@@ -109,10 +100,6 @@ const UserNavbar = () => {
                                         {isCartPage ? <RiShoppingCartFill className='text-primary' /> : <RiShoppingCartLine />}
                                     </li>
                                 </Link>
-                            </ul>
-                        </div>
-                        <div>
-                            <ul className='flex items-center gap-1'>
                                 <li><Link to='/login-user'><Button className='bg-primary font-custom font-normal
                                       capitalize text-sm'>sign in</Button></Link>
                                 </li>

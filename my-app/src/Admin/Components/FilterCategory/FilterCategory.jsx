@@ -6,20 +6,16 @@ import {
     Button,
 } from "@material-tailwind/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { AppContext } from "../../../StoreContext/StoreContext";
+import axios from "axios";
 
-const categories = [
-    "Kurti",
-    "Bottom",
-    "Kurti Set",
-    "Night Wear",
-    "Churidar Material",
-    "Running Material",
-    "Maternity Wear",
-    "Offer Zone",
-];
 
 export default function FilterCategory() {
+    const { BASE_URL } = useContext(AppContext)
     const [selectedCategory, setSelectedCategory] = useState("Category")
+    const [categories, setCategories] = useState([])
 
     // Handle status selection
     const handleOrderStatusSelect = (category) => {
@@ -30,6 +26,20 @@ export default function FilterCategory() {
     const handleClickInside = (event) => {
         event.stopPropagation();
     };
+
+    // fetch categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/admin/category/get`);
+                setCategories(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.log(error, ": Error fetching data");
+            }
+        }
+        fetchCategories();
+    }, [])
 
     return (
         <Menu>
@@ -51,17 +61,17 @@ export default function FilterCategory() {
                 <div className="border-b-[1px] p-5 hover:outline-none focus:outline-none">
                     <h1 className="text-secondary font-semibold text-lg text-center">Select Category</h1>
                     <ul className="mt-5 text-secondary flex flex-wrap justify-center items-center gap-2">
-                        {categories.map((category, index) => (
+                        {categories.map((category) => (
                             <li
-                                key={index}
+                                key={category.id}
                                 onClick={(e) => {
-                                    handleOrderStatusSelect(category);
+                                    handleOrderStatusSelect(category.name);
                                     handleClickInside(e);  // Prevent Menu from closing
                                 }}
                                 className="cursor-pointer border-[1px] border-gray-400 text-sm w-[30%] p-2 flex justify-center items-center 
                                 rounded-full hover:bg-primary hover:text-white"
-                        >
-                                {category}
+                            >
+                                {category.name}
                             </li>
                         ))}
                     </ul>

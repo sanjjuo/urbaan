@@ -11,7 +11,6 @@ const orderStatus = [
     "Pending",
     "Processing",
     "Cancelled",
-    "Shipped",
     "Delivered",
 ];
 

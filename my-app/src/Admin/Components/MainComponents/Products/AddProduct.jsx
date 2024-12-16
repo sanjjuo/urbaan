@@ -8,6 +8,7 @@ import { AppContext } from '../../../../StoreContext/StoreContext';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 
 const AddProduct = () => {
@@ -74,29 +75,6 @@ const AddProduct = () => {
             const deleteInput = [...fields];
             deleteInput.splice(i, 1);
             setFields(deleteInput);
-        }
-    };
-
-    // handle add new inputs at attributes section with color size stock
-    const handleAddAttributesFields = () => {
-        setAttributeFields([...attributeFields, { color: "", sizes: [{ size: "", stock: "" }] }]);
-    };
-
-
-    // Handle input changes
-    const handleAttributeInputChange = (index, fieldName, value) => {
-        const updatedFields = attributeFields.map((field, i) =>
-            i === index ? { ...field, [fieldName]: value } : field
-        );
-        setAttributeFields(updatedFields);
-    };
-
-    // handle to delete inputs at attributes section
-    const handleDeleteAttributeInputField = (i) => {
-        if (attributeFields.length > 1) {
-            const updatedFields = [...attributeFields];
-            updatedFields.splice(i, 1);
-            setAttributeFields(updatedFields);
         }
     };
 
@@ -169,64 +147,89 @@ const AddProduct = () => {
                 return;
             }
 
+            // Validate inputs
+            if (!productTitle.trim() || !productCategory.trim()) {
+                alert("Product title and category are required");
+                return;
+            }
+
             const productFormData = new FormData();
             productFormData.append('title', productTitle);
             productFormData.append('category', productCategory);
             productFormData.append('subcategory', productSubCategory);
             productFormData.append('actualPrice', productActualPrice);
             productFormData.append('discount', productDiscount);
-            productFormData.append('offerPrice', productOfferPrice);
+
+            // Calculate offer price
+            const calculatedOfferPrice = productActualPrice - (productActualPrice * (productDiscount / 100));
+            productFormData.append('offerPrice', calculatedOfferPrice.toFixed(2));
+
             productFormData.append('isLatestProduct', checkboxes.latest);
             productFormData.append('isOfferProduct', checkboxes.offer);
             productFormData.append('isFeaturedProduct', checkboxes.featured);
             productFormData.append('description', productDescription);
 
-            // Convert fields array to backend-compatible object format
-            const convertFieldsToObject = () => {
-                return fields.reduce((acc, { property, value }) => {
-                    acc[property] = value;
-                    return acc;
-                }, {});
-            };
-            // Append the transformed features to productFormData
-            productFormData.append("features", JSON.stringify(convertFieldsToObject()));
+            // Convert features array to an object
+            const featuresObject = fields.reduce((acc, { property, value }) => {
+                acc[property] = value;
+                return acc;
+            }, {});
+            productFormData.append('features', JSON.stringify(featuresObject));
 
-            // // Handle images
-            productImage.forEach((image, index) => {
-                productFormData.append(`images[${index}]`, image); 
+            // Append images
+            productImage.forEach((image) => {
+                productFormData.append('images', image);
             });
 
-            // Handle colors
-            const attributes = attributeFields.reduce((acc, field) => {
-                const existingColor = acc.find(attr => attr.color === field.color);
-                if (existingColor) {
-                    existingColor.sizes.push({ size: field.size, stock: parseInt(field.stock) });
-                } else {
-                    acc.push({ color: field.color, sizes: [{ size: field.size, stock: parseInt(field.stock) }] });
+            const colors = attributeFields.reduce((acc, field) => {
+                if (field.color.trim()) {
+                    const validSizes = field.sizes
+                        .filter(size =>
+                            size.size.trim() &&
+                            size.stock !== '' &&
+                            !isNaN(Number(size.stock))
+                        )
+                        .map(size => ({
+                            size: size.size.trim(),
+                            stock: Number(size.stock)
+                        }));
+
+                    if (validSizes.length > 0) {
+                        acc.push({
+                            color: field.color.trim(),
+                            sizes: validSizes
+                        });
+                    }
                 }
                 return acc;
             }, []);
-            productFormData.append('colors', JSON.stringify(attributes));
 
+            // Ensure colors are added correctly
+            if (colors.length > 0) {
+                productFormData.append('colors', JSON.stringify(colors));
+            }
+            // Append manufacturer details
             productFormData.append('manufacturerName', productManuName);
             productFormData.append('manufacturerBrand', productManuBrand);
             productFormData.append('manufacturerAddress', productManuAddress);
 
-
-            // Log each entry in the FormData
+            // Debugging: Log the FormData
             for (const [key, value] of productFormData.entries()) {
-                console.log(`Key: ${key}, Value: ${value}`);
+                console.log(key, value);
             }
-
 
             const headers = {
                 Authorization: `Bearer ${token}`,
-                "Content-Type": "multipart/form-data",
             };
 
-            const response = await axios.post(`${BASE_URL}/admin/products/create-product`, productFormData, { headers });
+            const response = await axios.post(
+                `${BASE_URL}/admin/products/create-product`,
+                productFormData,
+                { headers }
+            );
+
             console.log(response.data);
-            alert("Product is created");
+            toast.success("Product is created");
 
             // Reset form
             setProductTitle('');
@@ -234,7 +237,6 @@ const AddProduct = () => {
             setProductSubCategory('');
             setProductActualPrice('');
             setProductDiscount('');
-            setProductOfferPrice('');
             setCheckboxes({ latest: false, offer: false, featured: false });
             setFields([{ property: "", value: "" }]);
             setAttributeFields([{ color: "", size: "", stock: "" }]);
@@ -244,11 +246,52 @@ const AddProduct = () => {
             setProductManuBrand('');
             setProductManuAddress('');
         } catch (error) {
-            console.error("Error in form submission:", error.response.data);
-            alert("Product is not created");
+            console.error("Error in form submission:", error?.response?.data || error.message);
+            alert(error?.response?.data?.message || "Product is not created");
         }
     };
 
+
+    const handleAddColorField = () => {
+        setAttributeFields([...attributeFields, { color: "", sizes: [{ size: "", stock: "" }] }]);
+    };
+
+    const handleDeleteColorField = (index) => {
+        setAttributeFields(attributeFields.filter((_, i) => i !== index));
+    };
+
+    const handleAddSizeField = (colorIndex) => {
+        const updatedFields = [...attributeFields];
+        updatedFields[colorIndex].sizes.push({ size: "", stock: "" });
+        setAttributeFields(updatedFields);
+    };
+    const handleDeleteSizeField = (colorIndex, sizeIndex) => {
+        const updatedFields = [...attributeFields];
+
+        // Ensure 'sizes' exists
+        if (updatedFields[colorIndex]?.sizes) {
+            updatedFields[colorIndex].sizes = updatedFields[colorIndex].sizes.filter((_, i) => i !== sizeIndex);
+        }
+
+        setAttributeFields(updatedFields);
+    };
+
+    const handleSizeFieldChange = (colorIndex, sizeIndex, key, value) => {
+        const updatedFields = [...attributeFields];
+
+        // Check if 'sizes' exists and is an array
+        if (updatedFields[colorIndex]?.sizes) {
+            updatedFields[colorIndex].sizes[sizeIndex][key] = value;
+        }
+        setAttributeFields(updatedFields);
+    };
+
+    // Handle input changes
+    const handleAttributeInputChange = (index, key, value) => {
+        const updatedFields = [...attributeFields];
+        updatedFields[index][key] = value;
+        setAttributeFields(updatedFields);
+    };
 
 
     return (
@@ -533,70 +576,78 @@ const AddProduct = () => {
                     </div>
 
                     {/* color size stock */}
-                    <div className='flex flex-col gap-1'>
-                        <div className='flex items-center justify-between'>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex items-center justify-between">
                             <label htmlFor="">Set Product Attributes</label>
                             <FaPlus
                                 className="text-2xl text-primary cursor-pointer"
-                                onClick={handleAddAttributesFields}
+                                onClick={handleAddColorField}
                             />
                         </div>
-                        {attributeFields.map((field, index) => (
-                            <div key={index} className="flex items-center gap-2 mb-2">
-                                {/* Color Picker */}
-                                <div className="w-1/2">
-                                    <div className="flex items-center gap-2">
-                                        <div className="bg-primary text-white rounded-md font-custom tracking-wider flex items-center justify-center gap-2 p-2 cursor-pointer relative">
+
+                        {attributeFields.map((field, colorIndex) => (
+                            <div key={colorIndex} className="flex flex-col gap-2 border p-4 rounded-md bg-gray-50">
+                                {/* Color Picker and Header */}
+                                <div className="flex items-center gap-5">
+                                    <div className="flex items-center gap-2 w-full">
+                                        <div className="w-64 bg-primary text-white rounded-md font-custom tracking-wider flex items-center justify-center gap-2 p-2 cursor-pointer relative">
                                             <input
                                                 type="color"
                                                 value={field.color}
-                                                onChange={(e) => handleAttributeInputChange(index, "color", e.target.value)}
+                                                onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
                                                 className="absolute w-full h-full opacity-0 cursor-pointer"
                                             />
-                                            <FaPlus className="text-xl" />
+                                            <p className='text-sm flex items-center gap-2'><FaPlus className="text-base" />Add Color</p>
                                         </div>
                                         <input
                                             type="text"
                                             value={field.color}
-                                            placeholder="Enter color code"
-                                            onChange={(e) => handleAttributeInputChange(index, "color", e.target.value)}
-                                            className={`w-full p-2 text-center bg-gray-100/50 border rounded-md text-sm uppercase placeholder:capitalize 
-                                            focus:outline-none ${getContrastYIQ(field.color)}`}
+                                            placeholder="Enter color name"
+                                            onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
+                                            className={`w-full p-2 text-center bg-gray-100/50 border rounded-md text-sm uppercase placeholder:capitalize focus:outline-none ${getContrastYIQ(field.color)}`}
                                             style={{ backgroundColor: field.color }}
                                         />
                                     </div>
-                                </div>
-
-                                {/* Size Input */}
-                                <div className="w-1/4">
-                                    <input
-                                        type="text"
-                                        value={field.size}
-                                        placeholder="Enter size"
-                                        onChange={(e) => handleAttributeInputChange(index, "size", e.target.value)}
-                                        className="border w-full bg-gray-100/50 p-2 rounded-md uppercase placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                    <MdDelete
+                                        className="text-xl text-primary cursor-pointer"
+                                        onClick={() => handleDeleteColorField(colorIndex)}
                                     />
                                 </div>
 
-                                {/* Stock Input */}
-                                <div className="w-1/4">
-                                    <input
-                                        type="text"
-                                        value={field.stock}
-                                        placeholder="Enter stock"
-                                        onChange={(e) => handleAttributeInputChange(index, "stock", e.target.value)}
-                                        className="border w-full bg-gray-100/50 p-2 rounded-md placeholder:text-sm focus:outline-none placeholder:capitalize"
-                                    />
+                                {/* Sizes and Stock Table */}
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-sm font-medium">Sizes & Stock</label>
+                                        <p onClick={() => handleAddSizeField(colorIndex)}
+                                            className="text-sm text-secondary hover:text-primary hover:underline cursor-pointer">Add</p>
+                                    </div>
+                                    {Array.isArray(field.sizes) && field.sizes.map((sizeField, sizeIndex) => (
+                                        <div key={sizeIndex} className="flex items-center gap-2">
+                                            <input
+                                                type="text"
+                                                value={sizeField.size}
+                                                placeholder="Enter size (e.g., S, M, L)"
+                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "size", e.target.value)}
+                                                className="border w-64 bg-gray-100/50 p-2 rounded-md uppercase placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                            />
+                                            <input
+                                                type="number"
+                                                value={sizeField.stock}
+                                                placeholder="Enter stock quantity"
+                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "stock", e.target.value)}
+                                                className="border w-64 bg-gray-100/50 p-2 rounded-md placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                            />
+                                            <MdDelete
+                                                className="text-xl text-primary cursor-pointer"
+                                                onClick={() => handleDeleteSizeField(colorIndex, sizeIndex)}
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
-
-                                {/* Delete Button */}
-                                <MdDelete
-                                    className="text-xl text-primary cursor-pointer"
-                                    onClick={() => handleDeleteAttributeInputField(index)}
-                                />
                             </div>
                         ))}
                     </div>
+
 
                     {/* button */}
                     <div className='flex justify-center items-center !mt-5'>

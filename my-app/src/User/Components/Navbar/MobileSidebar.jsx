@@ -2,13 +2,33 @@ import React from "react";
 import { Drawer } from "@material-tailwind/react";
 import { HiMiniXMark } from "react-icons/hi2";
 import { Link } from "react-router-dom";
-import { categories } from "../../../data";
 import { useContext } from "react";
 import { AppContext } from "../../../StoreContext/StoreContext";
+import { useState } from "react";
+import { useEffect } from "react";
+import AppLoader from "../../../Loader";
+import axios from "axios";
 
 
 const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
-    const { setSelectedCategory } = useContext(AppContext);
+    const { setSelectedCategory, BASE_URL } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(true);
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/admin/category/get`);
+                setCategories(response.data);
+                setIsLoading(false);
+            } catch (error) {
+                console.error(error);
+                console.log("Category data could not be fetched.");
+                setIsLoading(false);
+            }
+        };
+        fetchCategories();
+    }, [BASE_URL]);
 
 
     const handleCategory = (category) => {
@@ -32,13 +52,25 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                 </div>
                 <div className="my-8 p-0">
                     <h2 className='text-sm font-medium tracking-wider'>CATEGORIES</h2>
-                    <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
-                        {
-                            categories.map((cat, index) => (
-                                <li key={index} onClick={() => handleCategory(cat.catTitle)}><Link to='/all-category' className="capitalize">{cat.catTitle}</Link></li>
-                            ))
-                        }
-                    </ul>
+                    {
+                        isLoading || categories.length === 0 ? (
+                            <div className="col-span-2 flex justify-center items-center h-[50vh]">
+                                <AppLoader />
+                            </div>
+                        ) : (
+                            <>
+                                <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
+                                    {
+                                        categories.map((category) => (
+                                            <li key={category.id} onClick={() => handleCategory(category.name)}>
+                                                <Link to='/all-category' className="capitalize">{category.name}</Link>
+                                            </li>
+                                        ))
+                                    }
+                                </ul>
+                            </>
+                        )
+                    }
                 </div>
 
                 <div className="my-8 p-0">

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Button, Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import axios from "axios";
 import { AppContext } from "../../../../StoreContext/StoreContext";
+import toast from "react-hot-toast";
 
 export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
     const { BASE_URL } = useContext(AppContext);
@@ -86,7 +87,7 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
             const response = await axios.patch(`${BASE_URL}/admin/coupon/update/${initialEditCoupon._id}`, couponData, { headers });
             console.log(response.data);
             handleOpen()
-            alert('Coupon is updated');
+            toast.success('Coupon is updated');
         } catch (error) {
             console.error(error);
             alert("Coupon is not updated");
