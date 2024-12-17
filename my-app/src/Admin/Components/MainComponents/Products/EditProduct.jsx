@@ -54,8 +54,8 @@ const EditProduct = () => {
             });
             // Convert `features` object to array
             const featuresArray = Object.entries(initialProducts.features)
-                .filter(([key, value]) => value !== null && value !== "")
-                .map(([key, value]) => ({ property: key, value }));
+                // .filter(([key, value]) => value !== null && value !== "")
+                .map(([key, value], index) => ({ property: key, value }));
 
             setEditProdFields(featuresArray);
 
@@ -238,8 +238,10 @@ const EditProduct = () => {
 
             // Append colors as a JSON string
             if (colors.length > 0) {
-                editproductFormData.append('colors', JSON.stringify(colors));
+                const colorsBlob = new Blob([JSON.stringify(colors)], { type: 'application/json' });
+                editproductFormData.append('colors', colorsBlob);
             }
+
 
 
             // // Handle features
@@ -707,7 +709,7 @@ const EditProduct = () => {
 
 
                     {/* button */}
-                    <div className='flex justify-center items-center mt-2'>
+                    <div className='flex justify-center items-center !mt-5'>
                         <Button type='submit' className='bg-buttonBg font-custom font-normal tracking-wider'>submit product</Button>
                     </div>
                 </div>

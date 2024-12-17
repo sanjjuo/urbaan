@@ -3,6 +3,7 @@ import {
     Navbar,
     Typography,
     Button,
+    Chip,
 } from "@material-tailwind/react";
 import { RiSearch2Line } from "react-icons/ri";
 import { RiHeart3Line } from "react-icons/ri";
@@ -46,11 +47,11 @@ const NavList = () => {
             <Typography
                 as="li"
                 variant="small"
-                onClick={() => setNavActive("contact")}
+                onClick={() => setNavActive("trackOrder")}
                 className={`p-1 font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
-                    hover:text-primary ${navActive === "contact" ? "text-primary scale-110" : ""}`}
+                    hover:text-primary ${navActive === "trackOrder" ? "text-primary scale-110" : ""}`}
             >
-                <Link to="/contact" >
+                <Link to='/orders-tracking' >
                     Track Order
                 </Link>
             </Typography>
@@ -96,8 +97,10 @@ const UserNavbar = () => {
                                     </li>
                                 </Link>
                                 <Link to='/user-cart'>
-                                    <li className='text-2xl text-secondary cursor-pointer'>
+                                    <li className='text-2xl text-secondary cursor-pointer relative'>
                                         {isCartPage ? <RiShoppingCartFill className='text-primary' /> : <RiShoppingCartLine />}
+                                        <Chip value="2" size="sm" className="rounded-full bg-primary text-xs text-white absolute 
+                                        -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                                     </li>
                                 </Link>
                                 <li><Link to='/login-user'><Button className='bg-primary font-custom font-normal

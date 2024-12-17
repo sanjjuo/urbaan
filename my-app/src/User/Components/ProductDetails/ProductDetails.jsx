@@ -13,6 +13,9 @@ import ProductReviews from './ProductReviews';
 import { SizeChart } from './SIzeChart';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useState } from 'react';
+import { TiTick } from "react-icons/ti";
+import { useEffect } from 'react';
 
 const ProductDetails = () => {
     const { productDetails, handleOpenSizeDrawer, BASE_URL } = useContext(AppContext)
@@ -22,7 +25,19 @@ const ProductDetails = () => {
     const colorSizes = productDetails.colors[0].sizes;
     const colorColor = productDetails.colors
     const features = productDetails.features
+    const [selectedColor, setSelectedColor] = useState("");
+    const [selectedSize, setSelectedSize] = useState("");
+    console.log(productDetails);
 
+
+    const getContrastYIQ = (color) => {
+        // if (!/^#([0-9A-F]{3}){1,2}$/i.test(color)) return 'text-black'; // Default to black for invalid or empty colors
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+        return yiq >= 128 ? 'text-black' : 'text-white';
+    };
 
 
     const addToCart = async () => {
@@ -30,8 +45,8 @@ const ProductDetails = () => {
             const payload = {
                 productId: productDetails._id,
                 quantity: 1, // Default quantity
-                selectedColor: colorColor[0].color, // Default color
-                selectedSize: colorSizes[0].size // Default size
+                selectedColor,
+                selectedSize,
             };
 
             const response = await axios.post(`${BASE_URL}/user/cart/add`, payload);
@@ -40,9 +55,34 @@ const ProductDetails = () => {
             }
         } catch (error) {
             console.error(error);
-            toast.error("Failed to add to cart. Please try again.");
+            alert("Failed to add to cart. Please try again.");
         }
     };
+
+
+    const handleColorClick = (color) => {
+        setSelectedColor(color);
+        // Reset selected size if the same color is clicked again
+        if (selectedColor === color) {
+            setSelectedColor(""); // Deselect the color
+            setSelectedSize(""); // Deselect the size
+        } else {
+            // Find the sizes for the newly selected color
+            const selectedColorData = productDetails.colors.find(c => c.color === color);
+            if (selectedColorData) {
+                setSelectedSize(selectedColorData.sizes[0]?.size || "");
+            }
+        }
+    };
+
+    const handleSizeClick = (size) => {
+        setSelectedSize(size);
+        if (selectedSize === size) {
+            setSelectedSize(""); // Deselect the size
+        }
+    };
+
+
 
     return (
         <>
@@ -120,7 +160,11 @@ const ProductDetails = () => {
                                 </div>
                                 <ul className='flex items-center gap-3'>
                                     {colorSizes.map((size) => (
-                                        <li key={size._id} className='bg-white uppercase shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm xl:text-sm lg:text-sm hover:bg-primary hover:text-white cursor-pointer'>
+                                        <li
+                                            key={size._id}
+                                            onClick={() => handleSizeClick(size.size)}
+                                            className={`bg-white cursor-pointer uppercase shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm xl:text-sm lg:text-sm 
+                                         ${selectedSize.includes(size.size) ? '!bg-primary text-white' : ''}`}>
                                             {size.size}
                                         </li>
                                     ))}
@@ -130,17 +174,19 @@ const ProductDetails = () => {
                             {/* Select Color */}
                             <div className='mt-4'>
                                 <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Color</h4>
-                                <ul className='flex items-center gap-3 mt-3'>
-                                    {
-                                        colorColor.map((color) => (
-                                            <li key={color._id} className='cursor-pointer'>
-                                                <FaCircle
-                                                    className='text-3xl'
-                                                    style={{ color: color.color }} // Apply the backend color value
-                                                />
-                                            </li>
-                                        ))
-                                    }
+                                <ul className='flex items-center gap-3'>
+                                    {colorColor.map((color) => (
+                                        <li
+                                            key={color._id}
+                                            onClick={() => handleColorClick(color.color)}
+                                            className={`cursor-pointer text-3xl relative flex items-center justify-center ${selectedColor.includes(color.color) ? 'text-primary' : ''}`}
+                                        >
+                                            {selectedColor.includes(color.color) && (
+                                                <TiTick className={`absolute text-3xl p-1 rounded-full bg-black/20 ${getContrastYIQ(color.color)}`} />
+                                            )}
+                                            <FaCircle style={{ color: color.color }} />
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
 

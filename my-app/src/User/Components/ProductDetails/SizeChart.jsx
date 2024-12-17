@@ -51,7 +51,7 @@ export function SizeChart() {
                         <HiMiniXMark onClick={handleCloseSizeDrawer} className='text-2xl text-gray-500' />
                     </div>
                 </div>
-                <Typography className="mb-8 font-normal">
+                <div className="mb-8 font-normal">
                     <table className="w-full min-w-max table-auto text-left">
                         <thead>
                             <tr>
@@ -116,7 +116,7 @@ export function SizeChart() {
                             })}
                         </tbody>
                     </table>
-                </Typography>
+                </div>
             </Drawer>
         </>
     );
