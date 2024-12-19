@@ -16,7 +16,7 @@ const UserCarousel = () => {
   useEffect(() => {
     const fetchCarousel = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/admin/slider`)
+        const response = await axios.get(`${BASE_URL}/user/slider/view-sliders`)
         setCarousel(response.data)
         setIsLoading(false)
         console.log(response.data);
@@ -57,7 +57,7 @@ const UserCarousel = () => {
                   className="relative w-full h-56 lg:h-[500px] xl:h-[450px] shadow-md rounded-2xl"
                 >
                   <img
-                    src={slider.image}
+                    src={`${BASE_URL}/${slider.image || ''}`}
                     alt={`Image showcasing ${slider.title}`}
                     className="h-full w-full object-cover rounded-2xl"
                   />
@@ -85,7 +85,7 @@ const UserCarousel = () => {
                         whileInView={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 1.1 }}
                         className="bg-primary mt-3 font-custom font-normal capitalize tracking-wider text-white 
-                p-2 xl:py-3 xl:px-6 lg:py-3 lg:px-6 text-xs xl:text-sm lg:text-sm  rounded-lg shadow-md hover:bg-secondary/80"
+                      p-2 xl:py-3 xl:px-6 lg:py-3 lg:px-6 text-xs xl:text-sm lg:text-sm  rounded-lg shadow-md hover:bg-secondary/80"
                       >
                         Explore Now
                       </motion.button>

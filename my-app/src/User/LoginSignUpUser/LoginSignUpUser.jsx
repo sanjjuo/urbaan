@@ -11,6 +11,7 @@ import { RiGoogleFill } from "react-icons/ri";
 import { GrApple } from "react-icons/gr";
 import { AppContext } from "../../StoreContext/StoreContext";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export function LoginSignUpUser() {
     const [loginSignUpUser, setLoginSignUpUser] = useState("login");
@@ -28,43 +29,33 @@ export function LoginSignUpUser() {
         setLoginFormData((prevState) => ({ ...prevState, [name]: value }));
     };
 
-    const handleLoginSubmit = async (e) => {
+    const handleAuthSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${BASE_URL}/user/auth/login`, {
+            const endpoint = loginSignUpUser === "login" ? "/user/auth/login" : "/user/auth/register";
+            const response = await axios.post(`${BASE_URL}${endpoint}`, {
                 phone: loginFormData.phone,
                 password: loginFormData.password,
+                ...(loginSignUpUser !== "login" && { name: loginFormData.name }),
             });
 
             if (response.data.token) {
                 localStorage.setItem("userToken", response.data.token);
-                navigate("/");
+                if (loginSignUpUser === "login") {
+                    navigate("/");
+                    toast.success("Login Success");
+                } else {
+                    setLoginSignUpUser("login");
+                    toast.success("Account Created. Now login!");
+                }
             }
-            alert("Login Success")
-        } catch (error) {
-            console.error("Login Error:", error.response?.data || error.message);
-            alert("Login failed. Please check your credentials.");
-        }
-    };
-
-    const handleSignUpSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(`${BASE_URL}/user/auth/register`, {
-                phone: loginFormData.phone,
-                name: loginFormData.name,
-                password: loginFormData.password,
-            });
-
-            if (response.data.token) {
-                localStorage.setItem("userToken", response.data.token);
-                loginSignUpUser("login");
+            if (response.data.userId) {
+                localStorage.setItem('userId', response.data.userId)
             }
-            alert('Account is created, Now login !')
         } catch (error) {
-            const errorMessage = error.response?.data?.message || "Sign up failed.";
+            const errorMessage = error.response?.data?.message || (loginSignUpUser === "login" ? "Login failed. Please check your credentials." : "Sign up failed.");
+            console.error("Error:", errorMessage);
             alert(errorMessage);
-            console.log(errorMessage); // Log the error message for debugging
         }
     };
 
@@ -87,11 +78,7 @@ export function LoginSignUpUser() {
                 </Typography>
                 <form
                     className="mt-12 xl:mt-8 lg:mt-8 mb-2 lg:w-full max-w-screen-lg"
-                    onSubmit={
-                        loginSignUpUser === "login"
-                            ? handleLoginSubmit
-                            : handleSignUpSubmit
-                    }
+                    onSubmit={handleAuthSubmit}
                 >
                     <div className="mb-1 flex flex-col gap-6">
                         <Input
@@ -165,7 +152,10 @@ export function LoginSignUpUser() {
                             <>
                                 Don't have an account?{" "}
                                 <Link
-                                    onClick={() => setLoginSignUpUser("signUp")}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setLoginSignUpUser("signUp");
+                                    }}
                                     className="font-medium text-primary"
                                 >
                                     Sign Up
@@ -175,7 +165,10 @@ export function LoginSignUpUser() {
                             <>
                                 Already have an account?{" "}
                                 <Link
-                                    onClick={() => setLoginSignUpUser("login")}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setLoginSignUpUser("login");
+                                    }}
                                     className="font-medium text-primary"
                                 >
                                     Login

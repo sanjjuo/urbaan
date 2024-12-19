@@ -15,7 +15,7 @@ const EditProduct = () => {
     const { BASE_URL } = useContext(AppContext)
     const navigate = useNavigate()
     const location = useLocation();
-    const initialProducts = location.state.product;
+    const initialProducts = location.state?.product || {};
     const [editProdFields, setEditProdFields] = useState([{ property: "", value: "" }])
     const [editAttributeFields, setEditAttributeFields] = useState([{ color: "", sizes: [{ size: "", stock: "" }] }]);
     const [editProdTitle, setEditProdTitle] = useState('')
@@ -71,6 +71,8 @@ const EditProduct = () => {
 
             setEditProdDescription(initialProducts.description)
             setEditProdImage(initialProducts.images || [])
+            console.log(initialProducts.images);
+            
             setEditProdManuName(initialProducts.manufacturerName)
             setEditProdManuBrand(initialProducts.manufacturerBrand)
             setEditProdManuAddress(initialProducts.manufacturerAddress)
@@ -81,9 +83,9 @@ const EditProduct = () => {
 
     // handle image
     const handleProductImageUpload = (e) => {
-        const files = Array.from(e.target.files); // Convert FileList to array
-        setEditProdImage((prevImages) => [...prevImages, ...files]); // Append new files
-    };
+        const files = Array.from(e.target.files);
+        setEditProdImage((prevImages) => [...prevImages, ...files]);
+      };
 
     // manage text color based ob bg-color
     const getContrastYIQ = (color) => {
@@ -238,23 +240,35 @@ const EditProduct = () => {
 
             // Append colors as a JSON string
             if (colors.length > 0) {
-                const colorsBlob = new Blob([JSON.stringify(colors)], { type: 'application/json' });
-                editproductFormData.append('colors', colorsBlob);
+                editproductFormData.append('colors', JSON.stringify(colors)); // Appends as a plain JSON string
             }
 
 
 
             // // Handle features
-            const featuresObject = editAttributeFields.reduce((acc, { property, value }) => {
-                acc[property] = value;
+
+            // Create a `features` object from the array
+            const featuresObject = editProdFields.reduce((acc, { property, value }) => {
+                if (property.trim()) {
+                    acc[property.trim()] = value || null; // Set null for empty values
+                }
                 return acc;
             }, {});
-            editproductFormData.append('features', JSON.stringify(featuresObject));
+        
+
+            // // Option 1: Append `features` as a JSON string (if backend expects JSON)
+            // editproductFormData.append("features", JSON.stringify(featuresObject));
+
+            // // OR
+
+            // Option 2: Append `features` as individual key-value pairs (if backend supports nested data)
+            Object.entries(featuresObject).forEach(([key, value]) => {
+                editproductFormData.append(`features[${key}]`, value);
+            });
+
 
             // Append images
-            editProdImage.forEach((image) => {
-                editproductFormData.append('images', image);
-            });
+            editProdImage.forEach((image) => editproductFormData.append("images", image));
 
             // Append manufacturer details
             editproductFormData.append('manufacturerName', editProdManuName);
@@ -568,7 +582,7 @@ const EditProduct = () => {
                                     <li key={index} className="flex items-start justify-between bg-primary/15 rounded-md p-2">
                                         <div className="flex gap-3 items-start">
                                             <div className="w-[60px] h-[60px]">
-                                                <img src={image} alt="" className="w-full h-full object-cover rounded-md" />
+                                                <img src={`${BASE_URL}/uploads/category/${image}`} alt="" className="w-full h-full object-cover rounded-md" />
                                             </div>
                                             <p className="text-secondary font-normal text-xs">{image.name}</p> {/* Display file name */}
                                         </div>

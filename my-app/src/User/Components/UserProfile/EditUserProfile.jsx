@@ -54,7 +54,7 @@ const EditUserProfile = () => {
                             name="name"
                             id="name"
                             placeholder="Natalie Portman"
-                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs placeholder:text-gray-500 focus:outline-none"
+                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                         />
                     </div>
 
@@ -68,7 +68,7 @@ const EditUserProfile = () => {
                             name="email"
                             id="email"
                             placeholder="natalieportmanofficial@gmail.com"
-                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs placeholder:text-gray-500 focus:outline-none"
+                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                         />
                     </div>
 
@@ -82,7 +82,7 @@ const EditUserProfile = () => {
                             name="password"
                             id="password"
                             placeholder="********"
-                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs placeholder:text-gray-500 focus:outline-none"
+                            className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                         />
                     </div>
 
@@ -95,7 +95,7 @@ const EditUserProfile = () => {
                             type="date"
                             name="date"
                             id="dob"
-                            className="w-full border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-xs focus:outline-none text-gray-500"
+                            className="w-full border-[1px] bg-transparent border-gray-400 p-2 rounded-md focus:outline-none text-gray-500"
                         />
                     </div>
 
@@ -109,7 +109,7 @@ const EditUserProfile = () => {
                             name="country"
                             id="country"
                             defaultValue=""
-                            className="border-[1px] text-xs bg-transparent border-gray-400 p-2 rounded-md text-gray-500 focus:outline-none"
+                            className="border-[1px] text-sm bg-transparent border-gray-400 p-2 rounded-md text-gray-500 focus:outline-none"
                         >
                             <option value="" disabled >
                                 Select your country
@@ -124,8 +124,16 @@ const EditUserProfile = () => {
                     </div>
                 </form>
 
+                <div className='flex justify-center mt-10'>
+                    <Link to='/user-profile' className='w-40'>
+                        <Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Save profile</Button>
+                    </Link>
+                </div>
+
                 <div className='bg-white shadow-md fixed bottom-0 inset-x-0 flex justify-center z-50 p-4 lg:hidden xl:hidden md:hidden'>
-                    <Link to='/user-profile' className='w-full'><Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Save</Button></Link>
+                    <Link to='/user-profile' className='w-full'>
+                        <Button className="bg-primary font-custom font-normal text-sm capitalize w-full">Save</Button>
+                    </Link>
                 </div>
 
             </div>

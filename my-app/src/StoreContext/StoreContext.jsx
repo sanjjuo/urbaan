@@ -1,12 +1,10 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { products } from '../data';
+import React, { createContext, useState } from 'react';
 
 export const AppContext = createContext();
 
 const StoreContext = ({ children }) => {
     const BASE_URL = import.meta.env.VITE_BASE_URL; // base url
     const [open, setOpen] = useState(null);
-    const [openRemoveModal, setOpenRemoveModal] = useState(false);
     const [openDrawer, setDrawerOpen] = useState(false);
     const [openBottomDrawer, setBottomDrawerOpen] = useState(false);
     const [openSizeDrawer, setOpenSizeDrawer] = useState(false);
@@ -16,6 +14,7 @@ const StoreContext = ({ children }) => {
         return savedDetails ? JSON.parse(savedDetails) : {};
     });
     const [modalType, setModalType] = useState(null); // New state for modal type
+    const [viewCart, setViewCart] = useState([]) //for UserCart.jsx and navbar
 
     // Handle modal
     const handleOpen = (modal, type) => {
@@ -23,8 +22,7 @@ const StoreContext = ({ children }) => {
         setModalType(type); // Set the modal type
     };
 
-    // remove address modal
-    const handleOpenRemoveModal = () => setOpenRemoveModal(!openRemoveModal);
+
 
     // Handle drawer
     const handleOpenDrawer = () => setDrawerOpen(true);
@@ -48,6 +46,7 @@ const StoreContext = ({ children }) => {
     }
     const handleCloseSizeDrawer = () => setOpenSizeDrawer(false);
 
+
     return (
         <AppContext.Provider
             value={{
@@ -66,9 +65,9 @@ const StoreContext = ({ children }) => {
                 handleOpenSizeDrawer,
                 handleCloseSizeDrawer,
                 openSizeDrawer,
-                openRemoveModal,
-                handleOpenRemoveModal,
                 modalType, // Provide modal type
+                viewCart,
+                setViewCart,
             }}
         >
             {children}

@@ -17,17 +17,7 @@ const FeaturedProducts = () => {
     useEffect(() => {
         const fetchFeaturedProducts = async () => {
             try {
-                const token = localStorage.getItem('userToken')
-                if (!token) {
-                    alert("Authorization is missing")
-                    return;
-                }
-                console.log(localStorage.getItem('userToken'));
-
-                const headers = {
-                    Authorization: `Bearer ${token}`
-                }
-                const response = await axios.get(`${BASE_URL}/user/products/view-products`, { headers });
+                const response = await axios.get(`${BASE_URL}/user/products/view-products`);
                 const filteredProducts = response.data.filter(product => product.isFeaturedProduct);
                 setFeaturedProducts(filteredProducts)
                 console.log(filteredProducts);

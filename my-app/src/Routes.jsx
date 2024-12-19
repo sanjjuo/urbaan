@@ -34,6 +34,8 @@ import OrdersTracking from './User/Components/TrackOrder/OrdersTracking';
 import AllCategory from './User/Components/UserCategory/AllCategory';
 import AddUserAddress from './User/Components/UserAddress/AddUserAddress';
 import ApplyCoupon from './User/Components/UserCart/ApplyCoupon';
+import EditUserAddress from './User/Components/UserAddress/EditUserAddress';
+import Checkout from './User/Components/UserCart/Checkout';
 
 const FullRoutes = () => {
     return (
@@ -71,8 +73,10 @@ const RoutesWithLocation = () => {
                 <Route path='/all-category' element={<AllCategory />} />
                 <Route path='/user-search' element={<UserSearch />} />
                 <Route path='/user-cart' element={<UserCart />} />
-                <Route path='/apply-coupon' element={<ApplyCoupon/>}/>
+                <Route path='/checkout' element={<Checkout />} />
+                <Route path='/apply-coupon' element={<ApplyCoupon />} />
                 <Route path='/add-delivery-address' element={<AddUserAddress />} />
+                <Route path='/edit-delivery-address' element={<EditUserAddress />} />
                 <Route path='/select-delivery-address' element={<SelectUserAddress />} />
                 <Route path='/orders-tracking' element={<OrdersTracking />} />
 

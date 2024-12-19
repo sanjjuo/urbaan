@@ -4,26 +4,43 @@ import React from 'react'
 import { useContext } from 'react'
 import { useState } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../StoreContext/StoreContext'
 import toast from 'react-hot-toast'
+import { useEffect } from 'react'
 
-const AddUserAddress = () => {
+const EditUserAddress = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+    const initailAddressData = location.state.address
     const { BASE_URL } = useContext(AppContext)
-    const [name, setName] = useState('')
-    const [number, setNumber] = useState('')
-    const [address, setAddress] = useState('')
-    const [landMark, setLandMark] = useState('')
-    const [pinCode, setPinCode] = useState('')
-    const [city, setCity] = useState('')
-    const [state, setState] = useState('')
-    const [email, setEmail] = useState('')
-    const [addressType, setAddressType] = useState('home')
+    const [editName, setEditName] = useState('')
+    const [editNumber, setEditNumber] = useState('')
+    const [editAddress, setEditAddress] = useState('')
+    const [editLandMark, setEditLandMark] = useState('')
+    const [editPinCode, setEditPinCode] = useState('')
+    const [editCity, setEditCity] = useState('')
+    const [editState, setEditState] = useState('')
+    const [editEmail, setEditEmail] = useState('')
+    const [editAddressType, setEditAddressType] = useState('home')
+
+
+    useEffect(() => {
+        if (initailAddressData) {
+            setEditName(initailAddressData.name)
+            setEditNumber(initailAddressData.number)
+            setEditAddress(initailAddressData.address)
+            setEditLandMark(initailAddressData.landmark)
+            setEditPinCode(initailAddressData.pincode)
+            setEditCity(initailAddressData.city)
+            setEditState(initailAddressData.state)
+            setEditEmail(initailAddressData.email)
+            setEditAddressType(initailAddressData.addressType)
+        }
+    }, [initailAddressData])
 
     // createAddressFormSubmit
-
-    const createAddressFormSubmit = async (e) => {
+    const editAddressFormSubmit = async (e) => {
         e.preventDefault()
         try {
             const token = localStorage.getItem('userToken')
@@ -31,29 +48,46 @@ const AddUserAddress = () => {
 
             // append to formdata
             const rowData = {
-                userId: userId,
-                name: name,
-                number: number,
-                address: address,
-                landmark: landMark,
-                pincode: pinCode,
-                city: city,
-                state: state,
-                email: email,
-                addressType: addressType
+                // userId: userId,
+                name: editName,
+                number: editNumber,
+                address: editAddress,
+                landmark: editLandMark,
+                // pincode: editPinCode,
+                city: editCity,
+                state: editState,
+                // email: editEmail,
+                addressType: editAddressType
             }
+
+            console.log('Payload:', rowData);
 
             const headers = {
                 Authorization: `Bearer ${token}`
             }
-
-            const response = await axios.post(`${BASE_URL}/user/address/add`, rowData, { headers })
+            console.log('Headers:', headers);
+            console.log(`${initailAddressData._id}`);
+            const response = await axios.put(`${BASE_URL}/user/address/update/${initailAddressData._id}`, rowData, { headers })
             console.log(response.data);
-            toast.success("Address added successfully")
+            toast.success("Address updated successfully")
             navigate('/select-delivery-address');
+
+            setEditName('')
+            setEditAddress('')
+            setEditLandMark('')
+            setEditPinCode('')
+            setEditNumber('')
+            setEditEmail('')
+            setEditAddressType('')
+            setEditState('')
+            setEditCity('')
         } catch (error) {
-            console.log(error);
-            alert("error in form submission :", error.response.message)
+            console.error(error);
+            if (error.response) {
+                console.error(`Error: ${error.response?.data || "Failed to update address"}`);
+            } else {
+                toast.error("Network error. Please try again later.");
+            }
         }
     }
 
@@ -71,7 +105,7 @@ const AddUserAddress = () => {
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
                 <div className='flex justify-center items-center'>
                     <Card className='p-5 w-[600px]'>
-                        <form action="" className="space-y-5 mt-3" onSubmit={createAddressFormSubmit}>
+                        <form action="" className="space-y-5 mt-3" onSubmit={editAddressFormSubmit}>
                             {/* Name */}
                             <div className="flex flex-col gap-1 w-full">
                                 <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
@@ -81,8 +115,8 @@ const AddUserAddress = () => {
                                     type="text"
                                     name="name"
                                     id="name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={editName}
+                                    onChange={(e) => setEditName(e.target.value)}
                                     placeholder="Enter your name"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -96,8 +130,8 @@ const AddUserAddress = () => {
                                     type="number"
                                     name="number"
                                     id="number"
-                                    value={number}
-                                    onChange={(e) => setNumber(e.target.value)}
+                                    value={editNumber}
+                                    onChange={(e) => setEditNumber(e.target.value)}
                                     placeholder="Enter your name"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -111,8 +145,8 @@ const AddUserAddress = () => {
                                     type="text"
                                     name="address"
                                     id="address"
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
+                                    value={editAddress}
+                                    onChange={(e) => setEditAddress(e.target.value)}
                                     placeholder="Address (House No, Building, Street, Area )*"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -120,8 +154,8 @@ const AddUserAddress = () => {
                                     type="text"
                                     name="landmark"
                                     id="landmark"
-                                    value={landMark}
-                                    onChange={(e) => setLandMark(e.target.value)}
+                                    value={editLandMark}
+                                    onChange={(e) => setEditLandMark(e.target.value)}
                                     placeholder="Landmark"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -129,8 +163,8 @@ const AddUserAddress = () => {
                                     type="number"
                                     name="pincode"
                                     id="pincode"
-                                    value={pinCode}
-                                    onChange={(e) => setPinCode(e.target.value)}
+                                    value={editPinCode}
+                                    onChange={(e) => setEditPinCode(e.target.value)}
                                     placeholder="Pin code"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -144,8 +178,8 @@ const AddUserAddress = () => {
                                     type="text"
                                     name="city"
                                     id="city"
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
+                                    value={editCity}
+                                    onChange={(e) => setEditCity(e.target.value)}
                                     placeholder="Enter your city"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -159,8 +193,8 @@ const AddUserAddress = () => {
                                     type="text"
                                     name="state"
                                     id="state"
-                                    value={state}
-                                    onChange={(e) => setState(e.target.value)}
+                                    value={editState}
+                                    onChange={(e) => setEditState(e.target.value)}
                                     placeholder="Enter your state"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -174,8 +208,8 @@ const AddUserAddress = () => {
                                     type="email"
                                     name="email"
                                     id="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={editEmail}
+                                    onChange={(e) => setEditEmail(e.target.value)}
                                     placeholder="Enter your email"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
                                 />
@@ -183,12 +217,12 @@ const AddUserAddress = () => {
 
                             {/* save address */}
                             <div className='flex items-center gap-3'>
-                                <Button onClick={() => setAddressType("home")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
-                                    ${addressType === "home" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Home</Button>
-                                <Button onClick={() => setAddressType("work")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
-                                    ${addressType === "work" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Work</Button>
-                                <Button onClick={() => setAddressType("other")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
-                                    ${addressType === "other" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Other</Button>
+                                <Button onClick={() => setEditAddressType("home")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
+                                    ${editAddressType === "home" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Home</Button>
+                                <Button onClick={() => setEditAddressType("work")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
+                                    ${editAddressType === "work" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Work</Button>
+                                <Button onClick={() => setEditAddressType("other")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
+                                ${editAddressType === "other" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Other</Button>
                             </div>
 
                             {/* button */}
@@ -204,4 +238,4 @@ const AddUserAddress = () => {
     )
 }
 
-export default AddUserAddress
+export default EditUserAddress

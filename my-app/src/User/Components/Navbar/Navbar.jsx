@@ -17,6 +17,7 @@ import MobileSidebar from './MobileSidebar';
 import { CategoryMenu } from './CategoryMenu';
 import SearchBar from './SearchBar';
 import { Link, useLocation } from 'react-router-dom';
+import { UserProfile } from './UserProfile';
 
 
 const NavList = () => {
@@ -60,20 +61,23 @@ const NavList = () => {
 }
 
 const UserNavbar = () => {
-    const { openDrawer, handleOpenDrawer, handleCloseDrawer } = useContext(AppContext)
+    const { openDrawer, handleOpenDrawer, handleCloseDrawer, viewCart } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const isCartPage = location.pathname === "/user-cart";
+    const cartView = viewCart?.items?.length;
 
 
     // pages where navbar don't visible
-    const noNavbar = ["/product-details", "/customer-reviews", "/write-review", "/add-delivery-address", "/select-delivery-address", "/orders-tracking",
+    const noNavbar = ["/product-details", "/customer-reviews", "/write-review", "/add-delivery-address","/edit-delivery-address", "/select-delivery-address", "/orders-tracking",
         "/select-tracking", "/orders-tracking", "/all-category"]
 
     // Check if current path matches any of the visible routes
     if (noNavbar.includes(location.pathname)) {
         return null // dont render navbar
     }
+
+    const token = localStorage.getItem("userToken")
 
     return (
         <>
@@ -99,12 +103,18 @@ const UserNavbar = () => {
                                 <Link to='/user-cart'>
                                     <li className='text-2xl text-secondary cursor-pointer relative'>
                                         {isCartPage ? <RiShoppingCartFill className='text-primary' /> : <RiShoppingCartLine />}
-                                        <Chip value="2" size="sm" className="rounded-full bg-primary text-xs text-white absolute 
+                                        <Chip value={cartView || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
                                         -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                                     </li>
                                 </Link>
-                                <li><Link to='/login-user'><Button className='bg-primary font-custom font-normal
-                                      capitalize text-sm'>sign in</Button></Link>
+                                <li>
+                                    {token ? (
+                                        <UserProfile />
+                                    ) : (
+                                        <Link to='/login-user'><Button className='bg-primary font-custom font-normal
+                                      capitalize text-sm'>sign in</Button>
+                                        </Link>
+                                    )}
                                 </li>
                             </ul>
                         </div>

@@ -17,7 +17,7 @@ const ShopByCategory = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/admin/category/get`);
+        const response = await axios.get(`${BASE_URL}/user/category/get`);
         setCategories(response.data);
         setIsLoading(false);
       } catch (error) {

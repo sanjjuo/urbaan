@@ -11,7 +11,7 @@ import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 
 const FilterByCategory = ({ productsCategory, handleCategory }) => {
-    const { setSelectedCategory, BASE_URL } = useContext(AppContext);
+    const { BASE_URL } = useContext(AppContext);
     const [categories, setCategories] = useState([]);
     const [selectedCategoryName, setSelectedCategoryName] = useState(productsCategory.name); // Initialize with current category name
 

@@ -15,7 +15,6 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { TiTick } from "react-icons/ti";
-import { useEffect } from 'react';
 
 const ProductDetails = () => {
     const { productDetails, handleOpenSizeDrawer, BASE_URL } = useContext(AppContext)
@@ -40,18 +39,47 @@ const ProductDetails = () => {
     };
 
 
+    const userId = localStorage.getItem('userId')
+    if (!userId) {
+        alert("Authorization is missing")
+        navigate('/login-user')
+        return;
+    }
+
+    const userToken = localStorage.getItem('userToken');
+    if (!userToken) {
+        alert("Authorization token is missing");
+        navigate('/login-user')
+        return;
+    }
+
     const addToCart = async () => {
         try {
+
+            if (!selectedColor || !selectedSize) {
+                toast.error("Please select a color and size.");
+                return;
+            }
+
             const payload = {
+                userId: userId,
                 productId: productDetails._id,
                 quantity: 1, // Default quantity
-                selectedColor,
-                selectedSize,
+                color: selectedColor,
+                size: selectedSize,
             };
 
-            const response = await axios.post(`${BASE_URL}/user/cart/add`, payload);
+            console.log(payload);
+
+
+            const response = await axios.post(`${BASE_URL}/user/cart/add`, payload, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+
             if (response.status === 200) {
-                toast.success("Added to cart successfully!");
+                toast.success(`${productDetails.title} added to your cart`);
             }
         } catch (error) {
             console.error(error);

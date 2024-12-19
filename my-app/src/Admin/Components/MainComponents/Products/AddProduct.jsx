@@ -171,10 +171,16 @@ const AddProduct = () => {
 
             // Convert features array to an object
             const featuresObject = fields.reduce((acc, { property, value }) => {
-                acc[property] = value;
+                if (property.trim()) {
+                    acc[property.trim()] = value.trim() || ""
+                }
                 return acc;
             }, {});
-            productFormData.append('features', JSON.stringify(featuresObject));
+            // productFormData.append('features', JSON.stringify(featuresObject));
+            Object.entries(featuresObject).forEach(([key, value]) => {
+                productFormData.append(`features[${key}]`, value);
+            });
+
 
             // Append images
             productImage.forEach((image) => {

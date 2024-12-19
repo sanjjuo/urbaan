@@ -81,7 +81,7 @@ const ListView = ({ products, isLoading }) => {
                                                     <td className={classes}>
                                                         <div className='flex flex-col items-center gap-2'>
                                                             <div className='w-[60px] h-[60px] rounded-md'>
-                                                                <img src={product.images[0]} alt={product.title} className='text-xs w-full h-full object-cover rounded-md' />
+                                                                <img src={`${BASE_URL}/uploads/category/${product.images[0]}`} alt={product.title} className='text-xs w-full h-full object-cover rounded-md' />
                                                             </div>
                                                             <Typography
                                                                 variant="small"

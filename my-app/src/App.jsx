@@ -18,11 +18,10 @@ const App = () => {
           containerClassName=""
           containerStyle={{}}
           toastOptions={{
-            className: '',
             duration: 5000,
             style: {
-              height: '50px',
-              width: '250px'
+              height: '70px',
+              width: '450px',
             },
           }}
         />

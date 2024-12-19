@@ -7,6 +7,7 @@ import { ReadMoreModal } from '../../ReadMoreModal/ReadMoreModal';
 import axios from 'axios';
 import { Card } from '@material-tailwind/react';
 import AppLoader from '../../../../Loader';
+import toast from 'react-hot-toast';
 
 const AddedCategories = ({ createEdit, handleEditCategory }) => {
     const { open, handleOpen, modalType, BASE_URL } = useContext(AppContext);
@@ -48,6 +49,7 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
             const response = await axios.delete(`${BASE_URL}/admin/category/delete/${catId}`, { headers });
             console.log(response.data);
             handleOpen(); // Close modal after deletion
+            toast.success("Category is deleted")
         } catch (error) {
             console.error("Error deleting category:", error);
             alert("Failed to delete category.");
@@ -67,7 +69,7 @@ const AddedCategories = ({ createEdit, handleEditCategory }) => {
                         {adminCategory.map((category) => (
                             <Card className="p-5 space-y-6 relative" key={category.id}>
                                 <div className='w-full h-72'>
-                                    <img src={category.imageUrl} alt={category.name} className='h-full w-full object-cover rounded-lg' />
+                                    <img src={`${BASE_URL}/uploads/category/${category.imageUrl}`} alt={category.name} className='h-full w-full object-cover rounded-lg' />
                                 </div>
                                 <div>
                                     <h2 className="font-bold text-2xl text-secondary capitalize">{category.name}</h2>

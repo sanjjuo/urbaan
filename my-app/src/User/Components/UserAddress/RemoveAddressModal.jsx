@@ -2,16 +2,12 @@ import React from "react";
 import {
     Button,
     Dialog,
-    DialogHeader,
     DialogBody,
-    DialogFooter,
     Typography,
 } from "@material-tailwind/react";
-import { useContext } from "react";
-import { AppContext } from "../../../StoreContext/StoreContext";
 
-export function RemoveAddressModal() {
-    const { openRemoveModal, handleOpenRemoveModal } = useContext(AppContext)
+export function RemoveAddressModal({ openRemoveModal, handleOpenRemoveModal, handleDelete, addressId }) {
+
     return (
         <>
             <Dialog open={openRemoveModal} handler={handleOpenRemoveModal} size='sm' className="rounded-none">
@@ -34,7 +30,7 @@ export function RemoveAddressModal() {
                         </Button>
                         <Button
                             className="bg-deleteBg text-white font-custom capitalize text-sm tracking-wider font-normal"
-                            onClick={handleOpenRemoveModal}
+                            onClick={() => handleDelete(addressId)}
                         >
                             Delete
                         </Button>

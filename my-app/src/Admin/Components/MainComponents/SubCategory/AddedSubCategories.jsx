@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import AppLoader from '../../../../Loader';
+import toast from 'react-hot-toast';
 
 const TABLE_HEAD = ["Sub Category", "Category", "Status", "Action"];
 
@@ -46,6 +47,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
             const response = await axios.delete(`${BASE_URL}/admin/Subcategory/delete/${subCategoryId}`, { headers })
             console.log(response.data);
             handleOpen();
+            toast.success('Subcategory is deleted')
         } catch (error) {
             console.log(error);
             alert("Sub category is not deleted")
@@ -92,7 +94,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                                                 <td className={classes}>
                                                     <div className="flex items-center gap-3">
                                                         <div className='w-[60px] h-[60px] rounded-md'>
-                                                            <img src={subCat.SubImageUrl} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
+                                                            <img src={`${BASE_URL}/uploads/category/${subCat.SubImageUrl}`} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
                                                         </div>
                                                         <Typography
                                                             variant="small"

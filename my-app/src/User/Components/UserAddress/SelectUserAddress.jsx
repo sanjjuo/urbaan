@@ -6,10 +6,64 @@ import { GoPlus } from "react-icons/go";
 import { useContext } from 'react';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import { RemoveAddressModal } from './RemoveAddressModal';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+import AppLoader from '../../../Loader';
+import toast from 'react-hot-toast';
 
 const SelectUserAddress = () => {
     const navigate = useNavigate()
-    const { handleOpenRemoveModal } = useContext(AppContext)
+    const { BASE_URL} = useContext(AppContext)
+    const [getAddress, setGetAddress] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [openRemoveModal, setOpenRemoveModal] = useState(false);
+    const [selectedId, setSelectedId] = useState(null)
+    const [selectedAddress, setSelectedAddress] = useState(null);
+
+    // remove address modal
+    const handleOpenRemoveModal = (addressId) => {
+        setOpenRemoveModal(!openRemoveModal);
+        setSelectedId(addressId)
+        console.log(addressId);
+    }
+
+    useEffect(() => {
+        const fetchAddress = async () => {
+            try {
+                const userId = localStorage.getItem('userId')
+                const token = localStorage.getItem('userToken')
+
+                const headers = {
+                    Authorization: `Bearer ${token}`
+                }
+                const response = await axios.get(`${BASE_URL}/user/address/view/${userId}`, { headers })
+                setGetAddress(response.data)
+                setIsLoading(false)
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchAddress();
+    }, [])
+
+    const handleRemoveAddress = async (addressId) => {
+        try {
+            const token = localStorage.getItem('userToken')
+
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+
+            const response = await axios.delete(`${BASE_URL}/user/address/delete/${addressId}`, { headers })
+            console.log(response.data);
+            handleOpenRemoveModal()
+            toast.success('Address is deleted')
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
@@ -22,52 +76,78 @@ const SelectUserAddress = () => {
             </div>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
                 <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-5">
-                    <Card className='p-4 xl:p-10 lg:p-10'>
-                        <div className='flex justify-between'>
-                            <div>
-                                <h1 className='text-secondary font-bold'>Home</h1>
-                                <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
-                                <div className='mt-3 flex items-center gap-2'>
-                                    <Link to='/add-delivery-address'><Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
-                                    text-xs py-1 px-6 capitalize font-custom'>Edit</Button></Link>
-                                    <Button onClick={handleOpenRemoveModal} variant='outlined' className='text-deleteBg border-deleteBg font-normal 
-                                    text-xs py-1 px-6 capitalize font-custom'>Remove</Button>
+                    {
+                        isLoading || getAddress.length === 0 ? (
+                            <div className='col-span-2 flex justify-center items-center h-[50vh]'>
+                                <AppLoader />
+                            </div>
+                        ) : getAddress.length === 0 ? (
+                            <>
+                                <div className='flex justify-center items-center'>
+                                    <div className='w-96 h-96'>
+                                        <img src="/no-address.png" alt="" className='w-full h-full object-cover' />
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <Radio name="color" color='pink' className='border-primary border-2' />
-                            </div>
-                        </div>
-                    </Card>
-
-                    <Card className='p-4 xl:p-10 lg:p-10'>
-                        <div className='flex justify-between'>
-                            <div>
-                                <h1 className='text-secondary font-bold'>Work</h1>
-                                <p className='text-sm'>Apartment 304, Building 5,1234 Elm Street, Suite 567Example City, EX 12345PO Box 654321</p>
-                                <div className='mt-3 flex items-center gap-2'>
-                                    <Link to='/add-delivery-address'><Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
-                                    text-xs py-1 px-6 capitalize font-custom'>Edit</Button></Link>
-                                    <Button onClick={handleOpenRemoveModal} variant='outlined' className='text-deleteBg border-deleteBg font-normal 
-                                    text-xs py-1 px-6 capitalize font-custom'>Remove</Button>
-                                </div>
-                            </div>
-                            <div>
-                                <Radio name="color" color='pink' className='border-primary border-2' />
-                            </div>
-                        </div>
-                    </Card>
-                </div>
+                            </>
+                        ) : (
+                            <>
+                                {getAddress.map((address) => (
+                                    <Card className='p-4 xl:p-10 lg:p-10' key={address._id}>
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                <h1 className='text-secondary font-bold capitalize'>{address.addressType}</h1>
+                                                <p className='text-sm capitalize'>{address.address}, {address.landmark}, {address.city}, {address.state}, {address.pincode}</p>
+                                                <div className='mt-3 flex items-center gap-2'>
+                                                    <Link to={{
+                                                        pathname: '/edit-delivery-address'
+                                                    }}
+                                                        state={{ address }}
+                                                    >
+                                                        <Button variant='outlined' className='text-shippedBg border-shippedBg font-normal 
+                                                        text-xs py-1 px-6 capitalize font-custom'>Edit</Button>
+                                                    </Link>
+                                                    <Button onClick={() => handleOpenRemoveModal(address._id)} variant='outlined' className='text-deleteBg border-deleteBg font-normal 
+                                                        text-xs py-1 px-6 capitalize font-custom'>Remove</Button>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <Radio
+                                                    name="address"
+                                                    color="pink"
+                                                    className="border-primary border-2"
+                                                    checked={selectedAddress?._id === address._id}
+                                                    onChange={() => setSelectedAddress(address)}
+                                                />
+                                            </div>
+                                        </div >
+                                    </Card >
+                                ))}
+                            </>
+                        )
+                    }
+                </div >
 
                 <div className='mt-5 flex flex-col xl:flex-row lg:flex-row gap-2 justify-normal xl:justify-center xl:items-center'>
                     <Link to='/add-delivery-address'><Button variant='outlined' className='w-full xl:w-52 lg:w-52 border-primary text-primary text-sm capitalize font-custom 
                     font-normal flex items-center gap-2 justify-center'><GoPlus />Add new address</Button></Link>
-                    <Button className='w-full xl:w-52 lg:w-52 bg-primary text-white text-sm capitalize font-custom 
+                    <Link to={{
+                        pathname: '/user-cart'
+                    }}
+                        state={{
+                            selectedAddress
+                        }}>
+                        <Button className='w-full xl:w-52 lg:w-52 bg-primary text-white text-sm capitalize font-custom 
                     font-normal'>Continue</Button>
+                    </Link>
                 </div>
-            </div>
+            </div >
 
-            <RemoveAddressModal/>
+            <RemoveAddressModal
+                openRemoveModal={openRemoveModal}
+                handleOpenRemoveModal={handleOpenRemoveModal}
+                handleDelete={handleRemoveAddress}
+                addressId={selectedId}
+            />
         </>
     )
 }

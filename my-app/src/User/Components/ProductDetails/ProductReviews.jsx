@@ -21,7 +21,7 @@ const ProductReviews = ({ productDetails }) => {
         setReviews(response.data);
         console.log(response.data);
         console.log("Product ID:", productId);
-console.log("Reviews Data:", reviews);
+      console.log("Reviews Data:", reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }

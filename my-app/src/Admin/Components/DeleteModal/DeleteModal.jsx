@@ -5,9 +5,6 @@ import {
     DialogBody,
     Typography,
 } from "@material-tailwind/react";
-import toast from "react-hot-toast";
-
-// const notify = () => toast('Here is your toast.');
 
 export function DeleteModal({ open, handleOpen, title, description, handleDelete, modalType, catId, SubCatId, carouselId, couponId, productId, }) {
     return (
@@ -46,7 +43,7 @@ export function DeleteModal({ open, handleOpen, title, description, handleDelete
                                 else if (modalType === "products") {
                                     handleDelete(productId);
                                 }
-                                // notify();
+                               
                             }}
                         >
                             Delete

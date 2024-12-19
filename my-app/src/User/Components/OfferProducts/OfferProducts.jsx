@@ -13,21 +13,11 @@ const OfferProducts = () => {
     useEffect(() => {
         const fetchOfferProducts = async () => {
             try {
-                const token = localStorage.getItem('userToken')
-                if (!token) {
-                    alert("Authorization is missing")
-                    return;
-                }
-                console.log(localStorage.getItem('userToken'));
-
-                const headers = {
-                    Authorization: `Bearer ${token}`
-                }
-                const response = await axios.get(`${BASE_URL}/user/products/view-products`, { headers });
+                const response = await axios.get(`${BASE_URL}/user/products/view-products`);
                 const filteredProducts = response.data.filter(product => product.isOfferProduct);
                 setOfferProducts(filteredProducts);
                 setIsLoading(false)
-                console.log(filteredProducts);
+                console.log("offer products:", filteredProducts);
             } catch (error) {
                 console.error("Error fetching offer products:", error);
             }
