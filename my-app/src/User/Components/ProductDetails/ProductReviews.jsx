@@ -7,10 +7,9 @@ import { IoStarOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
 
-const ProductReviews = ({ productDetails }) => {
+const ProductReviews = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
   const { BASE_URL } = useContext(AppContext);
-  const productId = productDetails._id;
   console.log(productId);
   
 

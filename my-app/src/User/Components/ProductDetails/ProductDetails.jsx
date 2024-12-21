@@ -15,18 +15,35 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { TiTick } from "react-icons/ti";
+import { useEffect } from 'react';
 
 const ProductDetails = () => {
-    const { productDetails, handleOpenSizeDrawer, BASE_URL } = useContext(AppContext)
-    const location = useLocation()
+    const { handleOpenSizeDrawer, BASE_URL } = useContext(AppContext)
+    const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
+    const { productId } = location.state || {}
     const navigate = useNavigate();
-    const colorSizes = productDetails.colors[0].sizes;
-    const colorColor = productDetails.colors
-    const features = productDetails.features
+    const [productDetails, setProductDetails] = useState([]);
     const [selectedColor, setSelectedColor] = useState("");
     const [selectedSize, setSelectedSize] = useState("");
+
+
+
+    useEffect(() => {
+        const fetchProductDetails = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/products/product/${productId}`)
+                setProductDetails(response.data)
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchProductDetails()
+    })
+
     console.log(productDetails);
+    console.log("id", productId);
 
 
     const getContrastYIQ = (color) => {
@@ -110,6 +127,9 @@ const ProductDetails = () => {
         }
     };
 
+    const colorSizes = productDetails.colors?.[0]?.sizes || [];
+    const colorColor = productDetails.colors || []
+    const features = productDetails.features || []
 
 
     return (
@@ -249,7 +269,7 @@ const ProductDetails = () => {
 
                             {/* Customer Reviews */}
                             <div className='mt-10'>
-                                <ProductReviews productDetails={productDetails} />
+                                <ProductReviews productId={productId} />
                             </div>
                         </div>
                     </div>

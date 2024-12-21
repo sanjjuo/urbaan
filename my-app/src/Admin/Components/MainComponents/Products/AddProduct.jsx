@@ -307,7 +307,7 @@ const AddProduct = () => {
                 <IoIosArrowBack /> Back</p>
             <h1 className='text-2xl lg:text-3xl font-semibold'>Create Product</h1>
             <form action='' className="grid lg:grid-cols-2 gap-10 mt-5" onSubmit={handleCreateProductSubmit}>
-                <div className='bg-white rounded-xl shadow-md'>
+                <div className='bg-white rounded-xl shadow-md h-fit'>
                     <div className='p-5'>
                         <h2 className="text-xl font-medium mb-3 lg:mb-0 text-secondary">Product Information</h2>
                     </div>
@@ -496,7 +496,7 @@ const AddProduct = () => {
                 {/* second col */}
 
                 {/* photo upload */}
-                <div className='bg-white rounded-xl shadow-md p-5 space-y-6'>
+                <div className='bg-white rounded-xl shadow-md p-5 space-y-6 h-fit'>
                     <div className='flex gap-5'>
                         <div className="flex flex-col justify-center items-center w-72 h-56 border-4 border-dashed border-primary rounded-xl">
                             <input

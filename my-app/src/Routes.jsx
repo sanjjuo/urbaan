@@ -36,6 +36,8 @@ import AddUserAddress from './User/Components/UserAddress/AddUserAddress';
 import ApplyCoupon from './User/Components/UserCart/ApplyCoupon';
 import EditUserAddress from './User/Components/UserAddress/EditUserAddress';
 import Checkout from './User/Components/UserCart/Checkout';
+import NotFound from './NotFound';
+import UserProfileDetails from './User/Components/UserProfile/UserProfileDetails';
 
 const FullRoutes = () => {
     return (
@@ -57,7 +59,7 @@ const RoutesWithLocation = () => {
         <>
             <ScrollToTop />
             {/* Hide Navbar on login and OTP pages and Show Navbar only if not on an admin route */}
-            {!isAdminRoute && !isLoginOrOtpPage && <UserNavbar />}
+            {!isAdminRoute && !isLoginOrOtpPage && !location.pathname.includes('*') && <UserNavbar />}
             <Routes>
                 {/* Routes of user section */}
                 <Route path='/' element={<UserHome />} />
@@ -68,6 +70,7 @@ const RoutesWithLocation = () => {
                 <Route path='/write-review' element={<WriteReview />} />
                 <Route path='/favourite' element={<FavouriteProduct />} />
                 <Route path='/user-profile' element={<UserProfile />} />
+                <Route path='/user-profile-details' element={<UserProfileDetails/>}/>
                 <Route path='/edit-user-profile' element={<EditUserProfile />} />
                 <Route path='/view-all-category' element={<ViewAllCategory />} />
                 <Route path='/all-category' element={<AllCategory />} />
@@ -96,6 +99,7 @@ const RoutesWithLocation = () => {
                     <Route path='userDetails' element={<ViewUserDetails />} />
                     <Route path='editProduct' element={<EditProduct />} />
                 </Route>
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </>
     );

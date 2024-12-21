@@ -12,6 +12,7 @@ import { AppContext } from '../../../StoreContext/StoreContext';
 import AppLoader from '../../../Loader';
 import namer from 'color-namer'; // Import the color-namer library
 import toast from 'react-hot-toast';
+import { HiOutlineXMark } from "react-icons/hi2";
 
 const UserCart = () => {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ const UserCart = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [cartItems, setCartItems] = useState(viewCart.items || []); // for get details
     const [isUpdating, setIsUpdating] = useState(false);
+    const [checkoutId, setCheckoutId] = useState('')
 
     // Function to get the nearest named color
     const getNamedColor = (colorCode) => {
@@ -62,6 +64,7 @@ const UserCart = () => {
     }, [BASE_URL, navigate]);
 
 
+    // handle update
     const updateQuantity = async (itemId, newQuantity) => {
         if (isUpdating || newQuantity <= 0) return;
         setIsUpdating(true);
@@ -99,7 +102,7 @@ const UserCart = () => {
     };
 
 
-
+    // handle remove
     const removeCart = async (itemId) => {
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
@@ -111,10 +114,20 @@ const UserCart = () => {
             return;
         }
 
+        // Find the item in the cartItems array
+        const item = cartItems.find(item => item.productId._id === itemId);
+
+        if (!item) {
+            toast.error('Item not found in the cart.');
+            return;
+        }
+
         try {
             const payload = {
                 userId: userId,
-                productId: itemId,
+                productId: item.productId._id,
+                color: item.color,
+                size: item.size,
             };
 
             const response = await axios.delete(`${BASE_URL}/user/cart/remove`, {
@@ -126,14 +139,14 @@ const UserCart = () => {
 
             if (response.status === 200) {
                 // Remove item from local state
-                const updatedCartItems = cartItems.filter(item => item.productId._id !== itemId);
+                const updatedCartItems = cartItems.filter(cartItem => cartItem.productId._id !== itemId);
                 setCartItems(updatedCartItems);
 
                 // Update global cart state
                 setViewCart(prevViewCart => ({
                     ...prevViewCart,
                     items: updatedCartItems,
-                    totalPrice: updatedCartItems.reduce((total, item) => total + item.price * item.quantity, 0),
+                    totalPrice: updatedCartItems.reduce((total, cartItem) => total + cartItem.price * cartItem.quantity, 0),
                 }));
 
                 toast.success('Item removed from the cart');
@@ -148,29 +161,61 @@ const UserCart = () => {
     };
 
 
+    // handle checkout
     const handleCheckout = async () => {
         try {
-            const token = localStorage.getItem('userToken')
-            const userId = localStorage.getItem('userId')
+            const token = localStorage.getItem('userToken');
+            const userId = localStorage.getItem('userId');
 
-            const checkoutPayLoad = {
+            if (!selectedAddress || !selectedAddress._id) {
+                toast.error("Please select a valid delivery address.");
+                return null; // Ensure the function exits early on error
+            }
+
+            const checkoutPayload = {
                 userId: userId,
                 cartId: viewCart._id,
                 cartItems: cartItems,
                 addressId: selectedAddress._id,
-                totalPrice: viewCart.totalPrice
-            }
+                totalPrice: viewCart.totalPrice,
+            };
 
-            const response = await axios.post(`${BASE_URL}/user/checkout/checkout`, checkoutPayLoad, {
+            const response = await axios.post(`${BASE_URL}/user/checkout/checkout`, checkoutPayload, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const newCheckoutId = response.data.checkout._id;
+            setCheckoutId(newCheckoutId); // Update local state for completeness
+            return newCheckoutId; // Return the checkoutId for further use
+        } catch (error) {
+            console.error("Error during checkout:", error.response?.data || error.message);
+            toast.error("Failed to initiate checkout. Please try again.");
+            return null; // Return null to signal failure
+        }
+    };
+
+    // handle clear
+    const handleClearAll = async () => {
+        try {
+            const token = localStorage.getItem('userToken')
+            const userId = localStorage.getItem('userId')
+            const response = await axios.delete(`${BASE_URL}/user/cart/clear/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
             console.log(response.data);
+            setCartItems([]);
+            setViewCart({ items: [] });
+            toast.success('Cart cleared successfully')
         } catch (error) {
             console.log(error);
         }
     }
+
+
 
 
     return (
@@ -184,7 +229,9 @@ const UserCart = () => {
                     My cart<RiShoppingCartLine />
                 </h2>
 
-                <div className='grid grid-cols-1 xl:grid-cols-5 gap-5 mt-10'>
+                <p onClick={handleClearAll} className='mt-10 capitalize flex items-center gap-0 text-sm hover:text-primary cursor-pointer'>
+                    clear all <HiOutlineXMark className='text-lg' /></p>
+                <div className='grid grid-cols-1 xl:grid-cols-5 gap-5 mt-5'>
                     <div className='space-y-5 xl:col-span-3 lg:col-span-2'>
                         {
                             isLoading ? (
@@ -308,13 +355,22 @@ const UserCart = () => {
                                 <h1 className='text-secondary font-medium'>Delivery Address</h1>
                                 <Link to='/select-delivery-address'><p className='text-primary underline text-sm font-medium'>Change</p></Link>
                             </div>
-                            <p className='text-sm font-normal mb-3'>
+                            <p className='text-sm font-normal mb-3 capitalize'>
                                 {selectedAddress?.address}, {selectedAddress?.landmark}, {selectedAddress?.city},
                                 {selectedAddress?.state}, {selectedAddress?.pincode}
                             </p>
-                            <Link onClick={handleCheckout} to='/checkout'>
-                                <Button className='w-full bg-primary font-custom font-normal text-sm capitalize'>Checkout</Button>
-                            </Link>
+                            <Button
+                                onClick={async () => {
+                                    const newCheckoutId = await handleCheckout(); // Ensure handleCheckout returns checkoutId
+                                    if (newCheckoutId) {
+                                        navigate('/checkout', { state: { checkoutId: newCheckoutId } });
+                                    }
+                                }}
+                                className='w-full bg-primary font-custom font-normal text-sm capitalize'
+                            >
+                                Checkout
+                            </Button>
+
 
                         </Card>
                     </div>

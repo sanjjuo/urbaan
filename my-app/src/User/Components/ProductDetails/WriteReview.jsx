@@ -33,6 +33,8 @@ const WriteReview = () => {
         "👍 Would you recommend it?",
     ];
 
+    
+
     return (
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">

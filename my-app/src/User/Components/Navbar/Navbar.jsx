@@ -61,7 +61,7 @@ const NavList = () => {
 }
 
 const UserNavbar = () => {
-    const { openDrawer, handleOpenDrawer, handleCloseDrawer, viewCart } = useContext(AppContext)
+    const { openDrawer, handleOpenDrawer, handleCloseDrawer, viewCart, wishlist } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const isCartPage = location.pathname === "/user-cart";
@@ -69,8 +69,8 @@ const UserNavbar = () => {
 
 
     // pages where navbar don't visible
-    const noNavbar = ["/product-details", "/customer-reviews", "/write-review", "/add-delivery-address","/edit-delivery-address", "/select-delivery-address", "/orders-tracking",
-        "/select-tracking", "/orders-tracking", "/all-category"]
+    const noNavbar = ["/product-details", "/customer-reviews", "/write-review", "/add-delivery-address", "/edit-delivery-address", "/select-delivery-address", "/orders-tracking",
+        "/select-tracking", "/orders-tracking", "/all-category",]
 
     // Check if current path matches any of the visible routes
     if (noNavbar.includes(location.pathname)) {
@@ -96,8 +96,10 @@ const UserNavbar = () => {
                         <div>
                             <ul className='flex items-center gap-10'>
                                 <Link to="/favourite">
-                                    <li className="text-2xl text-secondary cursor-pointer">
+                                    <li className="text-2xl text-secondary cursor-pointer relative">
                                         {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
+                                        <Chip value={wishlist?.items?.length || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
+                                        -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                                     </li>
                                 </Link>
                                 <Link to='/user-cart'>

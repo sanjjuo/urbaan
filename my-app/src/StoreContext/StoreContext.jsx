@@ -8,13 +8,9 @@ const StoreContext = ({ children }) => {
     const [openDrawer, setDrawerOpen] = useState(false);
     const [openBottomDrawer, setBottomDrawerOpen] = useState(false);
     const [openSizeDrawer, setOpenSizeDrawer] = useState(false);
-    const [productDetails, setProductDetails] = useState(() => {
-        // Load product details from localStorage
-        const savedDetails = localStorage.getItem('productDetails');
-        return savedDetails ? JSON.parse(savedDetails) : {};
-    });
     const [modalType, setModalType] = useState(null); // New state for modal type
     const [viewCart, setViewCart] = useState([]) //for UserCart.jsx and navbar
+    const [wishlist, setWishlist] = useState([]) //for favouriteProduct.jsx and navbar
 
     // Handle modal
     const handleOpen = (modal, type) => {
@@ -22,18 +18,9 @@ const StoreContext = ({ children }) => {
         setModalType(type); // Set the modal type
     };
 
-
-
     // Handle drawer
     const handleOpenDrawer = () => setDrawerOpen(true);
     const handleCloseDrawer = () => setDrawerOpen(false);
-
-    // Handle product details
-    const handleProductDetails = (details) => {
-        setProductDetails(details);
-        // Persist product details in localStorage
-        localStorage.setItem('productDetails', JSON.stringify(details));
-    };
 
     // Handle view all bottom drawer
     const handleOpenBottomDrawer = () => setBottomDrawerOpen(true);
@@ -56,9 +43,6 @@ const StoreContext = ({ children }) => {
                 openDrawer,
                 handleOpenDrawer,
                 handleCloseDrawer,
-                setProductDetails,
-                handleProductDetails,
-                productDetails,
                 openBottomDrawer,
                 handleOpenBottomDrawer,
                 handleCloseBottomDrawer,
@@ -68,6 +52,8 @@ const StoreContext = ({ children }) => {
                 modalType, // Provide modal type
                 viewCart,
                 setViewCart,
+                wishlist,
+                setWishlist
             }}
         >
             {children}

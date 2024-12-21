@@ -49,16 +49,18 @@ const UserProfile = () => {
 
         <div className='mt-10 flex justify-center items-center'>
           <ul className='space-y-3 xl:space-y-5 lg:space-y-5 w-72'>
-            <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
+            {/* <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
               <span className='flex items-center gap-2 text-base'><RiAccountBoxLine className='text-lg' />Account Details</span>
               <span className='text-sm xl:text-base lg:text-base'>
                 <IoIosArrowForward /></span>
-            </li>
-            <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
-              <span className='flex items-center gap-2 text-base'><TbAddressBook className='text-lg' />Address</span>
-              <span className='text-sm xl:text-base lg:text-base'>
-                <IoIosArrowForward /></span>
-            </li>
+            </li> */}
+            <Link to='/user-profile-details'>
+              <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
+                <span className='flex items-center gap-2 text-base'><TbAddressBook className='text-lg' />Address</span>
+                <span className='text-sm xl:text-base lg:text-base'>
+                  <IoIosArrowForward /></span>
+              </li>
+            </Link>
             <li className='flex items-center justify-between bg-white p-3 rounded-xl shadow-md'>
               <span className='flex items-center gap-2 text-base'><LiaClipboardListSolid className='text-lg' />Orders</span>
               <span className='text-sm xl:text-base lg:text-base'>

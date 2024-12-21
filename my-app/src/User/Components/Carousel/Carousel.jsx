@@ -57,7 +57,7 @@ const UserCarousel = () => {
                   className="relative w-full h-56 lg:h-[500px] xl:h-[450px] shadow-md rounded-2xl"
                 >
                   <img
-                    src={`${BASE_URL}/${slider.image || ''}`}
+                    src={`${BASE_URL}/uploads/category/${slider.image}`}
                     alt={`Image showcasing ${slider.title}`}
                     className="h-full w-full object-cover rounded-2xl"
                   />
