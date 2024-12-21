@@ -57,18 +57,7 @@ const ProductDetails = () => {
 
 
     const userId = localStorage.getItem('userId')
-    if (!userId) {
-        alert("Authorization is missing")
-        navigate('/login-user')
-        return;
-    }
-
     const userToken = localStorage.getItem('userToken');
-    if (!userToken) {
-        alert("Authorization token is missing");
-        navigate('/login-user')
-        return;
-    }
 
     const addToCart = async () => {
         try {
@@ -77,6 +66,19 @@ const ProductDetails = () => {
                 toast.error("Please select a color and size.");
                 return;
             }
+
+            if (!userId) {
+                alert("Authorization is missing")
+                navigate('/login-user')
+                return;
+            }
+
+            if (!userToken) {
+                alert("Authorization userId is missing")
+                navigate('/login-user')
+                return;
+            }
+
 
             const payload = {
                 userId: userId,

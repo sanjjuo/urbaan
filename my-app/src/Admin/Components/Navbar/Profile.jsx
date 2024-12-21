@@ -23,7 +23,7 @@ const Profile = () => {
               variant="circular"
               alt="tania andrew"
               className="cursor-pointer"
-              src="/profile.jpg"
+              src="/admin.png"
             />
             <ul className='cursor-pointer flex flex-col items-center'>
               <li className='text-secondary text-base font-bold'>Amber Heard</li>

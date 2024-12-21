@@ -14,7 +14,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 
 
 const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
-    const { setSelectedCategory, BASE_URL } = useContext(AppContext);
+    const { setSelectedCategory, BASE_URL, profile } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate()
@@ -33,6 +33,7 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
         };
         fetchCategories();
     }, [BASE_URL]);
+
 
 
     const handleCategory = (category) => {
@@ -57,8 +58,9 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                                     <div className='w-16 h-16'>
                                         <img src="/userProfile.jpg" alt="" className='w-full h-full rounded-full object-cover' />
                                     </div>
-                                    <h1 className='font-custom font-medium text-base flex items-center gap-1'>
-                                        <Link to='/edit-user-profile'><TiEdit className='text-primary' /></Link>Natalie Portman</h1>
+                                    <h1 className='font-custom font-medium text-base capitalize'>
+                                        {profile.name}
+                                    </h1>
                                 </div>
                                 <div className='absolute -top-2 -right-2'>
                                     <HiMiniXMark onClick={handleCloseDrawer} className='text-2xl text-gray-500' />
@@ -114,10 +116,15 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                     </ul>
                 </div>
 
-                <div className="my-8 p-0">
-                    <Button onClick={handleLogout} className='bg-primary font-custom font-normal
-                        capitalize text-sm flex items-center gap-1'><FaSignOutAlt />Log out</Button>
-                </div>
+                {token ? (
+                    <div className="my-8 p-0">
+                        <Button onClick={handleLogout} className='bg-primary font-custom font-normal
+         capitalize text-sm flex items-center gap-1'><FaSignOutAlt />Log out</Button>
+                    </div>
+                ) : (
+                    ""
+                )}
+
 
             </Drawer>
         </>

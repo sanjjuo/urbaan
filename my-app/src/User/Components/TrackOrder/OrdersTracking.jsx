@@ -7,7 +7,7 @@ const OrdersTracking = () => {
     const navigate = useNavigate()
     return (
         <>
-            <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
+            <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0 xl:hidden lg:hidden">
                 <h1
                     className="flex items-center gap-5 text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}

@@ -25,7 +25,6 @@ import CustomerReviews from './User/Components/ProductDetails/CustomerReviews';
 import WriteReview from './User/Components/ProductDetails/WriteReview';
 import FavouriteProduct from './User/Components/FavouriteProduct/FavouriteProduct';
 import UserProfile from './User/Components/UserProfile/UserProfile';
-import EditUserProfile from './User/Components/UserProfile/EditUserProfile';
 import ViewAllCategory from './User/Components/UserCategory/ViewAllCategory';
 import UserSearch from './User/Components/UserSearch/UserSearch';
 import UserCart from './User/Components/UserCart/UserCart';
@@ -37,7 +36,8 @@ import ApplyCoupon from './User/Components/UserCart/ApplyCoupon';
 import EditUserAddress from './User/Components/UserAddress/EditUserAddress';
 import Checkout from './User/Components/UserCart/Checkout';
 import NotFound from './NotFound';
-import UserProfileDetails from './User/Components/UserProfile/UserProfileDetails';
+import UserAddress from './User/Components/UserProfile/UserAddress';
+import UserOrders from './User/Components/UserProfile/UserOrders';
 
 const FullRoutes = () => {
     return (
@@ -70,8 +70,8 @@ const RoutesWithLocation = () => {
                 <Route path='/write-review' element={<WriteReview />} />
                 <Route path='/favourite' element={<FavouriteProduct />} />
                 <Route path='/user-profile' element={<UserProfile />} />
-                <Route path='/user-profile-details' element={<UserProfileDetails/>}/>
-                <Route path='/edit-user-profile' element={<EditUserProfile />} />
+                <Route path='/user-addresses' element={<UserAddress/>}/>
+                <Route path='/user-orders' element={<UserOrders/>}/>
                 <Route path='/view-all-category' element={<ViewAllCategory />} />
                 <Route path='/all-category' element={<AllCategory />} />
                 <Route path='/user-search' element={<UserSearch />} />

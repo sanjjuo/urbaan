@@ -11,6 +11,7 @@ const StoreContext = ({ children }) => {
     const [modalType, setModalType] = useState(null); // New state for modal type
     const [viewCart, setViewCart] = useState([]) //for UserCart.jsx and navbar
     const [wishlist, setWishlist] = useState([]) //for favouriteProduct.jsx and navbar
+    const [profile, setProfile] = useState([]) //for userprofile and mobile sidebar
 
     // Handle modal
     const handleOpen = (modal, type) => {
@@ -53,7 +54,9 @@ const StoreContext = ({ children }) => {
                 viewCart,
                 setViewCart,
                 wishlist,
-                setWishlist
+                setWishlist,
+                profile,
+                setProfile
             }}
         >
             {children}
