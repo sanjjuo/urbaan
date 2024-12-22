@@ -13,6 +13,7 @@ import AppLoader from '../../../Loader';
 import namer from 'color-namer'; // Import the color-namer library
 import toast from 'react-hot-toast';
 import { HiOutlineXMark } from "react-icons/hi2";
+import { ApplyCouponModal } from './ApplyCouponModal';
 
 const UserCart = () => {
     const navigate = useNavigate();
@@ -23,6 +24,11 @@ const UserCart = () => {
     const [cartItems, setCartItems] = useState(viewCart.items || []); // for get details
     const [isUpdating, setIsUpdating] = useState(false);
     const [checkoutId, setCheckoutId] = useState('')
+    const [openCoupon, setOpenCoupon] = React.useState(false); // modal for coupon
+
+
+    // handle Coupon modal
+    const handleCouponModalOpen = () => setOpenCoupon(!openCoupon);
 
     // Function to get the nearest named color
     const getNamedColor = (colorCode) => {
@@ -224,15 +230,14 @@ const UserCart = () => {
                 <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
                 </h1>
-
-                <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 mt-5'>
+                {/* 
+                <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 mt-0'>
                     My cart<RiShoppingCartLine />
-                </h2>
-
-                <p onClick={handleClearAll} className='mt-10 capitalize flex items-center gap-0 text-sm hover:text-primary cursor-pointer'>
-                    clear all <HiOutlineXMark className='text-lg' /></p>
+                </h2> */}
                 <div className='grid grid-cols-1 xl:grid-cols-5 gap-5 mt-5'>
                     <div className='space-y-5 xl:col-span-3 lg:col-span-2'>
+                        <p onClick={handleClearAll} className='capitalize flex justify-end items-center gap-1 text-sm hover:text-primary cursor-pointer'>
+                            clear all <HiOutlineXMark className='text-lg' /></p>
                         {
                             isLoading ? (
                                 <div className='col-span-2 flex justify-center items-center h-[50vh]'>
@@ -240,9 +245,16 @@ const UserCart = () => {
                                 </div>
                             ) : cartItems.length === 0 ? (
                                 <>
-                                    <div className='flex justify-center items-center'>
-                                        <div className='w-96 h-96'>
+                                    <div className='flex flex-col justify-center items-center h-[60vh] !mb-20'>
+                                        <div className='w-72 h-72 xl:w-96 xl:h-96 lg:w-96 lg:h-96'>
                                             <img src="/empty-cart.png" alt="" className='w-full h-full object-cover' />
+                                        </div>
+                                        <div className='space-y-3 flex flex-col justify-center items-center'>
+                                            <h1 className='text-2xl font-semibold'>Your Cart is Empty</h1>
+                                            <p className='text-center text-gray-600'>Looks like you haven’t added anything to your cart yet</p>
+                                            <Link to='/'>
+                                                <Button className='bg-primary w-52 text-sm capitalize font-custom font-normal'>Go shopping</Button>
+                                            </Link>
                                         </div>
                                     </div>
                                 </>
@@ -310,20 +322,19 @@ const UserCart = () => {
                                 ))
                             )
                         }
-
-                        {/* coupon */}
-                        <Card className='p-4 xl:p-6 lg:p-6'>
-                            <Link to='/apply-coupon'>
-                                <div className='flex items-center justify-between'>
-                                    <h1 className='flex items-center gap-3 text-base text-secondary font-medium'>
-                                        <RiCoupon4Line className='text-xl' />Apply Coupon</h1>
-                                    <IoIosArrowForward className='text-secondary' />
-                                </div>
-                            </Link>
-                        </Card>
                     </div>
 
                     <div className='xl:col-span-2 space-y-5'>
+                        {/* coupon */}
+                        <Card className='p-4'>
+                            <Link onClick={handleCouponModalOpen}>
+                                <div className='flex items-center justify-between'>
+                                    <h1 className='flex items-center gap-3 text-base text-secondary font-medium'>
+                                        <RiCoupon4Line className='text-xl' />Apply Coupon</h1>
+                                    <IoIosArrowForward className='text-secondary text-2xl' />
+                                </div>
+                            </Link>
+                        </Card>
                         {/* total */}
                         <Card className='p-4 xl:p-6 lg:p-6'>
                             <h1 className='text-secondary font-medium'>Cart Totals</h1>
@@ -376,6 +387,11 @@ const UserCart = () => {
                     </div>
                 </div>
             </div>
+
+            <ApplyCouponModal
+                handleCouponModalOpen={handleCouponModalOpen}
+                openCoupon={openCoupon}
+            />
         </>
     );
 };

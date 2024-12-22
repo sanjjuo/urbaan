@@ -2,8 +2,34 @@ import React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PlaceMenu } from './PlaceMenu';
 import MonthMenu from './MonthMenu';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useContext } from 'react';
+import { AppContext } from '../../../../StoreContext/StoreContext';
 
 const SalesGraph = () => {
+    const [graph, setGraph] = useState([])
+    const { BASE_URL } = useContext(AppContext)
+
+    useEffect(() => {
+        const fetchGraphDetails = async () => {
+            try {
+                const token = localStorage.getItem('token')
+                const response = await axios.get(`${BASE_URL}/admin/dashboard/view-graph?month=12`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                setGraph(response.data)
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchGraphDetails();
+    }, [])
+    
     return (
         <div className='p-10 mt-10 bg-white rounded-xl shadow-md'>
             <div className="flex items-center justify-between">
@@ -40,7 +66,7 @@ const SalesGraph = () => {
                             data: [20, 28, 49, 50, 30, 54, 85, 52, 58, 61, 23, 25], // Y-axis values corresponding to X-axis
                             area: true,
                             color: '#A3BDF533',
-                             pointLabel: (params) => `${params.y}%`
+                            pointLabel: (params) => `${params.y}%`
                         },
                     ]}
                     className="w-full"

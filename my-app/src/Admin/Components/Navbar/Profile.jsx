@@ -25,10 +25,7 @@ const Profile = () => {
               className="cursor-pointer"
               src="/admin.png"
             />
-            <ul className='cursor-pointer flex flex-col items-center'>
-              <li className='text-secondary text-base font-bold'>Amber Heard</li>
-              <li className='text-sm text-gray-400 font-normal'>Admin</li>
-            </ul>
+              <p className='text-sm text-secondary font-normal'>Admin</p>
           </div>
         </MenuHandler>
         <MenuList className='rounded-xl shadow-md !w-[50px] py-2 px-0 !m-0'>

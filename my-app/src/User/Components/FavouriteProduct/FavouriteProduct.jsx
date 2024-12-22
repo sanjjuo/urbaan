@@ -70,19 +70,19 @@ const FavouriteProduct = () => {
     }
 
     return (
-        <div className='bg-userBg p-4 xl:p-16 lg:p-16 space-y-8 xl:space-y-14 lg:space-y-14 h-screen'>
+        <div className='bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto p-4 xl:p-16 lg:p-16 space-y-8 xl:space-y-14 lg:space-y-14'>
             <h1
                 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
                 onClick={() => navigate(-1)}
             >
-                <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> My Wishlist
+                <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
             </h1>
 
-            <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 mt-5'>
+            {/* <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 !mt-0'>
                 My Wishlist<RiHeart3Line />
-            </h2>
+            </h2> */}
 
-            <p onClick={handleWishlistClear} className='mt-10 capitalize flex items-center gap-0 text-sm hover:text-primary cursor-pointer'>
+            <p onClick={handleWishlistClear} className='!mt-0 capitalize flex justify-end items-center gap-0 text-sm hover:text-primary cursor-pointer'>
                 clear all <HiOutlineXMark className='text-lg' /></p>
 
             {isLoading ? (
@@ -90,19 +90,21 @@ const FavouriteProduct = () => {
                     <AppLoader />
                 </div>
             ) : wishlistProducts.length === 0 ? (
-                <div className='flex flex-col justify-center items-center'>
-                    <div className='w-20 h-20 mb-10'>
-                        <img src="/favorite.png" alt="Empty Wishlist" className='w-full h-full object-cover' />
+                <div className='flex flex-col justify-center items-center !mt-0 mb-20'>
+                    <div className='w-64 h-64 xl:w-72 xl:h-72 lg:w-72 lg:h-72'>
+                        <img src="/favourite.png" alt="Empty Wishlist" className='w-full h-full object-cover' />
                     </div>
-                    <p className='font-medium text-lg xl:text-xl lg:text-xl mb-3'>Your wishlist is Empty</p>
-                    <p className='font-normal text-xs xl:text-sm lg:text-sm text-gray-600 text-center mb-3'>
-                        You can add an item to your favourites by clicking “Heart Icon”
-                    </p>
-                    <Link to='/'>
-                        <Button className='bg-primary text-sm capitalize w-48 font-custom font-normal'>
-                            Go Shopping
-                        </Button>
-                    </Link>
+                    <div className='space-y-3 flex flex-col justify-center items-center'>
+                    <h1 className='text-2xl font-semibold'>Your wishlist is Empty</h1>
+                    <p className='text-center text-gray-600'>
+                            You can add an item to your favourites by clicking “Heart Icon”
+                        </p>
+                        <Link to='/'>
+                            <Button className='bg-primary text-sm capitalize w-48 font-custom font-normal'>
+                                Go Shopping
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
             ) : (
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5'>

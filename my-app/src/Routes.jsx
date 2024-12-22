@@ -32,12 +32,12 @@ import SelectUserAddress from './User/Components/UserAddress/SelectUserAddress';
 import OrdersTracking from './User/Components/TrackOrder/OrdersTracking';
 import AllCategory from './User/Components/UserCategory/AllCategory';
 import AddUserAddress from './User/Components/UserAddress/AddUserAddress';
-import ApplyCoupon from './User/Components/UserCart/ApplyCoupon';
 import EditUserAddress from './User/Components/UserAddress/EditUserAddress';
 import Checkout from './User/Components/UserCart/Checkout';
 import NotFound from './NotFound';
 import UserAddress from './User/Components/UserProfile/UserAddress';
 import UserOrders from './User/Components/UserProfile/UserOrders';
+import Delivery from './Admin/Components/MainComponents/Delivery/Delivery';
 
 const FullRoutes = () => {
     return (
@@ -70,14 +70,13 @@ const RoutesWithLocation = () => {
                 <Route path='/write-review' element={<WriteReview />} />
                 <Route path='/favourite' element={<FavouriteProduct />} />
                 <Route path='/user-profile' element={<UserProfile />} />
-                <Route path='/user-addresses' element={<UserAddress/>}/>
-                <Route path='/user-orders' element={<UserOrders/>}/>
+                <Route path='/user-addresses' element={<UserAddress />} />
+                <Route path='/user-orders' element={<UserOrders />} />
                 <Route path='/view-all-category' element={<ViewAllCategory />} />
                 <Route path='/all-category' element={<AllCategory />} />
                 <Route path='/user-search' element={<UserSearch />} />
                 <Route path='/user-cart' element={<UserCart />} />
                 <Route path='/checkout' element={<Checkout />} />
-                <Route path='/apply-coupon' element={<ApplyCoupon />} />
                 <Route path='/add-delivery-address' element={<AddUserAddress />} />
                 <Route path='/edit-delivery-address' element={<EditUserAddress />} />
                 <Route path='/select-delivery-address' element={<SelectUserAddress />} />
@@ -94,6 +93,7 @@ const RoutesWithLocation = () => {
                     <Route path='orderlist' element={<OrderList />} />
                     <Route path='coupon' element={<Coupons />} />
                     <Route path='userslist' element={<UsersList />} />
+                    <Route path='delivery' element={<Delivery />} />
                     <Route path='invoice' element={<Invoice />} />
                     <Route path='addProduct' element={<AddProduct />} />
                     <Route path='userDetails' element={<ViewUserDetails />} />

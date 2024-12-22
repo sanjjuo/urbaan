@@ -14,6 +14,7 @@ import { RiCouponLine } from "react-icons/ri";
 import { PiUsersBold } from "react-icons/pi";
 import { TbFileInvoice } from "react-icons/tb";
 import { MdOutlineViewCarousel } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
 
 export function AppSidebar() {
@@ -64,7 +65,7 @@ export function AppSidebar() {
                         <img src="/logo.png" alt="" className='w-full object-contain' />
                     </div></Link>
                 </div>
-                <List className='mt-14 px-4 space-y-1'>
+                <List className='mt-8 px-4 space-y-1'>
                     <Link to="/adminHome">
                         <ListItem onClick={() => setActiveLink('dashboard')} className={` text-secondary bg-gray-100 p-3 text-base font-medium transition-all duration-300 ease-in-out
                             ${activeLink === "dashboard" ? "!bg-primary text-white py-6 focus:!text-white" : "bg-none"}`}>
@@ -144,6 +145,18 @@ export function AppSidebar() {
                         </ListItem>
 
                     </Link>
+
+                    <Link to='/adminHome/delivery'>
+                        <ListItem onClick={() => setActiveLink('delivery')} className={`text-secondary bg-gray-100 p-3 text-base font-medium transition-all duration-300 ease-in-out
+                            ${activeLink === "delivery" ? "!bg-primary text-white py-6 focus:!text-white" : "bg-none"}`}>
+                            <ListItemPrefix>
+                                <TbTruckDelivery className="h-5 w-5" />
+                            </ListItemPrefix>
+                            Delivery
+                        </ListItem>
+
+                    </Link>
+
                     <Link to='/adminHome/invoice'>
                         <ListItem onClick={() => setActiveLink('invoice')} className={`text-secondary bg-gray-100 p-3 text-base font-medium transition-all duration-300 ease-in-out
                             ${activeLink === "invoice" ? "!bg-primary text-white py-6 focus:!text-white" : "bg-none"}`}>
