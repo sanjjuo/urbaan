@@ -46,7 +46,7 @@ const UserCart = () => {
         const token = localStorage.getItem('userToken');
 
         if (!userId || !token) {
-            alert("User is not logged in or authorization is missing.");
+            toast.error("User is not logged in or authorization is missing.");
             navigate('/login-user');
             return;
         }
@@ -123,7 +123,7 @@ const UserCart = () => {
 
         // Ensure user is authenticated
         if (!userId || !token) {
-            alert("User is not logged in or authorization is missing.");
+            toast.error("User is not logged in or authorization is missing.");
             navigate('/login-user');
             return;
         }
