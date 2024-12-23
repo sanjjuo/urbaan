@@ -56,7 +56,7 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                             <div className="relative border-b-2 pb-5">
                                 <div className='flex flex-col justify-center items-center gap-3'>
                                     <div className='w-16 h-16'>
-                                        <img src="/userProfile.jpg" alt="" className='w-full h-full rounded-full object-cover' />
+                                        <img src="/userProfile.png" alt="" className='w-full h-full rounded-full object-cover' />
                                     </div>
                                     <h1 className='font-custom font-medium text-base capitalize'>
                                         {profile.name}

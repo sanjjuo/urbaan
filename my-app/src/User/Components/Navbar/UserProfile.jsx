@@ -29,7 +29,7 @@ export function UserProfile() {
                     variant="circular"
                     alt="tania andrew"
                     className="cursor-pointer w-10 h-10"
-                    src="/userProfile.jpg"
+                    src="/userProfile.png"
                 />
             </MenuHandler>
             <MenuList>
@@ -38,14 +38,6 @@ export function UserProfile() {
                         <HiMiniUserCircle />
                         <Typography variant="small" className="font-medium font-custom">
                             My Profile
-                        </Typography>
-                    </MenuItem>
-                </Link>
-                <Link to='/edit-user-profile' className='outline-none'>
-                    <MenuItem className="flex items-center gap-2 text-xl hover:!text-primary">
-                        <IoMdSettings />
-                        <Typography variant="small" className="font-medium font-custom">
-                            Edit Profile
                         </Typography>
                     </MenuItem>
                 </Link>

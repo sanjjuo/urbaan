@@ -1,7 +1,46 @@
 import { Button } from '@material-tailwind/react'
+import axios from 'axios'
 import React from 'react'
+import { useContext } from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { AppContext } from '../../../../StoreContext/StoreContext'
+import toast from 'react-hot-toast'
 
-const EditDelivery = () => {
+const EditDelivery = ({ initialDelivery }) => {
+    const { BASE_URL } = useContext(AppContext)
+    const [editQuantity, setEditQuantity] = useState('')
+    const [editDeliveryFee, setEditDeliveryFee] = useState('')
+
+    useEffect(() => {
+        if (initialDelivery) {
+            setEditQuantity(initialDelivery.quantity);
+            setEditDeliveryFee(initialDelivery.deliveryFee)
+        }
+    }, [initialDelivery])
+
+    // handle function
+    const handleEditDeliverySubmit = async (e) => {
+        e.preventDefault();
+        try {
+
+            const token = localStorage.getItem('token')
+            const editDeliverypayload = {
+                deliveryFee: editDeliveryFee,
+                quantity: editQuantity
+            }
+
+            const response = await axios.patch(`${BASE_URL}/admin/delivery-fee/update/${initialDelivery._id}`, editDeliverypayload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data.data);
+            toast.success("Delivery Fees is updated")
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <>
             <div className="bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out">
@@ -11,14 +50,14 @@ const EditDelivery = () => {
                 <hr />
                 <div className="p-5">
                     <form className="space-y-5"
-                    // onSubmit={handleCategoryFormSubmit}
+                        onSubmit={handleEditDeliverySubmit}
                     >
                         {/* quantity */}
                         <div className="flex flex-col gap-1">
                             <label htmlFor="name" className="font-normal text-base">Quantity</label>
                             <input
-                                // value={createCategoryForm.name}
-                                // onChange={handleCategoryInputChange}
+                                value={editQuantity}
+                                onChange={(e) => setEditQuantity(e.target.value)}
                                 type="number"
                                 name="quantity"
                                 id="quantity"
@@ -31,8 +70,8 @@ const EditDelivery = () => {
                         <div className="flex flex-col gap-1">
                             <label htmlFor="name" className="font-normal text-base">Delivery Charge</label>
                             <input
-                                // value={createCategoryForm.name}
-                                // onChange={handleCategoryInputChange}
+                                value={editDeliveryFee}
+                                onChange={(e) => setEditDeliveryFee(e.target.value)}
                                 type="number"
                                 name="delivery"
                                 id="delivery"

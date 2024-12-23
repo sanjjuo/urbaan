@@ -13,7 +13,7 @@ import AppLoader from '../../../Loader';
 import namer from 'color-namer'; // Import the color-namer library
 import toast from 'react-hot-toast';
 import { HiOutlineXMark } from "react-icons/hi2";
-import { ApplyCouponModal } from './ApplyCouponModal';
+import ApplyCouponModal from './ApplyCouponModal';
 
 const UserCart = () => {
     const navigate = useNavigate();
@@ -95,9 +95,17 @@ const UserCart = () => {
             });
 
             if (response.status === 200) {
-                setCartItems(prev =>
-                    prev.map(cartItem => (cartItem._id === itemId ? { ...cartItem, quantity: newQuantity } : cartItem)),
-                );
+                setCartItems(prev => {
+                    const updatedItems = prev.map(cartItem =>
+                        cartItem._id === itemId ? { ...cartItem, quantity: newQuantity } : cartItem
+                    );
+
+                    // Recalculate total price
+                    const newTotal = updatedItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+                    setViewCart(prev => ({ ...prev, totalPrice: newTotal }));
+
+                    return updatedItems;
+                });
             }
         } catch (error) {
             console.error('Error updating quantity:', error.response?.data || error.message);
@@ -344,8 +352,8 @@ const UserCart = () => {
                                     <span className='text-secondary font-medium text-sm'>{viewCart?.items?.length || 0}</span>
                                 </li>
                                 <li className='flex justify-between items-center'>
-                                    <span className='font-normal text-sm'>Total MRP</span>
-                                    <span className='text-secondary font-medium text-sm'>₹5000</span>
+                                    <span className='font-normal text-sm'>Sub Total</span>
+                                    <span className='text-secondary font-medium text-sm'>₹{viewCart.totalPrice || 0.00}</span>
                                 </li>
                                 <li className='flex justify-between items-center'>
                                     <span className='font-normal text-sm'>Discount</span>

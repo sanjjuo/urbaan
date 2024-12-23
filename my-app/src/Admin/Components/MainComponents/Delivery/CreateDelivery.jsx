@@ -1,7 +1,38 @@
 import { Button } from '@material-tailwind/react'
 import React from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../../../../StoreContext/StoreContext'
+import { useState } from 'react'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const CreateDelivery = () => {
+    const [deliveryInput, setDeliveryInput] = useState('')
+    const [quantityInput, setQuantityInput] = useState('')
+    const { BASE_URL } = useContext(AppContext)
+
+    // handle delivery
+    const handleDeliveryFeeSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const deliveryPayload = {
+                deliveryFee: deliveryInput,
+                quantity: quantityInput
+            }
+            console.log(deliveryPayload);
+            const token = localStorage.getItem('token')
+            const response = await axios.post(`${BASE_URL}/admin/delivery-fee/add`, deliveryPayload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data);
+            toast.success('Delivery Fees is added')
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <div className="bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out">
@@ -10,33 +41,35 @@ const CreateDelivery = () => {
                 </div>
                 <hr />
                 <div className="p-5">
-                    <form className="space-y-5" 
-                    // onSubmit={handleCategoryFormSubmit}
+                    <form className="space-y-5"
+                        onSubmit={handleDeliveryFeeSubmit}
                     >
                         {/* quantity */}
                         <div className="flex flex-col gap-1">
-                            <label htmlFor="name" className="font-normal text-base">Quantity</label>
+                            <label htmlFor="quantity" className="font-normal text-base">Quantity</label>
                             <input
-                                // value={createCategoryForm.name}
-                                // onChange={handleCategoryInputChange}
+                                value={quantityInput}
+                                onChange={(e) => setQuantityInput(e.target.value)}
                                 type="number"
                                 name="quantity"
                                 id="quantity"
                                 placeholder="Enter Quantity"
+                                min='0'
                                 className="border-[1px] bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
                             />
                         </div>
 
                         {/* quantity */}
                         <div className="flex flex-col gap-1">
-                            <label htmlFor="name" className="font-normal text-base">Delivery Charge</label>
+                            <label htmlFor="delivery" className="font-normal text-base">Delivery Charge</label>
                             <input
-                                // value={createCategoryForm.name}
-                                // onChange={handleCategoryInputChange}
+                                value={deliveryInput}
+                                onChange={(e) => setDeliveryInput(e.target.value)}
                                 type="number"
                                 name="delivery"
                                 id="delivery"
                                 placeholder="Enter Delivery Charge"
+                                min='0'
                                 className="border-[1px] bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
                             />
                         </div>

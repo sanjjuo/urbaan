@@ -49,7 +49,7 @@ const UserProfile = () => {
             {/* image */}
             <div className='flex flex-col gap-2 items-center xl:justify-center lg:justify-center'>
               <div className=' w-full h-56 xl:h-72 lg:h-72'>
-                <img src="/userProfile.jpg" alt="" className='w-full h-full object-cover rounded-lg' />
+                <img src="/userProfile.png" alt="" className='w-full h-full object-cover rounded-lg' />
               </div>
               <Typography className='font-custom font-medium capitalize text-lg xl:text-xl lg:text-xl flex items-center gap-1'>
                 {profile.name}
