@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Button, Card, CardFooter, Chip, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardFooter, Chip, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
 import { AppContext } from "../../../../StoreContext/StoreContext"
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
@@ -18,6 +18,8 @@ const CouponsTable = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [initialEditCoupon, setInitialEditCoupon] = useState(null)
     const [selectCouponId, setSelectCouponId] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
 
     // handle edit modal
@@ -73,6 +75,27 @@ const CouponsTable = () => {
         }
 
     }
+
+    // Get current items to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentOrderList = adminCoupon.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Handle next and prev page
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(adminCoupon.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
     return (
         <>
             {
@@ -82,166 +105,164 @@ const CouponsTable = () => {
                     </div>
                 ) : (
                     <>
-                        <Card className="h-full w-full shadow-none bg-transparent">
-                            <table className="w-full table-auto text-left border-collapse">
-                                <thead>
-                                    <tr className='bg-white'>
-                                        {TABLE_HEAD.map((head) => (
-                                            <th
-                                                key={head}
-                                                className="border-b border-gray-300 p-4 text-center"
-                                            >
-                                                <Typography
-                                                    variant="small"
-                                                    className="font-semibold font-custom text-secondary leading-none text-base uppercase"
+                        <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
+                            <CardBody>
+                                <table className="w-full table-auto text-left border-collapse">
+                                    <thead>
+                                        <tr className='bg-quaternary'>
+                                            {TABLE_HEAD.map((head) => (
+                                                <th
+                                                    key={head}
+                                                    className="border-b border-gray-300 p-4 text-center"
                                                 >
-                                                    {head}
-                                                </Typography>
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {adminCoupon.map((coupon, index) => {
-                                        const isLast = index === adminCoupon.length - 1;
-                                        const classes = isLast
-                                            ? "p-4 text-center"
-                                            : "p-4 border-b border-gray-300 text-center";
+                                                    <Typography
+                                                        variant="small"
+                                                        className="font-semibold font-custom text-secondary leading-none text-sm uppercase"
+                                                    >
+                                                        {head}
+                                                    </Typography>
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentOrderList.map((coupon, index) => {
+                                            const isLast = index === currentOrderList.length - 1;
+                                            const classes = isLast
+                                                ? "p-4 text-center"
+                                                : "p-4 border-b border-gray-300 text-center";
 
-                                        return (
-                                            <tr key={coupon._id}>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal font-custom text-sm"
-                                                    >
-                                                        {coupon.discountValue}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal font-custom text-sm"
-                                                    >
-                                                        {coupon.discountType}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal capitalize font-custom text-sm"
-                                                    >
-                                                        {coupon.title}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal font-custom text-sm"
-                                                    >
-                                                        {coupon.code}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal font-custom text-sm"
-                                                    >
-                                                        {new Date(coupon.startDate).toLocaleString('en-US', {
-                                                            year: 'numeric',
-                                                            month: 'short',
-                                                            day: 'numeric',
-                                                            hour: '2-digit',
-                                                            minute: '2-digit',
-                                                        })}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal font-custom text-sm"
-                                                    >
-                                                        {new Date(coupon.endDate).toLocaleString('en-US', {
-                                                            year: 'numeric',
-                                                            month: 'short',
-                                                            day: 'numeric',
-                                                            hour: '2-digit',
-                                                            minute: '2-digit',
-                                                        })}
-                                                    </Typography>
-                                                </td>
+                                            return (
+                                                <tr key={coupon._id}>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal font-custom text-sm"
+                                                        >
+                                                            {coupon.discountValue}
+                                                        </Typography>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal font-custom text-sm"
+                                                        >
+                                                            {coupon.discountType}
+                                                        </Typography>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal capitalize font-custom text-sm"
+                                                        >
+                                                            {coupon.title}
+                                                        </Typography>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal font-custom text-sm"
+                                                        >
+                                                            {coupon.code}
+                                                        </Typography>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal font-custom text-sm"
+                                                        >
+                                                            {new Date(coupon.startDate).toLocaleString('en-US', {
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                            })}
+                                                        </Typography>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal font-custom text-sm"
+                                                        >
+                                                            {new Date(coupon.endDate).toLocaleString('en-US', {
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                            })}
+                                                        </Typography>
+                                                    </td>
 
-                                                <td className={classes}>
-                                                    <Chip
-                                                        className={`
+                                                    <td className={classes}>
+                                                        <Chip
+                                                            className={`
                                                  ${coupon.status === "expired" ? "text-cancelBg bg-cancelBg/20 capitalize text-sm text-center font-normal" : ""}
                                                  ${coupon.status === "active" ? "text-shippedBg bg-shippedBg/20 capitalize text-sm text-center font-normal" : ""}
                                                  ${!["expired", "active"].includes(coupon.status) ? "text-gray-500 bg-gray-200 capitalize text-sm text-center font-normal" : ""}
                                                     `}
-                                                        value={
-                                                            coupon.status === "expired" ? "Expired" :
-                                                                coupon.status === "active" ? "Active" : "Unknown"
-                                                        }
+                                                            value={
+                                                                coupon.status === "expired" ? "Expired" :
+                                                                    coupon.status === "active" ? "Active" : "Unknown"
+                                                            }
 
-                                                    />
-                                                </td>
-                                                <td className={classes}>
-                                                    <Menu>
-                                                        <MenuHandler>
-                                                            <IconButton variant="text">
-                                                                <HiOutlineDotsHorizontal className='text-primary text-2xl cursor-pointer' />
-                                                            </IconButton>
-                                                        </MenuHandler>
-                                                        <MenuList>
-                                                            <MenuItem onClick={() => {
-                                                                handleEditModal(coupon);
-                                                                setSelectCouponId(coupon._id)
-                                                            }}
-                                                                className={`font-custom text-buttonBg hover:!text-buttonBg ${selectCouponId ? 'bg-buttonBg text-white' : ''}`}>Edit</MenuItem>
-                                                            <MenuItem onClick={() => {
-                                                                setSelectCouponId(coupon._id);
-                                                                handleOpen("deleteModal")
-                                                            }} className='font-custom text-primary hover:!text-primary'>
-                                                                Delete</MenuItem>
-                                                        </MenuList>
-                                                    </Menu>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                                                        />
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <Menu>
+                                                            <MenuHandler>
+                                                                <IconButton variant="text">
+                                                                    <HiOutlineDotsHorizontal className='text-primary text-2xl cursor-pointer' />
+                                                                </IconButton>
+                                                            </MenuHandler>
+                                                            <MenuList>
+                                                                <MenuItem onClick={() => {
+                                                                    handleEditModal(coupon);
+                                                                    setSelectCouponId(coupon._id)
+                                                                }}
+                                                                    className={`font-custom text-buttonBg hover:!text-buttonBg ${selectCouponId ? 'bg-buttonBg text-white' : ''}`}>Edit</MenuItem>
+                                                                <MenuItem onClick={() => {
+                                                                    setSelectCouponId(coupon._id);
+                                                                    handleOpen("deleteModal")
+                                                                }} className='font-custom text-primary hover:!text-primary'>
+                                                                    Delete</MenuItem>
+                                                            </MenuList>
+                                                        </Menu>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </CardBody>
                             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                                <Button variant="outlined" size="sm" className='font-custom border-gray-300 font-normal capitalize 
-                    text-sm cursor-pointer hover:bg-black hover:text-white'>
-                                    Prev. Page
+                                <Button
+                                    variant="outlined"
+                                    size="sm"
+                                    className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                    onClick={handlePrevPage}
+                                    disabled={currentPage === 1}
+                                >
+                                    Prev. page
                                 </Button>
+
                                 <div className="flex items-center gap-2">
-                                    <IconButton variant="outlined" size="sm">
-                                        1
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        2
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        3
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        ...
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        8
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        9
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        10
-                                    </IconButton>
+                                    {[...Array(Math.ceil(adminCoupon.length / itemsPerPage))].map((_, index) => (
+                                        <IconButton key={index} variant="text" size="sm" onClick={() => paginate(index + 1)}>
+                                            {index + 1}
+                                        </IconButton>
+                                    ))}
                                 </div>
-                                <Button variant="outlined" size="sm" className='font-custom border-gray-300 font-normal capitalize text-sm 
-                    cursor-pointer hover:bg-black hover:text-white'>
-                                    Next Page
+
+                                <Button
+                                    variant="outlined"
+                                    size="sm"
+                                    className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                    onClick={handleNextPage}
+                                    disabled={currentPage === Math.ceil(adminCoupon.length / itemsPerPage)}
+                                >
+                                    Next page
                                 </Button>
                             </CardFooter>
                         </Card>

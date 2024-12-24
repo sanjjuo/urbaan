@@ -263,7 +263,7 @@ const Checkout = () => {
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Shipping</span>
                                             <span className='text-secondary font-bold'>
-                                            ₹{calculateDeliveryCharge(checkoutDetails?.cartItems)}
+                                                ₹{calculateDeliveryCharge(checkoutDetails?.cartItems)}
                                             </span>
                                         </li>
                                         <li className='flex items-center justify-between'>
@@ -273,24 +273,28 @@ const Checkout = () => {
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Total</span>
                                             <span className='text-secondary font-bold'>
-                                            ₹{calculateTotalPrice()}
+                                                ₹{calculateTotalPrice()}
                                             </span>
                                         </li>
 
                                     </ul>
                                     <div className='mt-5'>
                                         <h3 className='font-medium text-sm xl:text-base lg:text-base text-secondary'>Payment Options</h3>
-                                        <div className='flex items-center gap-10'>
+                                        <div className='flex flex-col xl:flex-row lg:flex-row lg:items-center xl:items-center gap-0 xl:gap-10 lg:gap-10'>
                                             <Radio name="type" label="Online Payment" color='pink' />
                                             <Radio name="type" label="Cash on Delivery" color='pink' />
                                         </div>
                                     </div>
-                                    <Button className='mt-5 bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
+                                    <Button className='hidden xl:block lg:block mt-5 bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
                                 </Card>
                             </div>
                         </>
                     )}
                 </div>
+            </div>
+
+            <div className='bg-white shadow-md fixed bottom-0 inset-x-0 z-50 w-full p-4 xl:hidden lg:hidden'>
+                <Button className='w-full bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
             </div>
         </>
     )

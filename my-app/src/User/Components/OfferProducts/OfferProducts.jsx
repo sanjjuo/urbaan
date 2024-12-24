@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 import AppLoader from '../../../Loader';
+import { RiHeart3Fill, RiHeart3Line } from 'react-icons/ri';
 
 const OfferProducts = () => {
-    const { handleProductDetails, BASE_URL } = useContext(AppContext);
+    const { BASE_URL, wishlist } = useContext(AppContext);
     const [offerProducts, setOfferProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [heartIcons, setHeartIcons] = useState({});
 
     useEffect(() => {
         const fetchOfferProducts = async () => {
@@ -25,6 +27,38 @@ const OfferProducts = () => {
         fetchOfferProducts();
     }, []);
 
+    // add to wishlist
+    const handleWishlist = async (productId, productTitle) => {
+        try {
+            const userId = localStorage.getItem('userId');
+            const payload = {
+                userId: userId,
+                productId: productId
+            };
+
+            // Check if product is already in wishlist
+            const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+
+            if (!isInWishlist) {
+                const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
+                console.log(response.data);
+
+                // Update heart icon state based on whether product is in wishlist
+                setHeartIcons(prevState => ({
+                    ...prevState,
+                    [productId]: true, // Toggle the heart icon state
+                }));
+
+                toast.success(`${productTitle} ${isInWishlist ? 'removed from' : 'added to'} wishlist`);
+            } else {
+                toast.error('Product already in wishlist')
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <>
             <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center xl:text-left'>
@@ -38,23 +72,35 @@ const OfferProducts = () => {
                 ) : (
                     <>
                         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
-                            {offerProducts.map(product => (
-                                <Link
-                                    onClick={() => handleProductDetails(product)}
-                                    to='/product-details'
-                                    className='cursor-pointer'
-                                    key={product._id}
-                                >
-                                    <div className='group'>
-                                        <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
-                                            <img
-                                                src={`${BASE_URL}/${product.images[0]}`}
-                                                alt={product.title}
-                                                className='w-full h-full object-cover rounded-xl shadow-md
+                            {offerProducts.map(product => {
+                                const isInWishlist = wishlist?.items?.some(item => item.productId._id === product._id);
+                                return (
+                                    <div className='group relative' key={product._id}>
+                                        <Link
+                                            to="/product-details"
+                                            state={{ productId: product._id }}
+                                            className="cursor-pointer"
+                                        >
+                                            <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
+                                                <img
+                                                    src={`${BASE_URL}/${product.images[0]}`}
+                                                    alt={product.title}
+                                                    className='w-full h-full object-cover rounded-xl shadow-md
                                     transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'
+                                                />
+                                            </div>
+                                        </Link>
+                                        {heartIcons[product._id] || isInWishlist ? (
+                                            <RiHeart3Fill
+                                                onClick={() => handleWishlist(product._id, product.title)}
+                                                className='absolute top-2 right-2 cursor-pointer text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
                                             />
-                                            <RxHeart className='absolute top-2 right-2 bg-white text-gray-600 w-6 h-6 xl:w-7 xl:h-7 lg:w-7 lg:h-7 p-1 rounded-full shadow-md' />
-                                        </div>
+                                        ) : (
+                                            <RiHeart3Line
+                                                onClick={() => handleWishlist(product._id, product.title)}
+                                                className='absolute top-2 right-2 cursor-pointer bg-white text-gray-600 w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
+                                            />
+                                        )}
                                         <div className='mt-3'>
                                             <h4 className='font-medium text-sm xl:text-lg lg:text-lg'>{product.title}</h4>
                                             <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm'>
@@ -65,10 +111,9 @@ const OfferProducts = () => {
                                             </p>
                                         </div>
                                     </div>
-                                </Link>
-                            ))}
+                                )
+                            })}
                         </div>
-
                     </>
                 )
             }

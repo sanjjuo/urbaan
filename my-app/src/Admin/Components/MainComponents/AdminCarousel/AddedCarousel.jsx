@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card } from '@material-tailwind/react';
+import { Button, Card, CardFooter, IconButton } from '@material-tailwind/react';
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
 import { useContext } from 'react';
 import { AppContext } from '../../../../StoreContext/StoreContext';
@@ -13,6 +13,8 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
     const [adminCarousel, setAdminCarousel] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedCarouselId, setSelectedCarouselId] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(3);
 
     useEffect(() => {
         const fetchAdminCarousel = async () => {
@@ -50,6 +52,27 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
             alert('Carousel is not deleted')
         }
     }
+
+    // Get current items to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentAdminCarousel = adminCarousel.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Handle next and prev page
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(adminCarousel.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
     return (
         <>
             {
@@ -60,7 +83,7 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
 
                 ) : (
                     <>
-                        {adminCarousel.map((carousel) => (
+                        {currentAdminCarousel.map((carousel) => (
                             <Card className="p-5 relative" key={carousel._id}>
                                 {/* carousel image */}
                                 <div className='w-full h-72'>
@@ -116,6 +139,35 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
                                 </div>
                             </Card>
                         ))}
+                        <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+                            <Button
+                                variant="outlined"
+                                size="sm"
+                                className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                onClick={handlePrevPage}
+                                disabled={currentPage === 1}
+                            >
+                                Prev. page
+                            </Button>
+
+                            <div className="flex items-center gap-2">
+                                {[...Array(Math.ceil(adminCarousel.length / itemsPerPage))].map((_, index) => (
+                                    <IconButton key={index} variant="text" size="sm" onClick={() => paginate(index + 1)}>
+                                        {index + 1}
+                                    </IconButton>
+                                ))}
+                            </div>
+
+                            <Button
+                                variant="outlined"
+                                size="sm"
+                                className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                onClick={handleNextPage}
+                                disabled={currentPage === Math.ceil(adminCarousel.length / itemsPerPage)}
+                            >
+                                Next page
+                            </Button>
+                        </CardFooter>
                     </>
                 )
             }

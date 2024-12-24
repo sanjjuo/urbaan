@@ -11,7 +11,6 @@ const LatestProducts = () => {
   const [latestProducts, setLatestProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [heartIcons, setHeartIcons] = useState({}); // Store heart icon state for each product
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLatestProducts = async () => {

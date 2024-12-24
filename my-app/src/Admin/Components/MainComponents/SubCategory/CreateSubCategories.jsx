@@ -82,7 +82,7 @@ const CreateSubCategories = () => {
 
     return (
         <>
-            <div className='bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out'>
+            <div className='bg-white rounded-xl'>
                 <div className='p-5'>
                     <h2 className="text-xl font-medium mb-3 lg:mb-0 text-secondary">Create Sub Categories</h2>
                 </div>

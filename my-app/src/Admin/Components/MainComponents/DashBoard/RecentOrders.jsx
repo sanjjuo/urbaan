@@ -4,6 +4,9 @@ import {
     Typography,
     CardBody,
     Chip,
+    CardFooter,
+    Button,
+    IconButton,
 } from "@material-tailwind/react";
 import MonthMenu from './MonthMenu';
 import axios from 'axios';
@@ -14,6 +17,8 @@ const TABLE_HEAD = ["Product Name", "Location", "Date", "Piece", "Amount", "Stat
 const RecentOrders = () => {
     const [recentOrders, setRecentOrders] = useState([]);
     const { BASE_URL } = useContext(AppContext);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
     useEffect(() => {
         const fetchRecentOrders = async () => {
@@ -32,6 +37,27 @@ const RecentOrders = () => {
         };
         fetchRecentOrders();
     }, [BASE_URL]);
+
+    // Get current items to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentRecentOrders = recentOrders.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Handle next and prev page
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(recentOrders.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
     return (
         <Card className="w-full p-10">
@@ -61,8 +87,8 @@ const RecentOrders = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {recentOrders.map((recentOrder, index) => {
-                            const isLast = index === recentOrders.length - 1;
+                        {currentRecentOrders.map((recentOrder, index) => {
+                            const isLast = index === currentRecentOrders.length - 1;
                             const classes = isLast
                                 ? "p-4 text-center"
                                 : "p-4 border-b border-gray-300 text-center";
@@ -131,7 +157,7 @@ const RecentOrders = () => {
                                                             : recentOrder.status === "Delivered"
                                                                 ? "text-shippedBg bg-shippedBg/20"
                                                                 : "text-gray-500 bg-gray-200"
-                                            }`}
+                                                }`}
                                             value={recentOrder.status}
                                         />
                                     </td>
@@ -141,6 +167,35 @@ const RecentOrders = () => {
                     </tbody>
                 </table>
             </CardBody>
+            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+                <Button
+                    variant="outlined"
+                    size="sm"
+                    className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                >
+                    Prev. page
+                </Button>
+
+                <div className="flex items-center gap-2">
+                    {[...Array(Math.ceil(recentOrders.length / itemsPerPage))].map((_, index) => (
+                        <IconButton key={index} variant="text" size="sm" onClick={() => paginate(index + 1)}>
+                            {index + 1}
+                        </IconButton>
+                    ))}
+                </div>
+
+                <Button
+                    variant="outlined"
+                    size="sm"
+                    className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                    onClick={handleNextPage}
+                    disabled={currentPage === Math.ceil(recentOrders.length / itemsPerPage)}
+                >
+                    Next page
+                </Button>
+            </CardFooter>
         </Card>
     );
 };

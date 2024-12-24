@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, Card, CardFooter, Chip, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardFooter, Chip, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { AppContext } from '../../../../StoreContext/StoreContext';
 import axios from 'axios';
@@ -12,6 +12,8 @@ const OrderTable = () => {
   const [orderList, setOrderList] = useState([]);
   const { BASE_URL } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   // Predefined allowed statuses
   const allowedStatuses = ["Delivered", "Processing", "Cancelled", "Pending"];
@@ -61,6 +63,27 @@ const OrderTable = () => {
     }
   };
 
+  // Get current items to display
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentOrderList = orderList.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  // Handle next and prev page
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(orderList.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <>
       {isLoading || orderList.length === 0 ? (
@@ -68,97 +91,128 @@ const OrderTable = () => {
           <AppLoader />
         </div>
       ) : (
-        <Card className="w-full shadow-none bg-transparent">
-          <table className="w-full table-auto text-left border-collapse">
-            <thead>
-              <tr className="bg-white">
-                {TABLE_HEAD.map((head) => (
-                  <th key={head} className="border-b border-blue-gray-100 p-4 text-center">
-                    <Typography
-                      variant="small"
-                      className="font-semibold font-custom text-secondary leading-none text-base uppercase"
-                    >
-                      {head}
-                    </Typography>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {orderList.map((order, index) => {
-                const isLast = index === orderList.length - 1;
-                const classes = isLast
-                  ? "p-4 text-center"
-                  : "p-4 border-b border-gray-300 text-center";
+        <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
+          <CardBody>
+            <table className="w-full table-auto text-left border-collapse">
+              <thead>
+                <tr className='bg-quaternary'>
+                  {TABLE_HEAD.map((head) => (
+                    <th key={head} className="border-b border-blue-gray-100 p-4 text-center">
+                      <Typography
+                        variant="small"
+                        className="font-semibold font-custom text-secondary leading-none text-base uppercase"
+                      >
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {currentOrderList.map((order, index) => {
+                  const isLast = index === currentOrderList.length - 1;
+                  const classes = isLast
+                    ? "p-4 text-center"
+                    : "p-4 border-b border-gray-300 text-center";
 
-                return (
-                  <tr key={order._id}>
-                    <td className={classes}>
-                      <Typography variant="small" className="font-normal font-custom text-sm">
-                        {order.orderId}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography variant="small" className="font-normal font-custom text-sm">
-                        {order.userId.name}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography variant="small" className="font-normal font-custom text-sm">
-                        {order.addressId.address}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography variant="small" className="font-normal font-custom text-sm">
-                        {order.createdAt}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography variant="small" className="font-normal font-custom text-sm">
-                        {order.products?.[0]?.productId?.title || "N/A"}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography variant="small" className="font-normal font-custom text-sm">
-                        {order.products?.[0]?.size || "N/A"}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography variant="small" className="font-normal font-custom text-sm">
-                        {order.paymentMethod}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Chip
-                        className={`capitalize text-sm text-center font-normal ${statusColors[order.status] || statusColors.default}`}
-                        value={order.status}
-                      />
-                    </td>
-                    <td className={classes}>
-                      <Menu placement="bottom-end" className="outline-none">
-                        <MenuHandler>
-                          <IconButton variant="text">
-                            <HiOutlineDotsHorizontal className="text-primary text-2xl cursor-pointer" />
-                          </IconButton>
-                        </MenuHandler>
-                        <MenuList>
-                          {allowedStatuses.map((status, index) => (
-                            <MenuItem
-                              key={index}
-                              onClick={() => handleStatusChange(order._id, status)}
-                              className={`font-custom capitalize ${statusColors[status]?.split(" ")[0]} hover:!text-buttonBg`}
-                            >
-                              {status}
-                            </MenuItem>
-                          ))}
-                        </MenuList>
-                      </Menu>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr key={order._id}>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm">
+                          {order.orderId}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm">
+                          {order.userId.name}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm">
+                          {order.addressId.address}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm">
+                          {order.createdAt}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm">
+                          {order.products?.[0]?.productId?.title || "N/A"}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm">
+                          {order.products?.[0]?.size || "N/A"}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm">
+                          {order.paymentMethod}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Chip
+                          className={`capitalize text-sm text-center font-normal ${statusColors[order.status] || statusColors.default}`}
+                          value={order.status}
+                        />
+                      </td>
+                      <td className={classes}>
+                        <Menu placement="bottom-end" className="outline-none">
+                          <MenuHandler>
+                            <IconButton variant="text">
+                              <HiOutlineDotsHorizontal className="text-primary text-2xl cursor-pointer" />
+                            </IconButton>
+                          </MenuHandler>
+                          <MenuList>
+                            {allowedStatuses.map((status, index) => (
+                              <MenuItem
+                                key={index}
+                                onClick={() => handleStatusChange(order._id, status)}
+                                className={`font-custom capitalize ${statusColors[status]?.split(" ")[0]} hover:!text-buttonBg`}
+                              >
+                                {status}
+                              </MenuItem>
+                            ))}
+                          </MenuList>
+                        </Menu>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </CardBody>
+          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+            <Button
+              variant="outlined"
+              size="sm"
+              className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+            >
+              Prev. page
+            </Button>
+
+            <div className="flex items-center gap-2">
+              {[...Array(Math.ceil(orderList.length / itemsPerPage))].map((_, index) => (
+                <IconButton key={index} variant="text" size="sm" onClick={() => paginate(index + 1)}>
+                  {index + 1}
+                </IconButton>
+              ))}
+            </div>
+
+            <Button
+              variant="outlined"
+              size="sm"
+              className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+              onClick={handleNextPage}
+              disabled={currentPage === Math.ceil(orderList.length / itemsPerPage)}
+            >
+              Next page
+            </Button>
+          </CardFooter>
         </Card>
       )}
     </>

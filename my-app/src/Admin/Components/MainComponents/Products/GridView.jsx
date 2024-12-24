@@ -18,44 +18,9 @@ import { DeleteModal } from '../../DeleteModal/DeleteModal'
 import { AppContext } from "../../../../StoreContext/StoreContext"
 import AppLoader from '../../../../Loader'
 
-const GridView = ({ products, isLoading, initialProducts, setInitialProducts }) => {
-    const { open, handleOpen } = useContext(AppContext)
+const GridView = ({ products, isLoading, selectedProductId, setSelectedProductId, handleDeleteProduct }) => {
+    const { open, handleOpen, modalType } = useContext(AppContext)
 
-    const product = [
-        {
-            id: "1",
-            img: "/p1.jpg",
-            product: "Stylish Crop Top",
-            rating: "4.9",
-            price: "500",
-            description: "trendy, comfy crop top...",
-            publish: "15-Nov-2024",
-            stocks: "12",
-            orders: "48"
-        },
-        {
-            id: "2",
-            img: "/p2.jpg",
-            product: "Stylish Crop Top",
-            rating: "4.1",
-            price: "400",
-            description: "trendy, comfy crop top...",
-            publish: "15-jan-2024",
-            stocks: "22",
-            orders: "88"
-        },
-        {
-            id: "3",
-            img: "/p3.jpg",
-            product: "Stylish Crop Top",
-            rating: "4.5",
-            price: "500",
-            description: "trendy, comfy crop top...",
-            publish: "15-Nov-2024",
-            stocks: "12",
-            orders: "48"
-        },
-    ]
     return (
         <>
             <div className='space-y-5'>
@@ -86,10 +51,21 @@ const GridView = ({ products, isLoading, initialProducts, setInitialProducts }) 
                                                             </IconButton>
                                                         </MenuHandler>
                                                         <MenuList>
-                                                            <Link to='/adminHome/editProduct'>
+                                                            <Link
+                                                                to={{
+                                                                    pathname: '/adminHome/editProduct',
+                                                                }}
+                                                                state={{ product }}
+                                                            >
                                                                 <MenuItem className='font-custom text-buttonBg hover:!text-buttonBg'>Edit</MenuItem>
                                                             </Link>
-                                                            <MenuItem onClick={() => handleOpen("deleteProductModal")} className='font-custom text-primary hover:!text-primary'>
+                                                            <MenuItem
+                                                                onClick={() => {
+                                                                    handleOpen("deleteProductModal");
+                                                                    setSelectedProductId(product._id);
+                                                                }}
+                                                                className='font-custom text-primary hover:!text-primary'
+                                                            >
                                                                 Delete</MenuItem>
                                                         </MenuList>
                                                     </Menu>
@@ -130,7 +106,7 @@ const GridView = ({ products, isLoading, initialProducts, setInitialProducts }) 
                                                 <div className='mt-5'>
                                                     <ul className='flex items-center gap-10'>
                                                         <li className='flex flex-col items-center'>
-                                                            <span className='text-lg text-secondary font-semibold'>{product.stock}</span>
+                                                            <span className='text-lg text-secondary font-semibold'>{product.totalStock}</span>
                                                             <span className='font-normal capitalize text-sm'>stocks</span>
                                                         </li>
                                                         <li className='flex flex-col items-center'>
@@ -151,7 +127,10 @@ const GridView = ({ products, isLoading, initialProducts, setInitialProducts }) 
             <DeleteModal
                 open={open === "deleteProductModal"}
                 handleOpen={handleOpen}
+                handleDelete={handleDeleteProduct}
+                productId={selectedProductId}
                 title="Are you sure ?"
+                modalType="products"
                 description="Are you sure you want to remove this product item ?" />
         </>
     )

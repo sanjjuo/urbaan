@@ -135,8 +135,10 @@ const UserNavbar = () => {
                 <ul className='flex items-center gap-3'>
                     <Link to='/user-search'><li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li></Link>
                     <Link to="/favourite">
-                        <li className="text-2xl text-secondary">
+                        <li className="text-2xl text-secondary relative">
                             {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
+                            <Chip value={wishlist?.items?.length || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
+                            -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                         </li>
                     </Link>
                 </ul>

@@ -1,59 +1,76 @@
-import React, { useContext } from 'react'
-import { Card, Typography, CardFooter, Button, IconButton } from "@material-tailwind/react";
-import { AppContext } from "../../../../StoreContext/StoreContext"
+import React, { useContext, useState, useEffect } from 'react';
+import { Card, Typography, CardFooter, Button, IconButton, CardBody } from "@material-tailwind/react";
+import { AppContext } from "../../../../StoreContext/StoreContext";
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
 import axios from 'axios';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import AppLoader from '../../../../Loader';
 import toast from 'react-hot-toast';
 
 const TABLE_HEAD = ["Sub Category", "Category", "Status", "Action"];
 
-
 const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
-    const { open, handleOpen, modalType, BASE_URL } = useContext(AppContext)
-    const [subCategory, setSubCategory] = useState([])
-    const [selectedCatId, setSelectedCatId] = useState(null); // Track selected category ID 
-    const [isLoading, setIsLoading] = useState(true)
+    const { open, handleOpen, modalType, BASE_URL } = useContext(AppContext);
+    const [subCategory, setSubCategory] = useState([]);
+    const [selectedCatId, setSelectedCatId] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
     useEffect(() => {
         const fetchSubCategory = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/admin/Subcategory/get`);
-                setSubCategory(response.data)
-                console.log(response.data);
-                setIsLoading(false)
+                setSubCategory(response.data);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error);
             }
-        }
+        };
         fetchSubCategory();
-    }, [])
-
+    }, []);
 
     const handleSubCategoryDelete = async (subCategoryId) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert("Authorization is missing")
+                alert("Authorization is missing");
                 return;
             }
 
             const headers = {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             };
 
-            const response = await axios.delete(`${BASE_URL}/admin/Subcategory/delete/${subCategoryId}`, { headers })
+            const response = await axios.delete(`${BASE_URL}/admin/Subcategory/delete/${subCategoryId}`, { headers });
             console.log(response.data);
             handleOpen();
-            toast.success('Subcategory is deleted')
+            toast.success('Subcategory is deleted');
         } catch (error) {
             console.log(error);
-            alert("Sub category is not deleted")
+            alert("Sub category is not deleted");
         }
-    }
+    };
 
+    // Get current items to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentSubCategories = subCategory.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Handle next and prev page
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(subCategory.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
     return (
         <>
@@ -63,20 +80,14 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                         <AppLoader />
                     </div>
                 ) : (
-                    <>
-                        <Card className=" w-full shadow-none bg-transparent">
+                    <Card className="w-full shadow-sm bg-white border-[1px] rounded-xl">
+                        <CardBody>
                             <table className="w-full table-auto text-left border-collapse">
-                                <thead className='bg-white bg-transparent'>
-                                    <tr className='bg-white'>
+                                <thead>
+                                    <tr className='bg-quaternary'>
                                         {TABLE_HEAD.map((head) => (
-                                            <th
-                                                key={head}
-                                                className="border-b border-gray-300 p-4 text-center"
-                                            >
-                                                <Typography
-                                                    variant="small"
-                                                    className="font-semibold uppercase font-custom text-base leading-none text-secondary"
-                                                >
+                                            <th key={head} className="border-b border-gray-300 p-4 text-center">
+                                                <Typography variant="small" className="font-semibold uppercase font-custom text-base leading-none text-secondary">
                                                     {head}
                                                 </Typography>
                                             </th>
@@ -84,11 +95,9 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                                     </tr>
                                 </thead>
                                 <tbody className='bg-transparent'>
-                                    {subCategory.map((subCat, index) => {
-                                        const isLast = index === subCategory.length - 1;
-                                        const classes = isLast
-                                            ? "p-4 text-center"
-                                            : "p-4 border-b border-gray-300 text-center";
+                                    {currentSubCategories.map((subCat, index) => {
+                                        const isLast = index === currentSubCategories.length - 1;
+                                        const classes = isLast ? "p-4 text-center" : "p-4 border-b border-gray-300 text-center";
                                         return (
                                             <tr key={subCat.id} className="bg-transparent">
                                                 <td className={classes}>
@@ -96,42 +105,29 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                                                         <div className='w-[60px] h-[60px] rounded-md'>
                                                             <img src={`${BASE_URL}/uploads/category/${subCat.SubImageUrl}`} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
                                                         </div>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal capitalize font-custom text-sm"
-                                                        >
+                                                        <Typography variant="small" className="font-normal capitalize font-custom text-sm">
                                                             {subCat.title}
                                                         </Typography>
                                                     </div>
                                                 </td>
                                                 <td className={classes}>
                                                     <div className="flex items-center gap-2">
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal capitalize font-custom text-sm"
-                                                        >
+                                                        <Typography variant="small" className="font-normal capitalize font-custom text-sm">
                                                             {subCat.MainCategory.name}
                                                         </Typography>
                                                     </div>
                                                 </td>
                                                 <td className={classes}>
-                                                    <Button
-                                                        className={`${subCat.isActive ? "bg-green-500 text-white" : "bg-red-500 text-white"
-                                                            } text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl`}
-                                                    >
+                                                    <Button className={`${subCat.isActive ? "bg-green-500 text-white" : "bg-red-500 text-white"} text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl`}>
                                                         {subCat.isActive ? "Active" : "Inactive"}
                                                     </Button>
                                                 </td>
                                                 <td className={classes}>
                                                     <div className="flex justify-center gap-2 text-sm">
-                                                        <button
-                                                            onClick={() => { handleEditCategory(subCat); setSelectedCatId(subCat.id); }}
-                                                            className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg 
-                                                        hover:text-editBg ${createEditSub === "editSub" && selectedCatId === subCat.id ? "!bg-buttonBg text-editBg" : ""}`}>
+                                                        <button onClick={() => { handleEditCategory(subCat); setSelectedCatId(subCat.id); }} className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg hover:text-editBg ${createEditSub === "editSub" && selectedCatId === subCat.id ? "!bg-buttonBg text-editBg" : ""}`}>
                                                             Edit
                                                         </button>
-                                                        <button onClick={() => { handleOpen("deleteModal"); setSelectedCatId(subCat.id) }} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
-                                                        hover:bg-primary hover:text-white">
+                                                        <button onClick={() => { handleOpen("deleteModal"); setSelectedCatId(subCat.id); }} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md hover:bg-primary hover:text-white">
                                                             Delete
                                                         </button>
                                                     </div>
@@ -141,41 +137,37 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                                     })}
                                 </tbody>
                             </table>
-                            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                                <Button variant="outlined" size="sm" className='font-custom border-gray-300 font-normal capitalize 
-                    text-sm cursor-pointer hover:bg-black hover:text-white'>
-                                    Prev. page
-                                </Button>
-                                <div className="flex items-center gap-2">
-                                    <IconButton variant="outlined" size="sm">
-                                        1
+                        </CardBody>
+                        <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+                            <Button
+                                variant="outlined"
+                                size="sm"
+                                className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                onClick={handlePrevPage}
+                                disabled={currentPage === 1}
+                            >
+                                Prev. page
+                            </Button>
+
+                            <div className="flex items-center gap-2">
+                                {[...Array(Math.ceil(subCategory.length / itemsPerPage))].map((_, index) => (
+                                    <IconButton key={index} variant="text" size="sm" onClick={() => paginate(index + 1)}>
+                                        {index + 1}
                                     </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        2
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        3
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        ...
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        8
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        9
-                                    </IconButton>
-                                    <IconButton variant="text" size="sm">
-                                        10
-                                    </IconButton>
-                                </div>
-                                <Button variant="outlined" size="sm" className='font-custom border-gray-300 font-normal capitalize text-sm 
-                    cursor-pointer hover:bg-black hover:text-white'>
-                                    Next page
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    </>
+                                ))}
+                            </div>
+
+                            <Button
+                                variant="outlined"
+                                size="sm"
+                                className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                onClick={handleNextPage}
+                                disabled={currentPage === Math.ceil(subCategory.length / itemsPerPage)}
+                            >
+                                Next page
+                            </Button>
+                        </CardFooter>
+                    </Card>
                 )
             }
 
@@ -189,7 +181,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
                 modalType="subcategories"
             />
         </>
-    )
-}
+    );
+};
 
-export default AddedSubCategories
+export default AddedSubCategories;

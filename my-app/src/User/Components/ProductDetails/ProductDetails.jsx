@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { FaStar } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa";
-import { Button } from '@material-tailwind/react';
+import { Button, Chip } from '@material-tailwind/react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiShoppingCart } from "react-icons/fi";
 import { AppContext } from '../../../StoreContext/StoreContext';
@@ -18,7 +18,7 @@ import { TiTick } from "react-icons/ti";
 import { useEffect } from 'react';
 
 const ProductDetails = () => {
-    const { handleOpenSizeDrawer, BASE_URL } = useContext(AppContext)
+    const { handleOpenSizeDrawer, BASE_URL, wishlist } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const { productId } = location.state || {}
@@ -26,6 +26,7 @@ const ProductDetails = () => {
     const [productDetails, setProductDetails] = useState([]);
     const [selectedColor, setSelectedColor] = useState("");
     const [selectedSize, setSelectedSize] = useState("");
+    const [heartIcons, setHeartIcons] = useState({});
 
 
 
@@ -68,13 +69,13 @@ const ProductDetails = () => {
             }
 
             if (!userId) {
-                alert("Authorization is missing")
+                toast.error("Authorization is missing")
                 navigate('/login-user')
                 return;
             }
 
             if (!userToken) {
-                alert("Authorization userId is missing")
+                toast.error("Authorization userId is missing")
                 navigate('/login-user')
                 return;
             }
@@ -108,26 +109,45 @@ const ProductDetails = () => {
 
 
     const handleColorClick = (color) => {
-        setSelectedColor(color);
-        // Reset selected size if the same color is clicked again
         if (selectedColor === color) {
-            setSelectedColor(""); // Deselect the color
-            setSelectedSize(""); // Deselect the size
+            // Deselect color and size if the same color is clicked again
+            setSelectedColor("");
+            setSelectedSize("");
         } else {
-            // Find the sizes for the newly selected color
-            const selectedColorData = productDetails.colors.find(c => c.color === color);
-            if (selectedColorData) {
-                setSelectedSize(selectedColorData.sizes[0]?.size || "");
-            }
+            setSelectedColor(color);
+            setSelectedSize("");  // Reset size but don't auto-select
         }
     };
 
+
     const handleSizeClick = (size) => {
-        setSelectedSize(size);
-        if (selectedSize === size) {
-            setSelectedSize(""); // Deselect the size
+        setSelectedSize((prevSize) => prevSize === size ? "" : size);
+    };
+
+    const handleWishlist = async (productId, productTitle) => {
+        try {
+            const payload = { userId: userId, productId: productId };
+
+            const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+
+            if (!isInWishlist) {
+                const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
+                console.log(response.data);
+
+                setHeartIcons(prevState => ({
+                    ...prevState,
+                    [productId]: true,
+                }));
+
+                toast.success(`${productTitle} added to wishlist`);
+            } else {
+                toast.error('Product already in wishlist');
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
+
 
     const colorSizes = productDetails.colors?.[0]?.sizes || [];
     const colorColor = productDetails.colors || []
@@ -144,10 +164,14 @@ const ProductDetails = () => {
                     </li>
                 </ul>
                 <ul className='flex items-center gap-3'>
-                    <li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li>
+                    <Link to='/user-search'>
+                        <li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li>
+                    </Link>
                     <Link to="/favourite">
-                        <li className="text-2xl text-secondary">
+                        <li className="text-2xl text-secondary relative">
                             {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
+                            <Chip value={wishlist?.items?.length || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
+                            -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                         </li>
                     </Link>
                 </ul>
@@ -162,8 +186,19 @@ const ProductDetails = () => {
                                 alt={productDetails.title}
                                 className='w-full h-full object-cover rounded-xl'
                             />
-                            <IoHeartOutline className='absolute top-5 right-5 xl:text-3xl lg:text-3xl text-2xl text-white' />
+                            {heartIcons[productDetails._id] || wishlist?.items?.some(item => item.productId._id === productDetails._id) ? (
+                                <RiHeart3Fill
+                                    onClick={() => handleWishlist(productDetails._id, productDetails.title)}
+                                    className='absolute top-5 right-5 xl:text-3xl lg:text-3xl text-2xl cursor-pointer text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
+                                />
+                            ) : (
+                                <IoHeartOutline
+                                    onClick={() => handleWishlist(productDetails._id, productDetails.title)}
+                                    className='absolute top-5 right-5 xl:text-3xl lg:text-3xl text-2xl text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
+                                />
+                            )}
                         </div>
+
                         <Button onClick={addToCart}
                             className='hidden xl:flex lg:flex items-center justify-center gap-2 font-normal capitalize font-custom tracking-wide text-sm
                         w-full bg-primary'>
@@ -172,7 +207,7 @@ const ProductDetails = () => {
                     </div>
                     <div className='col-span-2'>
                         <div className='flex justify-between items-center'>
-                            <h1 className='text-secondary font-semibold text-xl xl:text-2xl lg:text-2xl'>{productDetails.title}</h1>
+                            <h1 className='text-secondary capitalize font-semibold text-xl xl:text-2xl lg:text-2xl'>{productDetails.title}</h1>
                             <div className='flex items-center gap-1'>
                                 <p className='text-sm text-shippedBg'>4.1</p>
                                 <ul className='flex items-center gap-1 xl:gap-3 lg:gap-3'>
@@ -185,7 +220,7 @@ const ProductDetails = () => {
                                 <p className='text-xs xl:text-sm lg:text-sm'>(103)</p>
                             </div>
                         </div>
-                        <p className='text-gray-600 text-xs xl:text-base lg:text-base'>{productDetails.description}</p>
+                        <p className='text-gray-600 text-xs capitalize xl:text-base lg:text-base'>{productDetails.description}</p>
                         <div>
                             <div className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-10 lg:gap-10 mt-2'>
                                 <p className='text-xs xl:text-sm lg:text-sm font-semibold text-shippedBg'>Free Shipping</p>
@@ -247,21 +282,21 @@ const ProductDetails = () => {
                                     Object.entries(features).map(([key, value], index) => (
                                         <div key={index} className="grid grid-cols-2 gap-x-4 mb-3">
                                             <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">{key}</span>
-                                            <span className="text-left text-xs xl:text-sm lg:text-sm">{value || "null"}</span>
+                                            <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{value || "null"}</span>
                                         </div>
                                     ))
                                 }
                                 <div className="grid grid-cols-2 gap-x-4 mb-3">
                                     <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacuturer Name</span>
-                                    <span className="text-left text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerName}</span>
+                                    <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerName}</span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-x-4 mb-3">
                                     <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Brand</span>
-                                    <span className="text-left text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerBrand}</span>
+                                    <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerBrand}</span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-x-4 mb-3">
                                     <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Address</span>
-                                    <span className="text-left text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerAddress}</span>
+                                    <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerAddress}</span>
                                 </div>
                                 <p className="text-xs text-buttonBg text-left font-semibold underline cursor-pointer mt-5">
                                     See more

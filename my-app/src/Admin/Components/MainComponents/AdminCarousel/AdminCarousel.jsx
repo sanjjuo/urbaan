@@ -22,7 +22,7 @@ const AdminCarousel = () => {
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-10 mt-5">
         {/* Left Section */}
         <div className="lg:col-span-2">
-          <div className="h-[calc(100vh-6rem)] overflow-y-auto hide-scrollbar">
+          <div className="h-fit overflow-y-auto hide-scrollbar">
             {createEditCarousel === "createcarousel" ? (
               <CreateCarousel
               />
@@ -48,7 +48,7 @@ const AdminCarousel = () => {
           </div>
 
           {/* Added Carousel */}
-          <div className="space-y-10 h-[calc(100vh-10rem)] overflow-y-auto hide-scrollbar">
+          <div className="space-y-10 overflow-y-auto hide-scrollbar">
             <AddedCarousel
               createEditCarousel={createEditCarousel}
               handleEditCarousel={handleEditCarousel}

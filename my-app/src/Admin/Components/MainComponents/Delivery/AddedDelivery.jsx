@@ -1,4 +1,4 @@
-import { Card, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardFooter, IconButton, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { useContext } from "react";
 import { useEffect } from "react";
@@ -15,6 +15,8 @@ export default function AddedDelivery({ createEditDelivery, handleEditDelivery }
     const [selectedDeliveryId, setSelectedDeliveryId] = useState(null);
     const [deliveryFees, setDeliveryFees] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
     useEffect(() => {
         const fetchDeliveryFees = async () => {
@@ -47,6 +49,28 @@ export default function AddedDelivery({ createEditDelivery, handleEditDelivery }
         }
     }
 
+    // Get current items to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentDeliveryFees = deliveryFees.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Handle next and prev page
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(deliveryFees.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+
     return (
         <>
             {
@@ -56,71 +80,102 @@ export default function AddedDelivery({ createEditDelivery, handleEditDelivery }
                     </div>
                 ) : (
                     <>
-                        <Card className="w-full shadow-none bg-transparent">
-                            <table className="w-full table-auto text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-white">
-                                        {TABLE_HEAD.map((head) => (
-                                            <th
-                                                key={head}
-                                                className="border-b border-blue-gray-100 p-4 text-center"
-                                            >
-                                                <Typography
-                                                    variant="small"
-                                                    className="font-semibold font-custom text-secondary leading-none text-base uppercase"
+                        <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
+                            <CardBody>
+                                <table className="w-full table-auto text-left border-collapse">
+                                    <thead>
+                                        <tr className="bg-quaternary">
+                                            {TABLE_HEAD.map((head) => (
+                                                <th
+                                                    key={head}
+                                                    className="border-b border-blue-gray-100 p-4 text-center"
                                                 >
-                                                    {head}
-                                                </Typography>
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {deliveryFees.map((delivery, index) => {
-                                        const isLast = index === deliveryFees.length - 1;
-                                        const classes = isLast ?
-                                            "p-4 text-center"
-                                            : "p-4 border-b border-gray-300 text-center";
+                                                    <Typography
+                                                        variant="small"
+                                                        className="font-semibold font-custom text-secondary leading-none text-base uppercase"
+                                                    >
+                                                        {head}
+                                                    </Typography>
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentDeliveryFees.map((delivery, index) => {
+                                            const isLast = index === currentDeliveryFees.length - 1;
+                                            const classes = isLast ?
+                                                "p-4 text-center"
+                                                : "p-4 border-b border-gray-300 text-center";
 
-                                        return (
-                                            <tr key={delivery._id}>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal font-custom text-sm"
-                                                    >
-                                                        {delivery.quantity}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-normal font-custom text-sm"
-                                                    >
-                                                        {delivery.deliveryFee}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <div className="flex justify-center gap-2 text-sm">
-                                                        <button
-                                                            onClick={() => { handleEditDelivery(delivery); setSelectedDeliveryId(delivery._id) }}
-                                                            className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg 
+                                            return (
+                                                <tr key={delivery._id}>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal font-custom text-sm"
+                                                        >
+                                                            {delivery.quantity}
+                                                        </Typography>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal font-custom text-sm"
+                                                        >
+                                                            {delivery.deliveryFee}
+                                                        </Typography>
+                                                    </td>
+                                                    <td className={classes}>
+                                                        <div className="flex justify-center gap-2 text-sm">
+                                                            <button
+                                                                onClick={() => { handleEditDelivery(delivery); setSelectedDeliveryId(delivery._id) }}
+                                                                className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg 
                                             hover:text-editBg ${createEditDelivery === "edit" && selectedDeliveryId === delivery._id ? "!bg-buttonBg text-editBg" : ""}`}>
-                                                            Edit
-                                                        </button>
-                                                        <button
-                                                            onClick={() => { handleOpen('deleteModal'); setSelectedDeliveryId(delivery._id) }}
-                                                            className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
+                                                                Edit
+                                                            </button>
+                                                            <button
+                                                                onClick={() => { handleOpen('deleteModal'); setSelectedDeliveryId(delivery._id) }}
+                                                                className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
                                         hover:bg-primary hover:text-white">
-                                                            Delete
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </CardBody>
+                            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+                                <Button
+                                    variant="outlined"
+                                    size="sm"
+                                    className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                    onClick={handlePrevPage}
+                                    disabled={currentPage === 1}
+                                >
+                                    Prev. page
+                                </Button>
+
+                                <div className="flex items-center gap-2">
+                                    {[...Array(Math.ceil(deliveryFees.length / itemsPerPage))].map((_, index) => (
+                                        <IconButton key={index} variant="text" size="sm" onClick={() => paginate(index + 1)}>
+                                            {index + 1}
+                                        </IconButton>
+                                    ))}
+                                </div>
+
+                                <Button
+                                    variant="outlined"
+                                    size="sm"
+                                    className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                    onClick={handleNextPage}
+                                    disabled={currentPage === Math.ceil(deliveryFees.length / itemsPerPage)}
+                                >
+                                    Next page
+                                </Button>
+                            </CardFooter>
                         </Card>
                     </>
                 )

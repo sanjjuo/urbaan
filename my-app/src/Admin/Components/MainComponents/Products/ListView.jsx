@@ -1,4 +1,4 @@
-import { Button, Card, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
+import { Button, Card, CardBody, CardFooter, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
 import React, { useContext } from 'react';
 import { FaPlus } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
@@ -12,32 +12,32 @@ import { useState } from 'react';
 
 const TABLE_HEAD = ["Product Name", "Description", "Stock", "Rate", "Price", "Orders", "Publish", "Action"];
 
-const ListView = ({ products, isLoading }) => {
+const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId, handleDeleteProduct }) => {
     const { open, handleOpen, modalType, BASE_URL } = useContext(AppContext);
-    const [selectedProductId, setSelectedProductId] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
-    const handleDeleteProduct = async (productId) => {
-        try {
-            const token = localStorage.getItem('token')
-            if (!token) {
-                alert("Authorization is missing")
-                return;
-            }
+    // Get current items to display
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentProducts = products.slice(indexOfFirstItem, indexOfLastItem);
 
-            const headers = {
-                Authorization: `Bearer ${token}`
-            };
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-            const response = await axios.delete(`${BASE_URL}/admin/products/delete-product/${productId}`, { headers })
-            console.log(response.data);
-            handleOpen()
-            alert("Product is deleted")
-        } catch (error) {
-            console.log(error);
-            alert("Product is not deleted")
-            handleOpen()
+    // Handle next and prev page
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(products.length / itemsPerPage)) {
+            setCurrentPage(currentPage + 1);
         }
-    }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
 
     return (
         <>
@@ -52,129 +52,160 @@ const ListView = ({ products, isLoading }) => {
                         <>
                             {/* <div className='bg-white rounded-xl h-screen shadow-md p-5'> */}
                             <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
-                                <table className="w-full table-auto text-left border-collapse">
-                                    <thead>
-                                        <tr className='bg-quaternary'>
-                                            {TABLE_HEAD.map((head) => (
-                                                <th
-                                                    key={head}
-                                                    className="border-b border-gray-300 p-4 text-center"
-                                                >
-                                                    <Typography
-                                                        variant="small"
-                                                        className="font-semibold uppercase text-secondary text-base leading-none font-custom"
+                                <CardBody>
+                                    <table className="w-full table-auto text-left border-collapse">
+                                        <thead>
+                                            <tr className='bg-quaternary'>
+                                                {TABLE_HEAD.map((head) => (
+                                                    <th
+                                                        key={head}
+                                                        className="border-b border-gray-300 p-4 text-center"
                                                     >
-                                                        {head}
-                                                    </Typography>
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {products.map((product, index) => {
-                                            const isLast = index === products.length - 1;
-                                            const classes = isLast
-                                                ? "p-4 text-center"
-                                                : "p-4 border-b border-gray-300 text-center";
-                                            return (
-                                                <tr key={product._id}>
-                                                    <td className={classes}>
-                                                        <div className='flex flex-col items-center gap-2'>
-                                                            <div className='w-[60px] h-[60px] rounded-md'>
-                                                                <img src={`${BASE_URL}/uploads/category/${product.images[0]}`} alt={product.title} className='text-xs w-full h-full object-cover rounded-md' />
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-semibold uppercase text-secondary text-base leading-none font-custom"
+                                                        >
+                                                            {head}
+                                                        </Typography>
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {currentProducts.map((product, index) => {
+                                                const isLast = index === currentProducts.length - 1;
+                                                const classes = isLast
+                                                    ? "p-4 text-center"
+                                                    : "p-4 border-b border-gray-300 text-center";
+                                                return (
+                                                    <tr key={product._id}>
+                                                        <td className={classes}>
+                                                            <div className='flex flex-col items-center gap-2'>
+                                                                <div className='w-[60px] h-[60px] rounded-md'>
+                                                                    <img src={`${BASE_URL}/uploads/category/${product.images[0]}`} alt={product.title} className='text-xs w-full h-full object-cover rounded-md' />
+                                                                </div>
+                                                                <Typography
+                                                                    variant="small"
+                                                                    className="font-normal font-custom text-sm"
+                                                                >
+                                                                    {product.title}
+                                                                </Typography>
                                                             </div>
+                                                        </td>
+                                                        <td className={classes}>
                                                             <Typography
                                                                 variant="small"
                                                                 className="font-normal font-custom text-sm"
                                                             >
-                                                                {product.title}
+                                                                {product.description}
                                                             </Typography>
-                                                        </div>
-                                                    </td>
-                                                    <td className={classes}>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal font-custom text-sm"
-                                                        >
-                                                            {product.description}
-                                                        </Typography>
-                                                    </td>
-                                                    <td className={classes}>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal font-custom text-sm"
-                                                        >
-                                                            {product.stock}
-                                                        </Typography>
-                                                    </td>
-                                                    <td className={classes}>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal font-custom text-xs flex items-center gap-1"
-                                                        >
-                                                            <FaStar className='text-ratingBg' />{product.rating}
-                                                        </Typography>
-                                                    </td>
-                                                    <td className={classes}>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal font-custom text-sm"
-                                                        >
-                                                            ₹{product.offerPrice}
-                                                        </Typography>
-                                                    </td>
-                                                    <td className={classes}>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal font-custom text-sm"
-                                                        >
-                                                            {product.orderCount}
-                                                        </Typography>
-                                                    </td>
-                                                    <td className={classes}>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal font-custom text-sm"
-                                                        >
-                                                            {product.publish}
-                                                        </Typography>
-                                                    </td>
-                                                    <td className={classes}>
-                                                        <Menu>
-                                                            <MenuHandler>
-                                                                <IconButton variant="text">
-                                                                    <HiOutlineDotsHorizontal className='text-primary text-2xl cursor-pointer' />
-                                                                </IconButton>
-                                                            </MenuHandler>
-                                                            <MenuList>
-                                                                <Link
-                                                                    to={{
-                                                                        pathname: '/adminHome/editProduct',
-                                                                    }}
-                                                                    state={{ product }}
-                                                                >
-                                                                    <MenuItem className='font-custom text-buttonBg hover:!text-buttonBg active:border-none'>
-                                                                        Edit
+                                                        </td>
+                                                        <td className={classes}>
+                                                            <Typography
+                                                                variant="small"
+                                                                className="font-normal font-custom text-sm"
+                                                            >
+                                                                {product.totalStock}
+                                                            </Typography>
+                                                        </td>
+                                                        <td className={classes}>
+                                                            <Typography
+                                                                variant="small"
+                                                                className="font-normal font-custom text-xs flex items-center gap-1"
+                                                            >
+                                                                <FaStar className='text-ratingBg' />{product.rating}
+                                                            </Typography>
+                                                        </td>
+                                                        <td className={classes}>
+                                                            <Typography
+                                                                variant="small"
+                                                                className="font-normal font-custom text-sm"
+                                                            >
+                                                                ₹{product.offerPrice}
+                                                            </Typography>
+                                                        </td>
+                                                        <td className={classes}>
+                                                            <Typography
+                                                                variant="small"
+                                                                className="font-normal font-custom text-sm"
+                                                            >
+                                                                {product.orderCount}
+                                                            </Typography>
+                                                        </td>
+                                                        <td className={classes}>
+                                                            <Typography
+                                                                variant="small"
+                                                                className="font-normal font-custom text-sm"
+                                                            >
+                                                                {product.publish}
+                                                            </Typography>
+                                                        </td>
+                                                        <td className={classes}>
+                                                            <Menu>
+                                                                <MenuHandler>
+                                                                    <IconButton variant="text">
+                                                                        <HiOutlineDotsHorizontal className='text-primary text-2xl cursor-pointer' />
+                                                                    </IconButton>
+                                                                </MenuHandler>
+                                                                <MenuList>
+                                                                    <Link
+                                                                        to={{
+                                                                            pathname: '/adminHome/editProduct',
+                                                                        }}
+                                                                        state={{ product }}
+                                                                    >
+                                                                        <MenuItem className='font-custom text-buttonBg hover:!text-buttonBg active:border-none'>
+                                                                            Edit
+                                                                        </MenuItem>
+                                                                    </Link>
+                                                                    <MenuItem
+                                                                        onClick={() => {
+                                                                            handleOpen("deleteProductModal");
+                                                                            setSelectedProductId(product._id);
+                                                                        }}
+                                                                        className='font-custom text-primary hover:!text-primary'
+                                                                    >
+                                                                        Delete
                                                                     </MenuItem>
-                                                                </Link>
-                                                                <MenuItem
-                                                                    onClick={() => {
-                                                                        handleOpen("deleteProductModal");
-                                                                        setSelectedProductId(product._id);
-                                                                    }}
-                                                                    className='font-custom text-primary hover:!text-primary'
-                                                                >
-                                                                    Delete
-                                                                </MenuItem>
-                                                            </MenuList>
-                                                        </Menu>
+                                                                </MenuList>
+                                                            </Menu>
 
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </CardBody>
+                                <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+                                    <Button
+                                        variant="outlined"
+                                        size="sm"
+                                        className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                        onClick={handlePrevPage}
+                                        disabled={currentPage === 1}
+                                    >
+                                        Prev. page
+                                    </Button>
+
+                                    <div className="flex items-center gap-2">
+                                        {[...Array(Math.ceil(products.length / itemsPerPage))].map((_, index) => (
+                                            <IconButton key={index} variant="text" size="sm" onClick={() => paginate(index + 1)}>
+                                                {index + 1}
+                                            </IconButton>
+                                        ))}
+                                    </div>
+
+                                    <Button
+                                        variant="outlined"
+                                        size="sm"
+                                        className='font-custom border-gray-300 font-normal capitalize text-sm cursor-pointer hover:bg-black hover:text-white'
+                                        onClick={handleNextPage}
+                                        disabled={currentPage === Math.ceil(products.length / itemsPerPage)}
+                                    >
+                                        Next page
+                                    </Button>
+                                </CardFooter>
                             </Card>
                             {/* </div> */}
                         </>
