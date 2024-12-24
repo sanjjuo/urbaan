@@ -7,17 +7,11 @@ const OrdersTracking = () => {
     const navigate = useNavigate()
     return (
         <>
-            <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0 xl:hidden lg:hidden">
-                <h1
-                    className="flex items-center gap-5 text-xl font-medium cursor-pointer"
-                    onClick={() => navigate(-1)}
-                >
-                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Orders Tracking
+            <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
+                <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
+                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
                 </h1>
-            </div>
-
-            <div className="px-4 py-10 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
-                <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-5 mt-10">
                     <Card className='p-2'>
                         <div className='flex justify-between items-center'>
                             <div className='w-16 h-14'>

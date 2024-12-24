@@ -61,7 +61,7 @@ export function SizeChart() {
                                         className="border-b border-blue-gray-100 bg-blue-gray-50 p-2 text-center w-16"
                                     >
                                         <Typography
-                                            className="font-semibold text-xs"
+                                            className="font-semibold text-xs font-custom"
                                         >
                                             {head}
                                         </Typography>
@@ -78,35 +78,35 @@ export function SizeChart() {
                                     <tr key={index}>
                                         <td className={classes}>
                                             <Typography
-                                                className="font-normal text-sm flex items-center"
+                                                className="font-normal text-sm flex items-center font-custom"
                                             ><Radio name="color" color="pink" />
                                                 {item.size}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
                                             <Typography
-                                                className="font-normal text-sm"
+                                                className="font-normal text-sm font-custom"
                                             >
                                                 {item.bust}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
                                             <Typography
-                                                className="font-normal text-sm"
+                                                className="font-normal text-sm font-custom"
                                             >
                                                 {item.front}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
                                             <Typography
-                                                className="font-normal text-sm"
+                                                className="font-normal text-sm font-custom"
                                             >
                                                 {item.waist}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
                                             <Typography
-                                                className="font-normal text-sm"
+                                                className="font-normal text-sm font-custom"
                                             >
                                                 {item.hip}
                                             </Typography>

@@ -10,17 +10,21 @@ import { useState } from 'react'
 
 const Coupons = () => {
   const { open, handleOpen } = useContext(AppContext)
- 
+  const [adminCoupon, setAdminCoupon] = useState([])
+
   return (
     <>
       <h1 className="text-2xl lg:text-3xl font-semibold">Coupons</h1>
       <div className='space-y-5 mt-5'>
         <div className='flex items-center gap-2'>
-          <CouponsSearchBar />
+          <CouponsSearchBar setAdminCoupon={setAdminCoupon} />
           <Button onClick={() => handleOpen("addCouponModal")} className='flex items-center gap-1 bg-buttonBg font-custom font-normal text-sm'><FaPlus />Add Coupon</Button>
         </div>
         <div>
-          <CouponsTable />
+          <CouponsTable
+            adminCoupon={adminCoupon}
+            setAdminCoupon={setAdminCoupon}
+          />
         </div>
       </div>
 

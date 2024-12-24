@@ -19,7 +19,7 @@ const UserCart = () => {
     const navigate = useNavigate();
     const location = useLocation()
     const selectedAddress = location.state?.selectedAddress || {}
-    const { BASE_URL, viewCart, setViewCart } = useContext(AppContext);
+    const { BASE_URL, viewCart, setViewCart, couponDiscountTotalPrice } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [cartItems, setCartItems] = useState(viewCart.items || []); // for get details
     const [isUpdating, setIsUpdating] = useState(false);
@@ -235,7 +235,7 @@ const UserCart = () => {
     return (
         <>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
-                <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
+                <h1 className="flex items-center gap-1 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
                 </h1>
                 {/* 

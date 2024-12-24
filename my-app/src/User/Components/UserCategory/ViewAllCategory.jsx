@@ -6,7 +6,7 @@ import { ViewCategoryDrawer } from './ViewCategoryDrawer';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { RiHeart3Line } from 'react-icons/ri';
+import { RiHeart3Line, RiSearch2Line } from 'react-icons/ri';
 import AppLoader from '../../../Loader';
 
 const ViewAllCategory = () => {
@@ -14,6 +14,8 @@ const ViewAllCategory = () => {
     const { handleOpenBottomDrawer, BASE_URL } = useContext(AppContext);
     const [allProducts, setAllProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true);
+    const [searchProducts, setSearchProducts] = useState('');
+
 
     useEffect(() => {
         const fetchAllProducts = async () => {
@@ -29,18 +31,43 @@ const ViewAllCategory = () => {
         fetchAllProducts()
     }, [])
 
+    // search products
+    useEffect(() => {
+        const fetchSearchedProducts = async () => {
+            setIsLoading(true);
+            try {
+                const response = await axios.get(`${BASE_URL}/user/products/products/search?name=${searchProducts}`);
+                setAllProducts(response.data);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchSearchedProducts()
+    }, [searchProducts]);
+
+
     return (
         <>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
-                <div className="flex items-center justify-between gap-2">
-                    <IoIosArrowBack onClick={() => navigate(-1)} className="text-secondary text-3xl cursor-pointer" />
-                    <input
-                        type="search"
-                        name="search"
-                        id=""
-                        placeholder='Churidar Materials'
-                        className='w-full text-sm p-2 rounded-lg placeholder:font-normal bg-searchUser placeholder:text-gray-700'
-                    />
+                <h1 className="flex items-center gap-1 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
+                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
+                </h1>
+                <div className="flex items-center justify-center gap-2 mt-5 ">
+                    <div className='w-96 bg-searchUser flex items-center gap-2 rounded-lg text-sm p-2'>
+                    <RiSearch2Line className='text-gray-600 text-xl' />
+                        <input
+                            type="search"
+                            name="search"
+                            id=""
+                            value={searchProducts}
+                            onChange={(e) => setSearchProducts(e.target.value)}
+                            placeholder='Search products'
+                            className='w-full bg-transparent placeholder:font-normal placeholder:text-gray-700 focus:outline-none'
+                        />
+                    </div>
                     <div onClick={handleOpenBottomDrawer} className='bg-searchUser p-2 rounded-lg'>
                         <div className='w-5 h-5'>
                             <img src="/filter.png" alt="" className='w-full h-full' />
@@ -51,7 +78,7 @@ const ViewAllCategory = () => {
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 mt-10'>
                     {
                         isLoading || allProducts.length === 0 ? (
-                            <div className="col-span-2 flex justify-center items-center">
+                            <div className="col-span-5 flex justify-center items-center h-[50vh]">
                                 <AppLoader />
                             </div>
                         ) : (

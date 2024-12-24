@@ -12,9 +12,8 @@ import { EditCouponModal } from './EditCouponModal';
 const TABLE_HEAD = ["Discount", "Discount Type", "Coupon Title", "Code", "Start Date", "End Date", "Status", "Action"];
 
 
-const CouponsTable = () => {
+const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
     const { open, handleOpen, BASE_URL, modalType } = useContext(AppContext)
-    const [adminCoupon, setAdminCoupon] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [initialEditCoupon, setInitialEditCoupon] = useState(null)
     const [selectCouponId, setSelectCouponId] = useState(null)

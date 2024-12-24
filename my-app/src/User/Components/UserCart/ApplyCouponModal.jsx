@@ -14,7 +14,7 @@ import toast from 'react-hot-toast'
 
 const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon }) => {
     const [couponCode, setCouponCode] = useState('');
-    const { BASE_URL } = useContext(AppContext)
+    const { BASE_URL, setCouponDiscountTotalPrice } = useContext(AppContext)
 
     // handle Coupon
     const handleCouponSubmit = async (e) => {
@@ -36,6 +36,7 @@ const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon }) => {
                 }
             })
             console.log(response.data);
+            setCouponDiscountTotalPrice(response.data.data) // for getting discount and previous amount value
             handleCouponModalOpen()
             toast.success('Coupon is applied')
         } catch (error) {

@@ -12,6 +12,7 @@ const StoreContext = ({ children }) => {
     const [viewCart, setViewCart] = useState([]) //for UserCart.jsx and navbar
     const [wishlist, setWishlist] = useState([]) //for favouriteProduct.jsx and navbar
     const [profile, setProfile] = useState([]) //for userprofile and mobile sidebar
+    const [couponDiscountTotalPrice, setCouponDiscountTotalPrice] = useState('') //for getting discount and previous value in userCart.jsx
 
     // Handle modal
     const handleOpen = (modal, type) => {
@@ -56,7 +57,9 @@ const StoreContext = ({ children }) => {
                 wishlist,
                 setWishlist,
                 profile,
-                setProfile
+                setProfile,
+                couponDiscountTotalPrice,
+                setCouponDiscountTotalPrice
             }}
         >
             {children}
