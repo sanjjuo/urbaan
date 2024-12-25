@@ -125,8 +125,8 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {currentOrderList.map((coupon, index) => {
-                                            const isLast = index === currentOrderList.length - 1;
+                                        {Array.isArray(currentOrderList) && currentOrderList.map((coupon, index) => {
+                                            const isLast = index === adminCoupon.length - 1;
                                             const classes = isLast
                                                 ? "p-4 text-center"
                                                 : "p-4 border-b border-gray-300 text-center";
@@ -136,7 +136,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                     <td className={classes}>
                                                         <Typography
                                                             variant="small"
-                                                            className="font-normal font-custom text-sm"
+                                                            className="font-normal font-custom text-sm capitalize"
                                                         >
                                                             {coupon.discountValue}
                                                         </Typography>
@@ -144,7 +144,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                     <td className={classes}>
                                                         <Typography
                                                             variant="small"
-                                                            className="font-normal font-custom text-sm"
+                                                            className="font-normal font-custom text-sm capitalize"
                                                         >
                                                             {coupon.discountType}
                                                         </Typography>
@@ -160,7 +160,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                     <td className={classes}>
                                                         <Typography
                                                             variant="small"
-                                                            className="font-normal font-custom text-sm"
+                                                            className="font-normal font-custom text-sm capitalize"
                                                         >
                                                             {coupon.code}
                                                         </Typography>
@@ -168,7 +168,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                     <td className={classes}>
                                                         <Typography
                                                             variant="small"
-                                                            className="font-normal font-custom text-sm"
+                                                            className="font-normal font-custom text-sm capitalize"
                                                         >
                                                             {new Date(coupon.startDate).toLocaleString('en-US', {
                                                                 year: 'numeric',
@@ -182,7 +182,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                     <td className={classes}>
                                                         <Typography
                                                             variant="small"
-                                                            className="font-normal font-custom text-sm"
+                                                            className="font-normal font-custom text-sm capitalize"
                                                         >
                                                             {new Date(coupon.endDate).toLocaleString('en-US', {
                                                                 year: 'numeric',

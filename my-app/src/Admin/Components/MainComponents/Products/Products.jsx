@@ -6,6 +6,9 @@ import { useEffect } from 'react'
 import { useContext } from 'react'
 import { AppContext } from '../../../../StoreContext/StoreContext'
 import axios from 'axios'
+import { Button } from '@material-tailwind/react'
+import { Link } from 'react-router-dom'
+import { FaPlus } from 'react-icons/fa6'
 
 
 const Products = () => {
@@ -72,7 +75,12 @@ const Products = () => {
         <div className='grid col-span-2 overflow-y-auto hide-scrollbar'>
           <Filter view={view} setView={setView} />
         </div>
-        <div className='grid col-span-6 overflow-y-auto hide-scrollbar'>
+        <div className='grid col-span-6 overflow-y-auto hide-scrollbar space-y-5'>
+          <Link
+            to='/adminHome/addProduct'
+            >
+            <Button className='flex items-center gap-1 bg-buttonBg font-custom font-normal text-sm'><FaPlus />Add product</Button>
+          </Link>
           {view === "list" ? (
             <ListView
               products={products}

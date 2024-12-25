@@ -20,7 +20,7 @@ const CouponsSearchBar = ({ setAdminCoupon }) => {
             Authorization: `Bearer ${token}`
           }
         })
-        // setAdminCoupon(response.data)
+        setAdminCoupon(response.data.coupons)
         console.log(response.data);
       } catch (error) {
         console.log(error);

@@ -1,13 +1,11 @@
 import { Button, Card, CardBody, CardFooter, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from '@material-tailwind/react'
 import React, { useContext } from 'react';
-import { FaPlus } from "react-icons/fa6";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { AppContext } from "../../../../StoreContext/StoreContext"
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
 import AppLoader from '../../../../Loader';
-import axios from 'axios';
 import { useState } from 'react';
 
 const TABLE_HEAD = ["Product Name", "Description", "Stock", "Rate", "Price", "Orders", "Publish", "Action"];
@@ -41,8 +39,7 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
 
     return (
         <>
-            <div className='space-y-5'>
-                <Link to='/adminHome/addProduct'><Button className='flex items-center gap-1 bg-buttonBg font-custom font-normal text-sm'><FaPlus />Add product</Button></Link>
+            <div>
                 {
                     isLoading || products.length === 0 ? (
                         <div className='col-span-2 flex justify-center items-center h-[50vh]'>

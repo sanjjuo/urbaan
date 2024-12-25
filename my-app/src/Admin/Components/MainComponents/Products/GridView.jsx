@@ -23,8 +23,7 @@ const GridView = ({ products, isLoading, selectedProductId, setSelectedProductId
 
     return (
         <>
-            <div className='space-y-5'>
-                <Link to='/adminHome/addProduct'><Button className='flex items-center gap-1 bg-buttonBg font-custom font-normal text-sm'><FaPlus />Add product</Button></Link>
+            <div>
                 {
                     isLoading || products.length === 0 ? (
                         <div className='col-span-2 flex justify-center items-center h-[50vh]'>

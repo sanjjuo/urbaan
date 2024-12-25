@@ -46,7 +46,7 @@ const Delivery = () => {
                         <input
                             type="search"
                             name="search"
-                            placeholder="Search Category"
+                            placeholder="Search Delivery fees"
                             className="bg-transparent placeholder:text-gray-700 placeholder:text-base focus:outline-none text-secondary w-full"
                         />
                     </div>

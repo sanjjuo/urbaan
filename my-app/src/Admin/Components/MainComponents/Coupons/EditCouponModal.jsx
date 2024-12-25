@@ -20,7 +20,7 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
         if (initialEditCoupon) {
             setEditCouponTitle(initialEditCoupon.title);
             setEditCouponCode(initialEditCoupon.code);
-            setEditCouponCategory(initialEditCoupon.category);
+            setEditCouponCategory(initialEditCoupon.category?._id);
             setEditCouponStartDate(initialEditCoupon.startDate);
             setEditCouponEndDate(initialEditCoupon.endDate);
             setEditCouponDiscountValue(initialEditCoupon.discountValue);
@@ -109,7 +109,7 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
                                     value={editCouponTitle}
                                     onChange={(e) => setEditCouponTitle(e.target.value)}
                                     placeholder='Coupon title'
-                                    className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                                    className='border-[1px] capitalize text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
                                 />
                             </div>
                             {/* Code and category */}
@@ -127,9 +127,9 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
                                 <div className='flex flex-col gap-1 w-full'>
                                     <label className='font-normal text-base'>Category Type</label>
                                     <select
-                                        value={editCouponCategory._id}
+                                        value={editCouponCategory}
                                         onChange={(e) => setEditCouponCategory(e.target.value)}
-                                        className="w-full text-sm text-gray-500 font-light bg-gray-100/50 border p-2 rounded-md focus:outline-none focus:cursor-pointer"
+                                        className="w-full text-sm capitalize text-gray-500 font-light bg-gray-100/50 border p-2 rounded-md focus:outline-none focus:cursor-pointer"
                                     >
                                         <option value="">Select Category</option>
                                         {categories.map((category) => (
@@ -170,7 +170,7 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
                                         value={editCouponDiscountValue}
                                         onChange={(e) => setEditCouponDiscountValue(e.target.value)}
                                         placeholder='Discount Value (50 or 50%)'
-                                        className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                                        className='border-[1px] capitalize text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
                                     />
                                 </div>
                                 <div className='flex flex-col gap-1 w-1/3'>
@@ -180,7 +180,7 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
                                         value={editCouponDiscountType}
                                         onChange={(e) => setEditCouponDiscountType(e.target.value)}
                                         placeholder='Discount Type (Percentage or amount)'
-                                        className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                                        className='border-[1px] capitalize text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
                                     />
                                 </div>
                                 <div className='flex flex-col gap-1 w-1/3'>
