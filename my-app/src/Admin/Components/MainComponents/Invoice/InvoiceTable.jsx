@@ -3,54 +3,50 @@ import { Button, Card, CardBody, CardFooter, Chip, IconButton, Typography } from
 import { AppContext } from "../../../../StoreContext/StoreContext"
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const TABLE_HEAD = ["payment ID", "Customer", "mobile", "Date", "Size", "amount", "Status", "action"];
 
-const TABLE_ROWS = [
-    {
-        paymentId: "#PAY12345",
-        customer: "Alex",
-        mobile: "7874561232",
-        date: "14 Feb 2024",
-        size: "S",
-        amount: "499",
-        status: "unpaid"
-    },
-    {
-        paymentId: "#PAY2468",
-        customer: "Arya Nair",
-        mobile: "9845687525",
-        date: "14 march 2024",
-        size: "M",
-        amount: "1299",
-        status: "refund"
-    },
-    {
-        paymentId: "#PAY6789",
-        customer: "kavya",
-        mobile: "6879452531",
-        date: "14 sep 2024",
-        size: "XL",
-        amount: "2999",
-        status: "paid"
-    },
-    {
-        paymentId: "#PAY1357",
-        customer: "asif ali",
-        mobile: "9025861543",
-        date: "14 oct 2024",
-        size: "XXL",
-        amount: "2399",
-        status: "paid"
-    },
-];
-
-
-const InvoiceTable = () => {
-    const { open, handleOpen } = useContext(AppContext)
-    const [invoice, setInvoice] = useState('')
+const InvoiceTable = ({ invoice, setInvoice }) => {
+    const { open, handleOpen, BASE_URL, modalType } = useContext(AppContext)
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
+    const [selectedInvoiceId, setSelectedInvoiceId] = useState(null)
+
+
+    // fetch invoice
+    useEffect(() => {
+        const fetchInvoices = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/admin/invoice/get`)
+                setInvoice(response.data)
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchInvoices()
+    }, [])
+
+
+    // handle Delete
+    const handleDeleteInvoice = async (invoiceId) => {
+        try {
+            const token = localStorage.getItem('token')
+            const response = await axios.delete(`${BASE_URL}/admin/invoice/delete/${invoiceId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data);
+            handleOpen()
+            toast.success('Invoice is deleted')
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     // Get current items to display
@@ -98,18 +94,18 @@ const InvoiceTable = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {TABLE_ROWS.map((item, index) => {
-                                const isLast = index === TABLE_ROWS.length - 1;
+                            {Array.isArray(currentInvoice) && currentInvoice.map((invoice, index) => {
+                                const isLast = index === currentInvoice.length - 1;
                                 const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
 
                                 return (
-                                    <tr key={index}>
+                                    <tr key={invoice._id}>
                                         <td className={classes}>
                                             <Typography
                                                 variant="small"
-                                                className="font-normal font-custom text-sm"
+                                                className="font-normal font-custom text-sm uppercase"
                                             >
-                                                {item.paymentId}
+                                                {invoice.paymentId}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -117,7 +113,15 @@ const InvoiceTable = () => {
                                                 variant="small"
                                                 className="font-normal capitalize font-custom text-sm"
                                             >
-                                                {item.customer}
+                                                {invoice.customerName}
+                                            </Typography>
+                                        </td>
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                className="font-normal capitalize font-custom text-sm"
+                                            >
+                                                {invoice.customerMobile}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -125,7 +129,15 @@ const InvoiceTable = () => {
                                                 variant="small"
                                                 className="font-normal font-custom text-sm"
                                             >
-                                                {item.mobile}
+                                                {invoice.date}
+                                            </Typography>
+                                        </td>
+                                        <td className={classes}>
+                                            <Typography
+                                                variant="small"
+                                                className="font-normal capitalize font-custom text-sm"
+                                            >
+                                                {invoice.products[0].size}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
@@ -133,37 +145,21 @@ const InvoiceTable = () => {
                                                 variant="small"
                                                 className="font-normal font-custom text-sm"
                                             >
-                                                {item.date}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal font-custom text-sm"
-                                            >
-                                                {item.size}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                className="font-normal font-custom text-sm"
-                                            >
-                                                ₹{item.amount}
+                                                ₹{invoice.totalAmount}
                                             </Typography>
                                         </td>
                                         <td className={classes}>
                                             <Chip
                                                 className={`
-                                                ${item.status === "unpaid" ? "text-processingBg bg-processingBg/20 capitalize text-sm text-center font-normal" : ""}
-                                                ${item.status === "paid" ? "text-shippedBg bg-shippedBg/20 capitalize text-sm text-center font-normal" : ""}
-                                                ${item.status === "refund" ? "text-pendingBg bg-pendingBg/20 capitalize text-sm text-center font-normal" : ""}
-                                                ${!["unpaid", "paid", "refund"].includes(item.status) ? "text-gray-500 bg-gray-200 capitalize text-sm text-center font-normal" : ""}
+                                                ${invoice.status === "Cancelled" ? "text-processingBg bg-processingBg/20 capitalize text-sm text-center font-normal" : ""}
+                                                ${invoice.status === "Delivered" ? "text-shippedBg bg-shippedBg/20 capitalize text-sm text-center font-normal" : ""}
+                                                ${invoice.status === "Pending" ? "text-pendingBg bg-pendingBg/20 capitalize text-sm text-center font-normal" : ""}
+                                                ${!["Cancelled", "Delivered", "Pending"].includes(invoice.status) ? "text-gray-500 bg-gray-200 capitalize text-sm text-center font-normal" : ""}
                                                     `}
                                                 value={
-                                                    item.status === "unpaid" ? "unpaid" :
-                                                        item.status === "paid" ? "paid" :
-                                                            item.status === "refund" ? "refund" : "Unknown"
+                                                    invoice.status === "Cancelled" ? "Cancelled" :
+                                                        invoice.status === "Delivered" ? "Delivered" :
+                                                            invoice.status === "Pending" ? "Pending" : "Unknown"
                                                 }
 
                                             />
@@ -174,7 +170,10 @@ const InvoiceTable = () => {
                                             hover:bg-buttonBg hover:text-editBg">
                                                     Edit
                                                 </button>
-                                                <button onClick={() => handleOpen("deleteModal")} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
+                                                <button onClick={() => {
+                                                    handleOpen("deleteModal");
+                                                    setSelectedInvoiceId(invoice._id)
+                                                }} className="text-deleteBg bg-primary/20 w-14 h-7 flex justify-center items-center rounded-md
                                             hover:bg-primary hover:text-white">
                                                     Delete
                                                 </button>
@@ -219,6 +218,9 @@ const InvoiceTable = () => {
             <DeleteModal
                 open={open === "deleteModal"}
                 handleOpen={handleOpen}
+                handleDelete={handleDeleteInvoice}
+                modalType='invoice'
+                invoiceId={selectedInvoiceId}
                 title="Are you sure ?"
                 description="Do you really want to delete this item? This action cannot be undone."
             />

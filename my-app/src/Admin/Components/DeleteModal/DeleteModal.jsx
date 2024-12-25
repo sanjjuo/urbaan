@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
-export function DeleteModal({ open, handleOpen, title, description, handleDelete, modalType, catId, SubCatId, carouselId, couponId, productId, deliveryId }) {
+export function DeleteModal({ open, handleOpen, title, description, handleDelete, modalType, catId, SubCatId, carouselId, couponId, productId, deliveryId, invoiceId }) {
     return (
         <Dialog open={open} handler={handleOpen} size="sm" className="rounded-none" aria-modal="true">
             <div className={`inert ${open ? '' : 'block'}`}>
@@ -45,6 +45,9 @@ export function DeleteModal({ open, handleOpen, title, description, handleDelete
                                 }
                                 else if (modalType === "delivery") {
                                     handleDelete(deliveryId);
+                                }
+                                else if (modalType === "invoice") {
+                                    handleDelete(invoiceId);
                                 }
 
                             }}
