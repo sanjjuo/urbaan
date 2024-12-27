@@ -33,11 +33,11 @@ import OrdersTracking from './User/Components/TrackOrder/OrdersTracking';
 import AllCategory from './User/Components/UserCategory/AllCategory';
 import AddUserAddress from './User/Components/UserAddress/AddUserAddress';
 import EditUserAddress from './User/Components/UserAddress/EditUserAddress';
-import Checkout from './User/Components/UserCart/Checkout';
 import NotFound from './NotFound';
 import UserAddress from './User/Components/UserProfile/UserAddress';
 import UserOrders from './User/Components/UserProfile/UserOrders';
 import Delivery from './Admin/Components/MainComponents/Delivery/Delivery';
+import Checkout from './User/Components/Checkout/Checkout';
 
 const FullRoutes = () => {
     return (

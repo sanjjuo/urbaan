@@ -23,6 +23,7 @@ const EditUserAddress = () => {
     const [editState, setEditState] = useState('')
     const [editEmail, setEditEmail] = useState('')
     const [editAddressType, setEditAddressType] = useState('home')
+    const [editDefaultAddress, setEditDefaultAddress] = useState(true)
 
 
     useEffect(() => {
@@ -36,6 +37,7 @@ const EditUserAddress = () => {
             setEditState(initailAddressData.state)
             setEditEmail(initailAddressData.email)
             setEditAddressType(initailAddressData.addressType)
+            setEditDefaultAddress(initailAddressData.defaultAddress)
         }
     }, [initailAddressData])
 
@@ -48,16 +50,17 @@ const EditUserAddress = () => {
 
             // append to formdata
             const rowData = {
-                // userId: userId,
+                userId: userId,
                 name: editName,
                 number: editNumber,
                 address: editAddress,
                 landmark: editLandMark,
-                // pincode: editPinCode,
+                pincode: editPinCode,
                 city: editCity,
                 state: editState,
                 // email: editEmail,
-                addressType: editAddressType
+                addressType: editAddressType,
+                defaultAddress: editDefaultAddress
             }
 
             console.log('Payload:', rowData);
@@ -67,7 +70,7 @@ const EditUserAddress = () => {
             }
             console.log('Headers:', headers);
             console.log(`${initailAddressData._id}`);
-            const response = await axios.put(`${BASE_URL}/user/address/update/${initailAddressData._id}`, rowData, { headers })
+            const response = await axios.patch(`${BASE_URL}/user/address/update/${initailAddressData._id}`, rowData, { headers })
             console.log(response.data);
             toast.success("Address updated successfully")
             navigate('/select-delivery-address');
@@ -81,6 +84,7 @@ const EditUserAddress = () => {
             setEditAddressType('')
             setEditState('')
             setEditCity('')
+            setEditDefaultAddress(false)
         } catch (error) {
             console.error(error);
             if (error.response) {
@@ -98,7 +102,7 @@ const EditUserAddress = () => {
                     className="flex items-center gap-2 text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
-                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" />Add Delivery Address
+                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" />Edit Delivery Address
                 </h1>
             </div>
 
@@ -223,6 +227,18 @@ const EditUserAddress = () => {
                                     ${editAddressType === "work" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Work</Button>
                                 <Button onClick={() => setEditAddressType("other")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
                                 ${editAddressType === "other" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Other</Button>
+                            </div>
+
+                            {/* Default Address Checkbox */}
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    checked={editDefaultAddress}
+                                    onChange={() => setEditDefaultAddress(!editDefaultAddress)}
+                                    id="defaultAddress"
+                                    className="h-4 w-4"
+                                />
+                                <label htmlFor="defaultAddress" className="font-medium text-sm xl:text-base lg:text-base">Set as Default Address</label>
                             </div>
 
                             {/* button */}

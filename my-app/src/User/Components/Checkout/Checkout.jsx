@@ -2,8 +2,9 @@ import { Button, Card, Radio } from '@material-tailwind/react'
 import React, { useState, useEffect, useContext } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { AppContext } from '../../../StoreContext/StoreContext'
 import axios from 'axios'
+import namer from 'color-namer'; // Import the color-namer library
+import { AppContext } from '../../../StoreContext/StoreContext'
 import AppLoader from '../../../Loader'
 
 const Checkout = () => {
@@ -16,6 +17,17 @@ const Checkout = () => {
     const [deliveryCharge, setDeliveryCharge] = useState([]);
 
     const checkoutDetails = checkoutData.checkout;
+
+    // Function to get the nearest named color
+    const getNamedColor = (colorCode) => {
+        try {
+            const namedColors = namer(colorCode);
+            return namedColors.pantone[0].name || "Unknown Color";
+        } catch (error) {
+            console.error("Invalid color code:", error);
+            return "Invalid Color";
+        }
+    };
 
     useEffect(() => {
         const fetchCheckoutDetails = async () => {
@@ -240,7 +252,7 @@ const Checkout = () => {
                                                     <div>
                                                         <h1 className='text-base text-secondary font-medium xl:mb-2 lg:mb-2'>{item?.name || 'No name'}</h1>
                                                         <ul className='xl:space-y-1 lg:space-y-1'>
-                                                            <li className='text-sm capitalize text-secondary'>Color : {item.color}</li>
+                                                            <li className='text-sm capitalize text-secondary'>Color : {getNamedColor(item.color)}</li>
                                                             <li className='text-sm capitalize text-secondary'>Size : {item.size}</li>
                                                             <li className='text-sm capitalize text-secondary'>Quantity : {item.quantity}</li>
                                                         </ul>

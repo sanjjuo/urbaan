@@ -1,8 +1,6 @@
 import { Button, Card } from '@material-tailwind/react'
 import axios from 'axios'
-import React from 'react'
-import { useContext } from 'react'
-import { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../StoreContext/StoreContext'
@@ -20,8 +18,7 @@ const AddUserAddress = () => {
     const [state, setState] = useState('')
     const [email, setEmail] = useState('')
     const [addressType, setAddressType] = useState('home')
-
-    // createAddressFormSubmit
+    const [defaultAddress, setDefaultAddress] = useState(false) // default address state
 
     const createAddressFormSubmit = async (e) => {
         e.preventDefault()
@@ -29,7 +26,7 @@ const AddUserAddress = () => {
             const token = localStorage.getItem('userToken')
             const userId = localStorage.getItem('userId')
 
-            // append to formdata
+            // Append to formdata
             const rowData = {
                 userId: userId,
                 name: name,
@@ -40,7 +37,8 @@ const AddUserAddress = () => {
                 city: city,
                 state: state,
                 email: email,
-                addressType: addressType
+                addressType: addressType,
+                defaultAddress: defaultAddress, // Use the state value for defaultAddress
             }
 
             const headers = {
@@ -48,12 +46,12 @@ const AddUserAddress = () => {
             }
 
             const response = await axios.post(`${BASE_URL}/user/address/add`, rowData, { headers })
-            console.log(response.data);
+            console.log(response.data)
             toast.success("Address added successfully")
-            navigate('/select-delivery-address');
+            navigate('/select-delivery-address')
         } catch (error) {
-            console.log(error);
-            alert("error in form submission :", error.response.message)
+            console.log(error)
+            alert("Error in form submission:", error.response?.message || "Unknown error")
         }
     }
 
@@ -87,7 +85,7 @@ const AddUserAddress = () => {
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
-                            {/* number */}
+                            {/* Number */}
                             <div className="flex flex-col gap-1 w-full">
                                 <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
                                     Phone Number
@@ -98,11 +96,11 @@ const AddUserAddress = () => {
                                     id="number"
                                     value={number}
                                     onChange={(e) => setNumber(e.target.value)}
-                                    placeholder="Enter your name"
+                                    placeholder="Enter your phone number"
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
-                            {/* address */}
+                            {/* Address */}
                             <div className="flex flex-col gap-1">
                                 <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
                                     Address
@@ -135,7 +133,7 @@ const AddUserAddress = () => {
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
-                            {/* city */}
+                            {/* City */}
                             <div className="flex flex-col gap-1">
                                 <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
                                     City
@@ -150,7 +148,7 @@ const AddUserAddress = () => {
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
-                            {/* state */}
+                            {/* State */}
                             <div className="flex flex-col gap-1">
                                 <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
                                     State
@@ -165,7 +163,7 @@ const AddUserAddress = () => {
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
-                            {/* email */}
+                            {/* Email */}
                             <div className="flex flex-col gap-1">
                                 <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
                                     Email Address
@@ -181,7 +179,7 @@ const AddUserAddress = () => {
                                 />
                             </div>
 
-                            {/* save address */}
+                            {/* Address Type Buttons */}
                             <div className='flex items-center gap-3'>
                                 <Button onClick={() => setAddressType("home")} variant='outlined' className={`text-secondary border-secondary font-custom text-sm capitalize 
                                     ${addressType === "home" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Home</Button>
@@ -191,14 +189,25 @@ const AddUserAddress = () => {
                                     ${addressType === "other" ? "text-primary border-primary text-opacity-100 shadow-none" : ""}`}>Other</Button>
                             </div>
 
-                            {/* button */}
+                            {/* Default Address Checkbox */}
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    checked={defaultAddress}
+                                    onChange={() => setDefaultAddress(!defaultAddress)}
+                                    id="defaultAddress"
+                                    className="h-4 w-4"
+                                />
+                                <label htmlFor="defaultAddress" className="font-medium text-sm xl:text-base lg:text-base">Set as Default Address</label>
+                            </div>
+
+                            {/* Submit Button */}
                             <div className='mb-3'>
                                 <Button type='submit' className='bg-primary font-custom text-sm capitalize w-full font-normal'>Save Address</Button>
                             </div>
                         </form>
                     </Card>
                 </div>
-
             </div>
         </>
     )

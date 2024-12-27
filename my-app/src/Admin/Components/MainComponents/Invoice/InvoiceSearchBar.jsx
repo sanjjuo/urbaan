@@ -15,13 +15,14 @@ const InvoiceSearchBar = ({ setInvoice }) => {
     const searchInvoice = async () => {
       try {
         const token = localStorage.getItem('token')
-        const response = await axios.get(`${BASE_URL}/admin/invoice/search?name=${searchInvoice}`, {
+        const response = await axios.get(`${BASE_URL}/admin/invoice/search?customerName=${searchInvoice}
+          &customerMobile=${searchInvoice}&status=${searchInvoice}&paymentId=${searchInvoice}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         })
         setInvoice(response.data.invoices)
-        console.log(response.data);
+        console.log(response.data.invoices);
       } catch (error) {
         console.log(error);
       }

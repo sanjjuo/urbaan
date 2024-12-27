@@ -36,11 +36,14 @@ const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon }) => {
                 }
             })
             console.log(response.data);
-            setCouponDiscountTotalPrice(response.data.data) // for getting discount and previous amount value
+            setCouponDiscountTotalPrice(response.data) // for getting discount and previous amount value
             handleCouponModalOpen()
             toast.success('Coupon is applied')
         } catch (error) {
-            console.log(error);
+            console.error('Error:', error.response?.data || error.message);
+            const errorMessage = error.response?.data?.message || 'Failed to apply coupon';
+            toast.error(errorMessage);
+            handleCouponModalOpen();  // Close modal even if error occurs
         }
     }
 

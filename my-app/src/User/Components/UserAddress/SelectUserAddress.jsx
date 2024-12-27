@@ -14,8 +14,8 @@ import toast from 'react-hot-toast';
 
 const SelectUserAddress = () => {
     const navigate = useNavigate()
-    const { BASE_URL} = useContext(AppContext)
-    const [getAddress, setGetAddress] = useState([])
+    const { BASE_URL, getAddress, setGetAddress } = useContext(AppContext)
+    // const [getAddress, setGetAddress] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [openRemoveModal, setOpenRemoveModal] = useState(false);
     const [selectedId, setSelectedId] = useState(null)
@@ -64,6 +64,18 @@ const SelectUserAddress = () => {
             console.log(error);
         }
     }
+
+    const handleContinue = () => {
+        const defaultAddress = getAddress.find(address => address.defaultAddress === true) || getAddress[0];
+        navigate('/user-cart',
+            {
+                state: {
+                    selectedAddress: selectedAddress || defaultAddress,
+                }
+            });
+    }
+
+
     return (
         <>
             <div className="bg-white shadow-md py-4 px-4 w-full sticky top-0">
@@ -130,15 +142,15 @@ const SelectUserAddress = () => {
                 <div className='mt-5 flex flex-col xl:flex-row lg:flex-row gap-2 justify-normal xl:justify-center xl:items-center'>
                     <Link to='/add-delivery-address'><Button variant='outlined' className='w-full xl:w-52 lg:w-52 border-primary text-primary text-sm capitalize font-custom 
                     font-normal flex items-center gap-2 justify-center'><GoPlus />Add new address</Button></Link>
-                    <Link to={{
+                    {/* <Link to={{
                         pathname: '/user-cart'
                     }}
                         state={{
                             selectedAddress
-                        }}>
-                        <Button className='w-full xl:w-52 lg:w-52 bg-primary text-white text-sm capitalize font-custom 
+                        }}> */}
+                    <Button onClick={handleContinue} className='w-full xl:w-52 lg:w-52 bg-primary text-white text-sm capitalize font-custom 
                     font-normal'>Continue</Button>
-                    </Link>
+                    {/* </Link> */}
                 </div>
             </div >
 

@@ -14,64 +14,23 @@
   scrollbar-width: none; /* Firefox */
 }
 
-/* day picker custom styles */
-
-.rdp-month_caption {
-  padding-left: 20px;
-  border-bottom: 1px solid #ededed;
-}
-
-.rdp-chevron {
-  display: inline-block;
-  fill: #202224 !important;
-  height: 30px !important;
-  width: 30px !important;
-  background-color: #ededed;
-  border-radius: 100%;
-  padding: 5px;
-}
-
-.rdp-caption_label {
- font-size: 15px;
- font-weight: 600;
- color: #202224;
-}
-
-.rdp-day_button {
-  width: 30px !important;
-  height: 30px !important;
-}
-
-.rdp-selected .rdp-day_button {
-  border: none !important;
+/* multi date picker styles */
+.rmdp-day.rmdp-today span {
   background-color: #C21E56 !important;
-  border-radius: 10px;
-  color: #ffffff;
 }
-
-.rdp-today:not(.rdp-outside) {
+.rmdp-panel-body li, .rmdp-panel-body li.bg-blue {
+  background-color: #C21E56 !important;
+}
+.rmdp-panel-body li .b-deselect {
+  background-color: #C21E56 !important;
+}
+.rmdp-week-day {
   color: #C21E56 !important;
 }
-
-
-/* month picker styles */
-
-.react-datepicker__month-container {
-  padding: 10px;
+.rmdp-day.rmdp-selected span:not(.highlight) {
+  background-color: #C21E56 !important;
 }
 
-.react-datepicker__header {
-  text-align: center;
-  background-color: transparent !important;
-  border-bottom: 1px solid #aeaeae;
-  border-top-left-radius: 0.3rem;
-  padding: 8px 0;
-  position: relative;
-}
-
-.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
-  border-top-right-radius: 0.3rem;
-}
 
 /* scrollbar style in usercategory page */
 .hide-scrollbar {

@@ -21,7 +21,7 @@ const App = () => {
             duration: 5000,
             style: {
               height: '70px',
-              width: '450px',
+              // width: '450px',
             },
           }}
         />

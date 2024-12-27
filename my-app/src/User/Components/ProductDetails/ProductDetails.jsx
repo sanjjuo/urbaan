@@ -112,10 +112,10 @@ const ProductDetails = () => {
         if (selectedColor === color) {
             // Deselect color and size if the same color is clicked again
             setSelectedColor("");
-            setSelectedSize("");
+            // setSelectedSize("");
         } else {
             setSelectedColor(color);
-            setSelectedSize("");  // Reset size but don't auto-select
+            // setSelectedSize("");  // Reset size but don't auto-select
         }
     };
 

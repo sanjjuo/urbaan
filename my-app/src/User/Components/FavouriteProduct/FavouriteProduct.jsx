@@ -73,14 +73,10 @@ const FavouriteProduct = () => {
         <div className='bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto p-4 xl:p-16 lg:p-16 space-y-8 xl:space-y-14 lg:space-y-14'>
             <h1
                 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/')}
             >
                 <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
             </h1>
-
-            {/* <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 !mt-0'>
-                My Wishlist<RiHeart3Line />
-            </h2> */}
 
             <p onClick={handleWishlistClear} className='!mt-0 capitalize flex justify-end items-center gap-0 text-sm hover:text-primary cursor-pointer'>
                 clear all <HiOutlineXMark className='text-lg' /></p>
