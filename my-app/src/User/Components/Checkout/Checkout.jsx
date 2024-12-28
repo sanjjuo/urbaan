@@ -246,7 +246,12 @@ const Checkout = () => {
                                         {checkoutDetails?.cartItems?.map((item, index) => (
                                             <div key={index} className='flex gap-5 mb-4'>
                                                 <div className='w-20 h-28 xl:w-28 xl:h-32'>
-                                                    <img src={item.image} alt="" className="w-full h-full object-cover rounded-lg" />
+                                                    <img
+                                                        src={item.image}
+                                                        alt=""
+                                                        className="w-full h-full object-cover rounded-lg"
+                                                        onError={(e) => e.target.src = '/no-image.jpg'}
+                                                    />
                                                 </div>
                                                 <div className='flex flex-col justify-between'>
                                                     <div>

@@ -60,6 +60,7 @@ const UserCarousel = () => {
                     src={`${BASE_URL}/uploads/category/${slider.image}`}
                     alt={`Image showcasing ${slider.title}`}
                     className="h-full w-full object-cover rounded-2xl"
+                    onError={(e) => e.target.src = '/banner-no-image.png'}
                   />
                   <div className="absolute inset-y-1/3 left-5 lg:left-20 text-white z-10">
                     <motion.p

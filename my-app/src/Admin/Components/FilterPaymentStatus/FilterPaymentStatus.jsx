@@ -11,6 +11,7 @@ const paymentStatus = [
     "Paid",
     "Unpaid",
     "Refund",
+    "Pending"
 ];
 
 export function FilterPaymentStatus() {

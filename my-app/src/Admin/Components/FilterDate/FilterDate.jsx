@@ -3,7 +3,27 @@ import DatePicker from "react-multi-date-picker"
 import DatePanel from "react-multi-date-picker/plugins/date_panel"
 import { FiChevronDown } from 'react-icons/fi' // Importing an icon from react-icons
 
-const FilterDate = () => {
+const FilterDate = ({ setFilters, resetFilter }) => {
+
+    const handleDateChange = (value) => {
+        setFilters(prev => ({
+            ...prev,
+            startDate: value[0]?.format("YYYY-MM-DD") || '',
+            endDate: value[1]?.format("YYYY-MM-DD") || ''
+        }));
+    };
+
+    // Reset date fields if resetFilter prop is triggered
+    React.useEffect(() => {
+        if (resetFilter) {
+            setFilters((prev) => ({
+                ...prev,
+                startDate: '',
+                endDate: '',
+            }));
+        }
+    }, [resetFilter, setFilters]);
+
     return (
         <>
             <div style={{
@@ -17,8 +37,11 @@ const FilterDate = () => {
             }}>
                 <DatePicker
                     multiple
+                    max={2}
                     placeholder='Select Date'
                     className="#C21E56"
+                    highlightToday={false}
+                    onChange={handleDateChange}
                     style={{
                         border: 'none',
                         height: '100%',
@@ -30,7 +53,7 @@ const FilterDate = () => {
                     plugins={[<DatePanel />]}
                 />
                 <FiChevronDown
-                size={19}
+                    size={19}
                     style={{
                         color: '#202224', // Adjust color of the arrow
                         cursor: 'pointer',

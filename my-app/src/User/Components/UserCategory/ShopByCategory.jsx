@@ -56,9 +56,11 @@ const ShopByCategory = () => {
                   <div className="w-full h-24 xl:w-36 xl:h-36 lg:w-36 lg:h-36">
                     <img
                       src={category.imageUrl}
-                      alt={category.name}
+                      alt={category.name || 'Category Image'}
                       className="w-full h-full object-cover rounded-xl"
+                      onError={(e) => (e.target.src = '/no-image.jpg')}
                     />
+
                   </div>
                   <p className="text-secondary text-center text-xs xl:text-sm lg:text-sm font-normal capitalize truncate">
                     {category.name}

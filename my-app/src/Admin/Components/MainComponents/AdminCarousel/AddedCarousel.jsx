@@ -99,11 +99,11 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
                                         {/* <li className='text-secondary font-bold capitalize text-2xl'>{carousel.category}</li> */}
                                         <li className="flex items-center text-secondary">
                                             <span className="font-semibold w-24">Label:</span>
-                                            <span>{carousel.label}</span>
+                                            <span className='capitalize'>{carousel.label}</span>
                                         </li>
                                         <li className="flex items-center text-secondary">
                                             <span className="font-semibold w-24">Title:</span>
-                                            <span>{carousel.title}</span>
+                                            <span className='capitalize'>{carousel.title}</span>
                                         </li>
                                     </ul>
                                     <div className="flex gap-2 text-sm">

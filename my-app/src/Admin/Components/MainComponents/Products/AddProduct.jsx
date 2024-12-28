@@ -264,24 +264,34 @@ const AddProduct = () => {
     };
 
     const handleDeleteColorField = (index) => {
-        setAttributeFields(attributeFields.filter((_, i) => i !== index));
+        if (attributeFields.length > 1) {
+            setAttributeFields(attributeFields.filter((_, i) => i !== index));
+        }
+        else {
+            toast.error("Atleast one attribute field is required");
+        }
     };
+
 
     const handleAddSizeField = (colorIndex) => {
         const updatedFields = [...attributeFields];
         updatedFields[colorIndex].sizes.push({ size: "", stock: "" });
         setAttributeFields(updatedFields);
     };
+
+
     const handleDeleteSizeField = (colorIndex, sizeIndex) => {
         const updatedFields = [...attributeFields];
 
-        // Ensure 'sizes' exists
-        if (updatedFields[colorIndex]?.sizes) {
+        if (updatedFields[colorIndex]?.sizes && updatedFields[colorIndex].sizes.length > 1) {
             updatedFields[colorIndex].sizes = updatedFields[colorIndex].sizes.filter((_, i) => i !== sizeIndex);
+        } else {
+            toast.error("Sizes and Stock is required");
         }
 
         setAttributeFields(updatedFields);
     };
+
 
     const handleSizeFieldChange = (colorIndex, sizeIndex, key, value) => {
         const updatedFields = [...attributeFields];

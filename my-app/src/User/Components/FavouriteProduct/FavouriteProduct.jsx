@@ -118,17 +118,18 @@ const FavouriteProduct = () => {
                             >
                                 <div className='w-full h-52 xl:h-80 lg:h-80 rounded-xl overflow-hidden'>
                                     <img
-                                        src={`${BASE_URL}/uploads/category/${product.productId.images[0] || 'default.jpg'}`}
+                                        src={`${BASE_URL}/uploads/category/${product.productId.images[0]}`}
                                         alt={product.productId.title}
                                         className='w-full h-full object-cover rounded-xl shadow-md
                                         transition-transform scale-100 duration-500 ease-in-out group-hover:scale-105'
+                                        onError={(e) => e.target.src = '/no-image.jpg'}
                                     />
                                 </div>
                                 <div className='mt-3'>
-                                    <h4 className='font-medium text-sm xl:text-lg lg:text-lg'>
+                                    <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>
                                         {product.productId.title}
                                     </h4>
-                                    <p className='text-gray-600 text-xs xl:text-sm lg:text-sm'>
+                                    <p className='text-gray-600 text-xs xl:text-sm lg:text-sm capitalize'>
                                         {product.productId.description}
                                     </p>
                                     <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>

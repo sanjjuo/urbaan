@@ -185,6 +185,7 @@ const ProductDetails = () => {
                                 src={`${BASE_URL}/uploads/category/${productDetails.images}`}
                                 alt={productDetails.title}
                                 className='w-full h-full object-cover rounded-xl'
+                                onError={(e) => e.target.src = '/no-image.jpg'}
                             />
                             {heartIcons[productDetails._id] || wishlist?.items?.some(item => item.productId._id === productDetails._id) ? (
                                 <RiHeart3Fill

@@ -72,7 +72,7 @@ const EditProduct = () => {
             setEditProdDescription(initialProducts.description)
             setEditProdImage(initialProducts.images || [])
             console.log(initialProducts.images);
-            
+
             setEditProdManuName(initialProducts.manufacturerName)
             setEditProdManuBrand(initialProducts.manufacturerBrand)
             setEditProdManuAddress(initialProducts.manufacturerAddress)
@@ -85,7 +85,7 @@ const EditProduct = () => {
     const handleProductImageUpload = (e) => {
         const files = Array.from(e.target.files);
         setEditProdImage((prevImages) => [...prevImages, ...files]);
-      };
+    };
 
     // manage text color based ob bg-color
     const getContrastYIQ = (color) => {
@@ -254,7 +254,7 @@ const EditProduct = () => {
                 }
                 return acc;
             }, {});
-        
+
 
             // // Option 1: Append `features` as a JSON string (if backend expects JSON)
             // editproductFormData.append("features", JSON.stringify(featuresObject));
@@ -324,7 +324,12 @@ const EditProduct = () => {
     };
 
     const handleDeleteColorField = (index) => {
-        setEditAttributeFields(editAttributeFields.filter((_, i) => i !== index));
+        if (editAttributeFields.length > 1) {
+            setEditAttributeFields(editAttributeFields.filter((_, i) => i !== index));
+        }
+        else {
+            toast.error("Atleast one attribute field is required");
+        }
     };
 
     const handleAddSizeField = (colorIndex) => {
@@ -332,16 +337,21 @@ const EditProduct = () => {
         updatedFields[colorIndex].sizes.push({ size: "", stock: "" });
         setEditAttributeFields(updatedFields);
     };
+
     const handleDeleteSizeField = (colorIndex, sizeIndex) => {
         const updatedFields = [...editAttributeFields];
 
         // Ensure 'sizes' exists
-        if (updatedFields[colorIndex]?.sizes) {
+        if (updatedFields[colorIndex]?.sizes && updatedFields[colorIndex].sizes.length > 1) {
             updatedFields[colorIndex].sizes = updatedFields[colorIndex].sizes.filter((_, i) => i !== sizeIndex);
+        } else {
+            toast.error("Sizes and Stock is required");
         }
 
         setEditAttributeFields(updatedFields);
+        console.log(updatedFields);
     };
+
 
     const handleSizeFieldChange = (colorIndex, sizeIndex, key, value) => {
         const updatedFields = [...editAttributeFields];

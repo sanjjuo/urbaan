@@ -1,25 +1,35 @@
 import React, { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import {
-    Menu,
-    MenuHandler,
-    MenuList,
-    Button,
-} from "@material-tailwind/react";
+import { Menu, MenuHandler, MenuList, Button } from "@material-tailwind/react";
 
-const orderStatus = [
-    "Pending",
-    "Processing",
-    "Cancelled",
-    "Delivered",
-];
+const orderStatus = ["Pending", "Processing", "Cancelled", "Delivered"];
 
-export function FilterOrderStatus() {
-    const [selectedStatus, setSelectedStatus] = useState("Order Status");
+export function FilterOrderStatus({ setFilters }) {
+    const [selectedStatuses, setSelectedStatuses] = useState([]);
 
     // Handle status selection
     const handleOrderStatusSelect = (status) => {
-        setSelectedStatus(status);
+        const updatedStatuses = selectedStatuses.includes(status)
+            ? selectedStatuses.filter((s) => s !== status) // Remove status
+            : [...selectedStatuses, status]; // Add status
+
+        setSelectedStatuses(updatedStatuses);
+
+        // If no status is selected, show all products
+        if (updatedStatuses.length === 0) {
+            setFilters((prevFilters) => ({
+                ...prevFilters,
+                status: undefined, // Reset status filter
+            }));
+        }
+    };
+
+    // Handle Apply now click
+    const handleApplyFilters = () => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            status: selectedStatuses.length > 0 ? selectedStatuses : undefined, // Update status field with selected statuses
+        }));
     };
 
     // Prevent the click event from propagating to the Menu component
@@ -32,11 +42,13 @@ export function FilterOrderStatus() {
             <MenuHandler>
                 <Button
                     className="!bg-white text-secondary rounded-xl cursor-pointer flex items-center gap-5 p-3 font-custom capitalize text-base font-normal
-                   border-gray-300 border-[1px] shadow-none focus:shadow-none focus:outline-none hover:shadow-none outline-none"
+                    border-gray-300 border-[1px] shadow-none focus:shadow-none focus:outline-none hover:shadow-none outline-none"
                     style={{ width: 'fit-content', maxWidth: '200px' }}
                 >
-                    <div className="flex gap-1 whitespace-nowrap">
-                        {selectedStatus}
+                    <div className="flex gap-1 whitespace-nowrap overflow-x-auto hide-scrollbar w-32">
+                        {selectedStatuses.length > 0
+                            ? selectedStatuses.join(", ")
+                            : "Order Status"}
                     </div>
                     <ChevronDownIcon
                         strokeWidth={2.5}
@@ -53,10 +65,10 @@ export function FilterOrderStatus() {
                                 key={index}
                                 onClick={(e) => {
                                     handleOrderStatusSelect(status);
-                                    handleClickInside(e);  // Prevent Menu from closing
+                                    handleClickInside(e); // Prevent Menu from closing
                                 }}
-                                className="cursor-pointer border-[1px] border-gray-400 text-sm w-[30%] p-2 flex justify-center items-center 
-                                    rounded-full hover:bg-primary hover:text-white"
+                                className={`cursor-pointer border-[1px] border-gray-400 text-sm w-[30%] p-2 flex justify-center items-center 
+                                    rounded-full ${selectedStatuses.includes(status) ? 'bg-primary text-white' : ''}`}
                             >
                                 {status}
                             </li>
@@ -64,8 +76,11 @@ export function FilterOrderStatus() {
                     </ul>
                 </div>
                 <div className='p-5 flex flex-col justify-center items-center gap-5 hover:outline-none focus:outline-none'>
-                    <p className="text-sm">*You can choose multiple order status</p>
-                    <Button className="bg-primary font-custom text-sm tracking-wider font-normal capitalize py-2 px-4">
+                    <p className="text-sm">*You can choose multiple order statuses</p>
+                    <Button 
+                        onClick={handleApplyFilters}
+                        className="bg-primary font-custom text-sm tracking-wider font-normal capitalize py-2 px-4"
+                    >
                         Apply now
                     </Button>
                 </div>

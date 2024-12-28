@@ -100,14 +100,18 @@ const AllCategory = () => {
                                                         state={{ productId: product._id }}
                                                         className="cursor-pointer">
                                                         <div className="w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden">
-                                                            <img src={`${BASE_URL}/uploads/category/${product.images[0]}`} alt="" className='w-full h-full object-cover rounded-xl shadow-md
-                                                        transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105' />
+                                                            <img
+                                                                src={`${BASE_URL}/uploads/category/${product.images[0]}`}
+                                                                alt=""
+                                                                className='w-full h-full object-cover rounded-xl shadow-md
+                                                                transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'
+                                                                onError={(e) => e.target.src = '/no-image.jpg'} />
                                                         </div>
                                                     </Link>
                                                     <RiHeart3Line className='absolute top-2 right-2 bg-white text-gray-600 w-6 h-6 xl:w-7 xl:h-7 lg:w-7 lg:h-7 p-1 rounded-full shadow-md' />
                                                     <div className='mt-3'>
-                                                        <p className='font-medium text-sm xl:text-lg lg:text-lg truncate'>{product.title}</p>
-                                                        <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm truncate'>{product.description}</p>
+                                                        <p className='font-medium text-sm xl:text-lg lg:text-lg truncate capitalize'>{product.title}</p>
+                                                        <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm truncate capitalize'>{product.description}</p>
                                                         <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹{product.offerPrice}</p>
                                                     </div>
                                                 </div>

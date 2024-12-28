@@ -18,7 +18,7 @@ const App = () => {
           containerClassName=""
           containerStyle={{}}
           toastOptions={{
-            duration: 5000,
+            duration: 2000,
             style: {
               height: '70px',
               // width: '450px',

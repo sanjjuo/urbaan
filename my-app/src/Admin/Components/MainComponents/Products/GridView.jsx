@@ -99,7 +99,11 @@ const GridView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                         color="gray"
                                                         className="font-custom text-sm capitalize font-normal text-buttonBg"
                                                     >
-                                                        Published on {product.publish}
+                                                        Published on {new Date(product.createdAt).toLocaleDateString('en-US', {
+                                                            year: 'numeric',
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                        })}
                                                     </Typography>
                                                 </div>
                                                 <div className='mt-5'>

@@ -1,14 +1,12 @@
 import React, { useContext } from 'react'
-import { Button, Card, CardBody, CardFooter, Chip, IconButton, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardFooter, Chip, IconButton, Menu, MenuHandler, MenuItem, MenuList, Typography } from "@material-tailwind/react";
 import { AppContext } from "../../../../StoreContext/StoreContext"
-import { DeleteModal } from '../../DeleteModal/DeleteModal';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
 import AppLoader from '../../../../Loader';
 
-const TABLE_HEAD = ["payment ID", "Customer", "mobile", "Date", "Size", "amount", "Status", "action"];
+const TABLE_HEAD = ["payment ID", "Customer", "mobile", "Date", "amount", "Status", "action"];
 
 const InvoiceTable = ({ invoice, setInvoice }) => {
     const { BASE_URL } = useContext(AppContext)
@@ -16,6 +14,44 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
     const [itemsPerPage] = useState(5);
     const [isLoading, setIsLoading] = useState(true)
     const [selectedInvoiceId, setSelectedInvoiceId] = useState(null)
+
+    // Predefined allowed statuses
+    const allowedStatuses = ["Paid", "Refund", "Unpaid", "Pending"];
+
+    // Status colors
+    const statusColors = {
+        Paid: "text-shippedBg bg-shippedBg/20",
+        Refund: "text-processingBg bg-processingBg/20",
+        Unpaid: "text-cancelBg bg-cancelBg/20",
+        Pending: "text-pendingBg bg-pendingBg/20",
+        default: "text-gray-500 bg-gray-200",
+    };
+
+    // handle status
+    const handleStatusChange = async (invoiceId, newStatus) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.patch(
+                `${BASE_URL}/admin/invoice/update/${invoiceId}`,
+                { status: newStatus },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (response.status === 200) {
+                const updatedInvoice = invoice.map((inv) =>
+                    inv._id === invoiceId ? { ...inv, status: newStatus } : inv
+                );
+                setInvoice(updatedInvoice);
+            }
+        } catch (error) {
+            console.error("Failed to update status", error);
+        }
+    };
+
 
 
     // fetch invoice
@@ -73,13 +109,13 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                     <>
                         <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
                             <CardBody>
-                                <table className="w-full min-w-max table-auto text-left">
+                            <table className="w-full table-auto text-left border-collapse">
                                     <thead>
                                         <tr className='bg-quaternary'>
                                             {TABLE_HEAD.map((head) => (
                                                 <th
                                                     key={head}
-                                                    className="border-b border-blue-gray-100 p-4"
+                                                    className="border-b border-blue-gray-100 p-4 text-center"
                                                 >
                                                     <Typography
                                                         variant="small"
@@ -94,7 +130,7 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                     <tbody>
                                         {Array.isArray(currentInvoice) && currentInvoice.map((invoice, index) => {
                                             const isLast = index === currentInvoice.length - 1;
-                                            const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
+                                            const classes = isLast ? "p-4 text-center" : "p-4 border-b border-gray-300 text-center";
 
                                             return (
                                                 <tr key={invoice._id}>
@@ -127,17 +163,14 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                                             variant="small"
                                                             className="font-normal font-custom text-sm"
                                                         >
-                                                            {invoice.date}
+                                                            {new Date(invoice.createdAt).toLocaleDateString('en-US', {
+                                                                 year: 'numeric',
+                                                                 month: 'short',
+                                                                 day: 'numeric',
+                                                            })}
                                                         </Typography>
                                                     </td>
-                                                    <td className={classes}>
-                                                        <Typography
-                                                            variant="small"
-                                                            className="font-normal capitalize font-custom text-sm"
-                                                        >
-                                                            {invoice.products[0].size}
-                                                        </Typography>
-                                                    </td>
+
                                                     <td className={classes}>
                                                         <Typography
                                                             variant="small"
@@ -148,27 +181,28 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                                     </td>
                                                     <td className={classes}>
                                                         <Chip
-                                                            className={`
-                                                ${invoice.status === "Cancelled" ? "text-processingBg bg-processingBg/20 capitalize text-sm text-center font-normal" : ""}
-                                                ${invoice.status === "Delivered" ? "text-shippedBg bg-shippedBg/20 capitalize text-sm text-center font-normal" : ""}
-                                                ${invoice.status === "Pending" ? "text-pendingBg bg-pendingBg/20 capitalize text-sm text-center font-normal" : ""}
-                                                ${!["Cancelled", "Delivered", "Pending"].includes(invoice.status) ? "text-gray-500 bg-gray-200 capitalize text-sm text-center font-normal" : ""}
-                                                    `}
-                                                            value={
-                                                                invoice.status === "Cancelled" ? "Cancelled" :
-                                                                    invoice.status === "Delivered" ? "Delivered" :
-                                                                        invoice.status === "Pending" ? "Pending" : "Unknown"
-                                                            }
-
+                                                            className={`capitalize text-sm text-center font-normal ${statusColors[invoice.status] || statusColors.default}`}
+                                                            value={invoice.status}
                                                         />
                                                     </td>
                                                     <td className={classes}>
-                                                        <div className="flex gap-2 text-sm">
-                                                            <button className="text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md
-                                            hover:bg-buttonBg hover:text-editBg">
-                                                                Edit
-                                                            </button>
-                                                        </div>
+                                                        <Menu>
+                                                            <MenuHandler>
+                                                                <Button className="text-buttonBg bg-editBg font-custom font-normal text-sm capitalize px-4 py-1 shadow-none
+                                                                hover:shadow-none hover:bg-buttonBg hover:text-editBg">
+                                                                    Edit</Button>
+                                                            </MenuHandler>
+                                                            <MenuList>
+                                                                {allowedStatuses.map((status, index) => (
+                                                                    <MenuItem
+                                                                        key={index}
+                                                                        onClick={() => handleStatusChange(invoice._id, status)}
+                                                                        className={`font-custom capitalize ${statusColors[status]?.split(" ")[0]} hover:!text-buttonBg`}
+                                                                    >
+                                                                        {status}</MenuItem>
+                                                                ))}
+                                                            </MenuList>
+                                                        </Menu>
                                                     </td>
                                                 </tr>
                                             );

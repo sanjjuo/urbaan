@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
+import { Button, Checkbox, Dialog, DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import axios from "axios";
 import { AppContext } from "../../../../StoreContext/StoreContext";
 import toast from "react-hot-toast";
@@ -9,7 +9,7 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
     const [categories, setCategories] = useState([]);
     const [editCouponTitle, setEditCouponTitle] = useState('');
     const [editCouponCode, setEditCouponCode] = useState('');
-    const [editCouponCategory, setEditCouponCategory] = useState('');
+    const [editCouponCategory, setEditCouponCategory] = useState([]);
     const [editCouponStartDate, setEditCouponStartDate] = useState('');
     const [editCouponEndDate, setEditCouponEndDate] = useState('');
     const [editCouponDiscountValue, setEditCouponDiscountValue] = useState('');
@@ -20,14 +20,34 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
         if (initialEditCoupon) {
             setEditCouponTitle(initialEditCoupon.title);
             setEditCouponCode(initialEditCoupon.code);
-            setEditCouponCategory(initialEditCoupon.category?._id);
-            setEditCouponStartDate(initialEditCoupon.startDate);
-            setEditCouponEndDate(initialEditCoupon.endDate);
+            setEditCouponCategory(initialEditCoupon.category.map((cat) => cat._id));
+            setEditCouponStartDate(initialEditCoupon.startDate?.split('T')[0]);
+            setEditCouponEndDate(initialEditCoupon.endDate?.split('T')[0]);
             setEditCouponDiscountValue(initialEditCoupon.discountValue);
             setEditCouponDiscountType(initialEditCoupon.discountType);
-            setEditCouponIsActive(initialEditCoupon.status);
+            setEditCouponIsActive(initialEditCoupon.status === 'active');
         }
     }, [initialEditCoupon]);
+
+
+
+    // handle category
+    const handleCategorySelect = (categoryId) => {
+        setEditCouponCategory((prev) => {
+            if (prev.includes(categoryId)) {
+                return prev.filter((id) => id !== categoryId);
+            }
+            return [...prev, categoryId];
+        });
+    };
+
+    const handleSelectAll = () => {
+        if (editCouponCategory.length === categories.length) {
+            setEditCouponCategory([]);
+        } else {
+            setEditCouponCategory(categories.map((category) => category.id));
+        }
+    };
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -102,42 +122,62 @@ export function EditCouponModal({ open, handleOpen, initialEditCoupon }) {
                         <h1 className="text-2xl font-custom font-semibold mb-0 text-secondary">Edit Coupon</h1>
                         <form className='space-y-5 mt-10' onSubmit={handleEditCouponSubmit}>
                             {/* Title */}
-                            <div className='flex flex-col gap-1'>
-                                <label className='font-normal text-base'>Coupon title</label>
-                                <input
-                                    type="text"
-                                    value={editCouponTitle}
-                                    onChange={(e) => setEditCouponTitle(e.target.value)}
-                                    placeholder='Coupon title'
-                                    className='border-[1px] capitalize text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
-                                />
-                            </div>
-                            {/* Code and category */}
                             <div className='flex justify-between items-center gap-2'>
-                                <div className='flex flex-col gap-1 w-full'>
+                                <div className='flex flex-col gap-1 w-1/2'>
+                                    <label className='font-normal text-base'>Coupon title</label>
+                                    <input
+                                        type="text"
+                                        value={editCouponTitle}
+                                        onChange={(e) => setEditCouponTitle(e.target.value)}
+                                        placeholder='Coupon title'
+                                        className='border-[1px] w-full capitalize text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                                    />
+                                </div>
+                                <div className='flex flex-col gap-1 w-1/2'>
                                     <label className='font-normal text-base'>Code</label>
                                     <input
                                         type="text"
                                         value={editCouponCode}
                                         onChange={(e) => setEditCouponCode(e.target.value)}
                                         placeholder='Code'
-                                        className='border-[1px] text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
+                                        className='border-[1px] w-full text-sm bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none'
                                     />
                                 </div>
-                                <div className='flex flex-col gap-1 w-full'>
-                                    <label className='font-normal text-base'>Category Type</label>
-                                    <select
-                                        value={editCouponCategory}
-                                        onChange={(e) => setEditCouponCategory(e.target.value)}
-                                        className="w-full text-sm capitalize text-gray-500 font-light bg-gray-100/50 border p-2 rounded-md focus:outline-none focus:cursor-pointer"
-                                    >
-                                        <option value="">Select Category</option>
-                                        {categories.map((category) => (
-                                            <option key={category.id} value={category.id}>{category.name}</option>
-                                        ))}
-                                    </select>
+                            </div>
+                            {/* Category Selection */}
+                            <div className='flex flex-col gap-3 w-full'>
+                                <label className='font-normal text-base'>Category Type</label>
+                                <div className='flex flex-row items-center gap-2 overflow-x-auto hide-scrollbar'>
+                                    {/* Select All Checkbox */}
+                                    <div className='flex items-center space-x-0 shrink-0'>
+                                        <Checkbox
+                                            checked={editCouponCategory.length === categories.length && categories.length > 0}
+                                            onChange={handleSelectAll}
+                                            color='black'
+                                            className='w-4 h-4 border-2 border-gray-600 rounded-sm'
+                                        />
+                                        <Typography className='text-sm sm:text-base font-custom font-medium capitalize text-secondary'>
+                                            Select All
+                                        </Typography>
+                                    </div>
+
+                                    {/* Individual Category Checkboxes */}
+                                    {categories.map((category) => (
+                                        <div key={category.id} className='flex items-center space-x-0 shrink-0'>
+                                            <Checkbox
+                                                checked={editCouponCategory.includes(category.id)}
+                                                onChange={() => handleCategorySelect(category.id)}
+                                                color='black'
+                                                className='w-4 h-4 border-2 border-gray-600 rounded-sm'
+                                            />
+                                            <Typography className='text-sm sm:text-base font-custom font-medium capitalize text-secondary truncate'>
+                                                {category.name}
+                                            </Typography>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
+
                             {/* Start and End Date */}
                             <div className='flex justify-between items-center gap-2'>
                                 <div className='flex flex-col gap-1 w-full'>

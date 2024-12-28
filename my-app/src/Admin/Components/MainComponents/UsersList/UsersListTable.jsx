@@ -59,13 +59,13 @@ const UsersListTable = () => {
             ) : (
                 <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
                     <CardBody>
-                        <table className="w-full min-w-max table-auto text-left">
+                    <table className="w-full table-auto text-left border-collapse">
                             <thead>
                                 <tr className="bg-quaternary">
                                     {TABLE_HEAD.map((head) => (
                                         <th
                                             key={head}
-                                            className="border-b border-blue-gray-100 p-4"
+                                            className="border-b border-blue-gray-100 p-4 text-center"
                                         >
                                             <Typography
                                                 variant="small"
@@ -80,7 +80,7 @@ const UsersListTable = () => {
                             <tbody>
                                 {currentUserList.map((user, index) => {
                                     const isLast = index === currentUserList.length - 1;
-                                    const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
+                                    const classes = isLast ? "p-4 text-center" : "p-4 border-b border-gray-300 text-center";
                                     const firstAddress = user.addresses?.[0] || {}; // Safely access the first address
 
                                     return (

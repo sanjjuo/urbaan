@@ -214,7 +214,11 @@ const CartItems = ({ cartItems, setCartItems }) => {
                                 <div className='flex gap-2 xl:gap-6 lg:gap-6'>
                                     <div className='w-20 h-28 xl:w-28 xl:h-32'>
                                         {item.productId && item.productId.images && item.productId.images.length > 0 ? (
-                                            <img src={item.productId.images[0]} alt={item.productId.title || "Product"} className="w-full h-full object-cover rounded-lg" />
+                                            <img 
+                                            src={item.productId.images[0]} 
+                                            alt={item.productId.title} 
+                                            className="w-full h-full object-cover rounded-lg"
+                                            onError={(e) => e.target.src = '/no-image.jpg'} />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-lg">
                                                 <span className="text-gray-500 text-sm text-center">Image not available</span>

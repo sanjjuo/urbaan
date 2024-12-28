@@ -4,8 +4,50 @@ import { PiArrowCounterClockwiseBold } from "react-icons/pi";
 import FilterDate from '../../FilterDate/FilterDate';
 import FilterCategory from '../../FilterCategory/FilterCategory';
 import { FilterOrderStatus } from '../../FilterOrderStatus/FilterOrderStatus';
+import { useContext } from 'react';
+import { AppContext } from '../../../../StoreContext/StoreContext';
+import { useEffect } from 'react';
+import axios from 'axios';
 
-const OrderFilter = () => {
+const OrderFilter = ({ setOrderList }) => {
+    const { BASE_URL } = useContext(AppContext);
+    const [resetFilter, setResetFilter] = useState(false);
+    const [filters, setFilters] = useState({
+        startDate: '',
+        endDate: '',
+        status: '',
+        category: ''
+    });
+
+    useEffect(() => {
+        const fetchFilteredOrders = async () => {
+            try {
+                const queryParams = new URLSearchParams();
+                Object.keys(filters).forEach(key => {
+                    if (filters[key]) queryParams.append(key, filters[key]);
+                });
+
+                const response = await axios.get(`${BASE_URL}/admin/orderlist/filter?${queryParams.toString()}`);
+                setOrderList(response.data);
+            } catch (error) {
+                console.error("Error fetching filtered orders:", error);
+            }
+        };
+
+        fetchFilteredOrders();
+    }, [filters, BASE_URL, setOrderList]);
+
+    // handleClearAll
+    const resetFilters = () => {
+        setFilters({
+            startDate: '',
+            endDate: '',
+            status: '',
+            category: ''
+        });
+        setResetFilter(prev => !prev)
+    };
+
 
     return (
         <>
@@ -14,12 +56,12 @@ const OrderFilter = () => {
                     <ImFilter />
                 </li>
                 <li className="bg-white font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-24 h-12 flex items-center justify-center">Filter by</li>
-                <li><FilterDate/></li>
-                <li><FilterCategory/></li>
-                <li><FilterOrderStatus/></li>
-                <li className="bg-white cursor-pointer font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-32 h-12 flex items-center justify-center gap-1
-                     text-red-500 hover:text-primary" 
-                     >
+                <li><FilterDate setFilters={setFilters} resetFilter={resetFilter} /></li>
+                <li><FilterCategory setFilters={setFilters}  resetFilter={resetFilter}/></li>
+                <li><FilterOrderStatus setFilters={setFilters} resetFilter={resetFilter}/></li>
+                <li onClick={resetFilters} className="bg-white cursor-pointer font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-32 h-12 flex items-center justify-center gap-1
+                     text-red-500 hover:text-primary"
+                >
                     <PiArrowCounterClockwiseBold />
                     Reset Filter
                 </li>

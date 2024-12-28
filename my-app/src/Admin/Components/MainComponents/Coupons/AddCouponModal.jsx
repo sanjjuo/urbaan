@@ -1,8 +1,10 @@
 import React from "react";
 import {
     Button,
+    Checkbox,
     Dialog,
     DialogBody,
+    Typography,
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -16,12 +18,30 @@ export function AddCouponModal({ open, handleOpen }) {
     const [categories, setCategories] = useState([])
     const [couponTitle, setCouponTitle] = useState('')
     const [couponCode, setCouponCode] = useState('')
-    const [couponCategory, setCouponCategory] = useState('')
+    const [couponCategory, setCouponCategory] = useState([])
     const [couponStartDate, setCouponStartDate] = useState('')
     const [couponEndDate, setCouponEndDate] = useState('')
     const [couponDiscountValue, setCouponDiscountValue] = useState('')
     const [couponDiscountType, setCouponDiscountType] = useState('')
     const [couponisActive, setCouponisActive] = useState(true)
+
+    // handle category
+    const handleCategorySelect = (categoryId) => {
+        setCouponCategory((prev) => {
+            if (prev.includes(categoryId)) {
+                return prev.filter((id) => id !== categoryId);
+            }
+            return [...prev, categoryId];
+        });
+    };
+
+    const handleSelectAll = () => {
+        if (couponCategory.length === categories.length) {
+            setCouponCategory([]);
+        } else {
+            setCouponCategory(categories.map((category) => category.id));
+        }
+    };
 
 
     const handleCouponSubmit = async (e) => {
@@ -35,6 +55,18 @@ export function AddCouponModal({ open, handleOpen }) {
 
             // Map the boolean status to the required string
             const status = couponisActive ? 'active' : 'expired';
+
+            // Format the dates to MM/DD/YYYY
+            const formatDate = (date) => {
+                const d = new Date(date);
+                const month = d.getMonth() + 1; // Months are zero-indexed
+                const day = d.getDate();
+                const year = d.getFullYear();
+                return `${month}/${day}/${year}`;
+            };
+
+            const formattedStartDate = formatDate(couponStartDate);
+            const formattedEndDate = formatDate(couponEndDate);
 
             // Cast the discount value and type to the expected types
             const discountValue = couponDiscountType === 'Percentage'
@@ -51,8 +83,8 @@ export function AddCouponModal({ open, handleOpen }) {
                 title: couponTitle,
                 code: couponCode,
                 category: couponCategory,
-                startDate: couponStartDate,                     //becoz in backend it expects row-data not form-data
-                endDate: couponEndDate,
+                startDate: formattedStartDate,                     //becoz in backend it expects row-data not form-data
+                endDate: formattedEndDate,
                 discountValue,
                 discountType,
                 status
@@ -103,22 +135,21 @@ export function AddCouponModal({ open, handleOpen }) {
                         <h1 className="text-2xl font-custom font-semibold mb-0 text-secondary">Add Coupon</h1>
                         <form action="" className='space-y-5 mt-10' onSubmit={handleCouponSubmit}>
                             {/* title */}
-                            <div className='flex flex-col gap-1'>
-                                <label htmlFor="" className='font-normal text-base'>Coupon title</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={couponTitle}
-                                    onChange={(e) => setCouponTitle(e.target.value)}
-                                    id=""
-                                    placeholder='Coupon title'
-                                    className='border-[1px] text-sm 
+                            <div className='flex justify-between items-center gap-2'>
+                                <div className='flex flex-col gap-1 w-1/2'>
+                                    <label htmlFor="" className='font-normal text-base'>Coupon title</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={couponTitle}
+                                        onChange={(e) => setCouponTitle(e.target.value)}
+                                        id=""
+                                        placeholder='Coupon title'
+                                        className='border-[1px] text-sm w-full
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
-                            </div>
-                            {/* Code and category */}
-                            <div className='flex justify-between items-center gap-2'>
-                                <div className='flex flex-col gap-1 w-full'>
+                                </div>
+                                <div className='flex flex-col gap-1 w-1/2'>
                                     <label className='font-normal text-base'>Code</label>
                                     <input
                                         type="text"
@@ -127,28 +158,41 @@ export function AddCouponModal({ open, handleOpen }) {
                                         onChange={(e) => setCouponCode(e.target.value)}
                                         id=""
                                         placeholder='Code'
-                                        className='border-[1px] text-sm
-                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                        className='border-[1px] text-sm w-full uppercase
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:capitalize placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                                 </div>
-                                <div className='flex flex-col gap-1 w-full'>
-                                    <label className='font-normal text-base'>Category Type</label>
-                                    <select
-                                        name="selectField"
-                                        value={couponCategory}
-                                        onChange={(e) => setCouponCategory(e.target.value)}
-                                        className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded-md focus:outline-none focus:cursor-pointer"
-                                    >
-                                        <option value="">Select Category</option>
-                                        {
-                                            categories.map((category) => (
-                                                <option className='text-gray-500 capitalize' key={category.id} value={category.id}>{category.name}</option>
-                                            ))
-                                        }
-
-                                    </select>
+                            </div>
+                            {/* category */}
+                            <div className='flex flex-col gap-3 w-full'>
+                                <label className='font-normal text-base'>Category Type</label>
+                                <div className='flex flex-row items-center gap-2 overflow-x-auto hide-scrollbar'>
+                                    {categories.map((category) => (
+                                        <div key={category.id} className='flex items-center space-x-0 shrink-0'>
+                                            <Checkbox
+                                                checked={couponCategory.length === categories.length}
+                                                onChange={handleSelectAll}
+                                                color='black'
+                                                className='w-4 h-4 border-2 border-gray-600 rounded-sm'
+                                            />
+                                            <Typography className='text-sm sm:text-base font-custom font-medium capitalize text-secondary'>
+                                                Select All
+                                            </Typography>
+                                            <Checkbox
+                                                checked={couponCategory.includes(category.id)}
+                                                onChange={() => handleCategorySelect(category.id)}
+                                                color='black'
+                                                className='w-4 h-4 border-2 border-gray-600 rounded-sm'
+                                            />
+                                            <Typography className='text-sm sm:text-base font-custom font-medium capitalize text-secondary truncate'>
+                                                {category.name}
+                                            </Typography>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
+
+
                             {/* Start and End Date */}
                             <div className='flex justify-between items-center gap-2'>
                                 <div className='flex flex-col gap-1 w-full'>
@@ -188,7 +232,7 @@ export function AddCouponModal({ open, handleOpen }) {
                                         value={couponDiscountValue}
                                         onChange={(e) => setCouponDiscountValue(e.target.value)}
                                         id=""
-                                        placeholder='50 or 50%'
+                                        placeholder='Enter Value'
                                         className='border-[1px] text-sm 
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>

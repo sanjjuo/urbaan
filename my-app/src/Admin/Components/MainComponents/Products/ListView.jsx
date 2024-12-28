@@ -56,7 +56,7 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                 {TABLE_HEAD.map((head) => (
                                                     <th
                                                         key={head}
-                                                        className="border-b border-gray-300 p-4 text-center"
+                                                        className="border-b border-gray-300 p-3 text-center"
                                                     >
                                                         <Typography
                                                             variant="small"
@@ -83,7 +83,7 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                                 </div>
                                                                 <Typography
                                                                     variant="small"
-                                                                    className="font-normal font-custom text-sm"
+                                                                    className="font-normal font-custom text-sm capitalize"
                                                                 >
                                                                     {product.title}
                                                                 </Typography>
@@ -92,7 +92,7 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                         <td className={classes}>
                                                             <Typography
                                                                 variant="small"
-                                                                className="font-normal font-custom text-sm"
+                                                                className="font-normal font-custom text-sm capitalize"
                                                             >
                                                                 {product.description}
                                                             </Typography>
@@ -134,7 +134,11 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                                 variant="small"
                                                                 className="font-normal font-custom text-sm"
                                                             >
-                                                                {product.publish}
+                                                                {new Date(product.createdAt).toLocaleDateString('en-US', {
+                                                                    year: 'numeric',
+                                                                    month: 'short',
+                                                                    day: 'numeric',
+                                                                })}
                                                             </Typography>
                                                         </td>
                                                         <td className={classes}>

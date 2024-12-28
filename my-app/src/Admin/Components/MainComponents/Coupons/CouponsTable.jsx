@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import AppLoader from '../../../../Loader';
 import { EditCouponModal } from './EditCouponModal';
+import toast from 'react-hot-toast';
 
 const TABLE_HEAD = ["Discount", "Discount Type", "Coupon Title", "Code", "Start Date", "End Date", "Status", "Action"];
 
@@ -18,7 +19,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
     const [initialEditCoupon, setInitialEditCoupon] = useState(null)
     const [selectCouponId, setSelectCouponId] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
 
 
     // handle edit modal
@@ -68,6 +69,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
             const response = await axios.delete(`${BASE_URL}/admin/coupon/delete/${couponId}`, { headers })
             console.log(response.data);
             handleOpen()
+            toast.success('Coupon is deleted')
         } catch (error) {
             console.log(error, ": Error deleting coupon");
             alert("Coupon is not deleted")
@@ -112,7 +114,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                             {TABLE_HEAD.map((head) => (
                                                 <th
                                                     key={head}
-                                                    className="border-b border-gray-300 p-4 text-center"
+                                                    className="border-b border-gray-300 p-3 text-center"
                                                 >
                                                     <Typography
                                                         variant="small"
@@ -170,12 +172,10 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                             variant="small"
                                                             className="font-normal font-custom text-sm capitalize"
                                                         >
-                                                            {new Date(coupon.startDate).toLocaleString('en-US', {
+                                                            {new Date(coupon.startDate).toLocaleDateString('en-US', {
                                                                 year: 'numeric',
                                                                 month: 'short',
                                                                 day: 'numeric',
-                                                                hour: '2-digit',
-                                                                minute: '2-digit',
                                                             })}
                                                         </Typography>
                                                     </td>
@@ -184,12 +184,10 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                             variant="small"
                                                             className="font-normal font-custom text-sm capitalize"
                                                         >
-                                                            {new Date(coupon.endDate).toLocaleString('en-US', {
+                                                            {new Date(coupon.endDate).toLocaleDateString('en-US', {
                                                                 year: 'numeric',
                                                                 month: 'short',
                                                                 day: 'numeric',
-                                                                hour: '2-digit',
-                                                                minute: '2-digit',
                                                             })}
                                                         </Typography>
                                                     </td>

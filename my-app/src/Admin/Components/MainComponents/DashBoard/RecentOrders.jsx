@@ -125,7 +125,11 @@ const RecentOrders = () => {
                                             variant="small"
                                             className="font-normal font-custom text-sm"
                                         >
-                                            {new Date(recentOrder.createdAt).toLocaleDateString()}
+                                            {new Date(recentOrder.createdAt).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: 'short',
+                                                day: 'numeric',
+                                            })}
                                         </Typography>
                                     </td>
                                     <td className={classes}>

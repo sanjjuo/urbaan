@@ -86,7 +86,8 @@ const OfferProducts = () => {
                                                     src={`${BASE_URL}/${product.images[0]}`}
                                                     alt={product.title}
                                                     className='w-full h-full object-cover rounded-xl shadow-md
-                                    transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'
+                                                    transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'
+                                                    onError={(e) => e.target.src = '/no-image.jpg'}
                                                 />
                                             </div>
                                         </Link>
@@ -102,8 +103,8 @@ const OfferProducts = () => {
                                             />
                                         )}
                                         <div className='mt-3'>
-                                            <h4 className='font-medium text-sm xl:text-lg lg:text-lg'>{product.title}</h4>
-                                            <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm'>
+                                            <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>{product.title}</h4>
+                                            <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize'>
                                                 {product.description}
                                             </p>
                                             <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>

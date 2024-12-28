@@ -9,11 +9,12 @@ import axios from 'axios'
 import { Button } from '@material-tailwind/react'
 import { Link } from 'react-router-dom'
 import { FaPlus } from 'react-icons/fa6'
+import toast from 'react-hot-toast'
 
 
 const Products = () => {
   const [view, setView] = useState('list')
-  const { BASE_URL } = useContext(AppContext);
+  const { BASE_URL, handleOpen } = useContext(AppContext);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [initialProducts, setInitialProducts] = useState(null)
@@ -59,7 +60,7 @@ const Products = () => {
       const response = await axios.delete(`${BASE_URL}/admin/products/delete-product/${productId}`, { headers })
       console.log(response.data);
       handleOpen()
-      alert("Product is deleted")
+      toast.success("Product is deleted")
     } catch (error) {
       console.log(error);
       alert("Product is not deleted")

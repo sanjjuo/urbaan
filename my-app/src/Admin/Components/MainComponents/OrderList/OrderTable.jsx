@@ -8,8 +8,7 @@ import toast from 'react-hot-toast';
 
 const TABLE_HEAD = ["ID", "Customer", "Address", "Delivery Date", "Product", "Size", "Payment", "Status", "Action"];
 
-const OrderTable = () => {
-  const [orderList, setOrderList] = useState([]);
+const OrderTable = ({orderList, setOrderList}) => {
   const { BASE_URL } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -123,32 +122,37 @@ const OrderTable = () => {
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Typography variant="small" className="font-normal font-custom text-sm">
-                          {order.userId.name}
+                        <Typography variant="small" className="font-normal font-custom text-sm capitalize">
+                          {order.userId.name || ""}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal font-custom text-sm capitalize">
+                          {order.addressId.address || ""}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal font-custom text-sm">
-                          {order.addressId.address}
+                          {new Date(order.createdAt).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })}
                         </Typography>
                       </td>
+
                       <td className={classes}>
-                        <Typography variant="small" className="font-normal font-custom text-sm">
-                          {order.createdAt}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" className="font-normal font-custom text-sm">
+                        <Typography variant="small" className="font-normal font-custom text-sm capitalize">
                           {order.products?.[0]?.productId?.title || "N/A"}
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Typography variant="small" className="font-normal font-custom text-sm">
+                        <Typography variant="small" className="font-normal font-custom text-sm capitalize">
                           {order.products?.[0]?.size || "N/A"}
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Typography variant="small" className="font-normal font-custom text-sm">
+                        <Typography variant="small" className="font-normal font-custom text-sm capitalize">
                           {order.paymentMethod}
                         </Typography>
                       </td>
