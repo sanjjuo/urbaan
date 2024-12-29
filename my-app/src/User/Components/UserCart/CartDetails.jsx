@@ -61,15 +61,14 @@ const CartDetails = ({ cartItems }) => {
         }
     };
 
-    // Useeffect to load data
     useEffect(() => {
-        // Simulate fetching data or retrieving from localStorage
-        const storedData = JSON.parse(localStorage.getItem('couponDiscountTotalPrice'));
-
-        if (storedData) {
-            setCouponDiscountTotalPrice(storedData);
+        // Load the coupon data from localStorage if available
+        const storedCouponData = JSON.parse(localStorage.getItem('couponDiscountTotalPrice'));
+        if (storedCouponData) {
+            setCouponDiscountTotalPrice(storedCouponData);
         }
     }, []);
+
 
 
     //handle address with defaultAddress true
@@ -119,11 +118,11 @@ const CartDetails = ({ cartItems }) => {
                     </li>
                     <li className='flex justify-between items-center'>
                         <span className='font-normal text-sm'>Sub Total</span>
-                        <span className='text-secondary font-medium text-sm'>₹{couponDiscountTotalPrice.originalAmount || 0.00}</span>
+                        <span className='text-secondary font-medium text-sm'>₹{couponDiscountTotalPrice?.originalAmount}</span>
                     </li>
                     <li className='flex justify-between items-center'>
                         <span className='font-normal text-sm'>Discount</span>
-                        <span className='text-secondary font-medium text-sm'>₹{couponDiscountTotalPrice.discountValue || 0}</span>
+                        <span className='text-secondary font-medium text-sm'>₹{couponDiscountTotalPrice?.discountValue || 0.00}</span>
                     </li>
                 </ul>
                 <ul className='mt-2'>
@@ -144,7 +143,7 @@ const CartDetails = ({ cartItems }) => {
                     !selectedAddress && !defaultAddr ? (
                         <>
                             <div className='mb-3 flex justify-center items-center'>
-                                <AppLoader/>
+                                <AppLoader />
                             </div>
                         </>
                     ) : (

@@ -22,20 +22,22 @@ const SearchBar = ({ searchUserProducts, setSearchedUserProducts, setSearchedPro
 
     return (
         <>
-            <ul>
-                <li className='w-full flex items-center gap-2 text-sm p-2 rounded-lg placeholder:font-normal bg-searchUser placeholder:text-gray-700'>
-                    <RiSearch2Line className='text-gray-600 text-xl' />
-                    <input
-                        type="search"
-                        name="search"
-                        value={searchUserProducts}
-                        onChange={(e) => setSearchedUserProducts(e.target.value)}
-                        id=""
-                        placeholder='Search Products'
-                        className='bg-transparent 
+            <div className='xl:w-[450px] lg:w-[450px]'>
+                <ul>
+                    <li className='w-full flex items-center gap-2 text-sm p-2 rounded-full placeholder:font-normal bg-searchUser placeholder:text-gray-700'>
+                        <RiSearch2Line className='text-gray-600 text-xl' />
+                        <input
+                            type="search"
+                            name="search"
+                            value={searchUserProducts}
+                            onChange={(e) => setSearchedUserProducts(e.target.value)}
+                            id=""
+                            placeholder='Search Products'
+                            className='bg-transparent 
                         placeholder:text-gray-600 placeholder:text-sm font-light focus:outline-none text-secondary w-full'/>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
         </>
     )
 }

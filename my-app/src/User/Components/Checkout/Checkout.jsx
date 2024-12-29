@@ -39,6 +39,7 @@ const Checkout = () => {
                     },
                 });
                 setCheckoutData(response.data || {});
+                console.log(response.data);
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching checkout details:', error);
@@ -240,7 +241,7 @@ const Checkout = () => {
                         <>
                             <div className='space-y-5'>
                                 {/* cart */}
-                                <Card className='p-4 xl:p-6 lg:p-6'>
+                                <Card className='p-4 xl:p-6 lg:p-6 h-[500px] overflow-y-auto hide-scrollbar'>
                                     <h1 className='text-secondary font-medium capitalize text-lg mb-3'>Review your cart</h1>
                                     <div>
                                         {checkoutDetails?.cartItems?.map((item, index) => (

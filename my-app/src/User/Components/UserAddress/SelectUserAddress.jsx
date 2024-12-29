@@ -142,15 +142,8 @@ const SelectUserAddress = () => {
                 <div className='mt-5 flex flex-col xl:flex-row lg:flex-row gap-2 justify-normal xl:justify-center xl:items-center'>
                     <Link to='/add-delivery-address'><Button variant='outlined' className='w-full xl:w-52 lg:w-52 border-primary text-primary text-sm capitalize font-custom 
                     font-normal flex items-center gap-2 justify-center'><GoPlus />Add new address</Button></Link>
-                    {/* <Link to={{
-                        pathname: '/user-cart'
-                    }}
-                        state={{
-                            selectedAddress
-                        }}> */}
                     <Button onClick={handleContinue} className='w-full xl:w-52 lg:w-52 bg-primary text-white text-sm capitalize font-custom 
                     font-normal'>Continue</Button>
-                    {/* </Link> */}
                 </div>
             </div >
 

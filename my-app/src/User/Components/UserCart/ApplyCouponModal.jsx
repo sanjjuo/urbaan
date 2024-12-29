@@ -36,7 +36,9 @@ const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon }) => {
                 }
             })
             console.log(response.data);
-            setCouponDiscountTotalPrice(response.data) // for getting discount and previous amount value
+            const couponData = response.data;
+            setCouponDiscountTotalPrice(couponData); // for getting discount and previous amount value
+            localStorage.setItem('couponDiscountTotalPrice', JSON.stringify(couponData));
             handleCouponModalOpen()
             toast.success('Coupon is applied')
         } catch (error) {
@@ -66,8 +68,8 @@ const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon }) => {
                             type="text"
                             value={couponCode}
                             onChange={(e) => setCouponCode(e.target.value)}
-                            placeholder="e.g., DISCOUNT50"
-                            className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none"
+                            placeholder="Enter coupon code"
+                            className="w-full border uppercase placeholder:capitalize border-gray-300 rounded-lg p-3 focus:outline-none"
                         />
 
                         <Button
