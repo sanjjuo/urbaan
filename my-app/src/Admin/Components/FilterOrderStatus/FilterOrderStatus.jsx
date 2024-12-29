@@ -1,11 +1,23 @@
 import React, { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Menu, MenuHandler, MenuList, Button } from "@material-tailwind/react";
+import { useEffect } from "react";
 
 const orderStatus = ["Pending", "Processing", "Cancelled", "Delivered"];
 
-export function FilterOrderStatus({ setFilters }) {
+export function FilterOrderStatus({ setFilters, resetFilter }) {
     const [selectedStatuses, setSelectedStatuses] = useState([]);
+
+    // Reset selected statuses when resetFilter is triggered
+    useEffect(() => {
+        if (resetFilter) {
+            setSelectedStatuses([]);
+            setFilters((prevFilters) => ({
+                ...prevFilters,
+                status: undefined, // Reset status filter
+            }));
+        }
+    }, [resetFilter, setFilters]);
 
     // Handle status selection
     const handleOrderStatusSelect = (status) => {
@@ -77,7 +89,7 @@ export function FilterOrderStatus({ setFilters }) {
                 </div>
                 <div className='p-5 flex flex-col justify-center items-center gap-5 hover:outline-none focus:outline-none'>
                     <p className="text-sm">*You can choose multiple order statuses</p>
-                    <Button 
+                    <Button
                         onClick={handleApplyFilters}
                         className="bg-primary font-custom text-sm tracking-wider font-normal capitalize py-2 px-4"
                     >

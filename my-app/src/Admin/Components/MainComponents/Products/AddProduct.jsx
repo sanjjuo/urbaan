@@ -9,12 +9,12 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { HiMiniXMark } from 'react-icons/hi2';
 
 
 const AddProduct = () => {
     const { BASE_URL } = useContext(AppContext) //BASE URL
     const navigate = useNavigate()
-    const [fields, setFields] = useState([{ property: "", value: "" }])
     const [attributeFields, setAttributeFields] = useState([{ color: "", sizes: [{ size: "", stock: "" }] }]);
     const [productTitle, setProductTitle] = useState('')
     const [productCategory, setProductCategory] = useState('')
@@ -27,6 +27,16 @@ const AddProduct = () => {
         offer: false,
         featured: false,
     });
+    const [specifications, setSpecifications] = useState({
+        netWeight: '',
+        fit: '',
+        sleevesType: '',
+        Length: '',
+        occasion: '',
+        innerLining: '',
+        material: ''
+    });
+
     const [productDescription, setProductDescription] = useState('')
     const [productImage, setProductImage] = useState([])
     const [productManuName, setProductManuName] = useState('')
@@ -36,13 +46,11 @@ const AddProduct = () => {
     const [subCategories, setSubCategories] = useState([])
     const [filteredSubCategories, setFilteredSubCategories] = useState([]); //for getting subcategory having same catgeory id
 
-
     // handle image
     const handleProductImageUpload = (e) => {
         const files = Array.from(e.target.files); // Convert FileList to array
         setProductImage((prevImages) => [...prevImages, ...files]); // Append new files
     };
-
 
     // manage text color based ob bg-color
     const getContrastYIQ = (color) => {
@@ -54,36 +62,18 @@ const AddProduct = () => {
         return yiq >= 128 ? 'text-black' : 'text-white';
     };
 
-
-
-    // handle add new inputs at specification section
-    const handleAddInputFields = () => {
-        setFields([...fields, { property: "", value: "" }])
-    }
-
-    // handle inputs at specification section
-    const handleInputChange = (e, i) => {
-        const { name, value } = e.target
-        const onChangeField = [...fields]
-        onChangeField[i][name] = value
-        setFields(onChangeField)
-    }
-
-    // handle to delete inputs at specification section
-    const handleDeleteInputField = (i) => {
-        if (fields.length > 1) {
-            const deleteInput = [...fields];
-            deleteInput.splice(i, 1);
-            setFields(deleteInput);
-        }
+    // handle input change of specifications
+    const handleSpecificationChange = (e, key) => {
+        setSpecifications(prev => ({
+            ...prev,
+            [key]: e.target.value
+        }));
     };
-
 
     // Handler for checkbox change
     const handleCheckboxChange = (e, checkboxName) => {
         setCheckboxes({ ...checkboxes, [checkboxName]: e.target.checked });
     };
-
 
     // fetch categories
     useEffect(() => {
@@ -159,34 +149,22 @@ const AddProduct = () => {
             productFormData.append('subcategory', productSubCategory);
             productFormData.append('actualPrice', productActualPrice);
             productFormData.append('discount', productDiscount);
-
             // Calculate offer price
             const calculatedOfferPrice = productActualPrice - (productActualPrice * (productDiscount / 100));
             productFormData.append('offerPrice', calculatedOfferPrice.toFixed(2));
-
             productFormData.append('isLatestProduct', checkboxes.latest);
             productFormData.append('isOfferProduct', checkboxes.offer);
             productFormData.append('isFeaturedProduct', checkboxes.featured);
             productFormData.append('description', productDescription);
-
-            // Convert features array to an object
-            const featuresObject = fields.reduce((acc, { property, value }) => {
-                if (property.trim()) {
-                    acc[property.trim()] = value.trim() || ""
-                }
-                return acc;
-            }, {});
-            // productFormData.append('features', JSON.stringify(featuresObject));
-            Object.entries(featuresObject).forEach(([key, value]) => {
-                productFormData.append(`features[${key}]`, value);
+            // Append specifications to features
+            Object.entries(specifications).forEach(([key, value]) => {
+                productFormData.append(`features[${key}]`, value || null);
             });
-
-
             // Append images
             productImage.forEach((image) => {
                 productFormData.append('images', image);
             });
-
+            //append color size and stock
             const colors = attributeFields.reduce((acc, field) => {
                 if (field.color.trim()) {
                     const validSizes = field.sizes
@@ -245,7 +223,7 @@ const AddProduct = () => {
             setProductActualPrice('');
             setProductDiscount('');
             setCheckboxes({ latest: false, offer: false, featured: false });
-            setFields([{ property: "", value: "" }]);
+            setSpecifications({ netWeight: "", fit: "", sleevesType: "", Length: "", occasion: "", innerLining: "", material: "" })
             setAttributeFields([{ color: "", size: "", stock: "" }]);
             setProductDescription('');
             setProductImage([]);
@@ -346,7 +324,7 @@ const AddProduct = () => {
                                     name="selectField"
                                     value={productCategory}
                                     onChange={(e) => setProductCategory(e.target.value)}
-                                    className="w-full text-sm text-gray-500 font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
+                                    className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
                                 >
                                     <option value="Option 1">Select Category</option>
                                     {
@@ -364,7 +342,7 @@ const AddProduct = () => {
                                     name="selectField"
                                     value={productSubCategory}
                                     onChange={(e) => setProductSubCategory(e.target.value)}
-                                    className="w-full text-sm text-gray-500 font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
+                                    className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
                                 >
                                     <option value="Option 1">Select SubCategory</option>
                                     {
@@ -446,43 +424,98 @@ const AddProduct = () => {
 
                         {/* specifications */}
                         <div className='flex flex-col gap-1'>
-                            <div className='flex items-center justify-between'>
-                                <label htmlFor="" className='font-normal text-base'>Specifications</label>
-                                <FaPlus
-                                    className="text-2xl text-primary cursor-pointer"
-                                    onClick={handleAddInputFields}
+                            <label htmlFor="" className='font-normal text-base'>Specifications</label>
+                            <div className='flex items-center gap-1 mt-4'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>NetWeight</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={specifications.netWeight}
+                                    onChange={(e) => handleSpecificationChange(e, 'netWeight')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
                                 />
                             </div>
-                            {
-                                fields.map((field, index) => (
-                                    <div className='flex items-center gap-2' key={index}>
-                                        <input
-                                            type="text"
-                                            name="property"
-                                            value={field.property}
-                                            onChange={(e) => handleInputChange(e, index)}
-                                            placeholder='Property'
-                                            className='border-[1px] w-1/2 
-                                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
-                                                    focus:outline-none'
-                                        />
-                                        <input
-                                            type="text"
-                                            name="value"
-                                            value={field.value}
-                                            onChange={(e) => handleInputChange(e, index)}
-                                            placeholder='Value'
-                                            className='border-[1px] w-1/2
-                                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
-                                                    focus:outline-none'
-                                        />
-                                        <MdDelete
-                                            className="text-xl text-primary cursor-pointer"
-                                            onClick={() => handleDeleteInputField(index)}
-                                        />
-                                    </div>
-                                ))
-                            }
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Fit</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={specifications.fit}
+                                    onChange={(e) => handleSpecificationChange(e, 'fit')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Sleeves Type</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={specifications.sleevesType}
+                                    onChange={(e) => handleSpecificationChange(e, 'sleevesType')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Length</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={specifications.Length}
+                                    onChange={(e) => handleSpecificationChange(e, 'Length')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Occassion</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={specifications.occasion}
+                                    onChange={(e) => handleSpecificationChange(e, 'occasion')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Inner Lining</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={specifications.innerLining}
+                                    onChange={(e) => handleSpecificationChange(e, 'innerLining')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Material</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={specifications.material}
+                                    onChange={(e) => handleSpecificationChange(e, 'material')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
                         </div>
 
 
@@ -497,14 +530,13 @@ const AddProduct = () => {
                                 className="w-full border-[1px] bg-gray-100/50 p-2 rounded resize-none overflow-y-scroll focus:outline-none
                                         placeholder:text-sm placeholder:font-light placeholder:text-gray-500 hide-scrollbar"
                                 placeholder="Enter your description here..."
-                                style={{ maxHeight: '250px' }}
+                                style={{ maxHeight: '100px' }}
                             ></textarea>
                         </div>
                     </div>
                 </div>
 
                 {/* second col */}
-
                 {/* photo upload */}
                 <div className='bg-white rounded-xl shadow-md p-5 space-y-6 h-fit'>
                     <div className='flex gap-5'>
@@ -601,11 +633,10 @@ const AddProduct = () => {
                                 onClick={handleAddColorField}
                             />
                         </div>
-
                         {attributeFields.map((field, colorIndex) => (
-                            <div key={colorIndex} className="flex flex-col gap-2 border p-4 rounded-md bg-gray-50">
+                            <div key={colorIndex} className="flex flex-col gap-2">
                                 {/* Color Picker and Header */}
-                                <div className="flex items-center gap-5">
+                                <div className="flex items-center justify-between gap-2">
                                     <div className="flex items-center gap-2 w-full">
                                         <div className="w-64 bg-primary text-white rounded-md font-custom tracking-wider flex items-center justify-center gap-2 p-2 cursor-pointer relative">
                                             <input
@@ -616,14 +647,16 @@ const AddProduct = () => {
                                             />
                                             <p className='text-sm flex items-center gap-2'><FaPlus className="text-base" />Add Color</p>
                                         </div>
-                                        <input
-                                            type="text"
-                                            value={field.color}
-                                            placeholder="Enter color name"
-                                            onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
-                                            className={`w-full p-2 text-center bg-gray-100/50 border rounded-md text-sm uppercase placeholder:capitalize focus:outline-none ${getContrastYIQ(field.color)}`}
-                                            style={{ backgroundColor: field.color }}
-                                        />
+                                        <div className='w-full'>
+                                            <input
+                                                type="text"
+                                                value={field.color}
+                                                placeholder="Enter color name or color code"
+                                                onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
+                                                className={`w-full p-2 text-center bg-gray-100/50 border rounded-md text-sm uppercase placeholder:capitalize focus:outline-none ${getContrastYIQ(field.color)}`}
+                                                style={{ backgroundColor: field.color }}
+                                            />
+                                        </div>
                                     </div>
                                     <MdDelete
                                         className="text-xl text-primary cursor-pointer"
@@ -632,30 +665,32 @@ const AddProduct = () => {
                                 </div>
 
                                 {/* Sizes and Stock Table */}
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex items-center justify-between">
-                                        <label className="text-sm font-medium">Sizes & Stock</label>
-                                        <p onClick={() => handleAddSizeField(colorIndex)}
-                                            className="text-sm text-secondary hover:text-primary hover:underline cursor-pointer">Add</p>
-                                    </div>
+                                <div className='flex flex-col gap-2'>
                                     {Array.isArray(field.sizes) && field.sizes.map((sizeField, sizeIndex) => (
-                                        <div key={sizeIndex} className="flex items-center gap-2">
-                                            <input
-                                                type="text"
-                                                value={sizeField.size}
-                                                placeholder="Enter size (e.g., S, M, L)"
-                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "size", e.target.value)}
-                                                className="border w-64 bg-gray-100/50 p-2 rounded-md uppercase placeholder:text-sm focus:outline-none placeholder:capitalize"
-                                            />
-                                            <input
-                                                type="number"
-                                                value={sizeField.stock}
-                                                placeholder="Enter stock quantity"
-                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "stock", e.target.value)}
-                                                className="border w-64 bg-gray-100/50 p-2 rounded-md placeholder:text-sm focus:outline-none placeholder:capitalize"
-                                            />
-                                            <MdDelete
-                                                className="text-xl text-primary cursor-pointer"
+                                        <div key={sizeIndex} className="flex items-center justify-between gap-2">
+                                            <Button
+                                                onClick={() => handleAddSizeField(colorIndex)}
+                                                className='bg-gray-100/50 border border-gray-300 text-secondary shadow-none rounded-3xl w-11 h-10 p-2 flex items-center justify-center 
+                                                font-custom font-normal capitalize text-sm hover:shadow-none'
+                                            ><FaPlus /></Button>
+                                            <div className='flex items-center gap-2 w-full'>
+                                                <input
+                                                    type="text"
+                                                    value={sizeField.size}
+                                                    placeholder="Enter size"
+                                                    onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "size", e.target.value)}
+                                                    className="border w-full bg-gray-100/50 p-2 rounded-md uppercase placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                                />
+                                                <input
+                                                    type="number"
+                                                    value={sizeField.stock}
+                                                    placeholder="Enter stock quantity"
+                                                    onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "stock", e.target.value)}
+                                                    className="border w-full bg-gray-100/50 p-2 rounded-md placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                                />
+                                            </div>
+                                            <HiMiniXMark
+                                                className="text-2xl text-primary cursor-pointer"
                                                 onClick={() => handleDeleteSizeField(colorIndex, sizeIndex)}
                                             />
                                         </div>

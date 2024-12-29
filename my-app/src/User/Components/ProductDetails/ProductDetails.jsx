@@ -149,7 +149,9 @@ const ProductDetails = () => {
     };
 
 
-    const colorSizes = productDetails.colors?.[0]?.sizes || [];
+    const colorSizes = selectedColor
+        ? productDetails.colors?.find(item => item.color === selectedColor)?.sizes || []
+        : (productDetails.colors?.[0]?.sizes || []); // Default to first color sizes if no color is selected
     const colorColor = productDetails.colors || []
     const features = productDetails.features || []
 

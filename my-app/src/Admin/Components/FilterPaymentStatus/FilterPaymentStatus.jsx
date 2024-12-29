@@ -6,6 +6,7 @@ import {
     MenuList,
     Button,
 } from "@material-tailwind/react";
+import { useEffect } from "react";
 
 const paymentStatus = [
     "Paid",
@@ -14,18 +15,49 @@ const paymentStatus = [
     "Pending"
 ];
 
-export function FilterPaymentStatus() {
-    const [selectedPaymentStatus, setSelectedPaymentStatus] = useState("Payment Status");
+export function FilterPaymentStatus({ setFilters, resetFilter }) {
+    const [selectedPaymentStatus, setSelectedPaymentStatus] = useState([]);
+
+    // Reset selected statuses when resetFilter is triggered
+    useEffect(() => {
+        if (resetFilter) {
+            setSelectedPaymentStatus([]);
+            setFilters((prevFilters) => ({
+                ...prevFilters,
+                status: undefined, // Reset status filter
+            }));
+        }
+    }, [resetFilter, setFilters]);
 
     // Handle status selection
     const handleOrderStatusSelect = (payment) => {
-        setSelectedPaymentStatus(payment);
+        const updatesPaymentStatuses = selectedPaymentStatus.includes(payment)
+            ? selectedPaymentStatus.filter((p) => p !== payment)
+            : [...selectedPaymentStatus, payment]
+
+        setSelectedPaymentStatus(updatesPaymentStatuses);
+
+        if (updatesPaymentStatuses.length === 0) {
+            setFilters((prevFilters) => ({
+                ...prevFilters,
+                payment: undefined
+            }))
+        }
+    };
+
+    // Handle Apply now click
+    const handleApplyFilters = () => {
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            payment: selectedPaymentStatus.length > 0 ? selectedPaymentStatus : undefined, // Update status field with selected statuses
+        }));
     };
 
     // Prevent the click event from propagating to the Menu component
     const handleClickInside = (event) => {
         event.stopPropagation();
     };
+
     return (
         <Menu>
             <MenuHandler>
@@ -34,8 +66,8 @@ export function FilterPaymentStatus() {
                    border-gray-300 border-[1px] shadow-none focus:shadow-none focus:outline-none hover:shadow-none outline-none"
                     style={{ width: 'fit-content', maxWidth: '200px' }}
                 >
-                    <div className="flex gap-1 whitespace-nowrap">
-                        {selectedPaymentStatus}
+                    <div className="flex gap-1 whitespace-nowrap overflow-x-auto hide-scrollbar w-32">
+                    {selectedPaymentStatus.length > 0 ? selectedPaymentStatus.join(", ") : "Payment Status"}
                     </div>
                     <ChevronDownIcon
                         strokeWidth={2.5}
@@ -54,8 +86,8 @@ export function FilterPaymentStatus() {
                                     handleOrderStatusSelect(payment);
                                     handleClickInside(e);  // Prevent Menu from closing
                                 }}
-                                className="cursor-pointer border-[1px] border-gray-400 text-sm w-[30%] p-2 flex justify-center items-center 
-                                    rounded-full hover:bg-primary hover:text-white"
+                                className={`cursor-pointer border-[1px] border-gray-400 text-sm w-[30%] p-2 flex justify-center items-center 
+                                    rounded-full ${selectedPaymentStatus.includes(payment) ? 'bg-primary text-white' : ''}`}
                             >
                                 {payment}
                             </li>
@@ -64,7 +96,7 @@ export function FilterPaymentStatus() {
                 </div>
                 <div className='p-5 flex flex-col justify-center items-center gap-5 hover:outline-none focus:outline-none'>
                     <p className="text-sm">*You can choose multiple payment status</p>
-                    <Button className="bg-primary font-custom text-sm tracking-wider font-normal capitalize py-2 px-4">
+                    <Button onClick={handleApplyFilters} className="bg-primary font-custom text-sm tracking-wider font-normal capitalize py-2 px-4">
                         Apply now
                     </Button>
                 </div>

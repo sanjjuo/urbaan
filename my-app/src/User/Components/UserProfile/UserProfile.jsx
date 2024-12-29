@@ -48,7 +48,7 @@ const UserProfile = () => {
           <div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
             {/* image */}
             <div className='flex flex-col gap-2 items-center xl:justify-center lg:justify-center'>
-              <div className='xl:w-full lg:w-full h-56 xl:h-72 lg:h-72'>
+              <div className='xl:w-72 lg:w-72 h-56 xl:h-72 lg:h-72'>
                 <img src="/userProfile.png" alt="" className='w-full h-full object-cover rounded-full xl:rounded-lg lg:rounded-lg' />
               </div>
               <Typography className='font-custom font-medium capitalize text-lg xl:text-xl lg:text-xl flex items-center gap-1'>

@@ -4,7 +4,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AppContext } from "../../../StoreContext/StoreContext";
 import axios from "axios";
 
-export default function FilterCategory({ setFilters }) {
+export default function FilterCategory({ setFilters, resetFilter }) {
     const { BASE_URL } = useContext(AppContext);
     const [selectedCategories, setSelectedCategories] = useState([]); // Store category IDs
     const [categories, setCategories] = useState([]);
@@ -21,6 +21,17 @@ export default function FilterCategory({ setFilters }) {
         };
         fetchCategories();
     }, [BASE_URL]);
+
+    // Reset selected categories when resetFilter is triggered
+    useEffect(() => {
+        if (resetFilter) {
+            setSelectedCategories([]);
+            setFilters((prevFilters) => ({
+                ...prevFilters,
+                category: undefined, // Reset category filter
+            }));
+        }
+    }, [resetFilter, setFilters]);
 
     // Handle category selection
     const handleCategorySelect = (category) => {

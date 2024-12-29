@@ -17,7 +17,7 @@ const Invoice = () => {
             />
           </div>
           <div>
-            <InvoiceFilter />
+            <InvoiceFilter setInvoice={setInvoice}/>
           </div>
         </div>
         <div>

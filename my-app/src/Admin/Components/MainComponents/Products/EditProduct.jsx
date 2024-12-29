@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { HiMiniXMark } from "react-icons/hi2";
 
 
 const EditProduct = () => {
@@ -16,7 +17,6 @@ const EditProduct = () => {
     const navigate = useNavigate()
     const location = useLocation();
     const initialProducts = location.state?.product || {};
-    const [editProdFields, setEditProdFields] = useState([{ property: "", value: "" }])
     const [editAttributeFields, setEditAttributeFields] = useState([{ color: "", sizes: [{ size: "", stock: "" }] }]);
     const [editProdTitle, setEditProdTitle] = useState('')
     const [editProdCategory, setEditProdCategory] = useState('')
@@ -28,6 +28,15 @@ const EditProduct = () => {
         latest: false,
         offer: false,
         featured: false,
+    });
+    const [editSpecifications, setEditSpecifications] = useState({
+        netWeight: '',
+        fit: '',
+        sleevesType: '',
+        Length: '',
+        occasion: '',
+        innerLining: '',
+        material: ''
     });
     const [editProdDescription, setEditProdDescription] = useState('')
     const [editProdImage, setEditProdImage] = useState([])
@@ -41,25 +50,29 @@ const EditProduct = () => {
 
     useEffect(() => {
         if (initialProducts) {
-            setEditProdTitle(initialProducts.title)
-            setEditProdCategory(initialProducts.category._id)
-            setEditProdSubCategory(initialProducts.subcategory._id)
-            setEditProdActualPrice(initialProducts.actualPrice)
-            setEditProdDiscount(initialProducts.discount)
-            setEditProdOfferPrice(initialProducts.offerPrice)
+            setEditProdTitle(initialProducts.title);
+            setEditProdCategory(initialProducts.category._id);
+            setEditProdSubCategory(initialProducts.subcategory._id);
+            setEditProdActualPrice(initialProducts.actualPrice);
+            setEditProdDiscount(initialProducts.discount);
+            setEditProdOfferPrice(initialProducts.offerPrice);
             setEditProdCheckboxes({
                 latest: initialProducts.isLatestProduct || false,
                 offer: initialProducts.isOfferProduct || false,
                 featured: initialProducts.isFeaturedProduct || false,
             });
-            // Convert `features` object to array
-            const featuresArray = Object.entries(initialProducts.features)
-                // .filter(([key, value]) => value !== null && value !== "")
-                .map(([key, value], index) => ({ property: key, value }));
 
-            setEditProdFields(featuresArray);
+            // Set specifications from features
+            setEditSpecifications({
+                netWeight: initialProducts.features.netWeight || '',
+                fit: initialProducts.features.fit || '',
+                sleevesType: initialProducts.features.sleevesType || '',
+                Length: initialProducts.features.Length || '',
+                occasion: initialProducts.features.occasion || '',
+                innerLining: initialProducts.features.innerLining || '',
+                material: initialProducts.features.material || ''
+            });
 
-            // Initialize color, size, and stock data
             const formattedAttributes = initialProducts.colors.map((color) => ({
                 color: color.color,
                 sizes: color.sizes.map((size) => ({
@@ -68,16 +81,14 @@ const EditProduct = () => {
                 })),
             }));
             setEditAttributeFields(formattedAttributes);
-
-            setEditProdDescription(initialProducts.description)
-            setEditProdImage(initialProducts.images || [])
-            console.log(initialProducts.images);
-
-            setEditProdManuName(initialProducts.manufacturerName)
-            setEditProdManuBrand(initialProducts.manufacturerBrand)
-            setEditProdManuAddress(initialProducts.manufacturerAddress)
+            setEditProdDescription(initialProducts.description);
+            setEditProdImage(initialProducts.images || []);
+            setEditProdManuName(initialProducts.manufacturerName);
+            setEditProdManuBrand(initialProducts.manufacturerBrand);
+            setEditProdManuAddress(initialProducts.manufacturerAddress);
         }
-    }, [initialProducts])
+    }, [initialProducts]);
+
 
 
 
@@ -97,29 +108,13 @@ const EditProduct = () => {
         return yiq >= 128 ? 'text-black' : 'text-white';
     };
 
-
-    // handle add new inputs at specification section
-    const handleAddInputFields = () => {
-        setEditProdFields([...editProdFields, { property: "", value: "" }])
-    }
-
-    // handle inputs at specification section
-    const handleInputChange = (e, i) => {
-        const { name, value } = e.target
-        const onChangeField = [...editProdFields]
-        onChangeField[i][name] = value
-        setEditProdFields(onChangeField)
-    }
-
-    // handle to delete inputs at specification section
-    const handleDeleteInputField = (i) => {
-        if (editProdFields.length > 1) {
-            const deleteInput = [...editProdFields];
-            deleteInput.splice(i, 1);
-            setEditProdFields(deleteInput);
-        }
+    // handle input change of specifications
+    const handleSpecificationChange = (e, key) => {
+        setEditSpecifications(prev => ({
+            ...prev,
+            [key]: e.target.value
+        }));
     };
-
 
     // Handler for checkbox change
     const handleCheckboxChange = (e, checkboxName) => {
@@ -204,11 +199,9 @@ const EditProduct = () => {
             editproductFormData.append('subcategory', editProdSubCategory);
             editproductFormData.append('actualPrice', editProdActualPrice);
             editproductFormData.append('discount', editProdDiscount);
-
             // Calculate offer price
             const calculatedOfferPrice = editProdActualPrice - (editProdActualPrice * (editProdDiscount / 100));
             editproductFormData.append('offerPrice', calculatedOfferPrice.toFixed(2));
-
             editproductFormData.append('isLatestProduct', editProdCheckboxes.latest);
             editproductFormData.append('isOfferProduct', editProdCheckboxes.offer);
             editproductFormData.append('isFeaturedProduct', editProdCheckboxes.featured);
@@ -242,34 +235,12 @@ const EditProduct = () => {
             if (colors.length > 0) {
                 editproductFormData.append('colors', JSON.stringify(colors)); // Appends as a plain JSON string
             }
-
-
-
-            // // Handle features
-
-            // Create a `features` object from the array
-            const featuresObject = editProdFields.reduce((acc, { property, value }) => {
-                if (property.trim()) {
-                    acc[property.trim()] = value || null; // Set null for empty values
-                }
-                return acc;
-            }, {});
-
-
-            // // Option 1: Append `features` as a JSON string (if backend expects JSON)
-            // editproductFormData.append("features", JSON.stringify(featuresObject));
-
-            // // OR
-
-            // Option 2: Append `features` as individual key-value pairs (if backend supports nested data)
-            Object.entries(featuresObject).forEach(([key, value]) => {
-                editproductFormData.append(`features[${key}]`, value);
+            // Append specifications to features
+            Object.entries(editSpecifications).forEach(([key, value]) => {
+                editproductFormData.append(`features[${key}]`, value || null);
             });
-
-
             // Append images
             editProdImage.forEach((image) => editproductFormData.append("images", image));
-
             // Append manufacturer details
             editproductFormData.append('manufacturerName', editProdManuName);
             editproductFormData.append('manufacturerBrand', editProdManuBrand);
@@ -303,7 +274,7 @@ const EditProduct = () => {
             setEditProdDiscount('');
             setEditProdOfferPrice('');
             setEditProdCheckboxes({ latest: false, offer: false, featured: false });
-            setEditProdFields([{ property: "", value: "" }]);
+            setEditSpecifications({ netWeight: "", fit: "", sleevesType: "", Length: "", occasion: "", innerLining: "", material: "" })
             setEditAttributeFields([{ color: "", sizes: [{ size: "", stock: "" }] }]);
             setEditProdDescription('');
             setEditProdImage([]);
@@ -505,43 +476,98 @@ const EditProduct = () => {
 
                         {/* specifications */}
                         <div className='flex flex-col gap-1'>
-                            <div className='flex items-center justify-between'>
-                                <label htmlFor="" className='font-normal text-base'>Specifications</label>
-                                <FaPlus
-                                    className="text-2xl text-primary cursor-pointer"
-                                    onClick={handleAddInputFields}
+                            <label htmlFor="" className='font-normal text-base'>Specifications</label>
+                            <div className='flex items-center gap-1 mt-4'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>NetWeight</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={editSpecifications.netWeight}
+                                    onChange={(e) => handleSpecificationChange(e, 'netWeight')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
                                 />
                             </div>
-                            {
-                                editProdFields.map((field, index) => (
-                                    <div className='flex items-center gap-2' key={index}>
-                                        <input
-                                            type="text"
-                                            name="property"
-                                            value={field.property}
-                                            onChange={(e) => handleInputChange(e, index)}
-                                            placeholder='Property'
-                                            className='border-[1px] w-1/2 
-                                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
-                                                    focus:outline-none'
-                                        />
-                                        <input
-                                            type="text"
-                                            name="value"
-                                            value={field.value}
-                                            onChange={(e) => handleInputChange(e, index)}
-                                            placeholder='Value'
-                                            className='border-[1px] w-1/2
-                                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
-                                                    focus:outline-none'
-                                        />
-                                        <MdDelete
-                                            className="text-xl text-primary cursor-pointer"
-                                            onClick={() => handleDeleteInputField(index)}
-                                        />
-                                    </div>
-                                ))
-                            }
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Fit</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={editSpecifications.fit}
+                                    onChange={(e) => handleSpecificationChange(e, 'fit')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Sleeves Type</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={editSpecifications.sleevesType}
+                                    onChange={(e) => handleSpecificationChange(e, 'sleevesType')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Length</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={editSpecifications.Length}
+                                    onChange={(e) => handleSpecificationChange(e, 'Length')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Occassion</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={editSpecifications.occasion}
+                                    onChange={(e) => handleSpecificationChange(e, 'occasion')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Inner Lining</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={editSpecifications.innerLining}
+                                    onChange={(e) => handleSpecificationChange(e, 'innerLining')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
+                            <div className='flex items-center gap-1'>
+                                <label htmlFor="" className='font-normal text-sm w-32'>Material</label>
+                                <input
+                                    type="text"
+                                    name="value"
+                                    value={editSpecifications.material}
+                                    onChange={(e) => handleSpecificationChange(e, 'material')}
+                                    placeholder='value'
+                                    className='border-[1px] w-full 
+                                    bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
+                                    focus:outline-none'
+                                />
+                            </div>
                         </div>
 
 
@@ -553,10 +579,10 @@ const EditProduct = () => {
                                 value={editProdDescription}
                                 onChange={(e) => setEditProdDescription(e.target.value)}
                                 rows="10"
-                                className="w-full border-[1px] bg-gray-100/50 p-2 rounded resize-none overflow-y-scroll focus:outline-none
+                                className="w-full border-[1px] bg-gray-100/50 p-2 rounded resize-none overflow-y-scroll hide-scrollbar focus:outline-none
                                         placeholder:text-sm placeholder:font-light placeholder:text-gray-500"
                                 placeholder="Enter your description here..."
-                                style={{ maxHeight: '250px' }}
+                                style={{ maxHeight: '100px' }}
                             ></textarea>
                         </div>
                     </div>
@@ -665,9 +691,9 @@ const EditProduct = () => {
                         {editAttributeFields.map((field, colorIndex) => (
                             <div
                                 key={colorIndex}
-                                className="flex flex-col gap-2 border p-4 rounded-md bg-gray-50">
+                                className="flex flex-col gap-2">
                                 {/* Color Picker and Header */}
-                                <div className="flex items-center gap-5">
+                                <div className="flex items-center justify-between gap-2">
                                     <div className="flex items-center gap-2 w-full">
                                         <div className="w-64 bg-primary text-white rounded-md font-custom tracking-wider flex items-center justify-center gap-2 p-2 cursor-pointer relative">
                                             <input
@@ -678,15 +704,17 @@ const EditProduct = () => {
                                             />
                                             <p className='text-sm flex items-center gap-2'><FaPlus className="text-base" />Add Color</p>
                                         </div>
-                                        <input
-                                            type="text"
-                                            value={field.color}
-                                            placeholder="Enter color name"
-                                            onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
-                                            className={`w-full p-2 text-center bg-gray-100/50 border rounded-md text-sm uppercase placeholder:capitalize 
+                                        <div className='w-full'>
+                                            <input
+                                                type="text"
+                                                value={field.color}
+                                                placeholder="Enter color name or color code"
+                                                onChange={(e) => handleAttributeInputChange(colorIndex, "color", e.target.value)}
+                                                className={`w-full p-2 text-center bg-gray-100/50 border rounded-md text-sm uppercase placeholder:capitalize 
                                                     focus:outline-none ${getContrastYIQ(field.color)}`}
-                                            style={{ backgroundColor: field.color }}
-                                        />
+                                                style={{ backgroundColor: field.color }}
+                                            />
+                                        </div>
                                     </div>
                                     <MdDelete
                                         className="text-xl text-primary cursor-pointer"
@@ -695,33 +723,32 @@ const EditProduct = () => {
                                 </div>
 
                                 {/* Sizes and Stock Table */}
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex items-center justify-between">
-                                        <label className="text-sm font-medium">Sizes & Stock</label>
-                                        <p
-                                            onClick={() => handleAddSizeField(colorIndex)}
-                                            className="text-sm text-secondary hover:text-primary hover:underline cursor-pointer">Add</p>
-                                    </div>
+                                <div className='flex flex-col gap-2'>
                                     {Array.isArray(field.sizes) && field.sizes.map((sizeField, sizeIndex) => (
-                                        <div
-                                            key={sizeIndex}
-                                            className="flex items-center gap-2">
-                                            <input
-                                                type="text"
-                                                value={sizeField.size}
-                                                placeholder="Enter size (e.g., S, M, L)"
-                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "size", e.target.value)}
-                                                className="border w-64 bg-gray-100/50 p-2 rounded-md uppercase placeholder:text-sm focus:outline-none placeholder:capitalize"
-                                            />
-                                            <input
-                                                type="number"
-                                                value={sizeField.stock}
-                                                placeholder="Enter stock quantity"
-                                                onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "stock", e.target.value)}
-                                                className="border w-64 bg-gray-100/50 p-2 rounded-md placeholder:text-sm focus:outline-none placeholder:capitalize"
-                                            />
-                                            <MdDelete
-                                                className="text-xl text-primary cursor-pointer"
+                                        <div key={sizeIndex} className="flex items-center justify-between gap-2">
+                                            <Button
+                                                onClick={() => handleAddSizeField(colorIndex)}
+                                                className='bg-gray-100/50 border border-gray-300 text-secondary shadow-none rounded-3xl w-11 h-10 p-2 flex items-center justify-center 
+                                                font-custom font-normal capitalize text-sm hover:shadow-none'
+                                            ><FaPlus /></Button>
+                                            <div className='flex items-center gap-2 w-full'>
+                                                <input
+                                                    type="text"
+                                                    value={sizeField.size}
+                                                    placeholder="Enter size (e.g., S, M, L)"
+                                                    onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "size", e.target.value)}
+                                                    className="border w-full bg-gray-100/50 p-2 rounded-md uppercase placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                                />
+                                                <input
+                                                    type="number"
+                                                    value={sizeField.stock}
+                                                    placeholder="Enter stock quantity"
+                                                    onChange={(e) => handleSizeFieldChange(colorIndex, sizeIndex, "stock", e.target.value)}
+                                                    className="border w-full bg-gray-100/50 p-2 rounded-md placeholder:text-sm focus:outline-none placeholder:capitalize"
+                                                />
+                                            </div>
+                                            <HiMiniXMark
+                                                className="text-2xl text-primary cursor-pointer"
                                                 onClick={() => handleDeleteSizeField(colorIndex, sizeIndex)}
                                             />
                                         </div>

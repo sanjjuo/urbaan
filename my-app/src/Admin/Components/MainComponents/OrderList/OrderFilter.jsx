@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../../../StoreContext/StoreContext';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { Button } from '@material-tailwind/react';
 
 const OrderFilter = ({ setOrderList }) => {
     const { BASE_URL } = useContext(AppContext);
@@ -51,21 +52,23 @@ const OrderFilter = ({ setOrderList }) => {
 
     return (
         <>
-            <ul className="flex items-center gap-1 text-secondary">
-                <li className="bg-white border-[1px] border-gray-300 rounded-full p-1 w-12 h-12 flex items-center justify-center">
-                    <ImFilter />
-                </li>
-                <li className="bg-white font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-24 h-12 flex items-center justify-center">Filter by</li>
-                <li><FilterDate setFilters={setFilters} resetFilter={resetFilter} /></li>
-                <li><FilterCategory setFilters={setFilters}  resetFilter={resetFilter}/></li>
-                <li><FilterOrderStatus setFilters={setFilters} resetFilter={resetFilter}/></li>
-                <li onClick={resetFilters} className="bg-white cursor-pointer font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-32 h-12 flex items-center justify-center gap-1
+            <div className='flex items-center gap-1'>
+                <ul className="flex items-center gap-1 text-secondary">
+                    <li className="bg-white border-[1px] border-gray-300 rounded-full p-1 w-12 h-12 flex items-center justify-center">
+                        <ImFilter />
+                    </li>
+                    <li className="bg-white font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-24 h-12 flex items-center justify-center">Filter by</li>
+                    <li><FilterDate setFilters={setFilters} resetFilter={resetFilter} /></li>
+                    <li><FilterCategory setFilters={setFilters} resetFilter={resetFilter} /></li>
+                    <li><FilterOrderStatus setFilters={setFilters} resetFilter={resetFilter} /></li>
+                </ul>
+                <Button onClick={resetFilters} className="bg-white font-custom capitalize shadow-none hover:shadow-none cursor-pointer font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-32 h-12 flex items-center justify-center gap-1
                      text-red-500 hover:text-primary"
                 >
                     <PiArrowCounterClockwiseBold />
                     Reset Filter
-                </li>
-            </ul>
+                </Button>
+            </div>
         </>
     );
 };

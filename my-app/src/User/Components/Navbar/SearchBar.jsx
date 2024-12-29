@@ -22,7 +22,7 @@ const SearchBar = ({ searchUserProducts, setSearchedUserProducts, setSearchedPro
 
     return (
         <>
-            <ul className='w-96'>
+            <ul>
                 <li className='w-full flex items-center gap-2 text-sm p-2 rounded-lg placeholder:font-normal bg-searchUser placeholder:text-gray-700'>
                     <RiSearch2Line className='text-gray-600 text-xl' />
                     <input

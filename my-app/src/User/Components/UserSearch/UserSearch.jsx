@@ -8,10 +8,12 @@ import { useContext } from 'react';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import toast from 'react-hot-toast';
 import { RiHeart3Fill, RiHeart3Line } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { IoIosArrowBack } from 'react-icons/io';
 
 const UserSearch = () => {
     const { BASE_URL, wishlist } = useContext(AppContext)
+    const navigate = useNavigate()
     const [searchedProducts, setSearchedProducts] = useState([])
     const [heartIcons, setHeartIcons] = useState({});
     const [searchUserProducts, setSearchedUserProducts] = useState([])
@@ -64,11 +66,17 @@ const UserSearch = () => {
     return (
         <>
             <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto'>
-                <SearchBar
-                    searchUserProducts={searchUserProducts}
-                    setSearchedUserProducts={setSearchedUserProducts}
-                    setSearchedProducts={setSearchedProducts}
-                />
+                <h1 className="flex items-center gap-1 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate('/')}>
+                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
+                </h1>
+
+                <div className='mt-5'>
+                    <SearchBar
+                        searchUserProducts={searchUserProducts}
+                        setSearchedUserProducts={setSearchedUserProducts}
+                        setSearchedProducts={setSearchedProducts}
+                    />
+                </div>
 
                 {searchUserProducts.length === 0 ? (
                     <div>
