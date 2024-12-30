@@ -41,7 +41,7 @@ const ProductDetails = () => {
             }
         }
         fetchProductDetails()
-    })
+    }, [])
 
     console.log(productDetails);
     console.log("id", productId);

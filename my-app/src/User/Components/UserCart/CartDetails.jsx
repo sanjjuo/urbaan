@@ -135,22 +135,23 @@ const CartDetails = ({ cartItems }) => {
                 </div>
                 {
                     !selectedAddress && !defaultAddr ? (
-                        <>
-                            <div className='mb-3 flex justify-center items-center'>
-                                <AppLoader />
-                            </div>
-                        </>
+                        <div className='mb-3 flex justify-center items-center'>
+                            <AppLoader />
+                        </div>
                     ) : (
                         <>
-                            <p className='text-sm font-normal mb-3 capitalize'>
-                                {selectedAddress
-                                    ? `${selectedAddress.address}, ${selectedAddress.landmark}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pincode}`
-                                    : `${defaultAddr?.address}, ${defaultAddr?.landmark}, ${defaultAddr?.city}, ${defaultAddr?.state}, ${defaultAddr?.pincode}`}
-                            </p>
+                            {selectedAddress && defaultAddr === 0 ? (
+                                <p className='text-sm text-gray-600'>Address not found</p>
+                            ) : (
+                                <p className='text-sm font-normal mb-3 capitalize'>
+                                    {selectedAddress
+                                        ? `${selectedAddress.address}, ${selectedAddress.landmark}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pincode}`
+                                        : `${defaultAddr?.address}, ${defaultAddr?.landmark}, ${defaultAddr?.city}, ${defaultAddr?.state}, ${defaultAddr?.pincode}`}
+                                </p>
+                            )}
                         </>
                     )
                 }
-
                 <Button
                     onClick={async () => {
                         const newCheckoutId = await handleCheckout(); // Ensure handleCheckout returns checkoutId
