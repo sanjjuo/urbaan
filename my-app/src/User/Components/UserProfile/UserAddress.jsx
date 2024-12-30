@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { useNavigate, Link } from 'react-router-dom';
-import { TbAddressBook } from "react-icons/tb";
 import { Card, Button } from '@material-tailwind/react';
 import axios from 'axios';
 import { AppContext } from '../../../StoreContext/StoreContext';
@@ -37,11 +36,6 @@ const UserAddress = () => {
             <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
                 <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
             </h1>
-
-            <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 mt-5'>
-                My addresses <TbAddressBook />
-            </h2>
-
             <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-4 mt-10'>
                 {isLoading || userAddresses.length === 0 ? (
                     <div className='col-span-2 flex justify-center items-center h-[50vh]'>

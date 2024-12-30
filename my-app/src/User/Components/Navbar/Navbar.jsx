@@ -18,6 +18,8 @@ import { CategoryMenu } from './CategoryMenu';
 import SearchBar from './SearchBar';
 import { Link, useLocation } from 'react-router-dom';
 import { UserProfile } from './UserProfile';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 
 const NavList = () => {
@@ -61,16 +63,17 @@ const NavList = () => {
 }
 
 const UserNavbar = () => {
-    const { openDrawer, handleOpenDrawer, handleCloseDrawer, viewCart, wishlist } = useContext(AppContext)
+    const { BASE_URL, openDrawer, handleOpenDrawer, handleCloseDrawer, viewCart, setViewCart, wishlist, setWishlist } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const isCartPage = location.pathname === "/user-cart";
-    const cartView = viewCart?.items?.length;
+    const cartView = viewCart?.length;
+    const favView = wishlist?.length;
 
 
     // pages where navbar don't visible
     const noNavbar = ["/product-details", "/customer-reviews", "/write-review", "/add-delivery-address", "/edit-delivery-address", "/select-delivery-address",
-        "/select-tracking", "/all-category",]
+        "/select-tracking", "/all-category", "/order"]
 
     // Check if current path matches any of the visible routes
     if (noNavbar.includes(location.pathname)) {
@@ -78,6 +81,38 @@ const UserNavbar = () => {
     }
 
     const token = localStorage.getItem("userToken")
+    const userId = localStorage.getItem('userId');
+
+    // fetching cart items and fav items for identifying the length initially
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setViewCart(response.data.items);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchCartItems();
+    }, [BASE_URL, userId, token]);
+
+
+    useEffect(() => {
+        const fetchWishlistProducts = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
+                setWishlist(response.data.items || {});
+            } catch (error) {
+                console.error('Error fetching wishlist:', error);
+            }
+        };
+        fetchWishlistProducts();
+    }, []);
 
     return (
         <>
@@ -98,9 +133,9 @@ const UserNavbar = () => {
                                 <Link to="/favourite">
                                     <li className="text-2xl text-secondary cursor-pointer relative">
                                         {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
-                                        {wishlist?.items?.length > 0 && (
+                                        {(favView || 0) > 0 && token && userId && (
                                             <Chip
-                                                value={wishlist.items.length}
+                                                value={favView || 0}
                                                 size="sm"
                                                 className="rounded-full bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
                                             />
@@ -111,10 +146,11 @@ const UserNavbar = () => {
                                 <Link to='/user-cart'>
                                     <li className='text-2xl text-secondary cursor-pointer relative'>
                                         {isCartPage ? <RiShoppingCartFill className='text-primary' /> : <RiShoppingCartLine />}
-                                        {cartView > 0 && (
+                                        {(cartView || 0) > 0 && token && userId && (
                                             <Chip value={cartView || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
                                             -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                                         )}
+
                                     </li>
                                 </Link>
                                 <li>

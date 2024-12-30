@@ -14,11 +14,10 @@ const CartDetails = ({ cartItems }) => {
     const navigate = useNavigate();
     const location = useLocation()
     const { selectedAddress } = location.state || {};
-    const { BASE_URL, viewCart, couponDiscountTotalPrice, setCouponDiscountTotalPrice } = useContext(AppContext);
+    const { BASE_URL, viewCart } = useContext(AppContext);
     const [checkoutId, setCheckoutId] = useState('')
     const [openCoupon, setOpenCoupon] = React.useState(false); // modal for coupon
     const [defaultAddress, setDefaultAddress] = useState([])
-
 
     // handle Coupon modal
     const handleCouponModalOpen = () => setOpenCoupon(!openCoupon);
@@ -45,6 +44,8 @@ const CartDetails = ({ cartItems }) => {
                 totalPrice: viewCart.totalPrice,
             };
 
+            console.log(checkoutPayload);
+
             const response = await axios.post(`${BASE_URL}/user/checkout/checkout`, checkoutPayload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -60,16 +61,6 @@ const CartDetails = ({ cartItems }) => {
             return null; // Return null to signal failure
         }
     };
-
-    useEffect(() => {
-        // Load the coupon data from localStorage if available
-        const storedCouponData = JSON.parse(localStorage.getItem('couponDiscountTotalPrice'));
-        if (storedCouponData) {
-            setCouponDiscountTotalPrice(storedCouponData);
-        }
-    }, []);
-
-
 
     //handle address with defaultAddress true
     useEffect(() => {
@@ -118,17 +109,20 @@ const CartDetails = ({ cartItems }) => {
                     </li>
                     <li className='flex justify-between items-center'>
                         <span className='font-normal text-sm'>Sub Total</span>
-                        <span className='text-secondary font-medium text-sm'>₹{couponDiscountTotalPrice?.originalAmount}</span>
+                        <span className='text-secondary font-medium text-sm'>
+                            ₹{viewCart?.totalPrice || 0.00}
+                        </span>
+
                     </li>
                     <li className='flex justify-between items-center'>
                         <span className='font-normal text-sm'>Discount</span>
-                        <span className='text-secondary font-medium text-sm'>₹{couponDiscountTotalPrice?.discountValue || 0.00}</span>
+                        <span className='text-secondary font-medium text-sm'>{viewCart?.coupenAmount || 0.00}</span>
                     </li>
                 </ul>
                 <ul className='mt-2'>
                     <li className='flex justify-between items-center'>
                         <span className='text-secondary font-medium text-sm'>Total</span>
-                        <span className='text-secondary font-bold text-lg'>₹{viewCart.totalPrice || 0.00}</span>
+                        <span className='text-secondary font-bold text-lg'>₹{viewCart.discountedTotal || 0.00}</span>
                     </li>
                 </ul>
             </Card>

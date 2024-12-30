@@ -38,6 +38,7 @@ import UserAddress from './User/Components/UserProfile/UserAddress';
 import UserOrders from './User/Components/UserProfile/UserOrders';
 import Delivery from './Admin/Components/MainComponents/Delivery/Delivery';
 import Checkout from './User/Components/Checkout/Checkout';
+import OrderPlaced from './User/Components/Order.jsx/OrderPlaced';
 
 const FullRoutes = () => {
     return (
@@ -77,6 +78,7 @@ const RoutesWithLocation = () => {
                 <Route path='/user-search' element={<UserSearch />} />
                 <Route path='/user-cart' element={<UserCart />} />
                 <Route path='/checkout' element={<Checkout />} />
+                <Route path='/order' element={<OrderPlaced />} />
                 <Route path='/add-delivery-address' element={<AddUserAddress />} />
                 <Route path='/edit-delivery-address' element={<EditUserAddress />} />
                 <Route path='/select-delivery-address' element={<SelectUserAddress />} />

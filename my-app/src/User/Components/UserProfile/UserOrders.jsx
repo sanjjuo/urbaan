@@ -1,7 +1,6 @@
 import { Card } from '@material-tailwind/react'
 import React from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
-import { LiaClipboardListSolid } from 'react-icons/lia'
 import { useNavigate } from 'react-router-dom'
 
 const UserOrders = () => {
@@ -12,11 +11,6 @@ const UserOrders = () => {
                 <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
                 </h1>
-
-                <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 mt-5'>
-                    My orders <LiaClipboardListSolid />
-                </h2>
-
                 <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 mt-10'>
                     <Card className='p-4 xl:p-6 lg:p-6'>
                         <div className='flex justify-between items-end'>

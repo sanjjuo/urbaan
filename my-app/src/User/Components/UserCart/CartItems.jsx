@@ -33,11 +33,11 @@ const CartItems = ({ cartItems, setCartItems }) => {
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
 
-        if (!userId || !token) {
-            toast.error("User is not logged in or authorization is missing.");
-            navigate('/login-user');
-            return;
-        }
+        // if (!userId || !token) {
+        //     toast.error("User is not logged in or authorization is missing.");
+        //     navigate('/login-user');
+        //     return;
+        // }
 
         const fetchCartItems = async () => {
             try {
@@ -55,7 +55,7 @@ const CartItems = ({ cartItems, setCartItems }) => {
         };
 
         fetchCartItems();
-    }, [BASE_URL, navigate]);
+    }, [BASE_URL]);
 
 
     // handle update
@@ -162,8 +162,6 @@ const CartItems = ({ cartItems, setCartItems }) => {
         }
     };
 
-
-    // handle clear
     const handleClearAll = async () => {
         try {
             const token = localStorage.getItem('userToken')
@@ -176,24 +174,25 @@ const CartItems = ({ cartItems, setCartItems }) => {
             console.log(response.data);
             setCartItems([]);
             setViewCart({ items: [] });
-            toast.success('Cart cleared successfully')
+            toast.success('Cart cleared successfully');
         } catch (error) {
             console.log(error);
+            toast.error('Failed to clear the cart');
         }
     }
+
 
 
     return (
         <>
             <p onClick={handleClearAll} className='capitalize flex justify-end items-center gap-1 text-sm hover:text-primary cursor-pointer'>
                 clear all <HiOutlineXMark className='text-lg' /></p>
-            {
-                isLoading ? (
+                
+            {isLoading ? (
                     <div className='col-span-2 flex justify-center items-center h-[50vh]'>
                         <AppLoader />
                     </div>
                 ) : cartItems.length === 0 ? (
-                    <>
                         <div className='flex flex-col justify-center items-center h-[60vh] !mb-20'>
                             <div className='w-72 h-72 xl:w-96 xl:h-96 lg:w-96 lg:h-96'>
                                 <img src="/empty-cart.png" alt="" className='w-full h-full object-cover' />
@@ -206,7 +205,6 @@ const CartItems = ({ cartItems, setCartItems }) => {
                                 </Link>
                             </div>
                         </div>
-                    </>
                 ) : (
                     cartItems.map((item) => (
                         <Card className='p-2 xl:p-6 lg:p-6' key={item._id}>
@@ -214,11 +212,11 @@ const CartItems = ({ cartItems, setCartItems }) => {
                                 <div className='flex gap-2 xl:gap-6 lg:gap-6'>
                                     <div className='w-20 h-28 xl:w-28 xl:h-32'>
                                         {item.productId && item.productId.images && item.productId.images.length > 0 ? (
-                                            <img 
-                                            src={item.productId.images[0]} 
-                                            alt={item.productId.title} 
-                                            className="w-full h-full object-cover rounded-lg"
-                                            onError={(e) => e.target.src = '/no-image.jpg'} />
+                                            <img
+                                                src={item.productId.images[0]}
+                                                alt={item.productId.title}
+                                                className="w-full h-full object-cover rounded-lg"
+                                                onError={(e) => e.target.src = '/no-image.jpg'} />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-lg">
                                                 <span className="text-gray-500 text-sm text-center">Image not available</span>

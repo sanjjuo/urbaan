@@ -1,7 +1,7 @@
 import { Button, Card, Radio } from '@material-tailwind/react'
 import React, { useState, useEffect, useContext } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import namer from 'color-namer'; // Import the color-namer library
 import { AppContext } from '../../../StoreContext/StoreContext'
@@ -11,12 +11,19 @@ const Checkout = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const checkoutDetailsId = location.state.checkoutId
-    const { BASE_URL } = useContext(AppContext);
+    const { BASE_URL, viewCart } = useContext(AppContext);
     const [checkoutData, setCheckoutData] = useState({});
     const [isLoading, setIsLoading] = useState(true)
     const [deliveryCharge, setDeliveryCharge] = useState([]);
+    const [paymentMethod, setPaymentMethod] = useState('Online Payment')
 
     const checkoutDetails = checkoutData.checkout;
+    console.log(checkoutDetails);
+
+    // token and userId
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
 
     // Function to get the nearest named color
     const getNamedColor = (colorCode) => {
@@ -32,7 +39,6 @@ const Checkout = () => {
     useEffect(() => {
         const fetchCheckoutDetails = async () => {
             try {
-                const token = localStorage.getItem('userToken');
                 const response = await axios.get(`${BASE_URL}/user/checkout/checkout/${checkoutDetailsId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -62,6 +68,7 @@ const Checkout = () => {
         fetchDeliveryChargeList();
     }, [BASE_URL]);
 
+
     // Calculate the delivery charge based on the cart items and available delivery fees
     const calculateDeliveryCharge = (cartItems) => {
         if (!deliveryCharge.length || !cartItems) return 0;
@@ -77,20 +84,44 @@ const Checkout = () => {
         return totalDeliveryFee;
     };
 
-    // Calculate subtotal (cart items total amount multiplied with total quantity)
-    const calculateSubtotal = (cartItems) => {
-        if (!cartItems) return 0;
+    // // Calculate subtotal (cart items total amount multiplied with total quantity)
+    // const calculateSubtotal = (cartItems) => {
+    //     if (!cartItems) return 0;
 
-        return cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    };
+    //     return cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    // };
 
     const calculateTotalPrice = () => {
-        const subtotal = calculateSubtotal(checkoutDetails?.cartItems);
+        const subtotal = viewCart.totalPrice;
         const deliveryCharge = calculateDeliveryCharge(checkoutDetails?.cartItems);
-        const discount = -50.00; // Assuming a static discount for now, but you could make this dynamic based on some logic if needed
 
-        return subtotal + deliveryCharge + discount;
+        return subtotal + deliveryCharge;
     };
+
+    // handleSubmitOrder
+    const handleSubmitOrder = async () => {
+        try {
+            const orderPayload = {
+                userId: userId,
+                addressId: checkoutDetails.addressId._id,
+                products: checkoutDetails.cartItems,
+                totalPrice: checkoutDetails.totalPrice,
+                deliveryCharge: calculateDeliveryCharge(checkoutDetails?.cartItems),
+                paymentMethod: paymentMethod
+            }
+
+            console.log(orderPayload);
+
+            const response = await axios.post(`${BASE_URL}/user/order/create`, orderPayload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -98,11 +129,6 @@ const Checkout = () => {
                 <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
                 </h1>
-
-                <h2 className='text-3xl xl:text-4xl lg:text-4xl font-semibold capitalize flex items-center justify-center gap-1 mt-5'>
-                    Checkout
-                </h2>
-
                 <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 mt-10 gap-5'>
                     {isLoading ? (
                         <div className='flex justify-center items-center h-[50vh]'>
@@ -275,8 +301,9 @@ const Checkout = () => {
                                 <Card className='p-4 xl:p-6 lg:p-6'>
                                     <ul className='space-y-2'>
                                         <li className='flex items-center justify-between'>
-                                            <span className='text-secondary'>Subtotal</span>
-                                            <span className='text-secondary font-bold'>₹{calculateSubtotal(checkoutDetails?.cartItems)}</span>
+                                            <span className='text-secondary flex items-center gap-3'>Subtotal
+                                                <span className='text-sm'>(Including discount)</span></span>
+                                            <span className='text-secondary font-bold'>₹{checkoutDetails?.discountedTotal || 0.00}</span>
                                         </li>
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Shipping</span>
@@ -286,7 +313,7 @@ const Checkout = () => {
                                         </li>
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Discount</span>
-                                            <span className='text-secondary font-bold'>-₹50.00</span>
+                                            <span className='text-secondary font-bold'>{checkoutDetails?.coupenAmount || 0.00}</span>
                                         </li>
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Total</span>
@@ -299,11 +326,26 @@ const Checkout = () => {
                                     <div className='mt-5'>
                                         <h3 className='font-medium text-sm xl:text-base lg:text-base text-secondary'>Payment Options</h3>
                                         <div className='flex flex-col xl:flex-row lg:flex-row lg:items-center xl:items-center gap-0 xl:gap-10 lg:gap-10'>
-                                            <Radio name="type" label="Online Payment" color='pink' />
-                                            <Radio name="type" label="Cash on Delivery" color='pink' />
+                                            <Radio
+                                                name="type"
+                                                label="Online Payment"
+                                                color='pink'
+                                                checked={paymentMethod === 'Online Payment'}
+                                                onChange={() => setPaymentMethod('Online Payment')} // Explicitly setting the value
+                                            />
+                                            <Radio
+                                                name="type"
+                                                label="Cash on Delivery"
+                                                color='pink'
+                                                checked={paymentMethod === 'Cash on Delivery'}
+                                                onChange={() => setPaymentMethod('Cash on Delivery')} // Explicitly setting the value
+                                            />
+
                                         </div>
                                     </div>
-                                    <Button className='hidden xl:block lg:block mt-5 bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
+                                    <Link to='/order'>
+                                        <Button onClick={handleSubmitOrder} className='hidden xl:block lg:block mt-5 bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
+                                    </Link>
                                 </Card>
                             </div>
                         </>
@@ -312,7 +354,9 @@ const Checkout = () => {
             </div>
 
             <div className='bg-white shadow-md fixed bottom-0 inset-x-0 z-50 w-full p-4 xl:hidden lg:hidden'>
-                <Button className='w-full bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
+                <Link to='/order'>
+                    <Button onClick={handleSubmitOrder} className='w-full bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
+                </Link>
             </div>
         </>
     )
