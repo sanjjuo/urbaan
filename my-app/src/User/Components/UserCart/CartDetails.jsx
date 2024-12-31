@@ -18,6 +18,7 @@ const CartDetails = ({ cartItems }) => {
     const [checkoutId, setCheckoutId] = useState('')
     const [openCoupon, setOpenCoupon] = React.useState(false); // modal for coupon
     const [defaultAddress, setDefaultAddress] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     // handle Coupon modal
     const handleCouponModalOpen = () => setOpenCoupon(!openCoupon);
@@ -66,21 +67,23 @@ const CartDetails = ({ cartItems }) => {
     useEffect(() => {
         const fetchDefaultAddress = async () => {
             try {
-                const userId = localStorage.getItem('userId')
-                const token = localStorage.getItem('userToken')
+                const userId = localStorage.getItem('userId');
+                const token = localStorage.getItem('userToken');
                 const response = await axios.get(`${BASE_URL}/user/address/view/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
-                })
-                setDefaultAddress(response.data)
-                console.log(response.data);
+                });
+                setDefaultAddress(response.data);
             } catch (error) {
                 console.log(error);
+            } finally {
+                setIsLoading(false); // Ensure this is called after the data is fetched
             }
-        }
-        fetchDefaultAddress()
-    }, [])
+        };
+        fetchDefaultAddress();
+    }, []);
+
 
 
     // Find the address with defaultAddress set to true
@@ -131,26 +134,27 @@ const CartDetails = ({ cartItems }) => {
             <Card className='p-4 xl:p-6 lg:p-6'>
                 <div className='flex items-center justify-between mb-3'>
                     <h1 className='text-secondary font-medium'>Delivery Address</h1>
-                    <Link to='/select-delivery-address'><p className='text-primary underline text-sm font-medium'>Change</p></Link>
+                    <Link to='/select-delivery-address'>
+                        <p className='text-primary underline text-sm font-medium'>Change</p>
+                    </Link>
                 </div>
-                {
-                    !selectedAddress && !defaultAddr ? (
-                        <div className='mb-3 flex justify-center items-center'>
-                            <AppLoader />
-                        </div>
-                    ) : (
-                        <>
-                            {selectedAddress && defaultAddr === 0 ? (
-                                <p className='text-sm text-gray-600'>Address not found</p>
-                            ) : (
-                                <p className='text-sm font-normal mb-3 capitalize'>
-                                    {selectedAddress
-                                        ? `${selectedAddress.address}, ${selectedAddress.landmark}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pincode}`
-                                        : `${defaultAddr?.address}, ${defaultAddr?.landmark}, ${defaultAddr?.city}, ${defaultAddr?.state}, ${defaultAddr?.pincode}`}
-                                </p>
-                            )}
-                        </>
-                    )
+                {isLoading ? (
+                    <div className='mb-3 flex justify-center items-center'>
+                        <AppLoader />
+                    </div>
+                ) : (
+                    <>
+                        {(!selectedAddress && !defaultAddr) ? (
+                            <p className='text-sm text-gray-600 text-center my-5'>Address not found</p>
+                        ) : (
+                            <p className='text-sm font-normal mb-3 capitalize'>
+                                {selectedAddress
+                                    ? `${selectedAddress.address}, ${selectedAddress.landmark}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pincode}`
+                                    : `${defaultAddr?.address}, ${defaultAddr?.landmark}, ${defaultAddr?.city}, ${defaultAddr?.state}, ${defaultAddr?.pincode}`}
+                            </p>
+                        )}
+                    </>
+                )
                 }
                 <Button
                     onClick={async () => {
@@ -164,6 +168,7 @@ const CartDetails = ({ cartItems }) => {
                     Checkout
                 </Button>
             </Card>
+
 
             <ApplyCouponModal
                 handleCouponModalOpen={handleCouponModalOpen}

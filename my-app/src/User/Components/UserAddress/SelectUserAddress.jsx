@@ -44,6 +44,9 @@ const SelectUserAddress = () => {
             } catch (error) {
                 console.log(error);
             }
+            finally {
+                setIsLoading(false); // Ensure this is called after the data is fetched
+            }
         }
         fetchAddress();
     }, [])
@@ -89,13 +92,13 @@ const SelectUserAddress = () => {
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
                 <div className="grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-5">
                     {
-                        isLoading || getAddress.length === 0 ? (
+                        isLoading ? (
                             <div className='col-span-2 flex justify-center items-center h-[50vh]'>
                                 <AppLoader />
                             </div>
                         ) : getAddress.length === 0 ? (
                             <>
-                                <div className='flex justify-center items-center'>
+                                <div className='col-span-2 flex justify-center items-center'>
                                     <div className='w-96 h-96'>
                                         <img src="/no-address.png" alt="" className='w-full h-full object-cover' />
                                     </div>

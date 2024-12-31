@@ -7,7 +7,6 @@ import axios from 'axios';
 import AppLoader from '../../../Loader';
 import { MdDelete } from 'react-icons/md';
 import toast from 'react-hot-toast';
-import { RiHeart3Line } from 'react-icons/ri';
 import { HiOutlineXMark } from 'react-icons/hi2';
 
 const FavouriteProduct = () => {

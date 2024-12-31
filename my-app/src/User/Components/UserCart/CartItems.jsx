@@ -33,12 +33,6 @@ const CartItems = ({ cartItems, setCartItems }) => {
         const userId = localStorage.getItem('userId');
         const token = localStorage.getItem('userToken');
 
-        // if (!userId || !token) {
-        //     toast.error("User is not logged in or authorization is missing.");
-        //     navigate('/login-user');
-        //     return;
-        // }
-
         const fetchCartItems = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
@@ -48,9 +42,10 @@ const CartItems = ({ cartItems, setCartItems }) => {
                 });
                 setViewCart(response.data);
                 setCartItems(response.data.items);
-                setIsLoading(false);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoading(false)
             }
         };
 

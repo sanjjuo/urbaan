@@ -32,31 +32,47 @@ export function LoginSignUpUser() {
     const handleAuthSubmit = async (e) => {
         e.preventDefault();
         try {
-            const endpoint = loginSignUpUser === "login" ? "/user/auth/login" : "/user/auth/register";
-            const response = await axios.post(`${BASE_URL}${endpoint}`, {
-                phone: loginFormData.phone,
-                password: loginFormData.password,
-                ...(loginSignUpUser !== "login" && { name: loginFormData.name }),
-            });
-
-            if (response.data.token) {
-                localStorage.setItem("userToken", response.data.token);
-                if (loginSignUpUser === "login") {
-                    navigate("/");
-                    toast.success("Login Success");
-                } else {
-                    // setLoginSignUpUser("login");
-                    navigate('/otp')
-                    // toast.success("Account Created. Now login!");
+            const isLogin = loginSignUpUser === "login";
+            const endpoint = isLogin ? "/user/auth/login" : "/user/auth/register";
+            const payload = isLogin
+                ? {
+                    phone: loginFormData.phone,
+                    password: loginFormData.password,
                 }
+                : {
+                    phone: loginFormData.phone,
+                    password: loginFormData.password,
+                    name: loginFormData.name,
+                };
+            const response = await axios.post(`${BASE_URL}${endpoint}`, payload, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            console.log(payload)
+
+            console.log(loginFormData.phone, loginFormData.password, loginFormData.name);
+
+            // Handle login response
+            if (isLogin && response.data.token) {
+                localStorage.setItem("userToken", response.data.token);
+                localStorage.setItem('userId', response.data.userId);
+                navigate("/");
+                toast.success("Login Success");
             }
-            if (response.data.userId) {
-                localStorage.setItem('userId', response.data.userId)
+
+            // Handle sign-up response
+            if (!isLogin) {
+                navigate('/otp', { state: { phone: loginFormData.phone } });
+                toast.success("Please verify OTP via the OTP call.");
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.message || (loginSignUpUser === "login" ? "Login failed. Please check your credentials." : "Sign up failed.");
+            const errorMessage = error.response?.data?.message ||
+                (isLogin
+                    ? "Login failed. Please check your credentials."
+                    : "Sign up failed. Please try again.");
             console.error("Error:", errorMessage);
-            alert(errorMessage);
+            toast.error(errorMessage);
         }
     };
 
@@ -84,6 +100,7 @@ export function LoginSignUpUser() {
                     <div className="mb-1 flex flex-col gap-6">
                         <Input
                             name="phone"
+                            type='number'
                             maxLength={16}
                             value={loginFormData.phone}
                             onChange={handleInputChange}

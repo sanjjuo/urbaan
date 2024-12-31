@@ -1,10 +1,23 @@
 import React from "react";
 import { Input, Typography, Button, Card } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AppContext } from "../../StoreContext/StoreContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Countdown from 'react-countdown'
 
 export function Otp() {
   const inputRefs = React.useRef([]);
-  const [otp, setOtp] = React.useState(Array(4).fill(""));
+  const [otp, setOtp] = React.useState(Array(6).fill(""));
+  const { BASE_URL } = useContext(AppContext)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { phone } = location.state || {};
+
+  // const handleComplete = () => {
+  //   toast.error("Time's up! Please request a new OTP.");
+  // };
 
   const handleChange = (index, value) => {
     const newOtp = [...otp];
@@ -23,6 +36,31 @@ export function Otp() {
     }
   }
 
+  // verify otp
+  const verifyOtp = async () => {
+    const otpValue = otp.join("");
+    try {
+      const otpPayload = {
+        phone: phone,
+        otp: otpValue,
+      }
+      const response = await axios.post(`${BASE_URL}/user/auth/register/verify-otp`, otpPayload, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      console.log(response.data);
+      if (response.data.token && response.data.userId) {
+        localStorage.setItem("userToken", response.data.token);
+        localStorage.setItem('userId', response.data.userId);
+        toast.success("Account created successfully")
+        navigate('/')
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <div className='lg:flex lg:justify-center lg:items-center min-h-screen lg:h-screen bg-userBg px-4 py-20 lg:py-0'>
@@ -32,7 +70,7 @@ export function Otp() {
           </Typography>
           <Typography color="gray" className="mt-8 xl:mt-1 lg:mt-1 font-normal font-custom text-secondary text-center 
           text-lg xl:text-lg">
-            We have sent a verification code to (+971) 123-4567
+            We have sent a verification code to +91 {phone}
           </Typography>
           <div className="w-full max-w-sm mt-10 xl:mt-14 lg:mt-14 flex flex-col">
             <div className="my-4 flex items-center justify-center gap-2">
@@ -68,11 +106,21 @@ export function Otp() {
               variant="small"
               className="text-center font-normal text-blue-gray-500 font-custom"
             >
-              Didn't get the OTP ? <span className="font-light">Resend SMS in 30s</span>
+              Didn't get the OTP ? <span className="font-light">Resend SMS in
+                <Countdown
+                  date={Date.now() + 300000}  // 5 minutes from now
+                  renderer={({ minutes, seconds }) => (
+                    <p className="text-2xl mt-4">
+                      {String(minutes).padStart(2, "0")}:
+                      {String(seconds).padStart(2, "0")}
+                    </p>
+                  )}
+                // onComplete={handleComplete}
+                />
+              </span>
             </Typography>
-            <Link to='/'>
-              <Button className='mt-8 bg-primary text-sm font-normal capitalize font-custom w-full'>Confirm</Button>
-            </Link>
+
+            <Button onClick={verifyOtp} className='mt-8 bg-primary text-sm font-normal capitalize font-custom w-full'>Confirm</Button>
           </div>
         </Card>
       </div>
