@@ -21,6 +21,7 @@ const App = () => {
             duration: 2000,
             style: {
               height: '70px',
+              textTransform: 'capitalize'
               // width: '450px',
             },
           }}

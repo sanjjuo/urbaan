@@ -228,8 +228,14 @@ const CartItems = ({ cartItems, setCartItems }) => {
                                         <div>
                                             <h1 className='text-base capitalize text-secondary font-medium xl:mb-2 lg:mb-2'>{item.productId.title}</h1>
                                             <ul className='xl:space-y-1 lg:space-y-1'>
-                                                <li className='text-sm capitalize'>Color : {getNamedColor(item.color)}</li>
-                                                <li className='text-sm capitalize'>Size : {item.size}</li>
+                                                <li className='text-sm capitalize flex items-center gap-1'>
+                                                    <span>Color :</span>
+                                                    <span className='font-semibold'>{getNamedColor(item.color)}</span>
+                                                </li>
+                                                <li className='text-sm capitalize flex items-center gap-1'>
+                                                    <span>Size :</span>
+                                                    <span className='uppercase font-semibold'>{item.size}</span>
+                                                </li>
                                             </ul>
                                         </div>
                                     ) : (

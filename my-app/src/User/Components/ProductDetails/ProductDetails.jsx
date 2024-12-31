@@ -25,7 +25,7 @@ const ProductDetails = () => {
     const navigate = useNavigate();
     const [productDetails, setProductDetails] = useState([]);
     const [selectedColor, setSelectedColor] = useState("");
-    const [selectedSize, setSelectedSize] = useState("");
+    const [selectedSize, setSelectedSize] = useState({});
     const [heartIcons, setHeartIcons] = useState({});
 
 
@@ -48,7 +48,7 @@ const ProductDetails = () => {
 
 
     const getContrastYIQ = (color) => {
-        // if (!/^#([0-9A-F]{3}){1,2}$/i.test(color)) return 'text-black'; // Default to black for invalid or empty colors
+        if (!/^#([0-9A-F]{3}){1,2}$/i.test(color)) return 'text-black'; // Default to black for invalid or empty colors
         const r = parseInt(color.slice(1, 3), 16);
         const g = parseInt(color.slice(3, 5), 16);
         const b = parseInt(color.slice(5, 7), 16);
@@ -86,7 +86,7 @@ const ProductDetails = () => {
                 productId: productDetails._id,
                 quantity: 1, // Default quantity
                 color: selectedColor,
-                size: selectedSize,
+                size: selectedSize[selectedColor],
             };
 
             console.log(payload);
@@ -109,19 +109,23 @@ const ProductDetails = () => {
 
 
     const handleColorClick = (color) => {
-        if (selectedColor === color) {
-            // Deselect color and size if the same color is clicked again
-            setSelectedColor("");
-            // setSelectedSize("");
-        } else {
-            setSelectedColor(color);
-            // setSelectedSize("");  // Reset size but don't auto-select
-        }
+        setSelectedColor((prevColor) => (prevColor === color ? "" : color));
     };
 
 
-    const handleSizeClick = (size) => {
-        setSelectedSize((prevSize) => prevSize === size ? "" : size);
+
+    // Handle size click for a specific color
+    const handleSizeClick = (size, color) => {
+        setSelectedSize((prevSelectedSize) => {
+            const updatedSelectedSize = { ...prevSelectedSize };
+            // If the size is already selected for the color, deselect it
+            if (updatedSelectedSize[color] === size) {
+                delete updatedSelectedSize[color];
+            } else {
+                updatedSelectedSize[color] = size; // Otherwise, select the new size for the color
+            }
+            return updatedSelectedSize;
+        });
     };
 
     const handleWishlist = async (productId, productTitle) => {
@@ -149,38 +153,17 @@ const ProductDetails = () => {
     };
 
 
-    const colorSizes = selectedColor
-        ? productDetails.colors?.find(item => item.color === selectedColor)?.sizes || []
-        : (productDetails.colors?.[0]?.sizes || []); // Default to first color sizes if no color is selected
+    const colorSizes = productDetails.colors?.find(item => item.color === selectedColor)?.sizes || [];
     const colorColor = productDetails.colors || []
     const features = productDetails.features || []
 
 
     return (
         <>
-            <div className='sticky top-0 z-10 flex justify-between items-center bg-white shadow-md py-4 px-4'>
-                <ul className='flex items-center gap-2'>
-                    <li onClick={() => navigate(-1)} className='text-2xl text-secondary cursor-pointer'><IoIosArrowBack /></li>
-                    <li className="w-24">
-                        <img src="/logo.png" alt="" className='w-full object-contain' />
-                    </li>
-                </ul>
-                <ul className='flex items-center gap-3'>
-                    <Link to='/user-search'>
-                        <li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li>
-                    </Link>
-                    <Link to="/favourite">
-                        <li className="text-2xl text-secondary relative">
-                            {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
-                            <Chip value={wishlist?.items?.length || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
-                            -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
-                        </li>
-                    </Link>
-                </ul>
-            </div>
-
-            <div className='p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg'>
-                <div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 gap-5 xl:gap-10 lg:gap-10">
+            <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
+                <h2 onClick={() => navigate(-1)} className='flex items-center gap-1 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer'>
+                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back</h2>
+                <div className="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-3 gap-5 xl:gap-10 lg:gap-10 mt-5">
                     <div className='col-span-2 xl:space-y-3 lg:space-y-3 xl:sticky xl:top-0 lg:sticky lg:top-0 h-[350px] xl:h-[600px] lg:h-[600px]'>
                         <div className='w-full h-full relative'>
                             <img
@@ -239,29 +222,9 @@ const ProductDetails = () => {
                                 </p>
                             </div>
 
-                            {/* Select Size */}
-                            <div className='mt-4'>
-                                <div className='flex items-center justify-between xl:justify-normal lg:justify-normal 
-                            xl:gap-32 lg:gap-32 mb-5'>
-                                    <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Size</h4>
-                                    <h4 onClick={handleOpenSizeDrawer} className='text-primary underline font-medium text-xs xl:text-sm lg:text-sm cursor-pointer'>Size chart</h4>
-                                </div>
-                                <ul className='flex items-center gap-3'>
-                                    {colorSizes.map((size) => (
-                                        <li
-                                            key={size._id}
-                                            onClick={() => handleSizeClick(size.size)}
-                                            className={`bg-white cursor-pointer uppercase shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm xl:text-sm lg:text-sm 
-                                         ${selectedSize.includes(size.size) ? '!bg-primary text-white' : ''}`}>
-                                            {size.size}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
                             {/* Select Color */}
                             <div className='mt-4'>
-                                <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Color</h4>
+                                <h4 className='font-medium text-sm xl:text-base lg:text-base mb-2'>Select Color</h4>
                                 <ul className='flex items-center gap-3'>
                                     {colorColor.map((color) => (
                                         <li
@@ -270,13 +233,38 @@ const ProductDetails = () => {
                                             className={`cursor-pointer text-3xl relative flex items-center justify-center ${selectedColor.includes(color.color) ? 'text-primary' : ''}`}
                                         >
                                             {selectedColor.includes(color.color) && (
-                                                <TiTick className={`absolute text-3xl p-1 rounded-full bg-black/20 ${getContrastYIQ(color.color)}`} />
+                                                <TiTick className={`absolute text-3xl p-1 rounded-full bg-black/10 ${getContrastYIQ(color.color)}`} />
                                             )}
                                             <FaCircle style={{ color: color.color }} />
                                         </li>
                                     ))}
                                 </ul>
                             </div>
+
+                            {/* Select Size */}
+                            <div className='mt-4'>
+                                <div className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-32 lg:gap-32 mb-2'>
+                                    <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Size</h4>
+                                    <h4 onClick={handleOpenSizeDrawer} className='text-primary underline font-medium text-xs xl:text-sm lg:text-sm cursor-pointer'>Size chart</h4>
+                                </div>
+                                {/* Hint message */}
+                                {!selectedColor && (
+                                    <p className="text-xs text-gray-500 mb-3"><span className='text-primary'>*</span>
+                                        Please select a color to see available sizes</p>
+                                )}
+                                <ul className='flex items-center gap-3'>
+                                    {colorSizes.map((size) => (
+                                        <li
+                                            key={size._id}
+                                            onClick={() => handleSizeClick(size.size, selectedColor)} // Pass color to handleSizeClick
+                                            className={`bg-white cursor-pointer uppercase shadow-md rounded-md w-10 h-10 flex items-center justify-center text-sm xl:text-sm lg:text-sm 
+                                                ${selectedSize[selectedColor] === size.size ? '!bg-primary text-white' : ''}`}>
+                                            {size.size}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
 
                             {/* Specifications */}
                             <div className="mt-7">

@@ -45,8 +45,9 @@ export function LoginSignUpUser() {
                     navigate("/");
                     toast.success("Login Success");
                 } else {
-                    setLoginSignUpUser("login");
-                    toast.success("Account Created. Now login!");
+                    // setLoginSignUpUser("login");
+                    navigate('/otp')
+                    // toast.success("Account Created. Now login!");
                 }
             }
             if (response.data.userId) {
@@ -125,9 +126,9 @@ export function LoginSignUpUser() {
                                 className="cursor-pointer"
                             >
                                 {passwordVisible ? (
-                                    <FaRegEyeSlash className="text-xl" />
-                                ) : (
                                     <FaRegEye className="text-xl" />
+                                ) : (
+                                    <FaRegEyeSlash className="text-xl" />
                                 )}
                             </div>
                         </div>
