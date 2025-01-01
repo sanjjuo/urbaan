@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import { useEffect } from 'react';
 
 export const AppContext = createContext();
 
@@ -40,6 +41,25 @@ const StoreContext = ({ children }) => {
     // handle non logged users modal
     const handleOpenUserNotLogin = () => setOpenUserNotLogin(!openUserNotLogin);
 
+    // fetch favourite for enabling the heart icon filled
+    const fetchWishlistProducts = async (userId) => {
+        try {
+            const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
+            setWishlist(response.data || {});
+        } catch (error) {
+            console.error('Error fetching wishlist:', error);
+            toast.error('Failed to fetch wishlist');
+        }
+    };
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
+        fetchWishlistProducts(userId);
+    }, [BASE_URL]); 
+
+
     return (
         <AppContext.Provider
             value={{
@@ -66,7 +86,8 @@ const StoreContext = ({ children }) => {
                 setGetAddress,
                 openUserNotLogin,
                 setOpenUserNotLogin,
-                handleOpenUserNotLogin
+                handleOpenUserNotLogin,
+                fetchWishlistProducts
             }}
         >
             {children}

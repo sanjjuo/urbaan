@@ -29,10 +29,10 @@ const CartItems = ({ cartItems, setCartItems }) => {
         }
     };
 
-    useEffect(() => {
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('userToken');
 
+    useEffect(() => {
         const fetchCartItems = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
@@ -57,10 +57,8 @@ const CartItems = ({ cartItems, setCartItems }) => {
     const updateQuantity = async (itemId, newQuantity) => {
         if (isUpdating || newQuantity <= 0) return;
         setIsUpdating(true);
-
+        if (!userId || !token) return;
         try {
-            const userId = localStorage.getItem('userId');
-            const token = localStorage.getItem('userToken');
             const item = cartItems.find(item => item._id === itemId);
 
             if (!item) throw new Error('Product not found in cart.');
@@ -101,16 +99,7 @@ const CartItems = ({ cartItems, setCartItems }) => {
 
     // handle remove
     const removeCart = async (itemId) => {
-        const userId = localStorage.getItem('userId');
-        const token = localStorage.getItem('userToken');
-
-        // Ensure user is authenticated
-        if (!userId || !token) {
-            toast.error("User is not logged in or authorization is missing.");
-            navigate('/login-user');
-            return;
-        }
-
+        if (!userId || !token) return;
         // Find the item in the cartItems array
         const item = cartItems.find(item => item.productId._id === itemId);
 
@@ -158,9 +147,8 @@ const CartItems = ({ cartItems, setCartItems }) => {
     };
 
     const handleClearAll = async () => {
+        if (!userId || !token) return;
         try {
-            const token = localStorage.getItem('userToken')
-            const userId = localStorage.getItem('userId')
             const response = await axios.delete(`${BASE_URL}/user/cart/clear/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`

@@ -71,18 +71,6 @@ const UserNavbar = () => {
     const [cart, setCart] = useState([])
     const cartView = cart?.length || 0;
     const favView = fav?.length || 0;
-    console.log(cartView, favView);
-    
-
-
-    // pages where navbar don't visible
-    const noNavbar = ["/customer-reviews", "/write-review", "/add-delivery-address", "/edit-delivery-address", "/select-delivery-address",
-        "/select-tracking", "/all-category", "/order"]
-
-    // Check if current path matches any of the visible routes
-    if (noNavbar.includes(location.pathname)) {
-        return null // dont render navbar
-    }
 
     const token = localStorage.getItem("userToken")
     const userId = localStorage.getItem('userId');
@@ -98,7 +86,6 @@ const UserNavbar = () => {
                     }
                 });
                 setCart(response.data?.items || []);
-                console.log("Cart Items: ", response.data.items);
             } catch (error) {
                 console.error(error);
             }
@@ -114,7 +101,6 @@ const UserNavbar = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
                 setFav(response.data.items || []);
-                console.log("Wishlist Items: ", response.data.items);
             } catch (error) {
                 console.error('Error fetching wishlist:', error);
             }
@@ -122,6 +108,16 @@ const UserNavbar = () => {
         fetchWishlistProducts();
     }, []);
 
+
+    // pages where navbar don't visible
+    const noNavbar = ["/customer-reviews", "/write-review", "/add-delivery-address", "/edit-delivery-address", "/select-delivery-address",
+        "/select-tracking", "/all-category", "/order"]
+
+
+    // Check if current path matches any of the visible routes
+    if (noNavbar.includes(location.pathname)) {
+        return null // dont render navbar
+    }
 
     return (
         <>

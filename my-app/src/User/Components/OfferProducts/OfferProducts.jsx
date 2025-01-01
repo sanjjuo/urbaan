@@ -9,10 +9,14 @@ import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 import toast from 'react-hot-toast';
 
 const OfferProducts = () => {
-    const { BASE_URL, wishlist, setOpenUserNotLogin } = useContext(AppContext);
+    const { BASE_URL, wishlist, setOpenUserNotLogin, fetchWishlistProducts } = useContext(AppContext);
     const [offerProducts, setOfferProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [heartIcons, setHeartIcons] = useState({});
+
+    useEffect(() => {
+        fetchWishlistProducts()
+    }, [])
 
     useEffect(() => {
         const fetchOfferProducts = async () => {
@@ -32,49 +36,47 @@ const OfferProducts = () => {
     // add to wishlist
     const handleWishlist = async (productId, productTitle) => {
         try {
-          const userId = localStorage.getItem('userId');
-    
-          if (!userId) {
-            setOpenUserNotLogin(true);
-            return;
-          }
-    
-          const payload = {
-            userId: userId,
-            productId: productId
-          };
-    
-          // Check if product is already in wishlist
-          const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
-    
-          // If the response is successful, update the heart icon state and show success toast
-          setHeartIcons(prevState => ({
-            ...prevState,
-            [productId]: !isInWishlist, // Set the heart icon to filled
-          }));
-    
-          if (isInWishlist) {
-            // If product is already in wishlist, show the appropriate toast and return
-            toast.error(`${productTitle} is already in your wishlist`);
-            return; // Stop here without making the API call
-          }
-    
-          // Add to wishlist if not already there
-          const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
-          console.log(response.data);
-    
-          toast.success(`${productTitle} added to wishlist`);
-    
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                setOpenUserNotLogin(true);
+                return;
+            }
+
+            const payload = {
+                userId: userId,
+                productId: productId
+            };
+
+            // Check if product is already in wishlist
+            const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+
+            // If the response is successful, update the heart icon state and show success toast
+            setHeartIcons(prevState => ({
+                ...prevState,
+                [productId]: !isInWishlist, // Set the heart icon to filled
+            }));
+
+            if (isInWishlist) {
+                toast.error(`${productTitle} is already in your wishlist`);
+                return; // Stop here without making the API call
+            }
+
+            const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
+            console.log(response.data);
+
+            toast.success(`${productTitle} added to wishlist`);
+
         } catch (error) {
-          // Check if the error is related to the product already being in the wishlist
-          if (error.response && error.response.data.message === "Product is already in the wishlist") {
-            toast.error(`${productTitle} is already in your wishlist`);
-          } else {
-            console.log("Error adding to wishlist:", error);
-            toast.error("Failed to add product to wishlist");
-          }
+            // Check if the error is related to the product already being in the wishlist
+            if (error.response && error.response.data.message === "Product is already in the wishlist") {
+                toast.error(`${productTitle} is already in your wishlist`);
+            } else {
+                console.log("Error adding to wishlist:", error);
+                toast.error("Failed to add product to wishlist");
+            }
         }
-      };
+    };
 
     return (
         <>

@@ -23,12 +23,13 @@ const CartDetails = ({ cartItems }) => {
     // handle Coupon modal
     const handleCouponModalOpen = () => setOpenCoupon(!openCoupon);
 
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
     // handle checkout
     const handleCheckout = async () => {
+        if (!userId || !token) return;
         try {
-            const token = localStorage.getItem('userToken');
-            const userId = localStorage.getItem('userId');
-
             // Use selectedAddress if available, otherwise defaultAddr
             const addressToSend = selectedAddress || defaultAddr;
 
@@ -67,8 +68,6 @@ const CartDetails = ({ cartItems }) => {
     useEffect(() => {
         const fetchDefaultAddress = async () => {
             try {
-                const userId = localStorage.getItem('userId');
-                const token = localStorage.getItem('userToken');
                 const response = await axios.get(`${BASE_URL}/user/address/view/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
