@@ -28,7 +28,7 @@ export function UserProfile() {
                 <Avatar
                     variant="circular"
                     alt="tania andrew"
-                    className="cursor-pointer w-10 h-10"
+                    className="cursor-pointer w-8 h-8"
                     src="/userProfile.jpg"
                 />
             </MenuHandler>

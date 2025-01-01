@@ -53,7 +53,7 @@ const ShopByCategory = () => {
                   state={{ category }}
                   className="space-y-2 mb-4 w-[30%] transition-opacity duration-500 ease-in-out hover:opacity-75 cursor-pointer block"
                 >
-                  <div className="w-full h-24 xl:w-36 xl:h-36 lg:w-36 lg:h-36">
+                  <div className="w-full h-28 xl:w-36 xl:h-36 lg:w-36 lg:h-36">
                     <img
                       src={category.imageUrl}
                       alt={category.name || 'Category Image'}

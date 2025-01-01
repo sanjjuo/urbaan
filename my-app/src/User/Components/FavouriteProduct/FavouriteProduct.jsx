@@ -62,7 +62,7 @@ const FavouriteProduct = () => {
             const response = await axios.delete(`${BASE_URL}/user/wishlist/clear/${userId}`)
             console.log(response.data);
             toast.success('Wishlist is cleared')
-            setWishlist([])
+            setWishlist((prev) => ({ ...prev, items: [] }));
         } catch (error) {
             console.log(error);
         }

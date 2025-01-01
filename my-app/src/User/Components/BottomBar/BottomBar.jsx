@@ -13,7 +13,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 
-const BottomBar = ({ cartView, token, userId }) => {
+const BottomBar = ({ cartView, setCart, token, userId }) => {
     const { BASE_URL } = useContext(AppContext)
     const location = useLocation();
     const [iconActive, setIconActive] = useState(() => {
@@ -44,14 +44,14 @@ const BottomBar = ({ cartView, token, userId }) => {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setViewCart(response.data.items);
+                setCart(response.data.items);
             } catch (error) {
                 console.error(error);
             }
         };
 
         fetchCartItems();
-    }, [BASE_URL, userId, token]);
+    }, []);
 
     // Pages where BottomBar should be visible
     const visibleRoutes = ["/", "/view-all-category", "/favourite", "/user-search", "/user-profile", "/user-cart"];
@@ -103,7 +103,7 @@ const BottomBar = ({ cartView, token, userId }) => {
                             <>
                                 <span className='relative'>
                                     <RiShoppingCartFill className="text-2xl" />
-                                    {(cartView || 0) > 0 && token && userId && (
+                                    {cartView > 0 && (
                                         <Chip value={cartView || 0} size="sm" className="rounded-full bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex 
                                         justify-center items-center" />
                                     )}
@@ -113,7 +113,7 @@ const BottomBar = ({ cartView, token, userId }) => {
                             <>
                                 <span className='relative'>
                                     <RiShoppingCartLine className="text-2xl" />
-                                    {(cartView || 0) > 0 && token && userId && (
+                                    {cartView > 0 && (
                                         <Chip value={cartView || 0} size="sm" className="rounded-full text-xs bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex 
                                         justify-center items-center" />
                                     )}

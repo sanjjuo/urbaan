@@ -63,12 +63,16 @@ const NavList = () => {
 }
 
 const UserNavbar = () => {
-    const { BASE_URL, openDrawer, handleOpenDrawer, handleCloseDrawer, viewCart, setViewCart, wishlist, setWishlist } = useContext(AppContext)
+    const { BASE_URL, openDrawer, handleOpenDrawer, handleCloseDrawer } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const isCartPage = location.pathname === "/user-cart";
-    const cartView = viewCart?.length;
-    const favView = wishlist?.length;
+    const [fav, setFav] = useState([])
+    const [cart, setCart] = useState([])
+    const cartView = cart?.length || 0;
+    const favView = fav?.length || 0;
+    console.log(cartView, favView);
+    
 
 
     // pages where navbar don't visible
@@ -93,7 +97,7 @@ const UserNavbar = () => {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setViewCart(response.data.items);
+                setCart(response.data?.items || []);
                 console.log("Cart Items: ", response.data.items);
             } catch (error) {
                 console.error(error);
@@ -101,7 +105,7 @@ const UserNavbar = () => {
         };
 
         fetchCartItems();
-    }, [BASE_URL, userId, token]);
+    }, []);
 
 
     useEffect(() => {
@@ -109,14 +113,15 @@ const UserNavbar = () => {
             if (!userId) return;
             try {
                 const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
-                setWishlist(response.data.items || {});
+                setFav(response.data.items || []);
                 console.log("Wishlist Items: ", response.data.items);
             } catch (error) {
                 console.error('Error fetching wishlist:', error);
             }
         };
         fetchWishlistProducts();
-    }, [BASE_URL, userId]);
+    }, []);
+
 
     return (
         <>
@@ -139,9 +144,9 @@ const UserNavbar = () => {
                                         {isFavouritePage ?
                                             <>
                                                 <RiHeart3Fill className='text-primary' />
-                                                {(favView || 0) > 0 && token && userId && (
+                                                {favView > 0 && (
                                                     <Chip
-                                                        value={favView || 0}
+                                                        value={favView}
                                                         size="sm"
                                                         className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
                                                     />
@@ -150,9 +155,9 @@ const UserNavbar = () => {
                                             :
                                             <>
                                                 <RiHeart3Line />
-                                                {(favView || 0) > 0 && token && userId && (
+                                                {favView > 0 && (
                                                     <Chip
-                                                        value={favView || 0}
+                                                        value={favView}
                                                         size="sm"
                                                         className="rounded-full !bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
                                                     />
@@ -167,16 +172,16 @@ const UserNavbar = () => {
                                         {isCartPage ?
                                             <>
                                                 <RiShoppingCartFill className="text-2xl text-primary" />
-                                                {(cartView || 0) > 0 && token && userId && (
-                                                    <Chip value={cartView || 0} size="sm"
+                                                {cartView > 0 && (
+                                                    <Chip value={cartView} size="sm"
                                                         className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                                                 )}
                                             </>
                                             :
                                             <>
                                                 <RiShoppingCartLine className="text-2xl" />
-                                                {(cartView || 0) > 0 && token && userId && (
-                                                    <Chip value={cartView || 0} size="sm"
+                                                {cartView > 0 && (
+                                                    <Chip value={cartView} size="sm"
                                                         className="rounded-full text-xs !bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
                                                 )}
                                             </>
@@ -213,9 +218,9 @@ const UserNavbar = () => {
                             {isFavouritePage ?
                                 <>
                                     <RiHeart3Fill className='text-primary' />
-                                    {(favView || 0) > 0 && token && userId && (
+                                    {favView > 0 && (
                                         <Chip
-                                            value={favView || 0}
+                                            value={favView}
                                             size="sm"
                                             className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
                                         />
@@ -224,9 +229,9 @@ const UserNavbar = () => {
                                 :
                                 <>
                                     <RiHeart3Line />
-                                    {(favView || 0) > 0 && token && userId && (
+                                    {favView > 0 && (
                                         <Chip
-                                            value={favView || 0}
+                                            value={favView}
                                             size="sm"
                                             className="rounded-full !bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
                                         />
@@ -238,7 +243,7 @@ const UserNavbar = () => {
                 </ul>
             </div>
 
-            <BottomBar cartView={cartView} setViewCart={setViewCart} token={token} userId={userId} />
+            <BottomBar cartView={cartView} setCart={setCart} token={token} userId={userId} />
             <MobileSidebar
                 openDrawer={openDrawer}
                 handleCloseDrawer={handleCloseDrawer}

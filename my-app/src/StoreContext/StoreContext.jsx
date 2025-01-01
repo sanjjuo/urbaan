@@ -40,8 +40,6 @@ const StoreContext = ({ children }) => {
     // handle non logged users modal
     const handleOpenUserNotLogin = () => setOpenUserNotLogin(!openUserNotLogin);
 
-
-
     return (
         <AppContext.Provider
             value={{

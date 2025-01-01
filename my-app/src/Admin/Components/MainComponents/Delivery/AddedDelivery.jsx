@@ -30,7 +30,7 @@ export default function AddedDelivery({ createEditDelivery, handleEditDelivery }
             }
         }
         fetchDeliveryFees()
-    })
+    },[])
 
     // handle delete
     const handleDeleteDelivery = async (deliveryId) => {
