@@ -16,9 +16,10 @@ import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { TiTick } from "react-icons/ti";
 import { useEffect } from 'react';
+import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const ProductDetails = () => {
-    const { handleOpenSizeDrawer, BASE_URL, wishlist } = useContext(AppContext)
+    const { handleOpenSizeDrawer, BASE_URL, wishlist, setOpenUserNotLogin } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const { productId } = location.state || {}
@@ -62,21 +63,14 @@ const ProductDetails = () => {
 
     const addToCart = async () => {
         try {
-
-            if (!selectedColor || !selectedSize) {
-                toast.error("Please select a color and size.");
+    
+            if (!selectedSize || !selectedSize[selectedColor]) {
+                toast.error("Please select a size for the selected color.");
                 return;
             }
 
-            if (!userId) {
-                toast.error("Authorization is missing")
-                navigate('/login-user')
-                return;
-            }
-
-            if (!userToken) {
-                toast.error("Authorization userId is missing")
-                navigate('/login-user')
+            if (!userId && !userToken) {
+                setOpenUserNotLogin(true)
                 return;
             }
 
@@ -183,6 +177,12 @@ const ProductDetails = () => {
                                     className='absolute top-5 right-5 xl:text-3xl lg:text-3xl text-2xl text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
                                 />
                             )}
+                            {/* <div className='absolute bottom-5 left-1/2 -translate-x-1/2 flex justify-center items-center
+                             bg-white shadow-md rounded-lg p-2 gap-x-2'>
+                                <div className='w-12 h-12'>
+                                    <img src="c1.jpg" alt="" className='w-full h-full object-cover rounded-md' />
+                                </div>
+                            </div> */}
                         </div>
 
                         <Button onClick={addToCart}
@@ -318,6 +318,12 @@ const ProductDetails = () => {
 
             {/* size chart drawer */}
             <SizeChart />
+
+            {/* popup for non-logged users */}
+            <UserNotLoginPopup  
+                title='You are not logged in'
+                description='To add items to your cart and complete your purchase, please log in or create an account.'
+            />
         </>
     )
 }

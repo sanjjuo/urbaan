@@ -68,9 +68,9 @@ export function Otp() {
           <Typography variant="h4" className='text-primary font-custom text-center text-4xl xl:text-3xl lg:text-3xl'>
             Verification
           </Typography>
-          <Typography color="gray" className="mt-8 xl:mt-1 lg:mt-1 font-normal font-custom text-secondary text-center 
-          text-lg xl:text-lg">
-            We have sent a verification code to +91 {phone}
+          <Typography color="gray" className="mt-3 xl:mt-1 lg:mt-1 font-normal font-custom text-secondary text-center 
+          xl:text-lg lg:text-lg text-sm">
+            We have sent a verification code to <span className='font-bold'> +91 {phone}</span>
           </Typography>
           <div className="w-full max-w-sm mt-10 xl:mt-14 lg:mt-14 flex flex-col">
             <div className="my-4 flex items-center justify-center gap-2">
@@ -102,23 +102,27 @@ export function Otp() {
               Check text messages for your OTP
             </Typography>
 
-            <Typography
-              variant="small"
-              className="text-center font-normal text-blue-gray-500 font-custom"
-            >
-              Didn't get the OTP ? <span className="font-light">Resend SMS in
+            <div className='flex items-center justify-center gap-2'>
+              <Typography
+                variant="small"
+                className="text-center font-normal text-blue-gray-500 font-custom"
+              >
+                Didn't get the OTP ? <span className="font-light">Resend SMS in
+                </span>
+              </Typography>
+              <div className='w-12'>
                 <Countdown
                   date={Date.now() + 300000}  // 5 minutes from now
                   renderer={({ minutes, seconds }) => (
-                    <p className="text-2xl mt-4">
+                    <p className="text-base font-bold text-primary">
                       {String(minutes).padStart(2, "0")}:
                       {String(seconds).padStart(2, "0")}
                     </p>
                   )}
                 // onComplete={handleComplete}
                 />
-              </span>
-            </Typography>
+              </div>
+            </div>
 
             <Button onClick={verifyOtp} className='mt-8 bg-primary text-sm font-normal capitalize font-custom w-full'>Confirm</Button>
           </div>

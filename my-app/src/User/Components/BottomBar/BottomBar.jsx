@@ -9,8 +9,12 @@ import { RiShoppingCartFill } from "react-icons/ri";
 import { RiUser3Fill } from "react-icons/ri";
 import { RiSearch2Fill } from "react-icons/ri";
 import { Chip } from '@material-tailwind/react';
+import { useContext } from 'react';
+import { AppContext } from '../../../StoreContext/StoreContext';
+import axios from 'axios';
 
-const BottomBar = () => {
+const BottomBar = ({ cartView, token, userId }) => {
+    const { BASE_URL } = useContext(AppContext)
     const location = useLocation();
     const [iconActive, setIconActive] = useState(() => {
         const path = location.pathname;
@@ -28,6 +32,26 @@ const BottomBar = () => {
         if (path === '/user-cart') setIconActive("cart");
         if (path === '/user-profile') setIconActive("profile");
     }, [location]);
+
+
+    //  fetching cart items for identifying the length initially
+    useEffect(() => {
+        const fetchCartItems = async () => {
+            if (!token || !userId) return;
+            try {
+                const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setViewCart(response.data.items);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchCartItems();
+    }, [BASE_URL, userId, token]);
 
     // Pages where BottomBar should be visible
     const visibleRoutes = ["/", "/view-all-category", "/favourite", "/user-search", "/user-profile", "/user-cart"];
@@ -79,16 +103,20 @@ const BottomBar = () => {
                             <>
                                 <span className='relative'>
                                     <RiShoppingCartFill className="text-2xl" />
-                                    <Chip value="2" size="sm" className="rounded-full bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex 
+                                    {(cartView || 0) > 0 && token && userId && (
+                                        <Chip value={cartView || 0} size="sm" className="rounded-full bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex 
                                         justify-center items-center" />
+                                    )}
                                 </span>
                             </>
                         ) : (
                             <>
                                 <span className='relative'>
                                     <RiShoppingCartLine className="text-2xl" />
-                                    <Chip value="2" size="sm" className="rounded-full text-xs bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex 
+                                    {(cartView || 0) > 0 && token && userId && (
+                                        <Chip value={cartView || 0} size="sm" className="rounded-full text-xs bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex 
                                         justify-center items-center" />
+                                    )}
                                 </span>
                             </>
                         )

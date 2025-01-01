@@ -6,15 +6,18 @@ import { ViewCategoryDrawer } from './ViewCategoryDrawer';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { RiHeart3Line, RiSearch2Line } from 'react-icons/ri';
+import { RiHeart3Fill, RiHeart3Line, RiSearch2Line } from 'react-icons/ri';
 import AppLoader from '../../../Loader';
+import toast from 'react-hot-toast';
+import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const ViewAllCategory = () => {
     const navigate = useNavigate();
-    const { handleOpenBottomDrawer, BASE_URL } = useContext(AppContext);
+    const { handleOpenBottomDrawer, BASE_URL, wishlist, setOpenUserNotLogin } = useContext(AppContext);
     const [allProducts, setAllProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [searchProducts, setSearchProducts] = useState('');
+    const [heartIcons, setHeartIcons] = useState({});
 
 
     useEffect(() => {
@@ -47,6 +50,53 @@ const ViewAllCategory = () => {
 
         fetchSearchedProducts()
     }, [searchProducts]);
+
+    // add to wishlist
+    const handleWishlist = async (productId, productTitle) => {
+        try {
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                setOpenUserNotLogin(true);
+                return;
+            }
+
+            const payload = {
+                userId: userId,
+                productId: productId
+            };
+
+            // Check if product is already in wishlist
+            const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+
+            // If the response is successful, update the heart icon state and show success toast
+            setHeartIcons(prevState => ({
+                ...prevState,
+                [productId]: !isInWishlist, // Set the heart icon to filled
+            }));
+
+            if (isInWishlist) {
+                // If product is already in wishlist, show the appropriate toast and return
+                toast.error(`${productTitle} is already in your wishlist`);
+                return; // Stop here without making the API call
+            }
+
+            // Add to wishlist if not already there
+            const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
+            console.log(response.data);
+
+            toast.success(`${productTitle} added to wishlist`);
+
+        } catch (error) {
+            // Check if the error is related to the product already being in the wishlist
+            if (error.response && error.response.data.message === "Product is already in the wishlist") {
+                toast.error(`${productTitle} is already in your wishlist`);
+            } else {
+                console.log("Error adding to wishlist:", error);
+                toast.error("Failed to add product to wishlist");
+            }
+        }
+    };
 
 
     return (
@@ -83,27 +133,41 @@ const ViewAllCategory = () => {
                             </div>
                         ) : (
                             <>
-                                {allProducts.map((product) => (
-                                    <div className='group relative' key={product._id}>
-                                        <Link
-                                            to='/product-details'
-                                            className='cursor-pointer'
-                                            key={product.id} >
-                                            <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
-                                                <img src={product.images[0]} alt={product.title}
-                                                    className='w-full h-full object-cover rounded-xl shadow-md
+                                {allProducts.map((product) => {
+                                    const isInWishlist = wishlist?.items?.some(item => item.productId._id === product._id);
+                                    return (
+                                        <div className='group relative' key={product._id}>
+                                            <Link
+                                                to="/product-details"
+                                                state={{ productId: product._id }}
+                                                className="cursor-pointer"
+                                            >
+                                                <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
+                                                    <img src={product.images[0]} alt={product.title}
+                                                        className='w-full h-full object-cover rounded-xl shadow-md
                                             transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'
-                                                    onError={(e) => e.target.src = '/no-image.jpg'} />
+                                                        onError={(e) => e.target.src = '/no-image.jpg'} />
+                                                </div>
+                                            </Link>
+                                            {heartIcons[product._id] || isInWishlist ? (
+                                                <RiHeart3Fill
+                                                    onClick={() => handleWishlist(product._id, product.title)}
+                                                    className='absolute top-2 right-2 cursor-pointer text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
+                                                />
+                                            ) : (
+                                                <RiHeart3Line
+                                                    onClick={() => handleWishlist(product._id, product.title)}
+                                                    className='absolute top-2 right-2 cursor-pointer bg-white text-gray-600 w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
+                                                />
+                                            )}
+                                            <div className='mt-3'>
+                                                <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>{product.title}</h4>
+                                                <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize'>{product.description}</p>
+                                                <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹{product.offerPrice}</p>
                                             </div>
-                                        </Link>
-                                        <RiHeart3Line className='absolute top-2 right-2 bg-white text-gray-600 w-6 h-6 xl:w-7 xl:h-7 lg:w-7 lg:h-7 p-1 rounded-full shadow-md' />
-                                        <div className='mt-3'>
-                                            <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>{product.title}</h4>
-                                            <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize'>{product.description}</p>
-                                            <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹{product.offerPrice}</p>
                                         </div>
-                                    </div>
-                                ))
+                                    )
+                                })
                                 }
                             </>
                         )
@@ -112,6 +176,10 @@ const ViewAllCategory = () => {
             </div >
 
             <ViewCategoryDrawer />
+            <UserNotLoginPopup
+                title='You are not logged in'
+                description='Please log in or create an account to add items to your wishlist and keep track of your favorites.'
+            />
         </>
     )
 }

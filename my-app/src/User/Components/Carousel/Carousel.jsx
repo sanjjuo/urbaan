@@ -39,7 +39,7 @@ const UserCarousel = () => {
     slidesToScroll: 1,
     autoplay: true,
     speed: 1000,
-    autoplaySpeed: 6000,
+    autoplaySpeed: 5000,
   };
   return (
     <>
@@ -60,7 +60,7 @@ const UserCarousel = () => {
                     src={`${BASE_URL}/uploads/category/${slider.image}`}
                     alt={`Image showcasing ${slider.title}`}
                     className="h-full w-full object-cover rounded-2xl"
-                    onError={(e) => e.target.src = '/banner-no-image.png'}
+                    onError={(e) => e.target.src = '/banner-no-image.jpg'}
                   />
                   <div className="absolute inset-y-1/3 left-5 lg:left-20 text-white z-10">
                     <motion.p

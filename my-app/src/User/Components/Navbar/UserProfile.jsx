@@ -29,7 +29,7 @@ export function UserProfile() {
                     variant="circular"
                     alt="tania andrew"
                     className="cursor-pointer w-10 h-10"
-                    src="/userProfile.png"
+                    src="/userProfile.jpg"
                 />
             </MenuHandler>
             <MenuList>

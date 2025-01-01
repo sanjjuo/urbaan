@@ -20,10 +20,15 @@ const App = () => {
           toastOptions={{
             duration: 2000,
             style: {
-              height: '70px',
-              textTransform: 'capitalize'
-              // width: '450px',
-            },
+              textTransform: 'capitalize',
+              maxWidth: '450px', 
+              width: 'auto', 
+              padding: '20px',
+              height: 'auto',
+              color: '#000',
+              backgroundColor: '#FFEDED',
+              border: "2px solid #C21E56"
+            }
           }}
         />
         <FullRoutes />

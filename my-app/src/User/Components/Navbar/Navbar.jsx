@@ -86,6 +86,7 @@ const UserNavbar = () => {
     // fetching cart items and fav items for identifying the length initially
     useEffect(() => {
         const fetchCartItems = async () => {
+            if (!token || !userId) return;
             try {
                 const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
                     headers: {
@@ -93,6 +94,7 @@ const UserNavbar = () => {
                     }
                 });
                 setViewCart(response.data.items);
+                console.log("Cart Items: ", response.data.items);
             } catch (error) {
                 console.error(error);
             }
@@ -104,15 +106,17 @@ const UserNavbar = () => {
 
     useEffect(() => {
         const fetchWishlistProducts = async () => {
+            if (!userId) return;
             try {
                 const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
                 setWishlist(response.data.items || {});
+                console.log("Wishlist Items: ", response.data.items);
             } catch (error) {
                 console.error('Error fetching wishlist:', error);
             }
         };
         fetchWishlistProducts();
-    }, []);
+    }, [BASE_URL, userId]);
 
     return (
         <>
@@ -132,25 +136,51 @@ const UserNavbar = () => {
                             <ul className='flex items-center gap-10'>
                                 <Link to="/favourite">
                                     <li className="text-2xl text-secondary cursor-pointer relative">
-                                        {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
-                                        {(favView || 0) > 0 && token && userId && (
-                                            <Chip
-                                                value={favView || 0}
-                                                size="sm"
-                                                className="rounded-full bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
-                                            />
-                                        )}
+                                        {isFavouritePage ?
+                                            <>
+                                                <RiHeart3Fill className='text-primary' />
+                                                {(favView || 0) > 0 && token && userId && (
+                                                    <Chip
+                                                        value={favView || 0}
+                                                        size="sm"
+                                                        className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
+                                                    />
+                                                )}
+                                            </>
+                                            :
+                                            <>
+                                                <RiHeart3Line />
+                                                {(favView || 0) > 0 && token && userId && (
+                                                    <Chip
+                                                        value={favView || 0}
+                                                        size="sm"
+                                                        className="rounded-full !bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
+                                                    />
+                                                )}
+                                            </>
+                                        }
                                     </li>
 
                                 </Link>
                                 <Link to='/user-cart'>
                                     <li className='text-2xl text-secondary cursor-pointer relative'>
-                                        {isCartPage ? <RiShoppingCartFill className='text-primary' /> : <RiShoppingCartLine />}
-                                        {(cartView || 0) > 0 && token && userId && (
-                                            <Chip value={cartView || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
-                                            -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
-                                        )}
-
+                                        {isCartPage ?
+                                            <>
+                                                <RiShoppingCartFill className="text-2xl text-primary" />
+                                                {(cartView || 0) > 0 && token && userId && (
+                                                    <Chip value={cartView || 0} size="sm"
+                                                        className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
+                                                )}
+                                            </>
+                                            :
+                                            <>
+                                                <RiShoppingCartLine className="text-2xl" />
+                                                {(cartView || 0) > 0 && token && userId && (
+                                                    <Chip value={cartView || 0} size="sm"
+                                                        className="rounded-full text-xs !bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
+                                                )}
+                                            </>
+                                        }
                                     </li>
                                 </Link>
                                 <li>
@@ -180,15 +210,35 @@ const UserNavbar = () => {
                     <Link to='/user-search'><li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li></Link>
                     <Link to="/favourite">
                         <li className="text-2xl text-secondary relative">
-                            {isFavouritePage ? <RiHeart3Fill className='text-primary' /> : <RiHeart3Line />}
-                            <Chip value={wishlist?.items?.length || 0} size="sm" className="rounded-full bg-primary text-xs text-white absolute 
-                            -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
+                            {isFavouritePage ?
+                                <>
+                                    <RiHeart3Fill className='text-primary' />
+                                    {(favView || 0) > 0 && token && userId && (
+                                        <Chip
+                                            value={favView || 0}
+                                            size="sm"
+                                            className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
+                                        />
+                                    )}
+                                </>
+                                :
+                                <>
+                                    <RiHeart3Line />
+                                    {(favView || 0) > 0 && token && userId && (
+                                        <Chip
+                                            value={favView || 0}
+                                            size="sm"
+                                            className="rounded-full !bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
+                                        />
+                                    )}
+                                </>
+                            }
                         </li>
                     </Link>
                 </ul>
             </div>
 
-            <BottomBar />
+            <BottomBar cartView={cartView} setViewCart={setViewCart} token={token} userId={userId} />
             <MobileSidebar
                 openDrawer={openDrawer}
                 handleCloseDrawer={handleCloseDrawer}

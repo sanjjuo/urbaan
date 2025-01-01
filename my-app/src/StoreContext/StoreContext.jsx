@@ -12,11 +12,8 @@ const StoreContext = ({ children }) => {
     const [viewCart, setViewCart] = useState([]) //for UserCart.jsx and navbar
     const [wishlist, setWishlist] = useState([]) //for favouriteProduct.jsx and navbar
     const [profile, setProfile] = useState([]) //for userprofile and mobile sidebar
-    // const [couponDiscountTotalPrice, setCouponDiscountTotalPrice] = useState({
-    //     originalAmount: 0,
-    //     discountValue: 0,
-    // }); //for getting discount and previous value in userCart.jsx
     const [getAddress, setGetAddress] = useState([])
+    const [openUserNotLogin, setOpenUserNotLogin] = useState(false); //for non-logged users
 
 
     // Handle modal
@@ -39,6 +36,9 @@ const StoreContext = ({ children }) => {
         setOpenSizeDrawer(true);
     }
     const handleCloseSizeDrawer = () => setOpenSizeDrawer(false);
+
+    // handle non logged users modal
+    const handleOpenUserNotLogin = () => setOpenUserNotLogin(!openUserNotLogin);
 
 
 
@@ -65,7 +65,10 @@ const StoreContext = ({ children }) => {
                 profile,
                 setProfile,
                 getAddress,
-                setGetAddress
+                setGetAddress,
+                openUserNotLogin,
+                setOpenUserNotLogin,
+                handleOpenUserNotLogin
             }}
         >
             {children}

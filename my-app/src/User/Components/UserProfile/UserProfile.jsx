@@ -48,8 +48,8 @@ const UserProfile = () => {
           <div className='grid grid-cols-1 xl:grid-cols-3 gap-5'>
             {/* image */}
             <div className='flex flex-col gap-2 items-center xl:justify-center lg:justify-center'>
-              <div className='xl:w-72 lg:w-72 h-56 xl:h-72 lg:h-72'>
-                <img src="/userProfile.png" alt="" className='w-full h-full object-cover rounded-full xl:rounded-lg lg:rounded-lg' />
+              <div className='xl:w-72 lg:w-72 w-full h-56 xl:h-72 lg:h-72'>
+                <img src="/userProfile.jpg" alt="" className='w-full h-full object-cover rounded-lg' />
               </div>
               <Typography className='font-custom font-medium capitalize text-lg xl:text-xl lg:text-xl flex items-center gap-1'>
                 {profile.name}
@@ -57,9 +57,9 @@ const UserProfile = () => {
             </div>
 
             {/* options */}
-            <div className='xl:col-span-2 lg:col-span-2'>
+            <div className='xl:col-span-2 lg:col-span-2 flex flex-col justify-center items-center'>
               <ul className='w-full'>
-                <li className='bg-white hover:text-primary p-4 rounded-xl border-2 mb-4'>
+                <li className='bg-white hover:text-primary p-2 rounded-xl border-2 mb-4'>
                   <Link to='/user-addresses' className='flex items-center justify-between'>
                     <span className='flex items-center gap-2 text-base xl:text-lg lg:text-lg'>
                       <TbAddressBook className='text-xl' />My Addresses
@@ -70,7 +70,7 @@ const UserProfile = () => {
                   </Link>
                 </li>
 
-                <li className='bg-white hover:text-primary p-4 rounded-xl border-2 mb-4'>
+                <li className='bg-white hover:text-primary p-2 rounded-xl border-2 mb-4'>
                   <Link to='/user-orders' className='flex items-center justify-between'>
                     <span className='flex items-center gap-2 text-base xl:text-lg lg:text-lg'>
                       <LiaClipboardListSolid className='text-xl' />My Orders
@@ -81,7 +81,7 @@ const UserProfile = () => {
                   </Link>
                 </li>
 
-                <li className='bg-white hover:text-primary p-4 rounded-xl border-2'>
+                <li className='bg-white hover:text-primary p-2 rounded-xl border-2'>
                   <Link to='/favourite' className='flex items-center justify-between'>
                     <span className='flex items-center gap-2 text-base xl:text-lg lg:text-lg'>
                       <RiHeart3Line className='text-xl' />My Wishlist
