@@ -13,7 +13,7 @@ import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const ViewAllCategory = () => {
     const navigate = useNavigate();
-    const { handleOpenBottomDrawer, BASE_URL, wishlist, setOpenUserNotLogin } = useContext(AppContext);
+    const { handleOpenBottomDrawer, BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext);
     const [allProducts, setAllProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [searchProducts, setSearchProducts] = useState('');
@@ -67,7 +67,7 @@ const ViewAllCategory = () => {
             };
 
             // Check if product is already in wishlist
-            const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+            const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
 
             // If the response is successful, update the heart icon state and show success toast
             setHeartIcons(prevState => ({
@@ -134,7 +134,7 @@ const ViewAllCategory = () => {
                         ) : (
                             <>
                                 {allProducts.map((product) => {
-                                    const isInWishlist = wishlist?.items?.some(item => item.productId._id === product._id);
+                                    const isInWishlist = favProduct?.items?.some(item => item.productId._id === product._id);
                                     return (
                                         <div className='group relative' key={product._id}>
                                             <Link

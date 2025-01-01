@@ -8,7 +8,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../../StoreContext/StoreContext';
 
 const UserCart = () => {
-    const { BASE_URL, viewCart } = useContext(AppContext);
+    const [viewCart, setViewCart] = useState([]) //for UserCart.jsx
     const navigate = useNavigate()
     const [cartItems, setCartItems] = useState(viewCart.items || []); // for get details
     return (
@@ -20,6 +20,7 @@ const UserCart = () => {
                 <div className='grid grid-cols-1 xl:grid-cols-5 gap-5 mt-5'>
                     <div className='space-y-5 xl:col-span-3 lg:col-span-2'>
                         <CartItems
+                            setViewCart={setViewCart}
                             cartItems={cartItems}
                             setCartItems={setCartItems}
                         />
@@ -27,6 +28,7 @@ const UserCart = () => {
 
                     <div className='xl:col-span-2 space-y-5'>
                         <CartDetails
+                            viewCart={viewCart}
                             cartItems={cartItems}
                         />
                     </div>

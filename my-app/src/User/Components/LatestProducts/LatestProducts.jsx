@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const LatestProducts = () => {
-  const { BASE_URL, wishlist, setOpenUserNotLogin } = useContext(AppContext);
+  const { BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext);
   const [latestProducts, setLatestProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [heartIcons, setHeartIcons] = useState({}); // Store heart icon state for each product
@@ -43,7 +43,7 @@ const LatestProducts = () => {
       };
 
       // Check if product is already in wishlist
-      const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+      const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
 
       // If the response is successful, update the heart icon state and show success toast
       setHeartIcons(prevState => ({
@@ -88,7 +88,7 @@ const LatestProducts = () => {
       ) : (
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5'>
           {latestProducts.map((product) => {
-            const isInWishlist = wishlist?.items?.some(item => item.productId._id === product._id);
+            const isInWishlist = favProduct?.items?.some(item => item.productId._id === product._id);
             return (
               <div className='group relative' key={product._id}>
                 <Link

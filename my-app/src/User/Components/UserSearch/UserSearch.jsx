@@ -9,7 +9,7 @@ import SearchBar from '../Navbar/SearchBar'
 import { RxCountdownTimer } from 'react-icons/rx'
 
 const UserSearch = () => {
-    const { BASE_URL, wishlist } = useContext(AppContext)
+    const { BASE_URL, favProduct } = useContext(AppContext)
     const navigate = useNavigate()
     const [searchedProducts, setSearchedProducts] = useState([])
     const [heartIcons, setHeartIcons] = useState({})
@@ -34,7 +34,7 @@ const UserSearch = () => {
             const payload = { userId, productId }
 
             // Check if product is already in wishlist
-            const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId)
+            const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId)
 
             if (!isInWishlist) {
                 const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload)
@@ -94,7 +94,7 @@ const UserSearch = () => {
             ) : (
                 <div className='grid grid-cols-2 gap-5 mt-10'>
                     {searchedProducts.map((product) => {
-                        const isInWishlist = wishlist?.items?.some(item => item.productId._id === product._id)
+                        const isInWishlist = favProduct?.items?.some(item => item.productId._id === product._id)
                         return (
                             <div className='group relative' key={product._id}>
                                 <Link to="/product-details" state={{ productId: product._id }} className="cursor-pointer">

@@ -20,7 +20,7 @@ const AllCategory = () => {
     const navigate = useNavigate();
     const location = useLocation()
     const productsCategory = location.state.category
-    const { BASE_URL, wishlist, setOpenUserNotLogin } = useContext(AppContext);
+    const { BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext);
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [heartIcons, setHeartIcons] = useState({});
@@ -79,7 +79,7 @@ const AllCategory = () => {
           };
     
           // Check if product is already in wishlist
-          const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+          const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
     
           // If the response is successful, update the heart icon state and show success toast
           setHeartIcons(prevState => ({
@@ -114,7 +114,7 @@ const AllCategory = () => {
         <>
             <div className="bg-white z-20 shadow-md py-4 px-4 w-full sticky top-0">
                 <h1
-                    className="flex items-center gap-2 text-xl font-medium cursor-pointer"
+                    className="flex items-center gap-1 text-xl font-medium cursor-pointer"
                     onClick={() => navigate(-1)}
                 >
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
@@ -146,7 +146,7 @@ const AllCategory = () => {
                                     <>
                                         {
                                             products.map((product) => {
-                                                const isInWishlist = wishlist?.items?.some(item => item.productId._id === product._id);
+                                                const isInWishlist = favProduct?.items?.some(item => item.productId._id === product._id);
                                                 return (
                                                     <div className='group relative' key={product._id}>
                                                         <Link

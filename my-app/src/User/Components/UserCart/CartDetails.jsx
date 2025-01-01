@@ -10,11 +10,11 @@ import toast from 'react-hot-toast';
 import ApplyCouponModal from './ApplyCouponModal';
 import AppLoader from '../../../Loader';
 
-const CartDetails = ({ cartItems }) => {
+const CartDetails = ({ cartItems, viewCart }) => {
     const navigate = useNavigate();
     const location = useLocation()
     const { selectedAddress } = location.state || {};
-    const { BASE_URL, viewCart } = useContext(AppContext);
+    const { BASE_URL } = useContext(AppContext);
     const [checkoutId, setCheckoutId] = useState('')
     const [openCoupon, setOpenCoupon] = React.useState(false); // modal for coupon
     const [defaultAddress, setDefaultAddress] = useState([])
@@ -144,7 +144,8 @@ const CartDetails = ({ cartItems }) => {
                 ) : (
                     <>
                         {(!selectedAddress && !defaultAddr) ? (
-                            <p className='text-sm text-gray-600 text-center my-5'>Address not found</p>
+                            <p className='text-sm text-gray-600 text-center my-5'>
+                                <Link to='/login-user' className='text-primary font-semibold'>Log in</Link> to add a new address.</p>
                         ) : (
                             <p className='text-sm font-normal mb-3 capitalize'>
                                 {selectedAddress

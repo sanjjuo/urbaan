@@ -92,7 +92,7 @@ const Checkout = () => {
     // };
 
     const calculateTotalPrice = () => {
-        const subtotal = viewCart.totalPrice;
+        const subtotal = viewCart?.totalPrice;
         const deliveryCharge = calculateDeliveryCharge(checkoutDetails?.cartItems);
 
         return subtotal + deliveryCharge;
@@ -126,7 +126,7 @@ const Checkout = () => {
     return (
         <>
             <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
-                <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
+                <h1 className="flex items-center gap-1 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
                 </h1>
                 <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 mt-10 gap-5'>
@@ -151,20 +151,6 @@ const Checkout = () => {
                                             id="name"
                                             disabled
                                             className="border-[2px] capitalize bg-gray-100 border-gray-100 text-gray-600 p-2 rounded-lg focus:outline-none"
-                                        />
-                                    </div>
-                                    {/* email */}
-                                    <div className="flex flex-col gap-1 w-full">
-                                        <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base text-secondary">
-                                            Email
-                                        </label>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            id="email"
-                                            disabled
-                                            value={checkoutDetails?.addressId?.email}
-                                            className="border-[1px] capitalize bg-gray-100 border-gray-100 text-gray-600 p-2 rounded-lg focus:outline-none"
                                         />
                                     </div>
                                     {/* number */}

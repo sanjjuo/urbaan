@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { createContext, useState } from 'react';
 import { useEffect } from 'react';
 
@@ -10,11 +11,10 @@ const StoreContext = ({ children }) => {
     const [openBottomDrawer, setBottomDrawerOpen] = useState(false);
     const [openSizeDrawer, setOpenSizeDrawer] = useState(false);
     const [modalType, setModalType] = useState(null); // New state for modal type
-    const [viewCart, setViewCart] = useState([]) //for UserCart.jsx and navbar
-    const [wishlist, setWishlist] = useState([]) //for favouriteProduct.jsx and navbar
     const [profile, setProfile] = useState([]) //for userprofile and mobile sidebar
     const [getAddress, setGetAddress] = useState([])
     const [openUserNotLogin, setOpenUserNotLogin] = useState(false); //for non-logged users
+    const [favProduct, setFavproduct] = useState([]) //this is for displaying heartfilled icon if product is in wishlist
 
 
     // Handle modal
@@ -42,22 +42,20 @@ const StoreContext = ({ children }) => {
     const handleOpenUserNotLogin = () => setOpenUserNotLogin(!openUserNotLogin);
 
     // fetch favourite for enabling the heart icon filled
-    const fetchWishlistProducts = async (userId) => {
-        try {
-            const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
-            setWishlist(response.data || {});
-        } catch (error) {
-            console.error('Error fetching wishlist:', error);
-            toast.error('Failed to fetch wishlist');
-        }
-    };
-
+    const userId = localStorage.getItem('userId');
     useEffect(() => {
-        const userId = localStorage.getItem('userId');
-        if (!userId) return;
+        const fetchWishlistProducts = async () => {
+            if (!userId) return;
+            try {
+                const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
+                setFavproduct(response.data || []);
+            } catch (error) {
+                console.error('Error fetching wishlist:', error);
+            }
+        };
 
-        fetchWishlistProducts(userId);
-    }, [BASE_URL]); 
+        fetchWishlistProducts();
+    }, [BASE_URL, userId]);
 
 
     return (
@@ -76,10 +74,6 @@ const StoreContext = ({ children }) => {
                 handleCloseSizeDrawer,
                 openSizeDrawer,
                 modalType, // Provide modal type
-                viewCart,
-                setViewCart,
-                wishlist,
-                setWishlist,
                 profile,
                 setProfile,
                 getAddress,
@@ -87,7 +81,7 @@ const StoreContext = ({ children }) => {
                 openUserNotLogin,
                 setOpenUserNotLogin,
                 handleOpenUserNotLogin,
-                fetchWishlistProducts
+                favProduct
             }}
         >
             {children}

@@ -19,7 +19,7 @@ import { useEffect } from 'react';
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const ProductDetails = () => {
-    const { handleOpenSizeDrawer, BASE_URL, wishlist, setOpenUserNotLogin } = useContext(AppContext)
+    const { handleOpenSizeDrawer, BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const { productId } = location.state || {}
@@ -126,7 +126,7 @@ const ProductDetails = () => {
         try {
             const payload = { userId: userId, productId: productId };
 
-            const isInWishlist = wishlist?.items?.some(item => item.productId._id === productId);
+            const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
 
             if (!isInWishlist) {
                 const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
@@ -166,7 +166,7 @@ const ProductDetails = () => {
                                 className='w-full h-full object-cover rounded-xl'
                                 onError={(e) => e.target.src = '/no-image.jpg'}
                             />
-                            {heartIcons[productDetails._id] || wishlist?.items?.some(item => item.productId._id === productDetails._id) ? (
+                            {heartIcons[productDetails._id] || favProduct?.items?.some(item => item.productId._id === productDetails._id) ? (
                                 <RiHeart3Fill
                                     onClick={() => handleWishlist(productDetails._id, productDetails.title)}
                                     className='absolute top-5 right-5 xl:text-3xl lg:text-3xl text-2xl cursor-pointer text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'

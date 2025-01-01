@@ -11,7 +11,8 @@ import { HiOutlineXMark } from 'react-icons/hi2';
 
 const FavouriteProduct = () => {
     const navigate = useNavigate();
-    const { BASE_URL, wishlist, setWishlist } = useContext(AppContext);
+    const { BASE_URL } = useContext(AppContext);
+    const [wishlist, setWishlist] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const wishlistProducts = wishlist?.items || [];
 
@@ -71,7 +72,7 @@ const FavouriteProduct = () => {
     return (
         <div className='bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto p-4 xl:p-16 lg:p-16 space-y-8 xl:space-y-14 lg:space-y-14'>
             <h1
-                className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
+                className="flex items-center gap-1 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer"
                 onClick={() => navigate('/')}
             >
                 <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back

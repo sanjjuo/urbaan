@@ -33,7 +33,7 @@ const UserAddress = () => {
 
     return (
         <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto">
-            <h1 className="flex items-center gap-2 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
+            <h1 className="flex items-center gap-1 text-lg xl:text-xl lg:text-xl font-medium cursor-pointer" onClick={() => navigate(-1)}>
                 <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
             </h1>
             <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-4 mt-10'>

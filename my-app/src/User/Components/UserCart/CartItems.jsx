@@ -12,9 +12,8 @@ import namer from 'color-namer'; // Import the color-namer library
 import toast from 'react-hot-toast';
 import { HiOutlineXMark } from "react-icons/hi2";
 
-const CartItems = ({ cartItems, setCartItems }) => {
-    const navigate = useNavigate();
-    const { BASE_URL, setViewCart } = useContext(AppContext);
+const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
+    const { BASE_URL } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdating, setIsUpdating] = useState(false);
 
