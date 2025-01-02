@@ -71,31 +71,20 @@ const Checkout = () => {
 
     // Calculate the delivery charge based on the cart items and available delivery fees
     const calculateDeliveryCharge = (cartItems) => {
-        if (!deliveryCharge.length || !cartItems) return 0;
+        if (!deliveryCharge?.length || !cartItems?.length) return 0;
 
-        let totalDeliveryFee = 0;
-        cartItems.forEach((item) => {
-            // Find the closest delivery fee matching the quantity in cart
-            const matchingFees = deliveryCharge.filter((fee) => fee.quantity <= item.quantity);
-            const bestMatch = matchingFees.length > 0 ? matchingFees[matchingFees.length - 1].deliveryFee : 0;
-            totalDeliveryFee += bestMatch;
-        });
-
-        return totalDeliveryFee;
+        return cartItems.reduce((totalFee, item) => {
+            const bestMatch = deliveryCharge
+                .filter((fee) => fee.quantity <= item.quantity)
+                .reduce((max, fee) => Math.max(max, fee.deliveryFee), 0);
+            return totalFee + bestMatch;
+        }, 0);
     };
 
-    // // Calculate subtotal (cart items total amount multiplied with total quantity)
-    // const calculateSubtotal = (cartItems) => {
-    //     if (!cartItems) return 0;
-
-    //     return cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    // };
-
     const calculateTotalPrice = () => {
-        const subtotal = viewCart?.totalPrice;
-        const deliveryCharge = calculateDeliveryCharge(checkoutDetails?.cartItems);
-
-        return subtotal + deliveryCharge;
+        const subtotal = checkoutDetails?.discountedPrice || 0;
+        const deliveryFee = calculateDeliveryCharge(checkoutDetails?.cartItems);
+        return subtotal + deliveryFee;
     };
 
     // handleSubmitOrder
@@ -260,7 +249,7 @@ const Checkout = () => {
                                             <div key={index} className='flex gap-5 mb-4'>
                                                 <div className='w-20 h-28 xl:w-28 xl:h-32'>
                                                     <img
-                                                        src={item.image}
+                                                        src={item.productId.images[0]}
                                                         alt=""
                                                         className="w-full h-full object-cover rounded-lg"
                                                         onError={(e) => e.target.src = '/no-image.jpg'}
@@ -268,7 +257,7 @@ const Checkout = () => {
                                                 </div>
                                                 <div className='flex flex-col justify-between'>
                                                     <div>
-                                                        <h1 className='text-base text-secondary font-medium xl:mb-2 lg:mb-2'>{item?.name || 'No name'}</h1>
+                                                        <h1 className='text-base text-secondary font-medium xl:mb-2 lg:mb-2 capitalize'>{item?.productId.title || 'No name'}</h1>
                                                         <ul className='xl:space-y-1 lg:space-y-1'>
                                                             <li className='text-sm capitalize text-secondary'>Color : {getNamedColor(item.color)}</li>
                                                             <li className='text-sm capitalize text-secondary'>Size : {item.size}</li>
@@ -289,7 +278,7 @@ const Checkout = () => {
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary flex items-center gap-3'>Subtotal
                                                 <span className='text-sm'>(Including discount)</span></span>
-                                            <span className='text-secondary font-bold'>₹{checkoutDetails?.discountedTotal || 0.00}</span>
+                                            <span className='text-secondary font-bold'>₹{checkoutDetails?.discountedPrice || 0.00}</span>
                                         </li>
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Shipping</span>
@@ -299,7 +288,10 @@ const Checkout = () => {
                                         </li>
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Discount</span>
-                                            <span className='text-secondary font-bold'>{checkoutDetails?.coupenAmount || 0.00}</span>
+                                            <span className='text-secondary font-bold'>
+                                                {checkoutDetails?.coupen.discountValue || 0.00}
+                                                {checkoutDetails.coupen.discountType === "percentage" ? "%" : "₹"}
+                                            </span>
                                         </li>
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Total</span>

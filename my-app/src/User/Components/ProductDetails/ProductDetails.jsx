@@ -63,7 +63,6 @@ const ProductDetails = () => {
 
     const addToCart = async () => {
         try {
-    
             if (!selectedSize || !selectedSize[selectedColor]) {
                 toast.error("Please select a size for the selected color.");
                 return;

@@ -42,8 +42,7 @@ const ShopByCategory = () => {
           </div>
         ) : (
           <>
-            <div className='flex flex-wrap xl:flex-nowrap lg:flex-nowrap items-center justify-between xl:justify-normal 
-      lg:justify-normal xl:gap-8 lg:gap-8 xl:overflow-x-scroll lg:overflow-x-scroll hide-scrollbar'>
+            <div className='flex items-center gap-4 xl:gap-8 lg:gap-8 overflow-x-scroll hide-scrollbar'>
               {categories.map((category) => (
                 <Link
                   key={category.id}
@@ -51,9 +50,9 @@ const ShopByCategory = () => {
                     pathname: "/all-category",
                   }}
                   state={{ category }}
-                  className="space-y-2 mb-4 w-[30%] transition-opacity duration-500 ease-in-out hover:opacity-75 cursor-pointer block"
+                  className="space-y-2 mb-4 transition-opacity duration-500 ease-in-out hover:opacity-75 cursor-pointer block"
                 >
-                  <div className="w-full h-28 xl:w-36 xl:h-36 lg:w-36 lg:h-36">
+                  <div className="w-24 h-28 xl:w-36 xl:h-36 lg:w-36 lg:h-36">
                     <img
                       src={category.imageUrl}
                       alt={category.name || 'Category Image'}

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import {
     Menu,
@@ -24,19 +24,20 @@ const months = [
     "Dec"
 ];
 
-
-export default function MonthMenu() {
+export default function MonthMenu({ onSelectMonth }) {
     const [selectedMonth, setSelectedMonth] = useState("Month");
 
-    // Handle status selection
-    const handleOrderStatusSelect = (month) => {
+    // Handle month selection
+    const handleMonthSelect = (month) => {
         setSelectedMonth(month);
+        onSelectMonth(month);
     };
 
     // Prevent the click event from propagating to the Menu component
     const handleClickInside = (event) => {
         event.stopPropagation();
     };
+
     return (
         <Menu placement='bottom-end' closeOnClick={false}>
             <MenuHandler>
@@ -58,7 +59,7 @@ export default function MonthMenu() {
             >
                 {months.map((month, index) => (
                     <MenuItem className='font-custom text-sm' key={index} onClick={(e) => {
-                        handleOrderStatusSelect(month);
+                        handleMonthSelect(month);
                         handleClickInside(e);
                     }}>
                         {month}

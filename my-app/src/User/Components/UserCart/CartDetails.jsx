@@ -40,10 +40,7 @@ const CartDetails = ({ cartItems, viewCart }) => {
 
             const checkoutPayload = {
                 userId: userId,
-                cartId: viewCart._id,
-                cartItems: cartItems,
                 addressId: addressToSend._id,
-                totalPrice: viewCart.totalPrice,
             };
 
             console.log(checkoutPayload);
@@ -54,7 +51,7 @@ const CartDetails = ({ cartItems, viewCart }) => {
                 },
             });
 
-            const newCheckoutId = response.data.checkout._id;
+            const newCheckoutId = response.data.checkoutId;
             setCheckoutId(newCheckoutId); // Update local state for completeness
             return newCheckoutId; // Return the checkoutId for further use
         } catch (error) {

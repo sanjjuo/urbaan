@@ -136,7 +136,7 @@ const AllCategory = () => {
                         <li><FilterByPrice handlePriceFilter={handlePriceFilter} /></li>
                     </ul>
                     <div className="xl:p-10 mt-10">
-                        <div className="grid grid-cols-2 xl:grid-cols-5 lg:grid-cols-5 gap-2">
+                        <div className="grid grid-cols-2 xl:grid-cols-5 lg:grid-cols-5 gap-5">
                             {
                                 isLoading || products.length === 0 ? (
                                     <div className='col-span-5 flex justify-center items-center h-[50vh]'>

@@ -27,7 +27,7 @@ const App = () => {
               height: 'auto',
               color: '#000',
               backgroundColor: '#FFEDED',
-              border: "2px solid #C21E56"
+              // border: "2px solid #C21E56"
             }
           }}
         />

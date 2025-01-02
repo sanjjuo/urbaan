@@ -1,35 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { PlaceMenu } from './PlaceMenu';
 import MonthMenu from './MonthMenu';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import axios from 'axios';
-import { useContext } from 'react';
 import { AppContext } from '../../../../StoreContext/StoreContext';
+import AppLoader from '../../../../Loader';
 
 const SalesGraph = () => {
-    const [graph, setGraph] = useState([])
-    const { BASE_URL } = useContext(AppContext)
+    const [graphData, setGraphData] = useState([]);
+    const { BASE_URL } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(true)
+    const [selectedMonthGraph, setSelectedMonthGraph] = useState(12);
 
     useEffect(() => {
         const fetchGraphDetails = async () => {
             try {
-                const token = localStorage.getItem('token')
-                const response = await axios.get(`${BASE_URL}/admin/dashboard/view-graph?month=12`, {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`${BASE_URL}/admin/dashboard/view-graph?month=${selectedMonthGraph}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
-                })
-                setGraph(response.data)
-                console.log(response.data);
+                });
+
+                const formattedData = response.data.data.map(item => ({
+                    x: item.monthName,
+                    y: item.totalRevenue
+                }));
+                setGraphData(formattedData);
+                setIsLoading(false)
             } catch (error) {
                 console.log(error);
             }
-        }
+        };
         fetchGraphDetails();
-    }, [])
-    
+    }, [BASE_URL]);
+
     return (
         <div className='p-10 mt-10 bg-white rounded-xl shadow-md'>
             <div className="flex items-center justify-between">
@@ -38,42 +43,43 @@ const SalesGraph = () => {
                 </div>
                 <ul className="flex items-center gap-2">
                     <li><PlaceMenu /></li>
-                    <li><MonthMenu /></li>
+                    <li>
+                        <MonthMenu onSelectMonth={(month) => setSelectedMonthGraph(month)} />
+                    </li>
                 </ul>
             </div>
-            <div className='w-[100%]'>
-                <LineChart
-                    xAxis={[
-                        {
-                            min: 5000, // Start value for X-axis
-                            max: 60000, // End value for X-axis
-                            tickNumber: 12,
-                            data: [5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000], // X-axis ticks
-                            valueFormatter: (value) => `${(value / 1000).toFixed()}k`, // Format as "5k", "10k", etc.
-                        },
-                    ]}
-                    yAxis={[
-                        {
-                            min: 20,
-                            max: 100,
-                            tickNumber: 5, // Specify 5 ticks
-                            valueFormatter: (value) => `${value}%`,
-                        },
-                    ]}
-                    series={[
-                        {
-                            curve: 'linear',
-                            data: [20, 28, 49, 50, 30, 54, 85, 52, 58, 61, 23, 25], // Y-axis values corresponding to X-axis
-                            area: true,
-                            color: '#A3BDF533',
-                            pointLabel: (params) => `${params.y}%`
-                        },
-                    ]}
-                    className="w-full"
-                    height={500}
-                    grid={{ vertical: false, horizontal: true }} // Enable grid lines
-                />
-            </div>
+            {isLoading ? (
+                <div className="col-span-2 flex justify-center items-center h-[70vh]">
+                    <AppLoader />
+                </div>
+            ) : (
+                <>
+                    <div className='w-[100%]'>
+                        <LineChart
+                            xAxis={[{
+                                data: graphData.map(item => item.x),
+                                tickNumber: 12,
+                                scaleType: 'point',
+                                valueFormatter: (value) => value,
+                            }]}
+                            yAxis={[{
+                                min: 0,
+                                tickNumber: 5,
+                                valueFormatter: (value) => `$${value}`,
+                            }]}
+                            series={[{
+                                data: graphData.map(item => item.y),
+                                curve: 'linear',
+                                area: true,
+                                color: '#A3BDF533',
+                            }]}
+                            className="w-full"
+                            height={500}
+                            grid={{ vertical: false, horizontal: true }}
+                        />
+                    </div>
+                </>
+            )}
         </div>
     );
 };

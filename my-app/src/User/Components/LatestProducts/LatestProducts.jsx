@@ -45,12 +45,6 @@ const LatestProducts = () => {
       // Check if product is already in wishlist
       const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
 
-      // If the response is successful, update the heart icon state and show success toast
-      setHeartIcons(prevState => ({
-        ...prevState,
-        [productId]: !isInWishlist, // Set the heart icon to filled
-      }));
-
       if (isInWishlist) {
         // If product is already in wishlist, show the appropriate toast and return
         toast.error(`${productTitle} is already in your wishlist`);
@@ -60,7 +54,11 @@ const LatestProducts = () => {
       // Add to wishlist if not already there
       const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
       console.log(response.data);
-
+      // If the response is successful, update the heart icon state and show success toast
+      setHeartIcons(prevState => ({
+        ...prevState,
+        [productId]: !isInWishlist, // Set the heart icon to filled
+      }));
       toast.success(`${productTitle} added to wishlist`);
 
     } catch (error) {
@@ -82,7 +80,7 @@ const LatestProducts = () => {
         Latest Products
       </h1>
       {isLoading || latestProducts.length === 0 ? (
-        <div className="col-span-2 flex justify-center items-center">
+        <div className="col-span-2 flex justify-center items-center h-[50vh]">
           <AppLoader />
         </div>
       ) : (

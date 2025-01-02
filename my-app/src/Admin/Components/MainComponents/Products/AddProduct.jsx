@@ -427,6 +427,7 @@ const AddProduct = () => {
                             <label htmlFor="" className='font-normal text-base'>Specifications</label>
                             <div className='flex items-center gap-1 mt-4'>
                                 <label htmlFor="" className='font-normal text-sm w-32'>NetWeight</label>
+                                <p>:</p>
                                 <input
                                     type="text"
                                     name="value"
@@ -440,6 +441,7 @@ const AddProduct = () => {
                             </div>
                             <div className='flex items-center gap-1'>
                                 <label htmlFor="" className='font-normal text-sm w-32'>Fit</label>
+                                <p>:</p>
                                 <input
                                     type="text"
                                     name="value"
@@ -453,6 +455,7 @@ const AddProduct = () => {
                             </div>
                             <div className='flex items-center gap-1'>
                                 <label htmlFor="" className='font-normal text-sm w-32'>Sleeves Type</label>
+                                <p>:</p>
                                 <input
                                     type="text"
                                     name="value"
@@ -466,6 +469,7 @@ const AddProduct = () => {
                             </div>
                             <div className='flex items-center gap-1'>
                                 <label htmlFor="" className='font-normal text-sm w-32'>Length</label>
+                                <p>:</p>
                                 <input
                                     type="text"
                                     name="value"
@@ -479,6 +483,7 @@ const AddProduct = () => {
                             </div>
                             <div className='flex items-center gap-1'>
                                 <label htmlFor="" className='font-normal text-sm w-32'>Occassion</label>
+                                <p>:</p>
                                 <input
                                     type="text"
                                     name="value"
@@ -492,6 +497,7 @@ const AddProduct = () => {
                             </div>
                             <div className='flex items-center gap-1'>
                                 <label htmlFor="" className='font-normal text-sm w-32'>Inner Lining</label>
+                                <p>:</p>
                                 <input
                                     type="text"
                                     name="value"
@@ -505,6 +511,7 @@ const AddProduct = () => {
                             </div>
                             <div className='flex items-center gap-1'>
                                 <label htmlFor="" className='font-normal text-sm w-32'>Material</label>
+                                <p>:</p>
                                 <input
                                     type="text"
                                     name="value"
