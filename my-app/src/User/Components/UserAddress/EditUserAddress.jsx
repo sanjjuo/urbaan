@@ -21,7 +21,6 @@ const EditUserAddress = () => {
     const [editPinCode, setEditPinCode] = useState('')
     const [editCity, setEditCity] = useState('')
     const [editState, setEditState] = useState('')
-    const [editEmail, setEditEmail] = useState('')
     const [editAddressType, setEditAddressType] = useState('home')
     const [editDefaultAddress, setEditDefaultAddress] = useState(true)
 
@@ -35,7 +34,6 @@ const EditUserAddress = () => {
             setEditPinCode(initailAddressData.pincode)
             setEditCity(initailAddressData.city)
             setEditState(initailAddressData.state)
-            setEditEmail(initailAddressData.email)
             setEditAddressType(initailAddressData.addressType)
             setEditDefaultAddress(initailAddressData.defaultAddress)
         }
@@ -58,7 +56,6 @@ const EditUserAddress = () => {
                 pincode: editPinCode,
                 city: editCity,
                 state: editState,
-                // email: editEmail,
                 addressType: editAddressType,
                 defaultAddress: editDefaultAddress
             }
@@ -80,7 +77,6 @@ const EditUserAddress = () => {
             setEditLandMark('')
             setEditPinCode('')
             setEditNumber('')
-            setEditEmail('')
             setEditAddressType('')
             setEditState('')
             setEditCity('')
@@ -122,6 +118,7 @@ const EditUserAddress = () => {
                                     value={editName}
                                     onChange={(e) => setEditName(e.target.value)}
                                     placeholder="Enter your name"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -137,6 +134,7 @@ const EditUserAddress = () => {
                                     value={editNumber}
                                     onChange={(e) => setEditNumber(e.target.value)}
                                     placeholder="Enter your name"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -151,7 +149,8 @@ const EditUserAddress = () => {
                                     id="address"
                                     value={editAddress}
                                     onChange={(e) => setEditAddress(e.target.value)}
-                                    placeholder="Address (House No, Building, Street, Area )*"
+                                    placeholder="Address (House No, Building, Street, Area )"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                                 <input
@@ -161,6 +160,7 @@ const EditUserAddress = () => {
                                     value={editLandMark}
                                     onChange={(e) => setEditLandMark(e.target.value)}
                                     placeholder="Landmark"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                                 <input
@@ -170,6 +170,7 @@ const EditUserAddress = () => {
                                     value={editPinCode}
                                     onChange={(e) => setEditPinCode(e.target.value)}
                                     placeholder="Pin code"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -185,6 +186,7 @@ const EditUserAddress = () => {
                                     value={editCity}
                                     onChange={(e) => setEditCity(e.target.value)}
                                     placeholder="Enter your city"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -200,22 +202,8 @@ const EditUserAddress = () => {
                                     value={editState}
                                     onChange={(e) => setEditState(e.target.value)}
                                     placeholder="Enter your state"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
-                                />
-                            </div>
-                            {/* email */}
-                            <div className="flex flex-col gap-1">
-                                <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
-                                    Email Address
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    value={editEmail}
-                                    onChange={(e) => setEditEmail(e.target.value)}
-                                    placeholder="Enter your email"
-                                    className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
 

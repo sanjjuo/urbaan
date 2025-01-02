@@ -34,13 +34,15 @@ const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setViewCart(response.data);
-                setCartItems(response.data.items);
+                if (token && userId) {
+                    const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setViewCart(response.data);
+                    setCartItems(response.data.items);
+                }
             } catch (error) {
                 console.error(error);
             } finally {

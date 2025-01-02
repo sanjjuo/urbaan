@@ -16,7 +16,6 @@ const AddUserAddress = () => {
     const [pinCode, setPinCode] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
-    const [email, setEmail] = useState('')
     const [addressType, setAddressType] = useState('home')
     const [defaultAddress, setDefaultAddress] = useState(false) // default address state
 
@@ -36,7 +35,6 @@ const AddUserAddress = () => {
                 pincode: pinCode,
                 city: city,
                 state: state,
-                email: email,
                 addressType: addressType,
                 defaultAddress: defaultAddress, // Use the state value for defaultAddress
             }
@@ -82,6 +80,7 @@ const AddUserAddress = () => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Enter your name"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -97,6 +96,7 @@ const AddUserAddress = () => {
                                     value={number}
                                     onChange={(e) => setNumber(e.target.value)}
                                     placeholder="Enter your phone number"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -111,7 +111,8 @@ const AddUserAddress = () => {
                                     id="address"
                                     value={address}
                                     onChange={(e) => setAddress(e.target.value)}
-                                    placeholder="Address (House No, Building, Street, Area )*"
+                                    placeholder="Address (House No, Building, Street, Area )"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                                 <input
@@ -121,6 +122,7 @@ const AddUserAddress = () => {
                                     value={landMark}
                                     onChange={(e) => setLandMark(e.target.value)}
                                     placeholder="Landmark"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                                 <input
@@ -130,6 +132,7 @@ const AddUserAddress = () => {
                                     value={pinCode}
                                     onChange={(e) => setPinCode(e.target.value)}
                                     placeholder="Pin code"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -145,6 +148,7 @@ const AddUserAddress = () => {
                                     value={city}
                                     onChange={(e) => setCity(e.target.value)}
                                     placeholder="Enter your city"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
@@ -160,22 +164,8 @@ const AddUserAddress = () => {
                                     value={state}
                                     onChange={(e) => setState(e.target.value)}
                                     placeholder="Enter your state"
+                                    required
                                     className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:text-gray-500 focus:outline-none"
-                                />
-                            </div>
-                            {/* Email */}
-                            <div className="flex flex-col gap-1">
-                                <label htmlFor="name" className="font-medium text-sm xl:text-base lg:text-base">
-                                    Email Address
-                                </label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter your email"
-                                    className="border-[1px] bg-transparent border-gray-400 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500 focus:outline-none"
                                 />
                             </div>
 

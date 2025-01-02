@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { RiHome5Line } from "react-icons/ri";
+import { RiHeart3Fill, RiHeart3Line, RiHome5Line } from "react-icons/ri";
 import { RiSearch2Line } from "react-icons/ri";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { RiUser3Line } from "react-icons/ri";
@@ -13,7 +13,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 
-const BottomBar = ({ cartView, setCart, token, userId }) => {
+const BottomBar = ({ cartView, favView, setCart, setFav, token, userId }) => {
     const { BASE_URL } = useContext(AppContext)
     const location = useLocation();
     const [iconActive, setIconActive] = useState(() => {
@@ -53,6 +53,19 @@ const BottomBar = ({ cartView, setCart, token, userId }) => {
         fetchCartItems();
     }, []);
 
+    useEffect(() => {
+        const fetchWishlistProducts = async () => {
+            if (!userId) return;
+            try {
+                const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
+                setFav(response.data.items || []);
+            } catch (error) {
+                console.error('Error fetching wishlist:', error);
+            }
+        };
+        fetchWishlistProducts();
+    }, []);
+
     // Pages where BottomBar should be visible
     const visibleRoutes = ["/", "/view-all-category", "/favourite", "/user-search", "/user-profile", "/user-cart"];
 
@@ -80,20 +93,32 @@ const BottomBar = ({ cartView, setCart, token, userId }) => {
                     <span className="text-[11px] h-5">Home</span>
                 </li></Link>
 
-                <Link to='/user-search'><li onClick={() => setIconActive("search")} className={`text-gray-500 hover:text-primary flex flex-col items-center
-                        ${iconActive === "search" ? "text-primary" : ""}`}>
+                <Link to='/favourite'><li onClick={() => setIconActive("favourite")} className={`text-gray-500 hover:text-primary flex flex-col items-center
+                        ${iconActive === "favourite" ? "text-primary" : ""}`}>
                     {
-                        iconActive === "search" ? (
+                        iconActive === "favourite" ? (
                             <>
-                                <span><RiSearch2Fill className="text-2xl" /></span>
+                                <span className='relative'>
+                                    <RiHeart3Fill className="text-2xl" />
+                                    {favView > 0 && (
+                                        <Chip value={favView || 0} size="sm" className="rounded-full bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex 
+                                        justify-center items-center" />
+                                    )}
+                                </span>
                             </>
                         ) : (
                             <>
-                                <span><RiSearch2Line className="text-2xl" /></span>
+                                <span className='relative'>
+                                    <RiHeart3Line className="text-2xl" />
+                                    {favView > 0 && (
+                                        <Chip value={favView || 0} size="sm" className="rounded-full text-xs bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex 
+                                        justify-center items-center" />
+                                    )}
+                                </span>
                             </>
                         )
                     }
-                    <span className="text-[11px] h-5">Search</span>
+                    <span className="text-[11px] h-5">Wishlist</span>
                 </li></Link>
 
                 <Link to='/user-cart'><li onClick={() => setIconActive("cart")} className={`text-gray-500 hover:text-primary flex flex-col items-center

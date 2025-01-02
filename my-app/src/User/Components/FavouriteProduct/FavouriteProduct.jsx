@@ -8,6 +8,7 @@ import AppLoader from '../../../Loader';
 import { MdDelete } from 'react-icons/md';
 import toast from 'react-hot-toast';
 import { HiOutlineXMark } from 'react-icons/hi2';
+import { RiDeleteBin5Line } from 'react-icons/ri';
 
 const FavouriteProduct = () => {
     const navigate = useNavigate();
@@ -16,14 +17,16 @@ const FavouriteProduct = () => {
     const [isLoading, setIsLoading] = useState(true);
     const wishlistProducts = wishlist?.items || [];
 
+    const userId = localStorage.getItem('userId');
+
     // Fetch wishlist products
     useEffect(() => {
         const fetchWishlistProducts = async () => {
-            setIsLoading(true);
             try {
-                const userId = localStorage.getItem('userId');
-                const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
-                setWishlist(response.data || {});
+                if (userId) {
+                    const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
+                    setWishlist(response.data || {});
+                }
             } catch (error) {
                 console.error('Error fetching wishlist:', error);
             } finally {
@@ -91,8 +94,8 @@ const FavouriteProduct = () => {
                         <img src="/favourite.png" alt="Empty Wishlist" className='w-full h-full object-cover' />
                     </div>
                     <div className='space-y-3 flex flex-col justify-center items-center'>
-                    <h1 className='text-2xl font-semibold'>Your wishlist is Empty</h1>
-                    <p className='text-center text-gray-600'>
+                        <h1 className='text-2xl font-semibold'>Your wishlist is Empty</h1>
+                        <p className='text-center text-gray-600'>
                             You can add an item to your favourites by clicking “Heart Icon”
                         </p>
                         <Link to='/'>
@@ -103,13 +106,12 @@ const FavouriteProduct = () => {
                     </div>
                 </div>
             ) : (
-                <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5'>
+                <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-x-5 gap-y-10 !mt-16'>
                     {wishlistProducts.map((product) => (
                         <div key={product._id} className='relative'>
-                            <MdDelete
+                            <RiDeleteBin5Line
                                 onClick={() => handleWishlistDelete(product.productId._id)}
-                                className='text-deleteBg bg-white shadow-md rounded-full p-1 w-7 h-7 hover:bg-primary 
-                                hover:text-white absolute -top-10 right-0 cursor-pointer'
+                                className='text-deleteBg absolute -top-5 right-1 cursor-pointer'
                             />
                             <Link
                                 to="/product-details"

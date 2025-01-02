@@ -5,7 +5,7 @@ import {
     Button,
     Chip,
 } from "@material-tailwind/react";
-import { RiSearch2Line } from "react-icons/ri";
+import { RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
 import { RiHeart3Line } from "react-icons/ri";
 import { RiHeart3Fill } from "react-icons/ri";
 import { RiShoppingCartLine } from "react-icons/ri";
@@ -67,6 +67,7 @@ const UserNavbar = () => {
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const isCartPage = location.pathname === "/user-cart";
+    const isSearch = location.pathname === '/user-search'
     const [fav, setFav] = useState([])
     const [cart, setCart] = useState([])
     const cartView = cart?.length || 0;
@@ -208,30 +209,15 @@ const UserNavbar = () => {
                     </li></Link>
                 </ul>
                 <ul className='flex items-center gap-3'>
-                    <Link to='/user-search'><li className='text-2xl text-secondary hover:text-primary'><RiSearch2Line /></li></Link>
-                    <Link to="/favourite">
-                        <li className="text-2xl text-secondary relative">
-                            {isFavouritePage ?
+                    <Link to='/user-search'>
+                        <li className='text-2xl text-secondary hover:text-primary'>
+                            {isSearch ?
                                 <>
-                                    <RiHeart3Fill className='text-primary' />
-                                    {favView > 0 && (
-                                        <Chip
-                                            value={favView}
-                                            size="sm"
-                                            className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
-                                        />
-                                    )}
+                                    <RiSearch2Fill className='text-primary' />
                                 </>
                                 :
                                 <>
-                                    <RiHeart3Line />
-                                    {favView > 0 && (
-                                        <Chip
-                                            value={favView}
-                                            size="sm"
-                                            className="rounded-full !bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
-                                        />
-                                    )}
+                                    <RiSearch2Line />
                                 </>
                             }
                         </li>
@@ -239,7 +225,7 @@ const UserNavbar = () => {
                 </ul>
             </div>
 
-            <BottomBar cartView={cartView} setCart={setCart} token={token} userId={userId} />
+            <BottomBar cartView={cartView} favView={favView} setCart={setCart} setFav={setFav} token={token} userId={userId} />
             <MobileSidebar
                 openDrawer={openDrawer}
                 handleCloseDrawer={handleCloseDrawer}

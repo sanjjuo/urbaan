@@ -68,12 +68,14 @@ const CartDetails = ({ cartItems, viewCart }) => {
     useEffect(() => {
         const fetchDefaultAddress = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/user/address/view/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                setDefaultAddress(response.data);
+                if (token && userId) {
+                    const response = await axios.get(`${BASE_URL}/user/address/view/${userId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
+                    setDefaultAddress(response.data);
+                }
             } catch (error) {
                 console.log(error);
             } finally {
