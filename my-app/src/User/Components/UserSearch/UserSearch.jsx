@@ -9,7 +9,7 @@ import SearchBar from '../Navbar/SearchBar'
 import { RxCountdownTimer } from 'react-icons/rx'
 
 const UserSearch = () => {
-    const { BASE_URL, favProduct } = useContext(AppContext)
+    const { BASE_URL, favProduct, setFav } = useContext(AppContext)
     const navigate = useNavigate()
     const [searchedProducts, setSearchedProducts] = useState([])
     const [heartIcons, setHeartIcons] = useState({})
@@ -44,6 +44,14 @@ const UserSearch = () => {
                     ...prevState,
                     [productId]: true
                 }))
+
+                setFav((prevFav) => {
+                    const isAlreadyFav = prevFav.some(
+                        (item) => item.productId === payload.productId
+                    );
+                    return isAlreadyFav ? prevFav : [...prevFav, payload];
+                });
+    
 
                 toast.success(`${productTitle} added to wishlist`)
             } else {

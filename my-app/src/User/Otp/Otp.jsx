@@ -44,6 +44,7 @@ export function Otp() {
         phone: phone,
         otp: otpValue,
       }
+      console.log(otpPayload)
       const response = await axios.post(`${BASE_URL}/user/auth/register/verify-otp`, otpPayload, {
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ export function Otp() {
       console.log(response.data);
       if (response.data.token && response.data.userId) {
         localStorage.setItem("userToken", response.data.token);
-        localStorage.setItem('userId', response.data.userId);
+        localStorage.setItem('userId', response.data.userId || '');
         toast.success("Account created successfully")
         navigate('/')
       }

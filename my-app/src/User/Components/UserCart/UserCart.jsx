@@ -4,8 +4,6 @@ import CartItems from './CartItems';
 import CartDetails from './CartDetails';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useContext } from 'react';
-import { AppContext } from '../../../StoreContext/StoreContext';
 
 const UserCart = () => {
     const [viewCart, setViewCart] = useState([]) //for UserCart.jsx

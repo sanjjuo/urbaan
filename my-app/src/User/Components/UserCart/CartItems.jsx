@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { HiOutlineXMark } from "react-icons/hi2";
 
 const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
-    const { BASE_URL } = useContext(AppContext);
+    const { BASE_URL, setCart } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdating, setIsUpdating] = useState(false);
 
@@ -128,6 +128,7 @@ const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
                 // Remove item from local state
                 const updatedCartItems = cartItems.filter(cartItem => cartItem.productId._id !== itemId);
                 setCartItems(updatedCartItems);
+                // setCart(updatedCartItems);
 
                 // Update global cart state
                 setViewCart(prevViewCart => ({

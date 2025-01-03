@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 
 
 const FeaturedProducts = () => {
-    const { BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext);
+    const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext);
     const [featuredProducts, setFeaturedProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [heartIcons, setHeartIcons] = useState({});
@@ -65,6 +65,13 @@ const FeaturedProducts = () => {
                 ...prevState,
                 [productId]: !isInWishlist, // Set the heart icon to filled
             }));
+
+            setFav((prevFav) => {
+                const isAlreadyFav = prevFav.some(
+                    (item) => item.productId === payload.productId
+                );
+                return isAlreadyFav ? prevFav : [...prevFav, payload];
+            });
 
             toast.success(`${productTitle} added to wishlist`);
 

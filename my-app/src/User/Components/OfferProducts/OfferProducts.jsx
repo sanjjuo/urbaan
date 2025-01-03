@@ -9,7 +9,7 @@ import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 import toast from 'react-hot-toast';
 
 const OfferProducts = () => {
-    const { BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext);
+    const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext);
     const [offerProducts, setOfferProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [heartIcons, setHeartIcons] = useState({});
@@ -59,6 +59,14 @@ const OfferProducts = () => {
                 ...prevState,
                 [productId]: !isInWishlist, // Set the heart icon to filled
             }));
+
+            setFav((prevFav) => {
+                const isAlreadyFav = prevFav.some(
+                    (item) => item.productId === payload.productId
+                );
+                return isAlreadyFav ? prevFav : [...prevFav, payload];
+            });
+            
             toast.success(`${productTitle} added to wishlist`);
 
         } catch (error) {
@@ -120,9 +128,14 @@ const OfferProducts = () => {
                                             <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize'>
                                                 {product.description}
                                             </p>
-                                            <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>
-                                                ₹{product.offerPrice}
-                                            </p>
+                                            <div className='flex items-center gap-3 mt-2'>
+                                                <p className="text-gray-600 font-normal text-sm xl:text-base lg:text-base">
+                                                    ₹<s>{product.actualPrice}</s>
+                                                </p>
+                                                <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold'>
+                                                    ₹{product.offerPrice}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 )

@@ -63,13 +63,11 @@ const NavList = () => {
 }
 
 const UserNavbar = () => {
-    const { BASE_URL, openDrawer, handleOpenDrawer, handleCloseDrawer } = useContext(AppContext)
+    const { BASE_URL, openDrawer, handleOpenDrawer, handleCloseDrawer, cart, setCart, fav, setFav } = useContext(AppContext)
     const location = useLocation();
     const isFavouritePage = location.pathname === "/favourite";
     const isCartPage = location.pathname === "/user-cart";
     const isSearch = location.pathname === '/user-search'
-    const [fav, setFav] = useState([])
-    const [cart, setCart] = useState([])
     const cartView = cart?.length || 0;
     const favView = fav?.length || 0;
 

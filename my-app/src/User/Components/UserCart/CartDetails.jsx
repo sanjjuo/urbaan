@@ -142,9 +142,18 @@ const CartDetails = ({ cartItems, viewCart }) => {
                     </div>
                 ) : (
                     <>
-                        {(!selectedAddress && !defaultAddr) ? (
+                        {((!userId && !token) || (!selectedAddress && !defaultAddr)) ? (
                             <p className='text-sm text-gray-600 text-center my-5'>
-                                <Link to='/login-user' className='text-primary font-semibold'>Log in</Link> to add a new address.</p>
+                                {(!userId && !token) ? (
+                                    <>
+                                        <Link to='/login-user' className='text-primary font-semibold'>
+                                            Log in
+                                        </Link> to add a new address.
+                                    </>
+                                ) : (
+                                    <>No address found.</>
+                                )}
+                            </p>
                         ) : (
                             <p className='text-sm font-normal mb-3 capitalize'>
                                 {selectedAddress

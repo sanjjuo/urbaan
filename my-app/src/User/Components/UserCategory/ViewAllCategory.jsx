@@ -13,7 +13,7 @@ import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const ViewAllCategory = () => {
     const navigate = useNavigate();
-    const { handleOpenBottomDrawer, BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext);
+    const { handleOpenBottomDrawer, BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext);
     const [allProducts, setAllProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const [searchProducts, setSearchProducts] = useState('');
@@ -68,13 +68,6 @@ const ViewAllCategory = () => {
 
             // Check if product is already in wishlist
             const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
-
-            // If the response is successful, update the heart icon state and show success toast
-            setHeartIcons(prevState => ({
-                ...prevState,
-                [productId]: !isInWishlist, // Set the heart icon to filled
-            }));
-
             if (isInWishlist) {
                 // If product is already in wishlist, show the appropriate toast and return
                 toast.error(`${productTitle} is already in your wishlist`);
@@ -84,6 +77,19 @@ const ViewAllCategory = () => {
             // Add to wishlist if not already there
             const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
             console.log(response.data);
+
+            // If the response is successful, update the heart icon state and show success toast
+            setHeartIcons(prevState => ({
+                ...prevState,
+                [productId]: !isInWishlist, // Set the heart icon to filled
+            }));
+
+            setFav((prevFav) => {
+                const isAlreadyFav = prevFav.some(
+                    (item) => item.productId === payload.productId
+                );
+                return isAlreadyFav ? prevFav : [...prevFav, payload];
+            });
 
             toast.success(`${productTitle} added to wishlist`);
 

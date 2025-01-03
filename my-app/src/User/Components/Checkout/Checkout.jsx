@@ -6,12 +6,13 @@ import axios from 'axios'
 import namer from 'color-namer'; // Import the color-namer library
 import { AppContext } from '../../../StoreContext/StoreContext'
 import AppLoader from '../../../Loader'
+import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup'
 
 const Checkout = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const checkoutDetailsId = location.state.checkoutId
-    const { BASE_URL, viewCart } = useContext(AppContext);
+    const { BASE_URL } = useContext(AppContext);
     const [checkoutData, setCheckoutData] = useState({});
     const [isLoading, setIsLoading] = useState(true)
     const [deliveryCharge, setDeliveryCharge] = useState([]);
@@ -93,10 +94,9 @@ const Checkout = () => {
             const orderPayload = {
                 userId: userId,
                 addressId: checkoutDetails.addressId._id,
-                products: checkoutDetails.cartItems,
-                totalPrice: checkoutDetails.totalPrice,
                 deliveryCharge: calculateDeliveryCharge(checkoutDetails?.cartItems),
-                paymentMethod: paymentMethod
+                paymentMethod: paymentMethod,
+                checkoutId: checkoutDetailsId
             }
 
             console.log(orderPayload);
@@ -107,8 +107,17 @@ const Checkout = () => {
                 }
             })
             console.log(response.data);
+            if (response.status === 200 || response.status === 201) {
+                navigate('/order');
+            } else {
+                alert("Failed to place the order. Please try again.");
+            }
         } catch (error) {
-            console.log(error);
+            console.error("Order submission error:", error);
+            if (error.response.status === 401) {
+                setOpenUserNotLogin(true)
+            }
+            alert(error.response?.data?.message || "Something went wrong. Please try again.");
         }
     }
 
@@ -242,7 +251,7 @@ const Checkout = () => {
                         <>
                             <div className='space-y-5'>
                                 {/* cart */}
-                                <Card className='p-4 xl:p-6 lg:p-6 h-[500px] overflow-y-auto hide-scrollbar'>
+                                <Card className={`p-4 xl:p-6 lg:p-6 overflow-y-auto hide-scrollbar ${checkoutDetails?.cartItems?.length > 1 ? 'max-h-[500px]' : 'min-h-[200px]'}`}>
                                     <h1 className='text-secondary font-medium capitalize text-lg mb-3'>Review your cart</h1>
                                     <div>
                                         {checkoutDetails?.cartItems?.map((item, index) => (
@@ -286,13 +295,27 @@ const Checkout = () => {
                                                 ₹{calculateDeliveryCharge(checkoutDetails?.cartItems)}
                                             </span>
                                         </li>
-                                        <li className='flex items-center justify-between'>
-                                            <span className='text-secondary'>Discount</span>
-                                            <span className='text-secondary font-bold'>
-                                                {checkoutDetails?.coupen.discountValue || 0.00}
-                                                {checkoutDetails.coupen.discountType === "percentage" ? "%" : "₹"}
-                                            </span>
-                                        </li>
+                                        {checkoutDetails?.coupen?.discountValue ? (
+                                            <>
+                                                <li className='flex items-center justify-between'>
+                                                    <span className='text-secondary'>Discount</span>
+                                                    <span className='text-secondary font-bold'>
+                                                        {checkoutDetails.coupen.discountValue || 0.00}
+                                                        {checkoutDetails.coupen.discountType === "percentage" ? "%" : "₹"}
+                                                    </span>
+                                                </li>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <li className='flex items-center justify-between'>
+                                                    <span className='text-secondary'>Discount</span>
+                                                    <span className='text-primary font-normal text-xs'>
+                                                        *No coupon applied
+                                                    </span>
+                                                </li>
+                                            </>
+                                        )
+                                        }
                                         <li className='flex items-center justify-between'>
                                             <span className='text-secondary'>Total</span>
                                             <span className='text-secondary font-bold'>
@@ -321,9 +344,11 @@ const Checkout = () => {
 
                                         </div>
                                     </div>
-                                    <Link to='/order'>
-                                        <Button onClick={handleSubmitOrder} className='hidden xl:block lg:block mt-5 bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
-                                    </Link>
+                                    {/* <Link to='/order'> */}
+                                    <div className='flex justify-center'>
+                                        <Button onClick={handleSubmitOrder} className='hidden w-56 xl:block lg:block mt-5 bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
+                                    </div>
+                                    {/* </Link> */}
                                 </Card>
                             </div>
                         </>
@@ -332,10 +357,11 @@ const Checkout = () => {
             </div>
 
             <div className='bg-white shadow-md fixed bottom-0 inset-x-0 z-50 w-full p-4 xl:hidden lg:hidden'>
-                <Link to='/order'>
-                    <Button onClick={handleSubmitOrder} className='w-full bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
-                </Link>
+                <Button onClick={handleSubmitOrder} className='w-full bg-primary font-custom capitalize font-normal text-sm tracking-wider hover:bg-secondary'>Confirm Order</Button>
             </div>
+
+
+            <UserNotLoginPopup />
         </>
     )
 }

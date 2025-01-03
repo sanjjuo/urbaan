@@ -15,6 +15,8 @@ const StoreContext = ({ children }) => {
     const [getAddress, setGetAddress] = useState([])
     const [openUserNotLogin, setOpenUserNotLogin] = useState(false); //for non-logged users
     const [favProduct, setFavproduct] = useState([]) //this is for displaying heartfilled icon if product is in wishlist
+    const [cart, setCart] = useState([]) //is for updating cart length in product details and navbar
+    const [fav, setFav] = useState([]) // is for updating fav length in product details and navbar
 
 
     // Handle modal
@@ -81,7 +83,11 @@ const StoreContext = ({ children }) => {
                 openUserNotLogin,
                 setOpenUserNotLogin,
                 handleOpenUserNotLogin,
-                favProduct
+                favProduct,
+                cart,
+                setCart,
+                fav,
+                setFav
             }}
         >
             {children}

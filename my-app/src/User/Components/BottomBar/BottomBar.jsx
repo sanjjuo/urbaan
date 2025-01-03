@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { RiHeart3Fill, RiHeart3Line, RiHome5Line } from "react-icons/ri";
-import { RiSearch2Line } from "react-icons/ri";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { RiUser3Line } from "react-icons/ri";
 import { RiHome5Fill } from "react-icons/ri";
 import { RiShoppingCartFill } from "react-icons/ri";
 import { RiUser3Fill } from "react-icons/ri";
-import { RiSearch2Fill } from "react-icons/ri";
 import { Chip } from '@material-tailwind/react';
 import { useContext } from 'react';
 import { AppContext } from '../../../StoreContext/StoreContext';

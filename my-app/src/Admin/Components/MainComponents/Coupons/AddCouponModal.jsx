@@ -167,17 +167,19 @@ export function AddCouponModal({ open, handleOpen }) {
                             <div className='flex flex-col gap-3 w-full'>
                                 <label className='font-normal text-base'>Category Type</label>
                                 <div className='flex flex-row items-center gap-2 overflow-x-auto hide-scrollbar'>
+                                    <div className='flex items-center space-x-0 shrink-0'>
+                                        <Checkbox
+                                            checked={couponCategory.length === categories.length}
+                                            onChange={handleSelectAll}
+                                            color='black'
+                                            className='w-4 h-4 border-2 border-gray-600 rounded-sm'
+                                        />
+                                        <Typography className='text-sm sm:text-base font-custom font-medium capitalize text-secondary'>
+                                            Select All
+                                        </Typography>
+                                    </div>
                                     {categories.map((category) => (
                                         <div key={category.id} className='flex items-center space-x-0 shrink-0'>
-                                            <Checkbox
-                                                checked={couponCategory.length === categories.length}
-                                                onChange={handleSelectAll}
-                                                color='black'
-                                                className='w-4 h-4 border-2 border-gray-600 rounded-sm'
-                                            />
-                                            <Typography className='text-sm sm:text-base font-custom font-medium capitalize text-secondary'>
-                                                Select All
-                                            </Typography>
                                             <Checkbox
                                                 checked={couponCategory.includes(category.id)}
                                                 onChange={() => handleCategorySelect(category.id)}

@@ -12,7 +12,7 @@ import { RiDeleteBin5Line } from 'react-icons/ri';
 
 const FavouriteProduct = () => {
     const navigate = useNavigate();
-    const { BASE_URL } = useContext(AppContext);
+    const { BASE_URL, setFav } = useContext(AppContext);
     const [wishlist, setWishlist] = useState([])
     const [isLoading, setIsLoading] = useState(true);
     const wishlistProducts = wishlist?.items || [];
@@ -47,10 +47,11 @@ const FavouriteProduct = () => {
             });
 
             if (response.status === 200) {
-                setWishlist((prev) => ({
-                    ...prev,
-                    items: prev.items.filter((item) => item.productId._id !== productId),
-                }));
+                setWishlist((prev) => {
+                    const updatedItems = prev.items.filter((item) => item.productId._id !== productId);
+                    setFav((prevFav) => prevFav.filter((item) => item.productId._id !== productId));  // Update fav.length
+                    return { ...prev, items: updatedItems };
+                });
                 toast.success('Product removed from wishlist');
             }
         } catch (error) {
@@ -65,8 +66,12 @@ const FavouriteProduct = () => {
             const userId = localStorage.getItem('userId')
             const response = await axios.delete(`${BASE_URL}/user/wishlist/clear/${userId}`)
             console.log(response.data);
+            setWishlist((prev) => {
+                const updatedWishlist = { ...prev, items: [] };  // Clear wishlist items
+                setFav([]);  // Clear favorites as well
+                return updatedWishlist;
+            });
             toast.success('Wishlist is cleared')
-            setWishlist((prev) => ({ ...prev, items: [] }));
         } catch (error) {
             console.log(error);
         }

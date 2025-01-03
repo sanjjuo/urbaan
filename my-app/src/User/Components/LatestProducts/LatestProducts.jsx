@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const LatestProducts = () => {
-  const { BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext);
+  const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext);
   const [latestProducts, setLatestProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [heartIcons, setHeartIcons] = useState({}); // Store heart icon state for each product
@@ -59,6 +59,14 @@ const LatestProducts = () => {
         ...prevState,
         [productId]: !isInWishlist, // Set the heart icon to filled
       }));
+
+      setFav((prevFav) => {
+        const isAlreadyFav = prevFav.some(
+          (item) => item.productId === payload.productId
+        );
+        return isAlreadyFav ? prevFav : [...prevFav, payload];
+      });
+
       toast.success(`${productTitle} added to wishlist`);
 
     } catch (error) {

@@ -19,9 +19,8 @@ import { useEffect } from 'react';
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const ProductDetails = () => {
-    const { handleOpenSizeDrawer, BASE_URL, favProduct, setOpenUserNotLogin } = useContext(AppContext)
+    const { handleOpenSizeDrawer, BASE_URL, favProduct, setOpenUserNotLogin, setCart, setFav } = useContext(AppContext)
     const location = useLocation();
-    const isFavouritePage = location.pathname === "/favourite";
     const { productId } = location.state || {}
     const navigate = useNavigate();
     const [productDetails, setProductDetails] = useState([]);
@@ -91,12 +90,26 @@ const ProductDetails = () => {
                 },
             });
 
-            if (response.status === 200) {
+            if (response.status === 200 || response.status === 201) {
                 toast.success(`${productDetails.title} added to your cart`);
+                setCart((prevCart) => {
+                    const item = prevCart.find(
+                        (item) =>
+                            item.productId === payload.productId &&
+                            item.color === payload.color &&
+                            item.size === payload.size
+                    );
+                    if (item) {
+                        item.quantity += 1;
+                        return [...prevCart];
+                    }
+                    return [...prevCart, payload];
+                });
             }
         } catch (error) {
             console.error(error);
             alert("Failed to add to cart. Please try again.");
+
         }
     };
 
@@ -135,6 +148,13 @@ const ProductDetails = () => {
                     ...prevState,
                     [productId]: true,
                 }));
+
+                setFav((prevFav) => {
+                    const isAlreadyFav = prevFav.some(
+                        (item) => item.productId === payload.productId
+                    );
+                    return isAlreadyFav ? prevFav : [...prevFav, payload];
+                });
 
                 toast.success(`${productTitle} added to wishlist`);
             } else {
@@ -319,7 +339,7 @@ const ProductDetails = () => {
             <SizeChart />
 
             {/* popup for non-logged users */}
-            <UserNotLoginPopup  
+            <UserNotLoginPopup
                 title='You are not logged in'
                 description='To add items to your cart and complete your purchase, please log in or create an account.'
             />

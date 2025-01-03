@@ -5,15 +5,20 @@ import { Link } from 'react-router-dom';
 import { AppContext } from "../../../../StoreContext/StoreContext";
 import AppLoader from '../../../../Loader';
 import axios from 'axios';
+import toast from 'react-hot-toast';
+import { DeleteModal } from '../../DeleteModal/DeleteModal';
 
 const TABLE_HEAD = ["user name", "mobile", "address", "city", "state", "pincode", "Action"];
 
 const UsersListTable = () => {
     const [userList, setUserList] = useState([]);
-    const { BASE_URL } = useContext(AppContext);
+    const { BASE_URL, open, handleOpen, modalType, } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedUserId, setSelectedUserId] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
+
+    const token = localStorage.getItem('token')
 
     // Get current items to display
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -50,6 +55,23 @@ const UsersListTable = () => {
         fetchUserList();
     }, [BASE_URL]);
 
+    // handle delete user
+    const handleDeleteUser = async (UserId) => {
+        try {
+            const response = await axios.delete(`${BASE_URL}/admin/users/delete/${UserId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data);
+            setUserList((prevUserList) => prevUserList.filter(user => user.id !== UserId));
+            handleOpen();
+            toast.success("User is deleted")
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             {isLoading || userList.length === 0 ? (
@@ -59,7 +81,7 @@ const UsersListTable = () => {
             ) : (
                 <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
                     <CardBody>
-                    <table className="w-full table-auto text-left border-collapse">
+                        <table className="w-full table-auto text-left border-collapse">
                             <thead>
                                 <tr className="bg-quaternary">
                                     {TABLE_HEAD.map((head) => (
@@ -152,7 +174,10 @@ const UsersListTable = () => {
                                                         <MenuItem className="font-custom text-processingBg hover:!text-processingBg">
                                                             Suspend
                                                         </MenuItem>
-                                                        <MenuItem className="font-custom text-primary hover:!text-primary">
+                                                        <MenuItem onClick={() => {
+                                                            handleOpen("deleteModal");
+                                                            setSelectedUserId(user.id)
+                                                        }} className="text-deleteBg font-custom">
                                                             Delete
                                                         </MenuItem>
                                                     </MenuList>
@@ -195,6 +220,16 @@ const UsersListTable = () => {
                     </CardFooter>
                 </Card>
             )}
+
+            <DeleteModal
+                open={open === "deleteModal"}
+                handleOpen={handleOpen}
+                title="Are you sure?"
+                description="Do you really want to delete this user? This action cannot be undone."
+                handleDelete={handleDeleteUser}
+                UserId={selectedUserId}
+                modalType="user"
+            />
         </>
     );
 };
