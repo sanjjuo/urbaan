@@ -128,7 +128,7 @@ const OfferProducts = () => {
                                             <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize'>
                                                 {product.description}
                                             </p>
-                                            <div className='flex items-center gap-3 mt-2'>
+                                            <div className='flex items-end gap-3 mt-2'>
                                                 <p className="text-gray-600 font-normal text-sm xl:text-base lg:text-base">
                                                     ₹<s>{product.actualPrice}</s>
                                                 </p>

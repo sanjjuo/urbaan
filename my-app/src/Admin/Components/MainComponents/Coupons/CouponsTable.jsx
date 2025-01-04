@@ -70,6 +70,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
             console.log(response.data);
             handleOpen()
             toast.success('Coupon is deleted')
+            setAdminCoupon((prevCoupons) => prevCoupons.filter((coupon) => coupon._id !== couponId));
         } catch (error) {
             console.log(error, ": Error deleting coupon");
             alert("Coupon is not deleted")
@@ -218,7 +219,7 @@ const CouponsTable = ({ adminCoupon, setAdminCoupon }) => {
                                                                     handleEditModal(coupon);
                                                                     setSelectCouponId(coupon._id)
                                                                 }}
-                                                                    className={`font-custom text-buttonBg hover:!text-buttonBg ${selectCouponId ? 'bg-buttonBg text-white' : ''}`}>Edit</MenuItem>
+                                                                    className={`font-custom !text-buttonBg hover:!text-buttonBg ${selectCouponId ? 'text-white' : ''}`}>Edit</MenuItem>
                                                                 <MenuItem onClick={() => {
                                                                     setSelectCouponId(coupon._id);
                                                                     handleOpen("deleteModal")

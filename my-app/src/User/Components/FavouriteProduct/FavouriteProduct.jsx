@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 import AppLoader from '../../../Loader';
-import { MdDelete } from 'react-icons/md';
 import toast from 'react-hot-toast';
 import { HiOutlineXMark } from 'react-icons/hi2';
 import { RiDeleteBin5Line } from 'react-icons/ri';

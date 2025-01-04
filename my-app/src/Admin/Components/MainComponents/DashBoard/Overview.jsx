@@ -36,7 +36,7 @@ const Overview = () => {
                     <ul className='flex justify-between'>
                         <li className='flex flex-col gap-2'>
                             <span className='text-gray-700 text-base'>Total Customers</span>
-                            <span className='text-secondary text-3xl font-semibold'>{overView.totalUsers}</span>
+                            <span className='text-secondary text-3xl font-semibold'>{overView.totalUsers || 0}</span>
                         </li>
                         <li className='w-[50px] h-[50px] bg-O1/30 p-3 rounded-2xl'>
                             <img src="/group.png" alt="" className='w-full h-full object-contain' />
@@ -49,7 +49,7 @@ const Overview = () => {
                     <ul className='flex justify-between'>
                         <li className='flex flex-col gap-2'>
                             <span className='text-gray-700 text-base'>Total Orders</span>
-                            <span className='text-secondary text-3xl font-semibold'>{overView.totalOrders}</span>
+                            <span className='text-secondary text-3xl font-semibold'>{overView.totalOrders || 0}</span>
                         </li>
                         <li className='w-[50px] h-[50px] bg-O2/30 p-3 rounded-2xl'>
                             <img src="/box.png" alt="" className='w-full h-full object-contain' />
@@ -77,7 +77,7 @@ const Overview = () => {
                     <ul className='flex justify-between'>
                         <li className='flex flex-col gap-2'>
                             <span className='text-gray-700 text-base'>Total Earnings</span>
-                            <span className='text-secondary text-3xl font-semibold'>{overView.totalRevenue}</span>
+                            <span className='text-secondary text-3xl font-semibold'>{overView.totalRevenue || 0}</span>
                         </li>
                         <li className='w-[50px] h-[50px] bg-O3/30 p-3 rounded-2xl'>
                             <img src="/chart.png" alt="" className='w-full h-full object-contain' />

@@ -137,7 +137,7 @@ export function AddCouponModal({ open, handleOpen }) {
                             {/* title */}
                             <div className='flex justify-between items-center gap-2'>
                                 <div className='flex flex-col gap-1 w-1/2'>
-                                    <label htmlFor="" className='font-normal text-base'>Coupon title</label>
+                                    <label htmlFor="" className='font-normal text-base'>Coupon Title</label>
                                     <input
                                         type="text"
                                         name="name"
