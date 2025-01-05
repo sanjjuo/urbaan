@@ -9,12 +9,13 @@ import { AppContext } from '../../../StoreContext/StoreContext';
 import toast from 'react-hot-toast';
 import ApplyCouponModal from './ApplyCouponModal';
 import AppLoader from '../../../Loader';
+import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
-const CartDetails = ({ cartItems, viewCart }) => {
+const CartDetails = ({ viewCart }) => {
     const navigate = useNavigate();
     const location = useLocation()
     const { selectedAddress } = location.state || {};
-    const { BASE_URL } = useContext(AppContext);
+    const { BASE_URL, setOpenUserNotLogin } = useContext(AppContext);
     const [checkoutId, setCheckoutId] = useState('')
     const [openCoupon, setOpenCoupon] = React.useState(false); // modal for coupon
     const [defaultAddress, setDefaultAddress] = useState([])
@@ -56,8 +57,9 @@ const CartDetails = ({ cartItems, viewCart }) => {
             return newCheckoutId; // Return the checkoutId for further use
         } catch (error) {
             console.error("Error during checkout:", error.response?.data || error.message);
-            toast.error("Failed to initiate checkout. Please try again.");
-            return null; // Return null to signal failure
+            if (error.response.status === 401) {
+                setOpenUserNotLogin(true)
+            }
         }
     };
 
@@ -182,6 +184,12 @@ const CartDetails = ({ cartItems, viewCart }) => {
                 handleCouponModalOpen={handleCouponModalOpen}
                 openCoupon={openCoupon}
             />
+
+            <UserNotLoginPopup
+                title="Session Expired"
+                description="Your session has expired. Please log in again to continue."
+            />
+
         </>
     )
 }

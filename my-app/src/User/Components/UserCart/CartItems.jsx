@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { HiOutlineXMark } from "react-icons/hi2";
 
 const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
-    const { BASE_URL, setCart } = useContext(AppContext);
+    const { BASE_URL } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdating, setIsUpdating] = useState(false);
 

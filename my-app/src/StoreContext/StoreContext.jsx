@@ -17,6 +17,9 @@ const StoreContext = ({ children }) => {
     const [favProduct, setFavproduct] = useState([]) //this is for displaying heartfilled icon if product is in wishlist
     const [cart, setCart] = useState([]) //is for updating cart length in product details and navbar
     const [fav, setFav] = useState([]) // is for updating fav length in product details and navbar
+    const [searchedProducts, setSearchedProducts] = useState([])
+    const [searchUser, setSearchUser] = useState('')
+    // above serach bar state for used in both navbar search in desktop and userSearch.jsx in mobile side
 
 
     // Handle modal
@@ -87,7 +90,11 @@ const StoreContext = ({ children }) => {
                 cart,
                 setCart,
                 fav,
-                setFav
+                setFav,
+                searchUser,
+                searchedProducts,
+                setSearchedProducts,
+                setSearchUser
             }}
         >
             {children}

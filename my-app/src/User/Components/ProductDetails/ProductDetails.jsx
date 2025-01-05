@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import { FaStar } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa";
-import { Button, Chip } from '@material-tailwind/react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '@material-tailwind/react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FiShoppingCart } from "react-icons/fi";
 import { AppContext } from '../../../StoreContext/StoreContext';
 import { IoHeartOutline } from "react-icons/io5";
 import { IoIosArrowBack } from 'react-icons/io';
-import { RiHeart3Fill, RiHeart3Line, RiSearch2Line } from 'react-icons/ri';
+import { RiHeart3Fill } from 'react-icons/ri';
 import SimilarProducts from './SimilarProducts';
 import ProductReviews from './ProductReviews';
 import { SizeChart } from './SIzeChart';
@@ -27,6 +27,14 @@ const ProductDetails = () => {
     const [selectedColor, setSelectedColor] = useState("");
     const [selectedSize, setSelectedSize] = useState({});
     const [heartIcons, setHeartIcons] = useState({});
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalDescription, setModalDescription] = useState('');
+    const [showMore, setShowMore] = useState(false);
+
+
+    const toggleShowMore = () => {
+        setShowMore(!showMore);
+    };
 
 
 
@@ -68,7 +76,9 @@ const ProductDetails = () => {
             }
 
             if (!userId && !userToken) {
-                setOpenUserNotLogin(true)
+                setModalTitle('You are not logged in');
+                setModalDescription('To add items to your cart and complete your purchase, please log in or create an account.');
+                setOpenUserNotLogin(true);
                 return;
             }
 
@@ -108,7 +118,11 @@ const ProductDetails = () => {
             }
         } catch (error) {
             console.error(error);
-            alert("Failed to add to cart. Please try again.");
+            if (error.response && error.response.status === 401) {
+                setModalTitle('Session Expired');
+                setModalDescription('Your session has expired. Please log in again to continue.');
+                setOpenUserNotLogin(true);
+            }
 
         }
     };
@@ -296,20 +310,27 @@ const ProductDetails = () => {
                                         </div>
                                     ))
                                 }
-                                <div className="grid grid-cols-2 gap-x-4 mb-3">
-                                    <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacuturer Name</span>
-                                    <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerName}</span>
-                                </div>
-                                <div className="grid grid-cols-2 gap-x-4 mb-3">
-                                    <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Brand</span>
-                                    <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerBrand}</span>
-                                </div>
-                                <div className="grid grid-cols-2 gap-x-4 mb-3">
-                                    <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Address</span>
-                                    <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerAddress}</span>
-                                </div>
-                                <p className="text-xs text-buttonBg text-left font-semibold underline cursor-pointer mt-5">
-                                    See more
+                                {showMore && (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-x-4 mb-3">
+                                            <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Name</span>
+                                            <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerName}</span>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-x-4 mb-3">
+                                            <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Brand</span>
+                                            <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerBrand}</span>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-x-4 mb-3">
+                                            <span className="font-normal capitalize text-xs xl:text-sm lg:text-sm text-gray-600">Manufacturer Address</span>
+                                            <span className="text-left capitalize text-xs xl:text-sm lg:text-sm">{productDetails.manufacturerAddress}</span>
+                                        </div>
+                                    </>
+                                )}
+                                <p
+                                    className={`text-xs ${showMore ? 'text-buttonBg' : 'text-primary'} text-left font-semibold underline underline-offset-2 cursor-pointer mt-5`}
+                                    onClick={toggleShowMore}
+                                >
+                                    {showMore ? 'See less' : 'See more'}
                                 </p>
                             </div>
 
@@ -340,9 +361,10 @@ const ProductDetails = () => {
 
             {/* popup for non-logged users */}
             <UserNotLoginPopup
-                title='You are not logged in'
-                description='To add items to your cart and complete your purchase, please log in or create an account.'
+                title={modalTitle}
+                description={modalDescription}
             />
+
         </>
     )
 }

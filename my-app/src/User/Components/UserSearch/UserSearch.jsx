@@ -5,15 +5,13 @@ import { AppContext } from '../../../StoreContext/StoreContext'
 import toast from 'react-hot-toast'
 import { RiHeart3Fill, RiHeart3Line } from 'react-icons/ri'
 import { IoIosArrowBack } from 'react-icons/io'
-import SearchBar from '../Navbar/SearchBar'
 import { RxCountdownTimer } from 'react-icons/rx'
+import UserSearchBar from './UserSearchBar'
 
 const UserSearch = () => {
-    const { BASE_URL, favProduct, setFav } = useContext(AppContext)
+    const { BASE_URL, favProduct, setFav, searchedProducts, setSearchedProducts, searchUser } = useContext(AppContext)
     const navigate = useNavigate()
-    const [searchedProducts, setSearchedProducts] = useState([])
     const [heartIcons, setHeartIcons] = useState({})
-    const [searchUserProducts, setSearchedUserProducts] = useState('')
 
     useEffect(() => {
         const fetchSearchedProducts = async () => {
@@ -51,7 +49,7 @@ const UserSearch = () => {
                     );
                     return isAlreadyFav ? prevFav : [...prevFav, payload];
                 });
-    
+
 
                 toast.success(`${productTitle} added to wishlist`)
             } else {
@@ -69,14 +67,10 @@ const UserSearch = () => {
             </h1>
 
             <div className='mt-5'>
-                <SearchBar
-                    searchUserProducts={searchUserProducts}
-                    setSearchedUserProducts={setSearchedUserProducts}
-                    setSearchedProducts={setSearchedProducts}
-                />
+                <UserSearchBar />
             </div>
 
-            {searchUserProducts.length === 0 ? (
+            {searchUser.length === 0 ? (
                 <div>
                     <div className='mt-10'>
                         <h3 className='text-base font-medium text-secondary'>Your Recent Searches</h3>

@@ -3,7 +3,7 @@ import React, { useEffect, useContext } from 'react'
 import { RiSearch2Line } from 'react-icons/ri'
 import { AppContext } from '../../../StoreContext/StoreContext'
 
-const SearchBar = () => {
+const UserSearchBar = () => {
     const { BASE_URL, setSearchedProducts, searchUser, setSearchUser } = useContext(AppContext)
 
     useEffect(() => {
@@ -40,4 +40,4 @@ const SearchBar = () => {
     )
 }
 
-export default SearchBar
+export default UserSearchBar
