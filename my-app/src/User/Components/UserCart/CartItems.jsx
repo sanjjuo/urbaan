@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { HiOutlineXMark } from "react-icons/hi2";
 
 const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
-    const { BASE_URL } = useContext(AppContext);
+    const { BASE_URL, setCart } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdating, setIsUpdating] = useState(false);
 
@@ -128,14 +128,24 @@ const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
                 // Remove item from local state
                 const updatedCartItems = cartItems.filter(cartItem => cartItem.productId._id !== itemId);
                 setCartItems(updatedCartItems);
-                // setCart(updatedCartItems);
+                setCart(updatedCartItems);
 
                 // Update global cart state
-                setViewCart(prevViewCart => ({
-                    ...prevViewCart,
-                    items: updatedCartItems,
-                    totalPrice: updatedCartItems.reduce((total, cartItem) => total + cartItem.price * cartItem.quantity, 0),
-                }));
+                setViewCart(prevViewCart => {
+                    // Calculate new total price
+                    const newTotalPrice = updatedCartItems.reduce((total, cartItem) => total + cartItem.price * cartItem.quantity, 0);
+
+                    // Recalculate discounted total (you can include coupon amount or any other factors here)
+                    const newDiscountedTotal = newTotalPrice - (prevViewCart?.coupenAmount || 0);
+
+                    return {
+                        ...prevViewCart,
+                        items: updatedCartItems,
+                        totalPrice: newTotalPrice,
+                        discountedTotal: newDiscountedTotal, // Update the discounted total here
+                    };
+                });
+
 
                 toast.success('Item removed from the cart');
             } else {
@@ -157,8 +167,9 @@ const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
                 }
             })
             console.log(response.data);
-            setCartItems([]);
-            setViewCart({ items: [] });
+            setCartItems([]); // Clear the local cart items
+            setViewCart({ items: [], totalPrice: 0 });
+            setCart([])
             toast.success('Cart cleared successfully');
         } catch (error) {
             console.log(error);

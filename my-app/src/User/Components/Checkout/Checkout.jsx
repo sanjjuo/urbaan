@@ -132,7 +132,7 @@ const Checkout = () => {
                         <div className="col-span-2 flex justify-center items-center h-[50vh]">
                             <AppLoader />
                         </div>
-                    ) : orderList.length === 0 ? (
+                    ) : checkoutDetails === '' ? (
                         <div className="flex flex-col items-center justify-center h-[50vh] text-center">
                             <Typography variant="h6" className="text-gray-700 font-semibold">
                                 No orders available.
