@@ -134,7 +134,6 @@ const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
                 setViewCart(prevViewCart => {
                     // Calculate new total price
                     const newTotalPrice = updatedCartItems.reduce((total, cartItem) => total + cartItem.price * cartItem.quantity, 0);
-
                     // Recalculate discounted total (you can include coupon amount or any other factors here)
                     const newDiscountedTotal = newTotalPrice - (prevViewCart?.coupenAmount || 0);
 
