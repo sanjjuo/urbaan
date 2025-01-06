@@ -51,7 +51,6 @@ const UserProfile = () => {
                   <p className='uppercase xl:text-4xl lg:text-4xl underline underline-offset-8 text-primary'>create an account</p>
                 </Link>
               </div>
-
             </div>
           </>
         ) : (

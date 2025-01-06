@@ -6,14 +6,13 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import AppLoader from '../../../../Loader';
 
-const TABLE_HEAD = ["payment ID", "Customer", "mobile", "Date", "amount", "Status", "action"];
+const TABLE_HEAD = ["invoice Number", "Customer", "mobile", "Date", "sub total", "delivery charge", "discount", "total", "payment", "Status", "action"];
 
 const InvoiceTable = ({ invoice, setInvoice }) => {
     const { BASE_URL } = useContext(AppContext)
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
     const [isLoading, setIsLoading] = useState(true)
-    const [selectedInvoiceId, setSelectedInvoiceId] = useState(null)
 
     // Predefined allowed statuses
     const allowedStatuses = ["Paid", "Refund", "Unpaid", "Pending"];
@@ -108,14 +107,14 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                 ) : (
                     <>
                         <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
-                            <CardBody>
-                            <table className="w-full table-auto text-left border-collapse">
+                            <CardBody className=''>
+                            <table className="w-full table-auto text-left">
                                     <thead>
                                         <tr className='bg-quaternary'>
                                             {TABLE_HEAD.map((head) => (
                                                 <th
                                                     key={head}
-                                                    className="border-b border-blue-gray-100 p-4 text-center"
+                                                    className="border-b border-blue-gray-100 p-3 text-center"
                                                 >
                                                     <Typography
                                                         variant="small"
@@ -139,7 +138,7 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                                             variant="small"
                                                             className="font-normal font-custom text-sm uppercase"
                                                         >
-                                                            {invoice.paymentId}
+                                                            {invoice.invoice_Number}
                                                         </Typography>
                                                     </td>
                                                     <td className={classes}>
@@ -170,13 +169,48 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                                             })}
                                                         </Typography>
                                                     </td>
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal capitalize font-custom text-sm"
+                                                        >
+                                                            ₹{invoice.SubTotalAmount || 0}
+                                                        </Typography>
+                                                    </td>
+
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal capitalize font-custom text-sm"
+                                                        >
+                                                            ₹{invoice.Delivery_Charge || 0}
+                                                        </Typography>
+                                                    </td>
+
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal capitalize font-custom text-sm"
+                                                        >
+                                                            ₹{invoice.Discounted_Amount || 0}
+                                                        </Typography>
+                                                    </td>
+
+                                                    <td className={classes}>
+                                                        <Typography
+                                                            variant="small"
+                                                            className="font-normal capitalize font-custom text-sm"
+                                                        >
+                                                            ₹{invoice.totalAmount || 0}
+                                                        </Typography>
+                                                    </td>
 
                                                     <td className={classes}>
                                                         <Typography
                                                             variant="small"
                                                             className="font-normal font-custom text-sm"
                                                         >
-                                                            ₹{invoice.totalAmount}
+                                                            ₹{invoice.totalAmount || 0}
                                                         </Typography>
                                                     </td>
                                                     <td className={classes}>

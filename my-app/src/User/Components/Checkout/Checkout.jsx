@@ -1,4 +1,4 @@
-import { Button, Card, Radio } from '@material-tailwind/react'
+import { Button, Card, Radio, Typography } from '@material-tailwind/react'
 import React, { useState, useEffect, useContext } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -16,7 +16,7 @@ const Checkout = () => {
     const [checkoutData, setCheckoutData] = useState({});
     const [isLoading, setIsLoading] = useState(true)
     const [deliveryCharge, setDeliveryCharge] = useState([]);
-    const [paymentMethod, setPaymentMethod] = useState('Online Payment')
+    const [paymentMethod, setPaymentMethod] = useState('')
 
     const checkoutDetails = checkoutData.checkout;
     console.log(checkoutDetails);
@@ -129,8 +129,17 @@ const Checkout = () => {
                 </h1>
                 <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 mt-10 gap-5'>
                     {isLoading ? (
-                        <div className='flex justify-center items-center h-[50vh]'>
+                        <div className="col-span-2 flex justify-center items-center h-[50vh]">
                             <AppLoader />
+                        </div>
+                    ) : orderList.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-[50vh] text-center">
+                            <Typography variant="h6" className="text-gray-700 font-semibold">
+                                No orders available.
+                            </Typography>
+                            <Typography variant="small" className="text-gray-500 mt-2">
+                                Once you place an order, it will appear here.
+                            </Typography>
                         </div>
                     ) : (
                         <>
@@ -326,21 +335,39 @@ const Checkout = () => {
                                     </ul>
                                     <div className='mt-5'>
                                         <h3 className='font-medium text-sm xl:text-base lg:text-base text-secondary'>Payment Options</h3>
-                                        <div className='flex flex-col xl:flex-row lg:flex-row lg:items-center xl:items-center gap-0 xl:gap-10 lg:gap-10'>
-                                            <Radio
-                                                name="type"
-                                                label="Online Payment"
-                                                color='pink'
-                                                checked={paymentMethod === 'Online Payment'}
-                                                onChange={() => setPaymentMethod('Online Payment')} // Explicitly setting the value
-                                            />
+                                        <div className='flex flex-col xl:flex-row lg:flex-row lg:items-center xl:items-center gap-0 xl:gap-4 lg:gap-4'>
                                             <Radio
                                                 name="type"
                                                 label="Cash on Delivery"
                                                 color='pink'
+                                                disabled
                                                 checked={paymentMethod === 'Cash on Delivery'}
                                                 onChange={() => setPaymentMethod('Cash on Delivery')} // Explicitly setting the value
                                             />
+                                            <Radio
+                                                name="type"
+                                                label="Credit Card"
+                                                color='pink'
+                                                checked={paymentMethod === 'Credit Card'}
+                                                onChange={() => setPaymentMethod('Credit Card')} // Explicitly setting the value
+                                            />
+
+                                            <Radio
+                                                name="type"
+                                                label="UPI"
+                                                color='pink'
+                                                checked={paymentMethod === 'UPI'}
+                                                onChange={() => setPaymentMethod('UPI')} // Explicitly setting the value
+                                            />
+
+                                            <Radio
+                                                name="type"
+                                                label="Net Banking"
+                                                color='pink'
+                                                checked={paymentMethod === 'Net Banking'}
+                                                onChange={() => setPaymentMethod('Net Banking')} // Explicitly setting the value
+                                            />
+
 
                                         </div>
                                     </div>
