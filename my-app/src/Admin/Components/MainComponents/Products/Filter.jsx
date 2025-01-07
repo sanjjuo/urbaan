@@ -6,7 +6,7 @@ import { AppContext } from '../../../../StoreContext/StoreContext';
 import axios from 'axios';
 import AppLoader from '../../../../Loader';
 
-const Filter = ({ view, setView, categoryFilter, setCategoryFilter }) => {
+const Filter = ({ view, setView, categoryFilter, setCategoryFilter, setProducts }) => {
     const [categories, setCategories] = useState([]);
     const { BASE_URL } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
@@ -30,24 +30,43 @@ const Filter = ({ view, setView, categoryFilter, setCategoryFilter }) => {
     // Handle filter submission
     const handleFilter = async () => {
         try {
+            let response;
+            if (categoryFilter.length === 0) {
+                // Fetch all products if no category is selected
+                response = await axios.get(`${BASE_URL}/admin/products/view-products`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setProducts(response.data)
+            } else {
+                // Filter products by selected categories
+                const filterPayload = { categoryIds: categoryFilter };
+                response = await axios.post(
+                    `${BASE_URL}/admin/products/filter`,
+                    filterPayload,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                // Update the product list based on the response
+                setProducts(response.data.products);
+            }
 
-            const filterPayload = {
-                categoryIds: categoryFilter,
-            }
-            const response = await axios.post(
-                `${BASE_URL}/admin/products/filter`, filterPayload, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-            );
-            console.log("Filtered products:", response.data);
         } catch (error) {
             console.error("Error filtering products:", error);
+        } finally {
+            setIsLoading(false);  // End loading
         }
     };
 
-    // Handle category selection
+    useEffect(() => {
+        handleFilter();
+    }, [categoryFilter, BASE_URL, token]);  // Re-run when categoryFilter changes
+
+
     const handleCategoryChange = (categoryId) => {
         setCategoryFilter((prev) =>
             prev.includes(categoryId)
@@ -55,6 +74,7 @@ const Filter = ({ view, setView, categoryFilter, setCategoryFilter }) => {
                 : [...prev, categoryId]
         );
     };
+
 
     return (
         <div className='bg-white shadow-sm border-[1px] rounded-xl p-5'>
@@ -83,6 +103,7 @@ const Filter = ({ view, setView, categoryFilter, setCategoryFilter }) => {
                         categories.map((category) => (
                             <Checkbox
                                 key={category.id}
+                                value={category.id}
                                 checked={categoryFilter.includes(category.id)}
                                 onChange={() => handleCategoryChange(category.id)}
                                 label={

@@ -9,10 +9,9 @@ import { Card } from '@material-tailwind/react';
 import AppLoader from '../../../../Loader';
 import toast from 'react-hot-toast';
 
-const AddedCategories = ({ createEdit, handleEditCategory }) => {
+const AddedCategories = ({ createEdit, handleEditCategory, adminCategory, setAdminCategory }) => {
     const { open, handleOpen, modalType, BASE_URL } = useContext(AppContext);
     const [readMoreDetails, setReadMoreDetails] = useState(null);
-    const [adminCategory, setAdminCategory] = useState([]);
     const [selectedCatId, setSelectedCatId] = useState(null); // Track selected category ID for deletion
     const [isLoading, setIsLoading] = useState(true)
 

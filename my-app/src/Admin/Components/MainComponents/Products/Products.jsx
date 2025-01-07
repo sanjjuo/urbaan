@@ -79,7 +79,8 @@ const Products = () => {
             view={view}
             setView={setView}
             categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter} />
+            setCategoryFilter={setCategoryFilter}
+            setProducts={setProducts} />
         </div>
         <div className='grid col-span-6 overflow-y-auto hide-scrollbar space-y-5'>
           <Link

@@ -8,9 +8,8 @@ import toast from 'react-hot-toast';
 
 const TABLE_HEAD = ["Sub Category", "Category", "Status", "Action"];
 
-const AddedSubCategories = ({ createEditSub, handleEditCategory }) => {
+const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, setSubCategory }) => {
     const { open, handleOpen, modalType, BASE_URL } = useContext(AppContext);
-    const [subCategory, setSubCategory] = useState([]);
     const [selectedCatId, setSelectedCatId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);

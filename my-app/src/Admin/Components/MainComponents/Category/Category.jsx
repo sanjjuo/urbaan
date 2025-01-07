@@ -4,10 +4,18 @@ import CreateCategories from './CreateCategories';
 import AddedCategories from './AddedCategories';
 import EditCategories from './EditCategories';
 import { RiSearch2Line } from 'react-icons/ri';
+import axios from 'axios';
+import { useContext } from 'react';
+import { AppContext } from '../../../../StoreContext/StoreContext';
+import { useEffect } from 'react';
 
 const Category = () => {
+  const { BASE_URL } = useContext(AppContext);
   const [createEdit, setCreateEdit] = useState("create");
   const [initialData, setInitialData] = useState(null);  // for displaying initial input fields on edit catgeory form before editing the form
+  const [adminCategory, setAdminCategory] = useState([]);
+  const [searchCategory, setSearchCategory] = useState('')
+
 
   const handleEditCategory = (category) => {
     setCreateEdit('edit');
@@ -15,6 +23,19 @@ const Category = () => {
     console.log(category);
 
   };
+
+  // handle category search
+  useEffect(() => {
+    const handleCategorySearch = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/admin/category/search?name=${searchCategory}`)
+        setAdminCategory(response.data)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    handleCategorySearch()
+  }, [searchCategory])
 
   return (
     <>
@@ -48,6 +69,8 @@ const Category = () => {
             <input
               type="search"
               name="search"
+              value={searchCategory}
+              onChange={(e) => setSearchCategory(e.target.value)}
               placeholder="Search Category"
               className="bg-transparent placeholder:text-gray-700 placeholder:text-base focus:outline-none text-secondary w-full"
             />
@@ -55,7 +78,11 @@ const Category = () => {
 
           {/* Added Categories */}
           <div className="grid lg:grid-cols-2 gap-5 h-[calc(100vh-10rem)] overflow-y-auto hide-scrollbar">
-            <AddedCategories createEdit={createEdit} handleEditCategory={handleEditCategory} />
+            <AddedCategories
+              createEdit={createEdit}
+              handleEditCategory={handleEditCategory}
+              adminCategory={adminCategory}
+              setAdminCategory={setAdminCategory} />
           </div>
         </div>
       </div>

@@ -35,6 +35,22 @@ const SalesGraph = () => {
         fetchGraphDetails();
     }, [BASE_URL]);
 
+    // Helper function to format month names
+    const formatMonth = (month) => {
+        const date = new Date(month + ' 1, 2020');  // Use any year for parsing
+        return date.toLocaleString('en-US', { month: 'short' });
+    };
+
+    // Helper function to format revenue (e.g., 15000 -> 15k)
+    const formatRevenue = (revenue) => {
+        if (revenue >= 1000) {
+            return `${(revenue / 1000).toFixed(0)}k`;
+        }
+        return revenue;
+    };
+
+
+
     return (
         <div className='p-10 mt-10 bg-white rounded-xl shadow-md'>
             <div className="flex items-center justify-between">
@@ -57,7 +73,7 @@ const SalesGraph = () => {
                     <div className='w-[100%]'>
                         <LineChart
                             xAxis={[{
-                                data: graphData.map(item => item.x),
+                                data: graphData.map(item => formatMonth(item.x)),
                                 tickNumber: 12,
                                 scaleType: 'point',
                                 valueFormatter: (value) => value,
@@ -65,7 +81,7 @@ const SalesGraph = () => {
                             yAxis={[{
                                 min: 0,
                                 tickNumber: 5,
-                                valueFormatter: (value) => `$${value}`,
+                                valueFormatter: (value) => formatRevenue(value),
                             }]}
                             series={[{
                                 data: graphData.map(item => item.y),

@@ -8,9 +8,8 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import AppLoader from '../../../../Loader';
 
-const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
+const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, setAdminCarousel }) => {
     const { open, handleOpen, BASE_URL, modalType } = useContext(AppContext);
-    const [adminCarousel, setAdminCarousel] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedCarouselId, setSelectedCarouselId] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -99,7 +98,7 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel }) => {
                                         {/* <li className='text-secondary font-bold capitalize text-2xl'>{carousel.category}</li> */}
                                         <li className="flex items-center text-secondary">
                                             <span className="font-semibold w-24">Label:</span>
-                                            <span className='capitalize'>{carousel.label}</span>
+                                            <span className='capitalize'>{carousel?.label || 'null'}</span>
                                         </li>
                                         <li className="flex items-center text-secondary">
                                             <span className="font-semibold w-24">Title:</span>
