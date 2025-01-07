@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { FaStar } from "react-icons/fa6";
 import { FaCircle } from "react-icons/fa";
 import { Button } from '@material-tailwind/react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiShoppingCart } from "react-icons/fi";
 import { AppContext } from '../../../StoreContext/StoreContext';
 import { IoHeartOutline } from "react-icons/io5";
@@ -30,6 +30,43 @@ const ProductDetails = () => {
     const [modalTitle, setModalTitle] = useState('');
     const [modalDescription, setModalDescription] = useState('');
     const [showMore, setShowMore] = useState(false);
+    const [reviews, setReviews] = useState([]);
+
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/review/${productId}`);
+                setReviews(response.data);
+            } catch (error) {
+                console.error("Error fetching reviews:", error);
+            }
+        };
+        fetchReviews();
+    }, [productId]);
+
+    const calculateRatings = (reviews) => {
+        const totalReviews = reviews.length;
+
+        if (totalReviews === 0) {
+            return { averageRating: 0, totalReviews };
+        }
+
+        // Calculate average rating
+        const averageRating =
+            reviews.reduce((acc, review) => acc + review.rating, 0) / totalReviews;
+
+        // Calculate rating distribution
+        const ratingCounts = [0, 0, 0, 0, 0]; // 1 to 5 stars
+
+        reviews.forEach((review) => {
+            ratingCounts[review.rating - 1]++; // Count the ratings
+        });
+
+        return { averageRating, totalReviews };
+    };
+
+    const { averageRating, totalReviews } = calculateRatings(reviews);
 
 
     const toggleShowMore = () => {
@@ -179,10 +216,10 @@ const ProductDetails = () => {
         }
     };
 
-
     const colorSizes = productDetails.colors?.find(item => item.color === selectedColor)?.sizes || [];
     const colorColor = productDetails.colors || []
     const features = productDetails.features || []
+
 
 
     return (
@@ -227,16 +264,18 @@ const ProductDetails = () => {
                     <div className='col-span-2'>
                         <div className='flex justify-between items-center'>
                             <h1 className='text-secondary capitalize font-semibold text-xl xl:text-2xl lg:text-2xl'>{productDetails.title}</h1>
-                            <div className='flex items-center gap-1'>
-                                <p className='text-sm text-shippedBg'>4.1</p>
-                                <ul className='flex items-center gap-1 xl:gap-3 lg:gap-3'>
-                                    <li className='text-primary text-sm xl:text-base lg:text-base'><FaStar /></li>
-                                    <li className='text-primary text-sm xl:text-base lg:text-base'><FaStar /></li>
-                                    <li className='text-primary text-sm xl:text-base lg:text-base'><FaStar /></li>
-                                    <li className='text-primary text-sm xl:text-base lg:text-base'><FaStar /></li>
-                                    <li className='text-primary text-sm xl:text-base lg:text-base'><FaStar /></li>
-                                </ul>
-                                <p className='text-xs xl:text-sm lg:text-sm'>(103)</p>
+                            <div className='flex items-center gap-3'>
+                                <h2 className="flex items-center gap-1 text-sm xl:text-base lg:text-base">
+                                    {averageRating.toFixed(1)}
+                                    {Array.from({ length: 5 }, (_, index) => (
+                                        <FaStar
+                                            key={index}
+                                            className={index < Math.floor(averageRating) ? "text-ratingBg" : "text-gray-300"}
+                                        />
+                                    ))}
+                                </h2>
+
+                                <p className='text-xs xl:text-sm lg:text-sm'>({totalReviews})</p>
                             </div>
                         </div>
                         <p className='text-gray-600 text-xs capitalize xl:text-base lg:text-base'>{productDetails.description}</p>
@@ -336,9 +375,26 @@ const ProductDetails = () => {
 
 
                             {/* Customer Reviews */}
-                            <div className='mt-10'>
-                                <ProductReviews productId={productId} />
-                            </div>
+                            {totalReviews === 0 ? (
+                                <>
+                                    <div className='mt-10'>
+                                        <h4 className="font-medium mb-3 text-sm xl:text-base lg:text-base pb-3 border-b-2 border-gray-300">
+                                            Customer Reviews ({totalReviews})
+                                        </h4>
+                                        <p className='text-gray-600 flex justify-center items-center py-5 text-sm'>No reviews for this product</p>
+                                        <Link to='/write-review'>
+                                            <p className='text-center text-primary underline underline-offset-4'>Add review</p>
+                                        </Link>
+                                    </div>
+
+                                </>
+                            ) : (
+                                <>
+                                    <div className='mt-10'>
+                                        <ProductReviews productId={productId} />
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

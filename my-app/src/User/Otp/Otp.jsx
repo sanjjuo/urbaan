@@ -51,11 +51,11 @@ export function Otp() {
         }
       })
       console.log(response.data);
-      if (response.data.token && response.data.userId) {
+      if (response.data.token && response.data.user.userId) {
         localStorage.setItem("userToken", response.data.token);
-        localStorage.setItem('userId', response.data.userId || '');
-        toast.success("Account created successfully")
-        navigate('/')
+        localStorage.setItem('userId', response.data.user.userId || '');
+        toast.success("Account created successfully");
+        navigate('/');
       }
     } catch (error) {
       console.log(error);

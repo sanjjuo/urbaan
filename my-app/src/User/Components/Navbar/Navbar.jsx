@@ -3,35 +3,47 @@ import {
     Navbar,
     Typography,
     Button,
-    Chip,
 } from "@material-tailwind/react";
 import { RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
-import { RiHeart3Line } from "react-icons/ri";
-import { RiHeart3Fill } from "react-icons/ri";
-import { RiShoppingCartLine } from "react-icons/ri";
-import { RiShoppingCartFill } from "react-icons/ri";
 import { IoMenu } from "react-icons/io5";
 import BottomBar from '../BottomBar/BottomBar';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import MobileSidebar from './MobileSidebar';
 import { CategoryMenu } from './CategoryMenu';
-import SearchBar from './SearchBar';
 import { Link, useLocation } from 'react-router-dom';
 import { UserProfile } from './UserProfile';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { SearchDesktopDrawer } from './SearchDesktopDrawer';
 
 
 const NavList = () => {
-    const [navActive, setNavActive] = useState("home")
+    const { cart, fav } = useContext(AppContext)
+    const cartView = cart?.length || 0;
+    const favView = fav?.length || 0;
+    const location = useLocation();
+    const [navActive, setNavActive] = useState(() => {
+        const path = location.pathname;
+        if (path === '/') return 'home';
+        if (path == '/orders-tracking') return 'trackOrder'
+        if (path == '/favourite') return 'wishlist'
+        if (path == '/user-cart') return 'cart'
+    })
+
+    useEffect(() => {
+        const path = location.pathname;
+        if (path === '/') setNavActive("home");
+        if (path === '/orders-tracking') setNavActive("trackOrder");
+        if (path === '/favourite') setNavActive("wishlist");
+        if (path === '/user-cart') setNavActive("cart");
+    }, [location]);
 
     return (
         <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
             <Typography
                 as="li"
-                variant="small"
                 onClick={() => setNavActive("home")}
-                className={`p-1 font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                className={`p-1 uppercase text-base font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
                     hover:text-primary ${navActive === "home" ? "text-primary scale-110" : ""}`}
             >
                 <Link to="/" >
@@ -40,22 +52,40 @@ const NavList = () => {
             </Typography>
             <Typography
                 as="li"
-                variant="small"
                 onClick={() => setNavActive("categories")}
-                className={`p-1 font-medium cursor-pointer font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                className={`p-1 uppercase text-base font-medium cursor-pointer font-custom text-secondary transition-all transform duration-500 ease-in-out 
                     hover:text-primary ${navActive === "categories" ? "text-primary scale-110" : ""}`}
             >
                 <CategoryMenu />
             </Typography>
             <Typography
                 as="li"
-                variant="small"
                 onClick={() => setNavActive("trackOrder")}
-                className={`p-1 font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                className={`p-1 uppercase text-base font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
                     hover:text-primary ${navActive === "trackOrder" ? "text-primary scale-110" : ""}`}
             >
                 <Link to='/orders-tracking' >
                     Track Order
+                </Link>
+            </Typography>
+            <Typography
+                as="li"
+                onClick={() => setNavActive("wishlist")}
+                className={`p-1 uppercase text-base font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                    hover:text-primary ${navActive === "wishlist" ? "text-primary scale-110" : ""}`}
+            >
+                <Link to='/favourite' >
+                    Wishlist <span>({favView || 0})</span>
+                </Link>
+            </Typography>
+            <Typography
+                as="li"
+                onClick={() => setNavActive("cart")}
+                className={`p-1 uppercase text-base font-medium font-custom text-secondary transition-all transform duration-500 ease-in-out 
+                    hover:text-primary ${navActive === "cart" ? "text-primary scale-110" : ""}`}
+            >
+                <Link to='/user-cart' >
+                    Cart <span>({cartView || 0})</span>
                 </Link>
             </Typography>
         </ul>
@@ -70,6 +100,10 @@ const UserNavbar = () => {
     const isSearch = location.pathname === '/user-search'
     const cartView = cart?.length || 0;
     const favView = fav?.length || 0;
+    const [openSearchDrawer, setOpenSearchDrawer] = useState(false);
+
+    const handleOpenSearchDrawer = () => setOpenSearchDrawer(true);
+    const closeSearchDrawer = () => setOpenSearchDrawer(false);
 
     const token = localStorage.getItem("userToken")
     const userId = localStorage.getItem('userId');
@@ -130,59 +164,12 @@ const UserNavbar = () => {
                         </div>
                         <div className="hidden lg:block xl:flex xl:items-center xl:gap-10 lg:items-center lg:gap-10">
                             <NavList />
-                            <SearchBar />
                         </div>
                         <div>
                             <ul className='flex items-center gap-10'>
-                                <Link to="/favourite">
-                                    <li className="text-2xl text-secondary cursor-pointer relative">
-                                        {isFavouritePage ?
-                                            <>
-                                                <RiHeart3Fill className='text-primary' />
-                                                {favView > 0 && (
-                                                    <Chip
-                                                        value={favView}
-                                                        size="sm"
-                                                        className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
-                                                    />
-                                                )}
-                                            </>
-                                            :
-                                            <>
-                                                <RiHeart3Line />
-                                                {favView > 0 && (
-                                                    <Chip
-                                                        value={favView}
-                                                        size="sm"
-                                                        className="rounded-full !bg-primary text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center"
-                                                    />
-                                                )}
-                                            </>
-                                        }
-                                    </li>
-
-                                </Link>
-                                <Link to='/user-cart'>
-                                    <li className='text-2xl text-secondary cursor-pointer relative'>
-                                        {isCartPage ?
-                                            <>
-                                                <RiShoppingCartFill className="text-2xl text-primary" />
-                                                {cartView > 0 && (
-                                                    <Chip value={cartView} size="sm"
-                                                        className="rounded-full !bg-gray-500 text-xs text-white absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
-                                                )}
-                                            </>
-                                            :
-                                            <>
-                                                <RiShoppingCartLine className="text-2xl" />
-                                                {cartView > 0 && (
-                                                    <Chip value={cartView} size="sm"
-                                                        className="rounded-full text-xs !bg-primary absolute -top-1 -right-2 p-1 w-4 h-4 flex justify-center items-center" />
-                                                )}
-                                            </>
-                                        }
-                                    </li>
-                                </Link>
+                                <li>
+                                    <RiSearch2Line onClick={handleOpenSearchDrawer} className='text-secondary text-3xl cursor-pointer hover:text-primary' />
+                                </li>
                                 <li>
                                     {token ? (
                                         <UserProfile />
@@ -227,6 +214,11 @@ const UserNavbar = () => {
             <MobileSidebar
                 openDrawer={openDrawer}
                 handleCloseDrawer={handleCloseDrawer}
+            />
+
+            <SearchDesktopDrawer
+                open={openSearchDrawer}
+                closeSearchDrawer={closeSearchDrawer}
             />
         </>
     )

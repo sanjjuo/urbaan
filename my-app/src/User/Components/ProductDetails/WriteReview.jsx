@@ -1,18 +1,32 @@
 import { Button } from '@material-tailwind/react';
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useContext } from 'react';
 import { IoIosArrowBack, IoMdCloudUpload } from 'react-icons/io';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { AppContext } from '../../../StoreContext/StoreContext';
+import { FaStar } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
 const WriteReview = () => {
+    const { BASE_URL, setOpenUserNotLogin } = useContext(AppContext)
     const navigate = useNavigate();
+    const location = useLocation();
+    const productId = location.state?.productId;
     const [selectedImage, setSelectedImage] = useState(null);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [reviewText, setReviewText] = useState("");
+    const [reviewImg, setReviewImg] = useState([])
+    const [reviewRating, setReviewRating] = useState(0)
+    console.log(productId);
+
 
     // Image selector
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setReviewImg(file);  // Save the file, not the URL
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
         }
@@ -33,7 +47,59 @@ const WriteReview = () => {
         "👍 Would you recommend it?",
     ];
 
-    
+    // Set rating on star click
+    const handleRating = (rate) => {
+        setReviewRating((prev) => (prev === rate ? 0 : rate));
+    };
+
+    const token = localStorage.getItem('userToken')
+    const userId = localStorage.getItem('userId')
+
+    // handle add review
+    const handleAddReview = async () => {
+        if (!userId || !token) {
+            setOpenUserNotLogin(true)
+            return;
+        }
+        try {
+            const reviewFormData = new FormData();
+            reviewFormData.append('userId', userId);
+            reviewFormData.append('productId', productId);
+            reviewFormData.append('rating', reviewRating);
+            reviewFormData.append('message', reviewText);
+            if (reviewImg) {
+                reviewFormData.append('image', reviewImg);
+            }
+
+            for (let pair of reviewFormData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            if (!productId || !userId || !reviewRating || !reviewText) {
+                console.error("Missing required fields.");
+                return;
+            }
+
+
+            const response = await axios.post(`${BASE_URL}/user/review/add`, reviewFormData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data);
+            if (response.status === 200 || response.status === 201) {
+                toast.success('Review added successfully!');
+            } else {
+                toast.error('Failed to add review. Please try again.');
+            }
+        } catch (error) {
+            console.error("Error adding review:", error);
+            const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again later.';
+            toast.error(errorMessage);
+        }
+    }
+
+
 
     return (
         <>
@@ -45,7 +111,7 @@ const WriteReview = () => {
                     <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Write a Review
                 </h1>
             </div>
-            <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] overflow-y-auto">
+            <div className="p-4 xl:py-16 xl:px-72 lg:py-16 lg:px-72 bg-userBg h-[calc(100vh-4rem)] overflow-y-auto">
                 <div className="grid grid-cols-1 gap-5">
                     {/* Image Upload Section */}
                     <div className="flex justify-center items-center w-full xl:h-56 lg:h-56 h-44 border-4 border-dashed border-primary rounded-xl">
@@ -73,6 +139,17 @@ const WriteReview = () => {
                                 className="w-full h-full rounded-lg"
                             />
                         )}
+                    </div>
+
+                    {/* Rating Section */}
+                    <div className="flex justify-center items-center gap-2 my-6">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <FaStar
+                                key={star}
+                                className={`text-3xl cursor-pointer ${star <= reviewRating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                onClick={() => handleRating(star)}
+                            />
+                        ))}
                     </div>
 
                     {/* Review Typing Section */}
@@ -107,17 +184,22 @@ const WriteReview = () => {
                 </div>
 
                 <div className="hidden xl:flex lg:flex justify-center mt-10">
-                    <Button className="bg-primary font-custom font-normal text-sm capitalize w-52">
+                    <Button type='submit' onClick={handleAddReview} className="bg-primary font-custom font-normal text-sm capitalize w-52">
                         Submit Review
                     </Button>
                 </div>
 
                 <div className="bg-white shadow-md fixed bottom-0 inset-x-0 flex justify-center z-50 p-4 lg:hidden xl:hidden md:hidden">
-                    <Button className="bg-primary font-custom font-normal text-sm capitalize w-full">
+                    <Button type='submit' onClick={handleAddReview} className="bg-primary font-custom font-normal text-sm capitalize w-full">
                         Submit Review
                     </Button>
                 </div>
             </div>
+
+            <UserNotLoginPopup
+                title='You are not logged in'
+                description="You need to be logged in to write a review for this product. If you don't have an account you can easily create one to enjoy all the features."
+            />
         </>
     );
 };

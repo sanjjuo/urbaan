@@ -19,6 +19,7 @@ const Products = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [initialProducts, setInitialProducts] = useState(null)
   const [selectedProductId, setSelectedProductId] = useState(null)
+  const [categoryFilter, setCategoryFilter] = useState([]);
 
   // fetch products
   useEffect(() => {
@@ -74,12 +75,16 @@ const Products = () => {
       <h1 className='text-2xl lg:text-3xl font-semibold'>Products</h1>
       <div className="grid grid-cols-8 mt-5 gap-5">
         <div className='grid col-span-2 overflow-y-auto hide-scrollbar'>
-          <Filter view={view} setView={setView} />
+          <Filter
+            view={view}
+            setView={setView}
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter} />
         </div>
         <div className='grid col-span-6 overflow-y-auto hide-scrollbar space-y-5'>
           <Link
             to='/adminHome/addProduct'
-            >
+          >
             <Button className='flex items-center gap-1 bg-buttonBg font-custom font-normal text-sm'><FaPlus />Add product</Button>
           </Link>
           {view === "list" ? (

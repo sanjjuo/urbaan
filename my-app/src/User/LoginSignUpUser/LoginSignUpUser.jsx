@@ -4,6 +4,7 @@ import {
     Input,
     Button,
     Typography,
+    Checkbox,
 } from "@material-tailwind/react";
 import { FaFacebook, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -22,11 +23,17 @@ export function LoginSignUpUser() {
         phone: "",
         password: "",
         name: "",
+        email: "", // Added email field
     });
+    const [isWalkIn, setIsWalkIn] = useState(false); // Added state for isWalkIn
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setLoginFormData((prevState) => ({ ...prevState, [name]: value }));
+    };
+
+    const handleCheckboxChange = () => {
+        setIsWalkIn((prevState) => !prevState); // Toggle isWalkIn value
     };
 
     const handleAuthSubmit = async (e) => {
@@ -43,15 +50,15 @@ export function LoginSignUpUser() {
                     phone: loginFormData.phone,
                     password: loginFormData.password,
                     name: loginFormData.name,
+                    email: loginFormData.email, // Include email
+                    isWalkIn: isWalkIn, // Send isWalkIn in the payload
                 };
             const response = await axios.post(`${BASE_URL}${endpoint}`, payload, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            console.log(payload)
-
-            console.log(loginFormData.phone, loginFormData.password, loginFormData.name);
+            console.log(payload);
 
             // Handle login response
             if (isLogin && response.data.token) {
@@ -112,17 +119,30 @@ export function LoginSignUpUser() {
                             }}
                         />
                         {loginSignUpUser !== "login" && (
-                            <Input
-                                name="name"
-                                size="lg"
-                                value={loginFormData.name}
-                                onChange={handleInputChange}
-                                placeholder="Enter your name"
-                                className="!border-gray-300 bg-white placeholder:text-blue-gray-300 !font-custom placeholder:font-custom placeholder:opacity-100 focus:border-gray-300 focus:border-[1px]"
-                                labelProps={{
-                                    className: "before:content-none after:content-none",
-                                }}
-                            />
+                            <>
+                                <Input
+                                    name="name"
+                                    size="lg"
+                                    value={loginFormData.name}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter your name"
+                                    className="!border-gray-300 bg-white placeholder:text-blue-gray-300 !font-custom placeholder:font-custom placeholder:opacity-100 focus:border-gray-300 focus:border-[1px]"
+                                    labelProps={{
+                                        className: "before:content-none after:content-none",
+                                    }}
+                                />
+                                <Input
+                                    name="email"
+                                    type="email"
+                                    value={loginFormData.email}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter your email"
+                                    className="!border-gray-300 bg-white placeholder:text-blue-gray-300 !font-custom placeholder:font-custom placeholder:opacity-100 focus:border-gray-300 focus:border-[1px]"
+                                    labelProps={{
+                                        className: "before:content-none after:content-none",
+                                    }}
+                                />
+                            </>
                         )}
                         <div className="flex items-center border-[1px] rounded-lg pr-3 !border-gray-300 bg-white">
                             <Input
@@ -149,6 +169,19 @@ export function LoginSignUpUser() {
                                 )}
                             </div>
                         </div>
+                        {loginSignUpUser !== "login" && (
+                            <div className="flex items-center">
+                                <Checkbox
+                                color='pink'
+                                    checked={isWalkIn}
+                                    onChange={handleCheckboxChange}
+                                    className="h-4 w-4 rounded-sm"
+                                />
+                                <Typography className="font-custom text-sm text-secondary">
+                                    Are you a walk-in customer?
+                                </Typography>
+                            </div>
+                        )}
                         <Link>
                             <Typography className="font-custom text-sm text-primary font-medium text-right">
                                 Forgot Password?

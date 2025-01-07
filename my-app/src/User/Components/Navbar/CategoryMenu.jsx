@@ -42,7 +42,7 @@ export function CategoryMenu() {
             <MenuHandler>
                 <Typography
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    className="p-1 font-medium font-custom flex items-center gap-1 text-sm cursor-pointer"
+                    className="p-1 font-medium font-custom flex items-center gap-1 text-base text-secondary cursor-pointer"
                 >
                     Categories
                     <ChevronDownIcon
@@ -62,13 +62,13 @@ export function CategoryMenu() {
                         {/* First column */}
                         <div className="outline-none">
                             {column1.map((category) => (
-                                <MenuItem key={category.id}>{category.name}</MenuItem>
+                                <MenuItem key={category.id} className='capitalize'>{category.name}</MenuItem>
                             ))}
                         </div>
                         {/* Second column */}
                         <div className="outline-none">
                             {column2.map((category) => (
-                                <MenuItem key={category.id}>{category.name}</MenuItem>
+                                <MenuItem key={category.id} className='capitalize'>{category.name}</MenuItem>
                             ))}
                         </div>
                     </>

@@ -242,7 +242,7 @@ const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
                                     <ul className="flex items-center">
                                         <li
                                             className={`text-secondary flex items-center justify-center w-7 h-7 rounded-full cursor-pointer border-[1px] 
-                                                            border-secondary hover:bg-gray-500 hover:border-gray-500 ${item.quantity === 1 && "cursor-not-allowed opacity-50"}`}
+                                                            border-secondary hover:bg-gray-100 hover:border-gray-500 ${item.quantity === 1 && "cursor-not-allowed opacity-50"}`}
                                             onClick={() => item.quantity > 1 && updateQuantity(item._id, item.quantity - 1)}
                                         >
                                             <HiMinus className="text-lg" />
@@ -252,7 +252,7 @@ const CartItems = ({ cartItems, setCartItems, setViewCart }) => {
 
                                         <li
                                             className="text-secondary flex items-center justify-center w-7 h-7 rounded-full cursor-pointer border-[1px] 
-                                                            border-secondary hover:bg-gray-500 hover:border-gray-500"
+                                                            border-secondary hover:bg-gray-100 hover:border-gray-500"
                                             onClick={() => updateQuantity(item._id, item.quantity + 1)}
                                         >
                                             <BsPlusLg className="text-lg" />
