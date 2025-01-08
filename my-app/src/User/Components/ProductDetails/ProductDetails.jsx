@@ -138,6 +138,7 @@ const ProductDetails = () => {
             });
 
             if (response.status === 200 || response.status === 201) {
+                navigate('/user-cart')
                 toast.success(`${productDetails.title} added to your cart`);
                 setCart((prevCart) => {
                     const item = prevCart.find(

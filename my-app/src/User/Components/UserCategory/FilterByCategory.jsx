@@ -18,7 +18,7 @@ const FilterByCategory = ({ productsCategory, handleCategory }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/admin/category/get`);
+                const response = await axios.get(`${BASE_URL}/user/category/get`);
                 setCategories(response.data);
             } catch (error) {
                 console.error("Error fetching categories:", error.response || error.message);
@@ -43,13 +43,13 @@ const FilterByCategory = ({ productsCategory, handleCategory }) => {
                          border-gray-400 text-gray-600 font-medium rounded-3xl focus:outline-none"
                 >
                     Filter by categories 
-                    <span className="text-xs capitalize bg-primary px-2 text-white rounded-md">
+                    <span className="text-xs capitalize bg-primary ml-5 px-2 text-white rounded-md">
                         {selectedCategoryName}
                     </span>
                     <IoIosArrowDown className="text-lg text-gray-400" />
                 </Button>
             </MenuHandler>
-            <MenuList className="w-72 max-h-64 rounded-xl">
+            <MenuList className="w-72 max-h-64 rounded-xl hide-scrollbar">
                 {categories.map((category) => (
                     <MenuItem
                         key={category.id}

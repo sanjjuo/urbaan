@@ -17,6 +17,10 @@ const FilterByPrice = ({ handlePriceFilter }) => {
         setPriceRange(newValue);
     };
 
+    const handleClickInside = (event) => {
+        event.stopPropagation();
+    };
+
     return (
         <Menu>
             <MenuHandler>
@@ -36,6 +40,7 @@ const FilterByPrice = ({ handlePriceFilter }) => {
                         size="small"
                         value={priceRange}
                         onChange={handlePriceChange}
+                        onClick={handleClickInside}
                         valueLabelDisplay="auto"
                         min={300}
                         max={1500}

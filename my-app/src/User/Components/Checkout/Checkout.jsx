@@ -309,8 +309,8 @@ const Checkout = () => {
                                                 <li className='flex items-center justify-between'>
                                                     <span className='text-secondary'>Discount</span>
                                                     <span className='text-secondary font-bold'>
-                                                        {checkoutDetails.coupen.discountValue || 0.00}
-                                                        {checkoutDetails.coupen.discountType === "percentage" ? "%" : "₹"}
+                                                        {checkoutDetails?.coupen?.discountValue || 0.00}
+                                                        {checkoutDetails?.coupen?.discountType === "percentage" ? "%" : "₹"}
                                                     </span>
                                                 </li>
                                             </>

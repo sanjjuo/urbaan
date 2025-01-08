@@ -14,7 +14,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 
 
 const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
-    const { setSelectedCategory, BASE_URL, profile } = useContext(AppContext);
+    const { BASE_URL, profile } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate()
@@ -34,11 +34,6 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
         fetchCategories();
     }, [BASE_URL]);
 
-
-
-    const handleCategory = (category) => {
-        setSelectedCategory(category)
-    }
 
     const handleLogout = () => {
         localStorage.removeItem("userToken");
@@ -96,8 +91,12 @@ const MobileSidebar = ({ openDrawer, handleCloseDrawer }) => {
                                 <ul className='space-y-4 mt-5 text-gray-600 text-sm'>
                                     {
                                         categories.map((category) => (
-                                            <li key={category.id} onClick={() => handleCategory(category.name)}>
-                                                <Link to='/all-category' className="capitalize">{category.name}</Link>
+                                            <li key={category.id} onClick={handleCloseDrawer}>
+                                                <Link to={{
+                                                    pathname: "/all-category",
+                                                }}
+                                                    state={{ category }}
+                                                    className='capitalize hover:text-primary'>{category.name}</Link>
                                             </li>
                                         ))
                                     }

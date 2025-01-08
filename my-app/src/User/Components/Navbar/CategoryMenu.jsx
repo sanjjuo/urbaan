@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import AppLoader from "../../../Loader";
 import { AppContext } from "../../../StoreContext/StoreContext";
+import { Link } from "react-router-dom";
 
 export function CategoryMenu() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,8 +38,12 @@ export function CategoryMenu() {
     const column1 = categories.slice(0, midIndex);
     const column2 = categories.slice(midIndex);
 
+    const handleItemClick = () => {
+        setIsMenuOpen(false);  // Close the menu on item click
+    };
+
     return (
-        <Menu size="lg">
+        <Menu open={isMenuOpen} handler={setIsMenuOpen} size="lg">
             <MenuHandler>
                 <Typography
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -47,8 +52,7 @@ export function CategoryMenu() {
                     Categories
                     <ChevronDownIcon
                         strokeWidth={2.5}
-                        className={`hidden h-3 w-3 transition-transform lg:block ${isMenuOpen ? "rotate-180" : ""
-                            }`}
+                        className={`hidden h-3 w-3 transition-transform lg:block ${isMenuOpen ? "rotate-180" : ""}`}
                     />
                 </Typography>
             </MenuHandler>
@@ -62,13 +66,33 @@ export function CategoryMenu() {
                         {/* First column */}
                         <div className="outline-none">
                             {column1.map((category) => (
-                                <MenuItem key={category.id} className='capitalize'>{category.name}</MenuItem>
+                                <MenuItem
+                                    key={category.id}
+                                    className='capitalize'
+                                    onClick={handleItemClick}>
+                                    <Link to={{
+                                        pathname: "/all-category",
+                                    }}
+                                        state={{ category }}>
+                                        {category.name}
+                                    </Link>
+                                </MenuItem>
                             ))}
                         </div>
                         {/* Second column */}
                         <div className="outline-none">
                             {column2.map((category) => (
-                                <MenuItem key={category.id} className='capitalize'>{category.name}</MenuItem>
+                                <MenuItem
+                                    key={category.id}
+                                    className='capitalize'
+                                    onClick={handleItemClick}>
+                                    <Link to={{
+                                        pathname: "/all-category",
+                                    }}
+                                        state={{ category }}>
+                                        {category.name}
+                                    </Link>
+                                </MenuItem>
                             ))}
                         </div>
                     </>

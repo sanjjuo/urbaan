@@ -144,7 +144,7 @@ const UserNavbar = () => {
 
     // pages where navbar don't visible
     const noNavbar = ["/customer-reviews", "/write-review", "/add-delivery-address", "/edit-delivery-address", "/select-delivery-address",
-        "/select-tracking", "/all-category", "/order"]
+        "/select-tracking", "/order"]
 
 
     // Check if current path matches any of the visible routes

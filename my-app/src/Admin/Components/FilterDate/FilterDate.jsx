@@ -10,8 +10,9 @@ const FilterDate = ({ setFilters, resetFilter }) => {
         setSelectedDates(value);
         setFilters(prev => ({
             ...prev,
-            startDate: value[0]?.format("YYYY-MM-DD") || '',
-            endDate: value[1]?.format("YYYY-MM-DD") || ''
+            startDate: value[0]?.format("YYYY-MM-DDTHH:mm:ss") || '',
+            endDate: value[1]?.format("YYYY-MM-DDTHH:mm:ss") || ''
+
         }));
     }, [setFilters]); // Dependency array ensures the function is recreated only when setFilters changes
 

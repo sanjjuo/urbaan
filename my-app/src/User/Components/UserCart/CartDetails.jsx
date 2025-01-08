@@ -26,6 +26,7 @@ const CartDetails = ({ viewCart }) => {
 
     const token = localStorage.getItem('userToken');
     const userId = localStorage.getItem('userId');
+    
 
     // handle checkout
     const handleCheckout = async () => {
@@ -125,7 +126,7 @@ const CartDetails = ({ viewCart }) => {
                 <ul className='mt-2'>
                     <li className='flex justify-between items-center'>
                         <span className='text-secondary font-medium text-sm'>Total</span>
-                        <span className='text-secondary font-bold text-lg'>₹{viewCart.discountedTotal || 0.00}</span>
+                        <span className='text-secondary font-bold text-lg'>₹{viewCart?.discountedTotal || 0.00}</span>
                     </li>
                 </ul>
             </Card>

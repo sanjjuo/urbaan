@@ -19,7 +19,7 @@ import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 const AllCategory = () => {
     const navigate = useNavigate();
     const location = useLocation()
-    const productsCategory = location.state.category
+    const productsCategory = location.state?.category || []
     const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext);
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -33,6 +33,8 @@ const AllCategory = () => {
                 setIsLoading(false)
             } catch (error) {
                 console.error("Error fetching categories:", error.response || error.message);
+            }finally{
+                setIsLoading(false)
             }
         };
 
@@ -59,6 +61,13 @@ const AllCategory = () => {
         const [minPrice, maxPrice] = priceRange;
         const filtered = products.filter(
             (product) => product.offerPrice >= minPrice && product.offerPrice <= maxPrice
+        );
+        setProducts(filtered);
+    };
+
+    const handleSizeFilter = (size) => {
+        const filtered = products.filter((product) =>
+            product.colors.some((color) => color.sizes.some((s) => s.size === size))
         );
         setProducts(filtered);
     };
@@ -117,25 +126,17 @@ const AllCategory = () => {
 
     return (
         <>
-            <div className="bg-white z-20 shadow-md py-4 px-4 w-full sticky top-0">
-                <h1
-                    className="flex items-center gap-1 text-xl font-medium cursor-pointer"
-                    onClick={() => navigate(-1)}
-                >
-                    <IoIosArrowBack className="text-secondary text-2xl cursor-pointer" /> Back
-                </h1>
-            </div>
-            <div className='min-h-[calc(100vh-4rem)]'>
+            <div className='h-[calc(100vh-4rem)] pb-20'>
                 <div className='w-full h-44 relative'>
                     <img src="/banner.jpeg" alt="" className='w-full h-full object-cover' />
                     <div className='absolute inset-0 bg-primary/70'></div>
-                    <h1 className='absolute inset-0 flex items-end justify-center z-50 text-white text-4xl font-medium
+                    <h1 className='absolute inset-0 flex items-end justify-center text-white text-4xl font-medium
                         mb-5 capitalize'>{productsCategory.name}</h1>
                 </div>
                 <div className="px-4 py-10 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg">
                     <ul className='space-y-3 xl:flex xl:items-center xl:space-y-0 xl:gap-5 xl:justify-center
                         lg:flex lg:items-center lg:space-y-0 lg:gap-5 lg:justify-center'>
-                        <li><FilterBySize handleCategory={handleCategory} /></li>
+                        <li><FilterBySize handleSizeFilter={handleSizeFilter} /></li>
                         <li><FilterByMaterial /></li>
                         <li><FilterByCategory productsCategory={productsCategory} handleCategory={handleCategory} /></li>
                         <li><FilterByPrice handlePriceFilter={handlePriceFilter} /></li>
@@ -143,9 +144,14 @@ const AllCategory = () => {
                     <div className="xl:p-10 mt-10">
                         <div className="grid grid-cols-2 xl:grid-cols-5 lg:grid-cols-5 gap-5">
                             {
-                                isLoading || products.length === 0 ? (
+                                isLoading ? (
                                     <div className='col-span-5 flex justify-center items-center h-[50vh]'>
                                         <AppLoader />
+                                    </div>
+                                ) : products.length === 0 ? (
+                                    <div className="col-span-5 flex flex-col justify-center items-center h-[50vh] text-center">
+                                        <p className="text-xl font-semibold text-secondary">No products available,</p>
+                                        <p className="text-md text-gray-700">Please check back later or try filtering the products.</p>
                                     </div>
                                 ) : (
                                     <>
