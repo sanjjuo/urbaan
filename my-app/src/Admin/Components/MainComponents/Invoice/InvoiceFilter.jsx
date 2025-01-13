@@ -15,35 +15,36 @@ const InvoiceFilter = ({ setInvoice }) => {
     const [filters, setFilters] = useState({
         startDate: '',
         endDate: '',
-        status: '',
+        status: [],
     });
 
     useEffect(() => {
         const fetchFilteredInvoice = async () => {
             try {
                 const queryParams = new URLSearchParams();
-                Object.keys(filters).forEach(key => {
+                Object.keys(filters).forEach((key) => {
                     if (filters[key]) queryParams.append(key, filters[key]);
                 });
-                console.log(filters);
 
+                console.log(`API Request: ${BASE_URL}/admin/invoice/filter?${queryParams.toString()}`);
                 const response = await axios.get(`${BASE_URL}/admin/invoice/filter?${queryParams.toString()}`);
-                setInvoice(response.data.invoices);
-                console.log(response.data);
+                console.log(response.data.invoices);
+                setInvoice(response.data?.invoices);
             } catch (error) {
-                console.error("Error fetching filtered orders:", error);
+                console.error("Error fetching filtered invoices:", error);
             }
         };
 
         fetchFilteredInvoice();
-    }, [filters, BASE_URL, setInvoice]);
+    }, [filters, BASE_URL, setInvoice, resetFilter]);
+
 
     // handleClearAll
     const resetFilters = () => {
         setFilters({
             startDate: '',
             endDate: '',
-            status: '',
+            status: [],
         });
         setResetFilter(prev => !prev)
     };

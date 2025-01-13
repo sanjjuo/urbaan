@@ -29,7 +29,7 @@ const OrderFilter = ({ setOrderList }) => {
                 });
 
                 const response = await axios.get(`${BASE_URL}/admin/orderlist/filter?${queryParams.toString()}`);
-                setOrderList(response.data);
+                setOrderList(response.data.filteredOrders);
             } catch (error) {
                 console.error("Error fetching filtered orders:", error);
             }

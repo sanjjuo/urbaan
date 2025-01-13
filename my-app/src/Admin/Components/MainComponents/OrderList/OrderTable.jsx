@@ -173,7 +173,7 @@ const OrderTable = ({ orderList, setOrderList }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentOrderList.map((order, index) => {
+                  {Array.isArray(currentOrderList) && currentOrderList.map((order, index) => {
                     const isLast = index === currentOrderList.length - 1;
                     const classes = isLast
                       ? "p-4 text-center"

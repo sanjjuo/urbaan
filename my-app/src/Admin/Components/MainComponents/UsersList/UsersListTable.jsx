@@ -8,10 +8,9 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
 
-const TABLE_HEAD = ["user name", "mobile", "address", "city", "state", "pincode", "Action"];
+const TABLE_HEAD = ["user name", "mobile", "email", "address", "city", "state", "pincode", "Action"];
 
-const UsersListTable = () => {
-    const [userList, setUserList] = useState([]);
+const UsersListTable = ({ userList, setUserList }) => {
     const { BASE_URL, open, handleOpen, modalType, } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedUserId, setSelectedUserId] = useState(null)
@@ -82,19 +81,15 @@ const UsersListTable = () => {
                 <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
                     <CardBody>
                         <table className="w-full table-auto text-left border-collapse">
-                            <thead>
-                                <tr className="bg-quaternary">
-                                    {TABLE_HEAD.map((head) => (
+                            <thead className="bg-quaternary">
+                                <tr>
+                                    {TABLE_HEAD.map((head, index) => (
                                         <th
-                                            key={head}
-                                            className="border-b border-blue-gray-100 p-4 text-center"
+                                            key={index}
+                                            className="border-b border-gray-300 px-4 py-3 text-center text-sm font-semibold text-secondary uppercase w-[150px]"
+                                            // style={{ minWidth: "120px" }} // Adjust minWidth to ensure uniformity
                                         >
-                                            <Typography
-                                                variant="small"
-                                                className="font-semibold font-custom text-secondary leading-none text-base uppercase"
-                                            >
-                                                {head}
-                                            </Typography>
+                                            {head}
                                         </th>
                                     ))}
                                 </tr>
@@ -102,7 +97,7 @@ const UsersListTable = () => {
                             <tbody>
                                 {currentUserList.map((user, index) => {
                                     const isLast = index === currentUserList.length - 1;
-                                    const classes = isLast ? "p-4 text-center" : "p-4 border-b border-gray-300 text-center";
+                                    const classes = `${isLast ? "p-4" : "p-4 border-b border-gray-300"} text-center w-[150px] truncate`;
                                     const firstAddress = user.addresses?.[0] || {}; // Safely access the first address
 
                                     return (
@@ -121,6 +116,14 @@ const UsersListTable = () => {
                                                     className="font-normal capitalize font-custom text-sm"
                                                 >
                                                     {user.phone || "N/A"}
+                                                </Typography>
+                                            </td>
+                                            <td className={classes}>
+                                                <Typography
+                                                    variant="small"
+                                                    className="font-normal capitalize font-custom text-sm"
+                                                >
+                                                    {user.email || "N/A"}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>

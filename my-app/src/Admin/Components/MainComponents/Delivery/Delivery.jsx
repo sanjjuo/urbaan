@@ -40,17 +40,6 @@ const Delivery = () => {
 
                 {/* Search and Added Categories Section */}
                 <div className="lg:col-span-4 space-y-5">
-                    {/* Search Bar */}
-                    <div className="border border-gray-300 py-1 px-2 flex items-center gap-1 rounded-xl bg-white h-12 w-96">
-                        <RiSearch2Line className="text-gray-700 text-xl" />
-                        <input
-                            type="search"
-                            name="search"
-                            placeholder="Search Delivery fees"
-                            className="bg-transparent placeholder:text-gray-700 placeholder:text-base focus:outline-none text-secondary w-full"
-                        />
-                    </div>
-
                     {/* Added Categories */}
                     <div className="h-[calc(100vh-10rem)] overflow-y-auto hide-scrollbar">
                         <AddedDelivery createEditDelivery={createEditDelivery} handleEditDelivery={handleEditDelivery} />

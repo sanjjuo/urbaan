@@ -68,6 +68,8 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                 console.log(response.data);
             } catch (error) {
                 console.log(error);
+            }finally{
+                setIsLoading(false)
             }
         }
         fetchInvoices()
@@ -100,15 +102,19 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
     return (
         <>
             {
-                isLoading || invoice.length === 0 ? (
+                isLoading ? (
                     <div className='col-span-2 flex justify-center items-center h-[50vh]'>
                         <AppLoader />
                     </div>
+                ) : invoice.length === 0 ? (
+                    <>
+                        <p className='col-span-5 text-sm text-secondary flex justify-center items-center h-[50vh]'>No invoices match the selected filters.</p>
+                    </>
                 ) : (
                     <>
                         <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
                             <CardBody className=''>
-                            <table className="w-full table-auto text-left">
+                                <table className="w-full table-auto text-left">
                                     <thead>
                                         <tr className='bg-quaternary'>
                                             {TABLE_HEAD.map((head) => (
@@ -118,7 +124,7 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                                 >
                                                     <Typography
                                                         variant="small"
-                                                        className="font-semibold font-custom text-secondary leading-none text-base uppercase"
+                                                        className="font-semibold font-custom text-secondary leading-none text-base uppercase w-[160px]"
                                                     >
                                                         {head}
                                                     </Typography>
@@ -129,7 +135,7 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                     <tbody>
                                         {Array.isArray(currentInvoice) && currentInvoice.map((invoice, index) => {
                                             const isLast = index === currentInvoice.length - 1;
-                                            const classes = isLast ? "p-4 text-center" : "p-4 border-b border-gray-300 text-center";
+                                            const classes = `${isLast ? "p-4" : "p-4 border-b border-gray-300"} text-center w-[150px] truncate`;
 
                                             return (
                                                 <tr key={invoice._id}>
@@ -163,9 +169,9 @@ const InvoiceTable = ({ invoice, setInvoice }) => {
                                                             className="font-normal font-custom text-sm"
                                                         >
                                                             {new Date(invoice.createdAt).toLocaleDateString('en-US', {
-                                                                 year: 'numeric',
-                                                                 month: 'short',
-                                                                 day: 'numeric',
+                                                                year: 'numeric',
+                                                                month: 'short',
+                                                                day: 'numeric',
                                                             })}
                                                         </Typography>
                                                     </td>

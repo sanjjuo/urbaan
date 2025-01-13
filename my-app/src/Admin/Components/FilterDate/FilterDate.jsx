@@ -8,17 +8,17 @@ const FilterDate = ({ setFilters, resetFilter }) => {
 
     const handleDateChange = useCallback((value) => {
         setSelectedDates(value);
-        setFilters(prev => ({
+        setFilters((prev) => ({
             ...prev,
-            startDate: value[0]?.format("YYYY-MM-DDTHH:mm:ss") || '',
-            endDate: value[1]?.format("YYYY-MM-DDTHH:mm:ss") || ''
-
+            startDate: value[0]?.format("DD-MM-YYYY") || '', // Format as DD-MM-YYYY
+            endDate: value[1]?.format("DD-MM-YYYY") || '',  // Format as DD-MM-YYYY
         }));
-    }, [setFilters]); // Dependency array ensures the function is recreated only when setFilters changes
+    }, [setFilters]);
+    
 
     useEffect(() => {
         if (resetFilter) {
-            setSelectedDates([]); // Reset the DatePicker by clearing state
+            setSelectedDates([]);
             setFilters(prev => ({
                 ...prev,
                 startDate: '',

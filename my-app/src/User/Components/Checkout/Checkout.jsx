@@ -304,13 +304,13 @@ const Checkout = () => {
                                                 ₹{calculateDeliveryCharge(checkoutDetails?.cartItems)}
                                             </span>
                                         </li>
-                                        {checkoutDetails?.coupen?.discountValue ? (
+                                        {checkoutDetails?.coupenAmount ? (
                                             <>
                                                 <li className='flex items-center justify-between'>
                                                     <span className='text-secondary'>Discount</span>
                                                     <span className='text-secondary font-bold'>
-                                                        {checkoutDetails?.coupen?.discountValue || 0.00}
-                                                        {checkoutDetails?.coupen?.discountType === "percentage" ? "%" : "₹"}
+                                                        {checkoutDetails?.coupenAmount || 0.00}
+                                                        {checkoutDetails?.discountType === "percentage" ? "%" : "₹"}
                                                     </span>
                                                 </li>
                                             </>
