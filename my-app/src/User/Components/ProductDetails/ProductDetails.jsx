@@ -232,12 +232,12 @@ const ProductDetails = () => {
                     <div className='col-span-2 xl:space-y-3 lg:space-y-3 xl:sticky xl:top-0 lg:sticky lg:top-0 h-[350px] xl:h-[600px] lg:h-[600px]'>
                         <div className='w-full h-full relative'>
                             <img
-                                src={`${BASE_URL}/uploads/category/${productDetails.images}`}
+                                src={productDetails.images && productDetails.images.length > 0 ? productDetails.images[0] : '/no-image.jpg'}
                                 alt={productDetails.title}
                                 className='w-full h-full object-cover rounded-xl'
-                                onError={(e) => e.target.src = '/no-image.jpg'}
                             />
-                            {heartIcons[productDetails._id] || favProduct?.items?.some(item => item.productId._id === productDetails._id) ? (
+
+                            {heartIcons[productDetails._id] || favProduct?.items?.some(item => item.productId?._id === productDetails._id) ? (
                                 <RiHeart3Fill
                                     onClick={() => handleWishlist(productDetails._id, productDetails.title)}
                                     className='absolute top-5 right-5 xl:text-3xl lg:text-3xl text-2xl cursor-pointer text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
@@ -279,7 +279,7 @@ const ProductDetails = () => {
                                 <p className='text-xs xl:text-sm lg:text-sm'>({totalReviews})</p>
                             </div>
                         </div>
-                        <p className='text-gray-600 text-xs capitalize xl:text-base lg:text-base'>{productDetails.description}</p>
+                        <p className='text-gray-600 text-xs capitalize xl:text-sm lg:text-sm mt-3'>{productDetails.description}</p>
                         <div>
                             <div className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-10 lg:gap-10 mt-2'>
                                 <p className='text-xs xl:text-sm lg:text-sm font-semibold text-shippedBg'>Free Shipping</p>

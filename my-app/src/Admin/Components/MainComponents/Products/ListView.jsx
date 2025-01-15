@@ -95,10 +95,12 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                         <td className={classes}>
                                                             <Typography
                                                                 variant="small"
-                                                                className="font-normal font-custom text-sm capitalize"
+                                                                className="font-normal font-custom text-sm capitalize truncate overflow-hidden whitespace-nowrap w-32"
                                                             >
                                                                 {product.description}
                                                             </Typography>
+
+
                                                         </td>
                                                         <td className={classes}>
                                                             <Typography

@@ -112,39 +112,43 @@ const FavouriteProduct = () => {
             ) : (
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-x-5 gap-y-10 !mt-16'>
                     {wishlistProducts.map((product) => (
-                        <div key={product._id} className='relative'>
-                            <RiDeleteBin5Line
-                                onClick={() => handleWishlistDelete(product.productId._id)}
-                                className='text-deleteBg absolute -top-5 right-1 cursor-pointer'
-                            />
-                            <Link
-                                to="/product-details"
-                                state={{ productId: product.productId._id }}
-                                className="group"
-                            >
-                                <div className='w-full h-52 xl:h-80 lg:h-80 rounded-xl overflow-hidden'>
-                                    <img
-                                        src={`${BASE_URL}/uploads/category/${product.productId.images[0]}`}
-                                        alt={product.productId.title}
-                                        className='w-full h-full object-cover rounded-xl shadow-md
-                                        transition-transform scale-100 duration-500 ease-in-out group-hover:scale-105'
-                                        onError={(e) => e.target.src = '/no-image.jpg'}
-                                    />
-                                </div>
-                                <div className='mt-3'>
-                                    <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>
-                                        {product.productId.title}
-                                    </h4>
-                                    <p className='text-gray-600 text-xs xl:text-sm lg:text-sm capitalize'>
-                                        {product.productId.description}
-                                    </p>
-                                    <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>
-                                        ₹{product.productId.offerPrice}
-                                    </p>
-                                </div>
-                            </Link>
-                        </div>
+                        product.productId ? (
+                            <div key={product._id} className='relative'>
+                                <RiDeleteBin5Line
+                                    onClick={() => handleWishlistDelete(product.productId._id)}
+                                    className='text-deleteBg absolute -top-5 right-1 cursor-pointer'
+                                />
+                                <Link
+                                    to="/product-details"
+                                    state={{ productId: product.productId._id }}
+                                    className="group"
+                                >
+                                    <div className='w-full h-52 xl:h-80 lg:h-80 rounded-xl overflow-hidden'>
+                                        <img
+                                            src={product.productId.images[0]}
+                                            alt={product.productId.title}
+                                            className='w-full h-full object-cover rounded-xl shadow-md
+                        transition-transform scale-100 duration-500 ease-in-out group-hover:scale-105'
+                                            onError={(e) => e.target.src = '/no-image.jpg'}
+                                        />
+                                    </div>
+                                    <div className='mt-3'>
+                                        <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>
+                                            {product.productId.title}
+                                        </h4>
+                                        <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize truncate overflow-hidden 
+                    whitespace-nowrap w-40 xl:w-60 lg:w-60'>
+                                            {product.productId.description}
+                                        </p>
+                                        <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>
+                                            ₹{product.productId.offerPrice}
+                                        </p>
+                                    </div>
+                                </Link>
+                            </div>
+                        ) : null
                     ))}
+
                 </div>
             )}
         </div>

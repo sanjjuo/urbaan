@@ -94,7 +94,8 @@ const GridView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                     <Typography
                                                         variant="small"
                                                         color="gray"
-                                                        className="font-custom text-sm capitalize font-normal"
+                                                        className="font-custom text-sm capitalize font-normal truncate overflow-hidden 
+                                                        whitespace-nowrap w-60"
                                                     >
                                                         {product.description}
                                                     </Typography>

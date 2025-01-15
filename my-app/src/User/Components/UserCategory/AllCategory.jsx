@@ -33,7 +33,7 @@ const AllCategory = () => {
                 setIsLoading(false)
             } catch (error) {
                 console.error("Error fetching categories:", error.response || error.message);
-            }finally{
+            } finally {
                 setIsLoading(false)
             }
         };
@@ -88,7 +88,7 @@ const AllCategory = () => {
             };
 
             // Check if product is already in wishlist
-            const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
+            const isInWishlist = favProduct?.items?.some(item => item.productId?._id === productId);
             if (isInWishlist) {
                 // If product is already in wishlist, show the appropriate toast and return
                 toast.error(`${productTitle} is already in your wishlist`);
@@ -157,7 +157,7 @@ const AllCategory = () => {
                                     <>
                                         {
                                             products.map((product) => {
-                                                const isInWishlist = favProduct?.items?.some(item => item.productId._id === product._id);
+                                                const isInWishlist = favProduct?.items?.some(item => item.productId?._id === product._id);
                                                 return (
                                                     <div className='group relative' key={product._id}>
                                                         <Link
@@ -166,7 +166,7 @@ const AllCategory = () => {
                                                             className="cursor-pointer">
                                                             <div className="w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden">
                                                                 <img
-                                                                    src={`${BASE_URL}/uploads/category/${product.images[0]}`}
+                                                                    src={product.images[0]}
                                                                     alt=""
                                                                     className='w-full h-full object-cover rounded-xl shadow-md
                                                                 transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'
@@ -186,7 +186,8 @@ const AllCategory = () => {
                                                         )}
                                                         <div className='mt-3'>
                                                             <p className='font-medium text-sm xl:text-lg lg:text-lg truncate capitalize'>{product.title}</p>
-                                                            <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm truncate capitalize'>{product.description}</p>
+                                                            <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm truncate overflow-hidden 
+                                                                whitespace-nowrap w-40 xl:w-60 lg:w-60 capitalize'>{product.description}</p>
                                                             <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹{product.offerPrice}</p>
                                                         </div>
                                                     </div>

@@ -45,7 +45,7 @@ const OfferProducts = () => {
             };
 
             // Check if product is already in wishlist
-            const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
+            const isInWishlist = favProduct?.items?.some(item => item.productId?._id === productId);
 
             if (isInWishlist) {
                 toast.error(`${productTitle} is already in your wishlist`);
@@ -66,7 +66,7 @@ const OfferProducts = () => {
                 );
                 return isAlreadyFav ? prevFav : [...prevFav, payload];
             });
-            
+
             toast.success(`${productTitle} added to wishlist`);
 
         } catch (error) {
@@ -92,13 +92,13 @@ const OfferProducts = () => {
                     </div>
                 ) : offerProducts.length === 0 ? (
                     <>
-                    <p className='col-span-5 flex items-center justify-center h-[50vh]'>No products available</p>
+                        <p className='col-span-5 flex items-center justify-center h-[50vh]'>No products available</p>
                     </>
                 ) : (
                     <>
                         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
                             {offerProducts.map(product => {
-                                const isInWishlist = favProduct?.items?.some(item => item.productId._id === product._id);
+                                const isInWishlist = favProduct?.items?.some(item => item?.productId?._id === product._id);
                                 return (
                                     <div className='group relative' key={product._id}>
                                         <Link
@@ -129,17 +129,13 @@ const OfferProducts = () => {
                                         )}
                                         <div className='mt-3'>
                                             <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>{product.title}</h4>
-                                            <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize'>
+                                            <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize truncate overflow-hidden 
+                                                whitespace-nowrap w-40 xl:w-60 lg:w-60'>
                                                 {product.description}
                                             </p>
-                                            <div className='flex items-end gap-3 mt-2'>
-                                                <p className="text-gray-600 font-normal text-sm xl:text-base lg:text-base">
-                                                    ₹<s>{product.actualPrice}</s>
-                                                </p>
-                                                <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold'>
-                                                    ₹{product.offerPrice}
-                                                </p>
-                                            </div>
+                                            <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>
+                                                ₹{product.offerPrice}
+                                            </p>
                                         </div>
                                     </div>
                                 )

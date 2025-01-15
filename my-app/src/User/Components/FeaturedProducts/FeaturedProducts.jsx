@@ -44,7 +44,7 @@ const FeaturedProducts = () => {
             }
 
             // Check if product is already in wishlist
-            const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
+            const isInWishlist = favProduct?.items?.some(item => item.productId?._id === productId);
 
             if (isInWishlist) {
                 // If product is already in wishlist, show the appropriate toast and return
@@ -103,7 +103,7 @@ const FeaturedProducts = () => {
                         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
                             {
                                 featuredProducts.map((product) => {
-                                    const isInWishlist = favProduct?.items?.some(item => item.productId._id === product._id);
+                                    const isInWishlist = favProduct?.items?.some(item => item?.productId?._id === product._id);
                                     return (
                                         <div className='group relative' key={product._id}>
                                             <Link
@@ -134,7 +134,8 @@ const FeaturedProducts = () => {
                                             )}
                                             <div className='mt-3'>
                                                 <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>{product.title}</h4>
-                                                <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize'>
+                                                <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize truncate overflow-hidden 
+                                                whitespace-nowrap w-40 xl:w-60 lg:w-60'>
                                                     {product.description}
                                                 </p>
                                                 <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>
