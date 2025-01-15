@@ -86,10 +86,14 @@ const OfferProducts = () => {
                 Offer Products
             </h1>
             {
-                isLoading || offerProducts.length === 0 ? (
+                isLoading ? (
                     <div className="col-span-2 flex justify-center items-center h-[50vh]">
                         <AppLoader />
                     </div>
+                ) : offerProducts.length === 0 ? (
+                    <>
+                    <p className='col-span-5 flex items-center justify-center h-[50vh]'>No products available</p>
+                    </>
                 ) : (
                     <>
                         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
@@ -104,7 +108,7 @@ const OfferProducts = () => {
                                         >
                                             <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
                                                 <img
-                                                    src={`${BASE_URL}/${product.images[0]}`}
+                                                    src={product.images[0]}
                                                     alt={product.title}
                                                     className='w-full h-full object-cover rounded-xl shadow-md
                                                     transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'

@@ -5,7 +5,6 @@ import { AppContext } from '../../../StoreContext/StoreContext';
 import { RxHeart } from 'react-icons/rx';
 import FilterBySize from './FilterBySize';
 import FilterByMaterial from './FilterByMaterial';
-import FilterByCategory from './FilterByCategory';
 import FilterByPrice from './FilterByPrice';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -14,6 +13,7 @@ import AppLoader from '../../../Loader';
 import { RiHeart3Fill, RiHeart3Line } from 'react-icons/ri';
 import toast from 'react-hot-toast';
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
+import FilterBySubCategory from './FilterBySubCategory';
 
 
 const AllCategory = () => {
@@ -138,7 +138,7 @@ const AllCategory = () => {
                         lg:flex lg:items-center lg:space-y-0 lg:gap-5 lg:justify-center'>
                         <li><FilterBySize handleSizeFilter={handleSizeFilter} /></li>
                         <li><FilterByMaterial /></li>
-                        <li><FilterByCategory productsCategory={productsCategory} handleCategory={handleCategory} /></li>
+                        <li><FilterBySubCategory categoryId={productsCategory.id} handleCategory={handleCategory} /></li>
                         <li><FilterByPrice handlePriceFilter={handlePriceFilter} /></li>
                     </ul>
                     <div className="xl:p-10 mt-10">

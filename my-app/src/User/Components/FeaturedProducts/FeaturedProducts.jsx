@@ -56,7 +56,7 @@ const FeaturedProducts = () => {
                 userId: userId,
                 productId: productId
             };
-            
+
             // Add to wishlist if not already there
             const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
             console.log(response.data);
@@ -90,10 +90,14 @@ const FeaturedProducts = () => {
         <>
             <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center xl:text-left'>Featured Products</h1>
             {
-                isLoading || featuredProducts.length === 0 ? (
+                isLoading ? (
                     <div className="col-span-2 flex justify-center items-center h-[50vh]">
                         <AppLoader />
                     </div>
+                ) : featuredProducts.length === 0 ? (
+                    <>
+                        <p className='col-span-5 flex items-center justify-center h-[50vh]'>No products available</p>
+                    </>
                 ) : (
                     <>
                         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
@@ -109,7 +113,7 @@ const FeaturedProducts = () => {
                                             >
                                                 <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
                                                     <img
-                                                        src={`${BASE_URL}/${product.images[0]}`}
+                                                        src={product.images[0]}
                                                         alt={product.title}
                                                         className='w-full h-full object-cover rounded-xl shadow-md
                                                         transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'

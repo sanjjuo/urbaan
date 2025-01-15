@@ -87,7 +87,7 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
                                 {/* carousel image */}
                                 <div className='w-full h-72'>
                                     <img
-                                        src={`${BASE_URL}/uploads/category/${carousel.image}`}
+                                        src={carousel.image}
                                         alt={carousel.title}
                                         className='w-full h-full object-cover rounded-lg'
                                     />
@@ -108,9 +108,9 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
                                     <div className="flex gap-2 text-sm">
                                         <Button
                                             className={`text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl
-                                        ${carousel.isActive ? 'bg-shippedBg text-white' : 'bg-cancelBg text-white'}`}
+                                        ${carousel?.isActive === true ? 'bg-shippedBg text-white' : 'bg-cancelBg text-white'}`}
                                         >
-                                            {carousel.isActive ? 'Active' : 'Inactive'}
+                                            {carousel?.isActive === true ? 'Active' : 'Inactive'}
                                         </Button>
 
                                         <button

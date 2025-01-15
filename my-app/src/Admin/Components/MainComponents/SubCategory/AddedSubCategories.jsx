@@ -20,6 +20,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
             try {
                 const response = await axios.get(`${BASE_URL}/admin/Subcategory/get`);
                 setSubCategory(response.data);
+                console.log(response.data);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);
@@ -102,7 +103,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
                                                 <td className={classes}>
                                                     <div className="flex flex-col items-center gap-3">
                                                         <div className='w-[60px] h-[60px] rounded-md'>
-                                                            <img src={`${BASE_URL}/uploads/category/${subCat.SubImageUrl}`} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
+                                                            <img src={subCat.SubImageUrl} alt={subCat.title} className='w-full h-full object-cover rounded-md' />
                                                         </div>
                                                         <Typography variant="small" className="font-normal capitalize font-custom text-sm">
                                                             {subCat.title}
@@ -116,7 +117,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
                                                 </td>
                                                 <td className={classes}>
                                                     <Button className={`${subCat.isActive ? "bg-green-500 text-white" : "bg-red-500 text-white"} text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl`}>
-                                                        {subCat.isActive ? "Active" : "Inactive"}
+                                                        {subCat?.isActive === true ? "Active" : "Inactive"}
                                                     </Button>
                                                 </td>
                                                 <td className={classes}>

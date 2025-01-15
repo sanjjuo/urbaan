@@ -40,6 +40,7 @@ const CreateCategories = () => {
 
             // Prepare FormData
             const formData = new FormData();
+            formData.append('folder', 'Categories');
             formData.append('name', createCategoryForm.name);
             formData.append('description', createCategoryForm.description);
             formData.append('image', createCategoryForm.image);

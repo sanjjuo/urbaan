@@ -7,6 +7,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 import AppLoader from '../../../Loader';
+import { formatDistanceToNow } from 'date-fns';
+import { TiStar } from 'react-icons/ti';
 
 const CustomerReviews = () => {
     const { BASE_URL } = useContext(AppContext);
@@ -107,42 +109,40 @@ const CustomerReviews = () => {
                     ) : (
                         <>
                             {reviews.map((review) => (
-                                <div className="space-y-2 mb-3" key={review._id}>
-                                    <ul className="flex items-center gap-3 xl:gap-5 lg:gap-5 font-medium">
-                                        <li className="w-12 h-12 xl:w-14 xl:h-14 lg:w-14 lg:h-14">
+                                <div className="space-y-2 border-b-2 py-5" key={review._id}>
+                                    <ul className="flex flex-col items-start gap-3 xl:gap-5 lg:gap-5 font-medium">
+                                        <li className="w-14 h-14 xl:w-16 xl:h-16 lg:w-16 lg:h-16">
                                             <img
-                                                src='userProfile.jpg'
+                                                src={review.image}
                                                 alt=''
-                                                className="w-full h-full object-cover rounded-full"
+                                                className="w-full h-full object-cover rounded-md"
                                             />
                                         </li>
                                         <li>
-                                            <span className="text-sm xl:text-base lg:text-base capitalize">
-                                                {review.userId.name}
-                                            </span>
-                                            <ul className="flex items-center gap-1">
-                                                <span className="text-xs xl:text-sm lg:text-sm text-primary">
-                                                    {review.rating}
-                                                </span>
-                                                {[...Array(5)].map((_, index) => (
-                                                    <li
-                                                        key={index}
-                                                        className={`text-xs xl:text-sm lg:text-sm ${index < Math.round(review.rating)
-                                                            ? "text-ratingBg"
-                                                            : "text-gray-300"
-                                                            }`}
-                                                    >
-                                                        <FaStar />
-                                                    </li>
-                                                ))}
+                                            <ul className="flex items-center gap-2">
+                                                <li
+                                                    className='flex items-center justify-center bg-shippedBg w-9 h-5 rounded-2xl text-xs'
+                                                >
+                                                    <span className="text-white">
+                                                        {review.rating}
+                                                    </span>
+                                                    <TiStar className='text-base text-white' />
+                                                </li>
+                                                <span className="text-gray-900 font-normal text-xs xl:text-sm lg:text-sm capitalize" >{review.message}</span>
                                             </ul>
                                         </li>
                                     </ul>
-                                    <p className="text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize">
-                                        {review.message}
-                                    </p>
+                                    <div className="flex items-center gap-3">
+                                        <p className="text-gray-600 font-bold text-xs capitalize">
+                                            {review.userId.name}
+                                        </p>
+                                        <p className="text-gray-600 font-normal text-xs capitalize">
+                                            {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
+                                        </p>
+                                    </div>
                                 </div>
                             ))}
+
                         </>
                     )}
                 </div>

@@ -63,6 +63,7 @@ const WriteReview = () => {
         }
         try {
             const reviewFormData = new FormData();
+            reviewFormData.append('folder', 'Reviews');
             reviewFormData.append('userId', userId);
             reviewFormData.append('productId', productId);
             reviewFormData.append('rating', reviewRating);
@@ -94,8 +95,8 @@ const WriteReview = () => {
             }
         } catch (error) {
             console.error("Error adding review:", error);
-            const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again later.';
-            toast.error(errorMessage);
+            // const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again later.';
+            // toast.error(errorMessage);
         }
     }
 
@@ -114,31 +115,33 @@ const WriteReview = () => {
             <div className="p-4 xl:py-16 xl:px-72 lg:py-16 lg:px-72 bg-userBg h-[calc(100vh-4rem)] overflow-y-auto">
                 <div className="grid grid-cols-1 gap-5">
                     {/* Image Upload Section */}
-                    <div className="flex justify-center items-center w-full xl:h-56 lg:h-56 h-44 border-4 border-dashed border-primary rounded-xl">
-                        {!selectedImage ? (
-                            <>
-                                <input
-                                    type="file"
-                                    id="file"
-                                    className="hidden"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
+                    <div className='flex items-center justify-center'>
+                        <div className="flex justify-center items-center w-full xl:w-96 lg:w-96 xl:h-72 lg:h-72 h-44 border-4 border-dashed border-primary rounded-xl">
+                            {!selectedImage ? (
+                                <>
+                                    <input
+                                        type="file"
+                                        id="file"
+                                        className="hidden"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                    />
+                                    <label
+                                        htmlFor="file"
+                                        className="flex flex-col items-center cursor-pointer"
+                                    >
+                                        <IoMdCloudUpload className="text-primary text-5xl" />
+                                        <p className="text-secondary text-xs">Add Photo or Video</p>
+                                    </label>
+                                </>
+                            ) : (
+                                <img
+                                    src={selectedImage}
+                                    alt="Uploaded"
+                                    className="w-full h-full rounded-lg object-contain"
                                 />
-                                <label
-                                    htmlFor="file"
-                                    className="flex flex-col items-center cursor-pointer"
-                                >
-                                    <IoMdCloudUpload className="text-primary text-5xl" />
-                                    <p className="text-secondary text-xs">Add Photo or Video</p>
-                                </label>
-                            </>
-                        ) : (
-                            <img
-                                src={selectedImage}
-                                alt="Uploaded"
-                                className="w-full h-full rounded-lg"
-                            />
-                        )}
+                            )}
+                        </div>
                     </div>
 
                     {/* Rating Section */}

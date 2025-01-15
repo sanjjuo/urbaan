@@ -68,11 +68,11 @@ const AddedCategories = ({ createEdit, handleEditCategory, adminCategory, setAdm
                         {adminCategory.map((category) => (
                             <Card className="p-5 space-y-6 relative" key={category.id}>
                                 <div className='w-full h-72'>
-                                    <img src={`${BASE_URL}/uploads/category/${category.imageUrl}`} alt={category.name} className='h-full w-full object-cover rounded-lg' />
+                                    <img src={category.imageUrl} alt={category.name} className='h-full w-full object-cover rounded-lg' />
                                 </div>
                                 <div>
                                     <h2 className="font-bold text-2xl text-secondary capitalize">{category.name}</h2>
-                                    <h2 className="font-normal text-secondary capitalize">{category.description}</h2>
+                                    <h2 className="font-normal text-gray-600 text-sm capitalize">{category.description}</h2>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     {/* Read More Link */}

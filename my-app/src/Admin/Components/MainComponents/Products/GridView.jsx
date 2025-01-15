@@ -25,10 +25,14 @@ const GridView = ({ products, isLoading, selectedProductId, setSelectedProductId
         <>
             <div>
                 {
-                    isLoading || products.length === 0 ? (
-                        <div className='col-span-2 flex justify-center items-center h-[50vh]'>
+                    isLoading ? (
+                        <div className="col-span-2 flex justify-center items-center h-[50vh]">
                             <AppLoader />
                         </div>
+                    ) : products.length === 0 ? (
+                        <>
+                            <p className='col-span-5 flex items-center justify-center h-[50vh]'>No products available</p>
+                        </>
                     ) : (
                         <>
                             <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">

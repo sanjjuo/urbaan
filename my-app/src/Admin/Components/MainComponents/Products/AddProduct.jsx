@@ -144,6 +144,7 @@ const AddProduct = () => {
             }
 
             const productFormData = new FormData();
+            productFormData.append('folder', 'Products');
             productFormData.append('title', productTitle);
             productFormData.append('category', productCategory);
             productFormData.append('subcategory', productSubCategory);
@@ -546,8 +547,8 @@ const AddProduct = () => {
                 {/* second col */}
                 {/* photo upload */}
                 <div className='bg-white rounded-xl shadow-md p-5 space-y-6 h-fit'>
-                    <div className='flex gap-5'>
-                        <div className="flex flex-col justify-center items-center w-72 h-56 border-4 border-dashed border-primary rounded-xl">
+                    <div className='grid grid-cols-5 gap-2'>
+                        <div className="col-span-3 flex flex-col justify-center items-center h-56 border-4 border-dashed border-primary rounded-xl">
                             <input
                                 type="file"
                                 id="file"
@@ -562,28 +563,27 @@ const AddProduct = () => {
                             </label>
                         </div>
 
-                        <ul className="flex-1 space-y-2 h-56 overflow-y-auto hide-scrollbar">
-                            {productImage.length === 0 ? (
-                                <p className="text-xs text-gray-600 font-normal flex justify-center items-center h-full">
-                                    Your selected images display here
-                                </p>
-                            ) : (
-                                productImage.map((image, index) => (
-                                    <li key={index} className="flex items-start justify-between bg-primary/15 rounded-md p-2">
-                                        <div className="flex gap-3 items-start">
-                                            <div className="w-[60px] h-[60px]">
+                        <div className='col-span-2'>
+                            <ul className="flex flex-row gap-2 overflow-y-auto hide-scrollbar">
+                                {productImage.length === 0 ? (
+                                    <p className="text-xs text-gray-600 font-normal flex justify-center items-center">
+                                        Your selected images display here
+                                    </p>
+                                ) : (
+                                    productImage.map((image, index) => (
+                                        <li key={index} className="relative w-full">
+                                            <div className="w-full h-[120px]">
                                                 <img src={URL.createObjectURL(image)} alt="" className="w-full h-full object-cover rounded-md" />
                                             </div>
-                                            <p className="text-secondary font-normal text-xs">{image.name}</p> {/* Display file name */}
-                                        </div>
-                                        <MdDelete
-                                            onClick={() => setProductImage((prevImages) => prevImages.filter((_, imgIndex) => imgIndex !== index))}
-                                            className="text-deleteBg text-lg cursor-pointer hover:text-primary"
-                                        />
-                                    </li>
-                                ))
-                            )}
-                        </ul>
+                                            <MdDelete
+                                                onClick={() => setProductImage((prevImages) => prevImages.filter((_, imgIndex) => imgIndex !== index))}
+                                                className="absolute top-1 right-1 text-deleteBg text-lg cursor-pointer hover:text-primary"
+                                            />
+                                        </li>
+                                    ))
+                                )}
+                            </ul>
+                        </div>
                     </div>
 
                     {/* manufacter name */}

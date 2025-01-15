@@ -383,8 +383,10 @@ const ProductDetails = () => {
                                             Customer Reviews ({totalReviews})
                                         </h4>
                                         <p className='text-gray-600 flex justify-center items-center py-5 text-sm'>No reviews for this product</p>
-                                        <Link to='/write-review'>
-                                            <p className='text-center text-primary underline underline-offset-4'>Add review</p>
+                                        <Link to={!userToken && !userId ? '/login-user' : '/write-review'}
+                                            state={{ productId }}
+                                            className='flex items-center justify-center cursor-pointer'>
+                                            <Button className='bg-primary font-normal capitalize font-custom py-2 px-4'>Add Review</Button>
                                         </Link>
                                     </div>
 

@@ -11,7 +11,7 @@ import { useState } from 'react';
 const TABLE_HEAD = ["Product Name", "Description", "Stock", "Rate", "Price", "Orders", "Publish", "Action"];
 
 const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId, handleDeleteProduct }) => {
-    const { open, handleOpen, modalType, BASE_URL } = useContext(AppContext);
+    const { open, handleOpen, modalType } = useContext(AppContext);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
 
@@ -41,13 +41,16 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
         <>
             <div>
                 {
-                    isLoading || products.length === 0 ? (
-                        <div className='col-span-2 flex justify-center items-center h-[50vh]'>
+                    isLoading ? (
+                        <div className="col-span-2 flex justify-center items-center h-[50vh]">
                             <AppLoader />
                         </div>
+                    ) : currentProducts.length === 0 ? (
+                        <>
+                            <p className='col-span-5 flex items-center justify-center h-[50vh]'>No products available</p>
+                        </>
                     ) : (
                         <>
-                            {/* <div className='bg-white rounded-xl h-screen shadow-md p-5'> */}
                             <Card className="w-full shadow-sm rounded-xl bg-white border-[1px]">
                                 <CardBody>
                                     <table className="w-full table-auto text-left border-collapse">
@@ -79,7 +82,7 @@ const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId
                                                         <td className={classes}>
                                                             <div className='flex flex-col items-center gap-2'>
                                                                 <div className='w-[60px] h-[60px] rounded-md'>
-                                                                    <img src={`${BASE_URL}/uploads/category/${product.images[0]}`} alt={product.title} className='text-xs w-full h-full object-cover rounded-md' />
+                                                                    <img src={product.images[0]} alt={product.title} className='text-xs w-full h-full object-cover rounded-md' />
                                                                 </div>
                                                                 <Typography
                                                                     variant="small"

@@ -40,6 +40,7 @@ const EditProduct = () => {
     });
     const [editProdDescription, setEditProdDescription] = useState('')
     const [editProdImage, setEditProdImage] = useState([])
+    const [newImage, setNewImage] = useState([])
     const [editProdManuName, setEditProdManuName] = useState('')
     const [editProdManuBrand, setEditProdManuBrand] = useState('')
     const [editProdManuAddress, setEditProdManuAddress] = useState('')
@@ -52,7 +53,7 @@ const EditProduct = () => {
         if (initialProducts) {
             setEditProdTitle(initialProducts.title);
             setEditProdCategory(initialProducts.category._id);
-            setEditProdSubCategory(initialProducts.subcategory._id);
+            setEditProdSubCategory(initialProducts.subcategory);
             setEditProdActualPrice(initialProducts.actualPrice);
             setEditProdDiscount(initialProducts.discount);
             setEditProdOfferPrice(initialProducts.offerPrice);
@@ -95,7 +96,7 @@ const EditProduct = () => {
     // handle image
     const handleProductImageUpload = (e) => {
         const files = Array.from(e.target.files);
-        setEditProdImage((prevImages) => [...prevImages, ...files]);
+        setNewImage((prevImages) => [...prevImages, ...files]);
     };
 
     // manage text color based ob bg-color
@@ -194,6 +195,7 @@ const EditProduct = () => {
 
             // Initialize FormData
             const editproductFormData = new FormData();
+            editproductFormData.append('folder', 'Products');
             editproductFormData.append('title', editProdTitle);
             editproductFormData.append('category', editProdCategory);
             editproductFormData.append('subcategory', editProdSubCategory);
@@ -240,7 +242,7 @@ const EditProduct = () => {
                 editproductFormData.append(`features[${key}]`, value || null);
             });
             // Append images
-            editProdImage.forEach((image) => editproductFormData.append("images", image));
+            newImage.forEach((image) => editproductFormData.append("images", image));
             // Append manufacturer details
             editproductFormData.append('manufacturerName', editProdManuName);
             editproductFormData.append('manufacturerBrand', editProdManuBrand);
@@ -278,6 +280,7 @@ const EditProduct = () => {
             setEditAttributeFields([{ color: "", sizes: [{ size: "", stock: "" }] }]);
             setEditProdDescription('');
             setEditProdImage([]);
+            setNewImage([])
             setEditProdManuName('');
             setEditProdManuBrand('');
             setEditProdManuAddress('');
@@ -340,6 +343,37 @@ const EditProduct = () => {
         updatedFields[index][key] = value;
         setEditAttributeFields(updatedFields);
     };
+
+    // handleDeleteImg
+    const handleDeleteImg = async (image) => {
+        try {
+            if (editProdImage.length === 1) {
+                toast.error("At least one image must be present. Cannot delete the last image.");
+                return;
+            }
+            const token = localStorage.getItem('token')
+            const imagePayload = {
+                imageName: image
+            }
+            console.log(imagePayload);
+            console.log(`${BASE_URL}/admin/products/delete-product-image/${initialProducts._id}`);
+
+            const response = await axios.post(`${BASE_URL}/admin/products/delete-product-image/${initialProducts._id}`, imagePayload, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data);
+            if (response.data.success) {
+                setEditProdImage((prevImages) => prevImages.filter((img) => img !== image));
+                toast.success('product image is deleted')
+            } else {
+                console.error('Failed to delete the image on the server.');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     return (
@@ -599,6 +633,25 @@ const EditProduct = () => {
 
                 {/* photo upload */}
                 <div className='bg-white rounded-xl shadow-md p-5 space-y-6 h-fit'>
+                    <div className='flex items-center gap-2'>
+                        {editProdImage.length > 0 ? (
+                            editProdImage.map((image, index) => (
+                                <div key={index} className='w-32 h-32 relative'>
+                                    <img
+                                        src={image}
+                                        alt={`Product image ${index + 1}`}
+                                        className='w-full h-full rounded-md'
+                                    />
+                                    <MdDelete
+                                        onClick={() => handleDeleteImg(image)}
+                                        className="absolute top-0 right-0 text-deleteBg text-lg cursor-pointer hover:text-primary"
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <p>No images available</p>
+                        )}
+                    </div>
                     <div className='flex gap-5'>
                         <div className="flex flex-col justify-center items-center w-72 h-56 border-4 border-dashed border-primary rounded-xl">
                             <input
@@ -616,26 +669,30 @@ const EditProduct = () => {
                         </div>
 
                         <ul className="flex-1 space-y-2 h-56 overflow-y-auto hide-scrollbar">
-                            {editProdImage.length === 0 ? (
+                            {newImage.length === 0 ? (
                                 <p className="text-xs text-gray-600 font-normal flex justify-center items-center h-full">
                                     Your selected images display here
                                 </p>
                             ) : (
-                                editProdImage.map((image, index) => (
-                                    <li key={index} className="flex items-start justify-between bg-primary/15 rounded-md p-2">
-                                        <div className="flex gap-3 items-start">
-                                            <div className="w-[60px] h-[60px]">
-                                                <img src={`${BASE_URL}/uploads/category/${image}`} alt="" className="w-full h-full object-cover rounded-md" />
-                                            </div>
-                                            <p className="text-secondary font-normal text-xs">{image.name}</p> {/* Display file name */}
-                                        </div>
-                                        <MdDelete
-                                            onClick={() => setEditProdImage((prevImages) =>
-                                                prevImages.filter((_, imgIndex) => imgIndex !== index))}
-                                            className="text-deleteBg text-lg cursor-pointer hover:text-primary"
-                                        />
-                                    </li>
-                                ))
+                                newImage.map((image, index) => {
+                                    if (image instanceof File) {
+                                        return (
+                                            <li key={index} className="flex items-start justify-between bg-primary/15 rounded-md p-2">
+                                                <div className="flex gap-3 items-start">
+                                                    <div className="w-[60px] h-[60px]">
+                                                        <img src={URL.createObjectURL(image)} alt="" className="w-full h-full object-cover rounded-md" />
+                                                    </div>
+                                                </div>
+                                                <MdDelete
+                                                    onClick={() => setEditProdImage((prevImages) =>
+                                                        prevImages.filter((_, imgIndex) => imgIndex !== index))}
+                                                    className="text-deleteBg text-lg cursor-pointer hover:text-primary"
+                                                />
+                                            </li>
+                                        );
+                                    }
+                                    return null; // Added a return null to ensure the map doesn't break for non-File objects
+                                })
                             )}
                         </ul>
                     </div>

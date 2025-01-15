@@ -39,6 +39,7 @@ const EditCategories = ({ initialData }) => {
             }
 
             const editFormData = new FormData();
+            editFormData.append('folder', 'Categories');
             editFormData.append('name', categoryName);
             editFormData.append('description', categoryDescription);
             if (categoryImage && categoryImage.image) {
@@ -94,7 +95,7 @@ const EditCategories = ({ initialData }) => {
                                 <label htmlFor="" className='font-normal text-base'>Image</label>
                                 <RiDeleteBin5Line onClick={() => setCategoryImage(null)} className='text-deleteBg text-xl hover:text-primary cursor-pointer' />
                             </div>
-                            <div className='w-full h-48 flex justify-center items-center border-2 rounded-xl mt-2'>
+                            <div className='w-full h-60 flex justify-center items-center border-2 rounded-xl mt-2'>
                                 {categoryImage ? (
                                     <>
                                         <img

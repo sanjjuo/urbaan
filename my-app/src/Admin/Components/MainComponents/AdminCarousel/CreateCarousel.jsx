@@ -57,6 +57,7 @@ const CreateCarousel = () => {
             }
 
             const carouselFormData = new FormData();
+            carouselFormData.append('folder', 'sliders');
             carouselFormData.append('image', carouselImage);
             carouselFormData.append('label', carouselLabel);
             carouselFormData.append('title', carouselTitle);

@@ -78,6 +78,7 @@ const EditCarousel = ({ initialEditCarouselData }) => {
             }
 
             const editCarouselFormData = new FormData();
+            editCarouselFormData.append('folder', 'sliders');
             if (editCarouselImage && editCarouselImage.image) {
                 editCarouselFormData.append('image', editCarouselImage.image);
             } else {

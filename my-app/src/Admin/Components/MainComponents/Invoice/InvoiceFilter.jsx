@@ -57,7 +57,14 @@ const InvoiceFilter = ({ setInvoice }) => {
                         <ImFilter />
                     </li>
                     <li className="bg-white font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-24 h-12 flex items-center justify-center">Filter by</li>
-                    <li><FilterDate setFilters={setFilters} resetFilter={resetFilter} /></li>
+                    <li>
+                        <FilterDate
+                            setFilters={setFilters}
+                            resetFilter={resetFilter}
+                            filterKeys={{ start: 'startDate', end: 'endDate' }}
+                        />
+                    </li>
+
                     <li><FilterPaymentStatus setFilters={setFilters} resetFilter={resetFilter} /></li>
                 </ul>
                 <Button onClick={resetFilters} className="bg-white capitalize font-custom shadow-none hover:shadow-none cursor-pointer font-normal text-base border-[1px] border-gray-300 rounded-xl p-1 w-32 h-12 flex items-center justify-center gap-1 

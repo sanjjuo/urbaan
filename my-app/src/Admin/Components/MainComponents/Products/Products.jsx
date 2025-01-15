@@ -47,6 +47,7 @@ const Products = () => {
 
   // handle delete product
   const handleDeleteProduct = async (productId) => {
+    console.log(productId);
     try {
       const token = localStorage.getItem('token')
       if (!token) {
@@ -62,6 +63,7 @@ const Products = () => {
       console.log(response.data);
       handleOpen()
       toast.success("Product is deleted")
+      setProducts(products.filter(product => product.id !== productId));
     } catch (error) {
       console.log(error);
       alert("Product is not deleted")

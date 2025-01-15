@@ -57,6 +57,7 @@ const CreateSubCategories = () => {
             }
 
             const subCategoryFormData = new FormData();
+            subCategoryFormData.append('folder', 'SubCategories');
             subCategoryFormData.append('title', createSubCategoryTitle);
             subCategoryFormData.append('category', createSubCategorySelect);
             subCategoryFormData.append('image', createSubCategoryImage);

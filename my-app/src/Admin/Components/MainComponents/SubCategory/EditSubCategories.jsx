@@ -71,6 +71,7 @@ const EditSubCategories = ({ initialSubCategory }) => {
             }
 
             const editSubCategoryFormData = new FormData();
+            editSubCategoryFormData.append('folder', 'SubCategories');
             editSubCategoryFormData.append('title', editSubCategoryTitle);
             editSubCategoryFormData.append('MainCategory', editSubCategorySelect.MainCategory);
 
