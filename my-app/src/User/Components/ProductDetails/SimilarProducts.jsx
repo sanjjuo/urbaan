@@ -1,43 +1,121 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { products } from '../../../data'
-import { RxHeart } from 'react-icons/rx'
 import { useContext } from 'react'
 import { AppContext } from '../../../StoreContext/StoreContext'
+import { RiHeart3Fill, RiHeart3Line } from 'react-icons/ri'
+import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 
-const SimilarProducts = () => {
-    const { handleProductDetails } = useContext(AppContext)
+const SimilarProducts = ({ similarProducts }) => {
+    const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext)
+    const [heartIcons, setHeartIcons] = useState({});
 
-    const handleClick = (product) => {
-        handleProductDetails(product)
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        })
-    }
+    const handleWishlist = async (productId, productTitle) => {
+        try {
+            const userId = localStorage.getItem('userId');
+
+            if (!userId) {
+                setOpenUserNotLogin(true);
+                return;
+            }
+
+            const payload = {
+                userId: userId,
+                productId: productId
+            };
+
+            const isInWishlist = favProduct?.items?.some(item => item.productId?._id === productId);
+
+            if (isInWishlist) {
+                toast.error(`${productTitle} is already in your wishlist`);
+                return;
+            }
+
+            const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
+            console.log(response.data);
+            
+            setHeartIcons(prevState => ({
+                ...prevState,
+                [productId]: !isInWishlist,
+            }));
+
+            setFav((prevFav) => {
+                const isAlreadyFav = prevFav.some(
+                    (item) => item.productId === payload.productId
+                );
+                return isAlreadyFav ? prevFav : [...prevFav, payload];
+            });
+
+            toast.success(`${productTitle} added to wishlist`);
+
+        } catch (error) {
+            if (error.response && error.response.data.message === "Product is already in the wishlist") {
+                toast.error(`${productTitle} is already in your wishlist`);
+            } else {
+                console.log("Error adding to wishlist:", error);
+                toast.error("Failed to add product to wishlist");
+            }
+        }
+    };
+
     return (
         <>
             <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center mb-10'>Similar Products</h1>
             <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-5 pb-10'>
-                {
-                    products.map((product) => (
-                        <Link onClick={() => handleClick(product)} to='/product-details' className='cursor-pointer' key={product.id}>
-                            <div className='group'>
+                {similarProducts.map(product => {
+                    const isInWishlist = favProduct?.items?.some(item => item?.productId?._id === product._id);
+                    return (
+                        <div className='group relative' key={product._id}>
+                            <Link
+                                to="/product-details"
+                                state={{
+                                    productId: product._id,
+                                    categoryId: product.category // Pass the category ID
+                                }}
+                                className="cursor-pointer"
+                            >
                                 <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
-                                    <img src={product.img} alt={product.title} className='w-full h-full object-cover rounded-xl shadow-md
-                                transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105' />
-                                    <RxHeart className='absolute top-2 right-2 bg-white text-gray-600 w-6 h-6 xl:w-7 xl:h-7 lg:w-7 lg:h-7 p-1 rounded-full shadow-md' />
+                                    <img
+                                        src={product.images[0]}
+                                        alt={product.title}
+                                        className='w-full h-full object-cover rounded-xl shadow-md
+                                        transition transform scale-100 duration-500 ease-in-out cursor-pointer group-hover:scale-105'
+                                        onError={(e) => e.target.src = '/no-image.jpg'}
+                                    />
                                 </div>
-                                <div className='mt-3'>
-                                    <h4 className='font-medium text-sm xl:text-lg lg:text-lg'>{product.title}</h4>
-                                    <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm'>{product.description}</p>
-                                    <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹ {product.price}</p>
-                                </div>
+                            </Link>
+                            {heartIcons[product._id] || isInWishlist ? (
+                                <RiHeart3Fill
+                                    onClick={() => handleWishlist(product._id, product.title)}
+                                    className='absolute top-2 right-2 cursor-pointer text-primary bg-white w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
+                                />
+                            ) : (
+                                <RiHeart3Line
+                                    onClick={() => handleWishlist(product._id, product.title)}
+                                    className='absolute top-2 right-2 cursor-pointer bg-white text-gray-600 w-7 h-7 xl:w-8 xl:h-8 lg:w-8 lg:h-8 p-1 rounded-full shadow-md'
+                                />
+                            )}
+                            <div className='mt-3'>
+                                <h4 className='font-medium text-sm xl:text-lg lg:text-lg capitalize'>{product.title}</h4>
+                                <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm capitalize truncate overflow-hidden 
+                                    whitespace-nowrap w-40 xl:w-60 lg:w-60'>
+                                    {product.description}
+                                </p>
+                                <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>
+                                    ₹{product.offerPrice}
+                                </p>
                             </div>
-                        </Link>
-                    ))
-                }
+                        </div>
+                    )
+                })}
             </div>
+
+            <UserNotLoginPopup
+                title='You are not logged in'
+                description='Please log in or create an account to add items to your wishlist and keep track of your favorites.'
+            />
         </>
     )
 }

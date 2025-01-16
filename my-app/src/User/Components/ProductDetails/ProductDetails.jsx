@@ -21,7 +21,7 @@ import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 const ProductDetails = () => {
     const { handleOpenSizeDrawer, BASE_URL, favProduct, setOpenUserNotLogin, setCart, setFav } = useContext(AppContext)
     const location = useLocation();
-    const { productId } = location.state || {}
+    const { productId, categoryId } = location.state || {}
     const navigate = useNavigate();
     const [productDetails, setProductDetails] = useState([]);
     const [selectedColor, setSelectedColor] = useState("");
@@ -31,6 +31,7 @@ const ProductDetails = () => {
     const [modalDescription, setModalDescription] = useState('');
     const [showMore, setShowMore] = useState(false);
     const [reviews, setReviews] = useState([]);
+    const [similarProducts, setSimilarProducts] = useState([])
 
 
     useEffect(() => {
@@ -86,10 +87,24 @@ const ProductDetails = () => {
             }
         }
         fetchProductDetails()
-    }, [])
+    }, []);
 
     console.log(productDetails);
     console.log("id", productId);
+
+    // fetch similar products based on category id
+    useEffect(() => {
+        const fetchSimilarProducts = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/products/products/category/${categoryId}`)
+                setSimilarProducts(response.data)
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchSimilarProducts()
+    }, [])
 
 
     const getContrastYIQ = (color) => {
@@ -404,7 +419,7 @@ const ProductDetails = () => {
 
                 {/* similar products */}
                 <div className='mt-10 xl:mt-20 lg:mt-10'>
-                    <SimilarProducts />
+                    <SimilarProducts similarProducts={similarProducts}/>
                 </div>
 
                 <div className="bg-white shadow-md fixed bottom-0 inset-x-0 z-50 w-full p-4 xl:hidden lg:hidden">

@@ -10,7 +10,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 
-const FilterBySubCategory = ({ categoryId, handleCategory }) => {
+const FilterBySubCategory = ({ categoryId, handleSubCategory }) => {
     const { BASE_URL } = useContext(AppContext);
     const [subCategories, setSubCategories] = useState([]);
     const [selectedSubCategoryName, setSelectedSubCategoryName] = useState("All Subcategories");
@@ -21,6 +21,7 @@ const FilterBySubCategory = ({ categoryId, handleCategory }) => {
 
             try {
                 const response = await axios.get(`${BASE_URL}/user/subCategory/get`);
+                console.log("Subcategories response:", response.data);
                 // Filter subcategories based on the selected category ID
                 const filterSubCategory = response.data.filter(subcat => subcat.MainCategory.id === categoryId);
                 setSubCategories(filterSubCategory);
@@ -34,7 +35,8 @@ const FilterBySubCategory = ({ categoryId, handleCategory }) => {
 
     const handleCategorySelection = (subCategory) => {
         setSelectedSubCategoryName(subCategory.title || "All Subcategories");
-        handleCategory(subCategory.id); // Trigger the parent handler with the subcategory ID
+        console.log("Selected Subcategory:", subCategory); // Debugging log
+        handleSubCategory(subCategory.id); // Trigger the parent handler with the subcategory ID
     };
 
     return (

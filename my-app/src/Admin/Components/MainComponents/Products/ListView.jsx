@@ -13,7 +13,7 @@ const TABLE_HEAD = ["Product Name", "Description", "Stock", "Rate", "Price", "Or
 const ListView = ({ products, isLoading, selectedProductId, setSelectedProductId, handleDeleteProduct }) => {
     const { open, handleOpen, modalType } = useContext(AppContext);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
 
     // Get current items to display
     const indexOfLastItem = currentPage * itemsPerPage;

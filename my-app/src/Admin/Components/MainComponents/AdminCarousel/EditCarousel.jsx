@@ -33,7 +33,7 @@ const EditCarousel = ({ initialEditCarouselData }) => {
 
     useEffect(() => {
         if (initialEditCarouselData) {
-            setEditCarouselImage(initialEditCarouselData.image ? `${BASE_URL}/uploads/category/${initialEditCarouselData.image}` : null);
+            setEditCarouselImage(initialEditCarouselData.image ? initialEditCarouselData.image : null);
             setEditCarouselIsActive(initialEditCarouselData.isActive)
             setEditCarouselLabel(initialEditCarouselData.label)
             setEditCarouselTitle(initialEditCarouselData.title)

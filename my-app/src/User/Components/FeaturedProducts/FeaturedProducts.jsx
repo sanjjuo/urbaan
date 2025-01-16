@@ -108,7 +108,10 @@ const FeaturedProducts = () => {
                                         <div className='group relative' key={product._id}>
                                             <Link
                                                 to="/product-details"
-                                                state={{ productId: product._id }}
+                                                state={{
+                                                    productId: product._id,
+                                                    categoryId: product.category._id
+                                                }}
                                                 className="cursor-pointer"
                                             >
                                                 <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>

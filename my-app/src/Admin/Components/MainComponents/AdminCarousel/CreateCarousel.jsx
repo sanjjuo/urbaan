@@ -80,7 +80,7 @@ const CreateCarousel = () => {
             setCarouselLabel('')
             setCarouselTitle('')
             setCarouselLink('')
-            setCarouselIsActive(true)
+            setCarouselIsActive(true);
         } catch (error) {
             console.error("Error creating carousel:", error.response || error.message);
             alert('Carousel is not created');

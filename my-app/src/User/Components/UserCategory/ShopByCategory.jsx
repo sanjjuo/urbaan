@@ -54,7 +54,7 @@ const ShopByCategory = () => {
                 >
                   <div className="w-24 h-28 xl:w-36 xl:h-36 lg:w-36 lg:h-36">
                     <img
-                      src={category.imageUrl}
+                      src={category?.imageUrl}
                       alt={category.name || 'Category Image'}
                       className="w-full h-full object-cover rounded-xl"
                       onError={(e) => (e.target.src = '/no-image.jpg')}

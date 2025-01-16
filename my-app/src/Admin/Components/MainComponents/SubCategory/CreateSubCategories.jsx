@@ -74,6 +74,7 @@ const CreateSubCategories = () => {
             setCreateSubCategoryTitle('');
             setCreateSubCategorySelect('');
             setCreateSubCategoryImage(null);
+            setCreateSubCategoryIsActive(true)
         } catch (error) {
             alert("Sub Category is not created");
             console.error("Error:", error.response || error.message);
@@ -115,7 +116,7 @@ const CreateSubCategories = () => {
                                 <option value="" >Select Category</option>
                                 {categories?.length > 0 &&
                                     categories.map((category) => (
-                                        <option className='text-gray-500' key={category.id} value={category.id}>
+                                        <option className='text-gray-500 capitalize' key={category.id} value={category.id}>
                                             {category.name}
                                         </option>
                                     ))}

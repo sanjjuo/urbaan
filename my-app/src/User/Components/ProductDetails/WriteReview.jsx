@@ -17,18 +17,14 @@ const WriteReview = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [reviewText, setReviewText] = useState("");
-    const [reviewImg, setReviewImg] = useState([])
     const [reviewRating, setReviewRating] = useState(0)
-    console.log(productId);
 
 
     // Image selector
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setReviewImg(file);  // Save the file, not the URL
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedImage(imageUrl);
+            setSelectedImage(file);
         }
     };
 
@@ -61,6 +57,11 @@ const WriteReview = () => {
             setOpenUserNotLogin(true)
             return;
         }
+
+        if (!productId) {
+            toast.error("Product ID is missing. Please try again.");
+            return;
+        }
         try {
             const reviewFormData = new FormData();
             reviewFormData.append('folder', 'Reviews');
@@ -68,13 +69,27 @@ const WriteReview = () => {
             reviewFormData.append('productId', productId);
             reviewFormData.append('rating', reviewRating);
             reviewFormData.append('message', reviewText);
-            if (reviewImg) {
-                reviewFormData.append('image', reviewImg);
+            reviewFormData.append('image', selectedImage || []);
+
+            console.log("Type of selectedImage:", selectedImage, typeof selectedImage);
+
+            if (!(selectedImage instanceof File)) {
+                console.error("Invalid file:", selectedImage);
+            } else {
+                console.log("Valid file:", selectedImage);
             }
+
+            console.log(selectedImage);
+
 
             for (let pair of reviewFormData.entries()) {
                 console.log(pair[0] + ': ' + pair[1]);
             }
+
+            for (let pair of reviewFormData.entries()) {
+                console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+            }
+
 
             if (!productId || !userId || !reviewRating || !reviewText) {
                 console.error("Missing required fields.");
@@ -84,7 +99,8 @@ const WriteReview = () => {
 
             const response = await axios.post(`${BASE_URL}/user/review/add`, reviewFormData, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             })
             console.log(response.data);
@@ -95,12 +111,8 @@ const WriteReview = () => {
             }
         } catch (error) {
             console.error("Error adding review:", error);
-            // const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again later.';
-            // toast.error(errorMessage);
         }
     }
-
-
 
     return (
         <>
@@ -136,7 +148,7 @@ const WriteReview = () => {
                                 </>
                             ) : (
                                 <img
-                                    src={selectedImage}
+                                    src={URL.createObjectURL(selectedImage)}
                                     alt="Uploaded"
                                     className="w-full h-full rounded-lg object-contain"
                                 />

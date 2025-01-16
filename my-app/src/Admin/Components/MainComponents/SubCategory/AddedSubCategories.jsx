@@ -13,7 +13,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
     const [selectedCatId, setSelectedCatId] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
 
     useEffect(() => {
         const fetchSubCategory = async () => {
@@ -116,7 +116,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
                                                         </Typography>
                                                 </td>
                                                 <td className={classes}>
-                                                    <Button className={`${subCat.isActive ? "bg-green-500 text-white" : "bg-red-500 text-white"} text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl`}>
+                                                    <Button className={`${subCat?.isActive ? "bg-green-500 text-white" : "bg-red-500 text-white"} text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl`}>
                                                         {subCat?.isActive === true ? "Active" : "Inactive"}
                                                     </Button>
                                                 </td>

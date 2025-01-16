@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
-import { IoIosArrowBack } from 'react-icons/io';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
-import { RxHeart } from 'react-icons/rx';
 import FilterBySize from './FilterBySize';
 import FilterByMaterial from './FilterByMaterial';
 import FilterByPrice from './FilterByPrice';
@@ -17,7 +15,6 @@ import FilterBySubCategory from './FilterBySubCategory';
 
 
 const AllCategory = () => {
-    const navigate = useNavigate();
     const location = useLocation()
     const productsCategory = location.state?.category || []
     const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext);
@@ -39,20 +36,19 @@ const AllCategory = () => {
         };
 
         fetchProducts();
-    }, []);
+    }, [productsCategory.id]);
 
-    const handleCategory = async (categoryId) => {
+    const handleSubCategory = async (subCategoryId) => {
         try {
             setIsLoading(true);
-            const response = await axios.get(`${BASE_URL}/user/products/products/category/${categoryId}`);
-            setProducts(response.data);
+            const response = await axios.get(`${BASE_URL}/user/subCategory/get/${subCategoryId}`);
+            setProducts(response.data)
+
+            const filterSubCategory = products.filter(product => product.subcategory._id === subCategoryId)
+            setProducts(filterSubCategory);
             setIsLoading(false);
         } catch (error) {
             console.error("Error fetching filtered products:", error.response || error.message);
-            // Check if the error has a response and if the response contains a message
-            const errorMessage = error.response?.data?.message || "Failed to load filtered products.";
-            toast(errorMessage);  // Display the error message from the response
-            setIsLoading(false);
         }
     };
 
@@ -138,7 +134,7 @@ const AllCategory = () => {
                         lg:flex lg:items-center lg:space-y-0 lg:gap-5 lg:justify-center'>
                         <li><FilterBySize handleSizeFilter={handleSizeFilter} /></li>
                         <li><FilterByMaterial /></li>
-                        <li><FilterBySubCategory categoryId={productsCategory.id} handleCategory={handleCategory} /></li>
+                        <li><FilterBySubCategory categoryId={productsCategory.id} handleSubCategory={handleSubCategory} /></li>
                         <li><FilterByPrice handlePriceFilter={handlePriceFilter} /></li>
                     </ul>
                     <div className="xl:p-10 mt-10">
@@ -156,7 +152,7 @@ const AllCategory = () => {
                                 ) : (
                                     <>
                                         {
-                                            products.map((product) => {
+                                            Array.isArray(products) && products.map((product) => {
                                                 const isInWishlist = favProduct?.items?.some(item => item.productId?._id === product._id);
                                                 return (
                                                     <div className='group relative' key={product._id}>
@@ -187,7 +183,7 @@ const AllCategory = () => {
                                                         <div className='mt-3'>
                                                             <p className='font-medium text-sm xl:text-lg lg:text-lg truncate capitalize'>{product.title}</p>
                                                             <p className='text-gray-600 font-normal text-xs xl:text-sm lg:text-sm truncate overflow-hidden 
-                                                                whitespace-nowrap w-40 xl:w-60 lg:w-60 capitalize'>{product.description}</p>
+                                                                whitespace-nowrap w-40 xl:w-56 lg:w-56 capitalize'>{product.description}</p>
                                                             <p className='text-primary text-base xl:text-xl lg:text-xl font-semibold mt-2'>₹{product.offerPrice}</p>
                                                         </div>
                                                     </div>
