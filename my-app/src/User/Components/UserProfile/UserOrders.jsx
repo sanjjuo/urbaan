@@ -1,43 +1,116 @@
 import { Card, Chip } from '@material-tailwind/react'
+import axios from 'axios'
 import React from 'react'
-import { IoIosArrowBack } from 'react-icons/io'
-import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { AppContext } from '../../../StoreContext/StoreContext'
+import AppLoader from '../../../Loader'
+import namer from 'color-namer';
 
 const UserOrders = () => {
-    const navigate = useNavigate()
+    const { BASE_URL } = useContext(AppContext);
+    const [userOrders, setUserOrders] = useState([])
+    const [isLoading, setIsLoading] = useState(true);
+    const userId = localStorage.getItem('userId')
+    const userToken = localStorage.getItem('userToken')
+
+
+    // Define status color mapping
+    const statusColors = {
+        Delivered: "text-shippedBg bg-shippedBg/20",
+        Processing: "text-processingBg bg-processingBg/20",
+        Cancelled: "text-cancelBg bg-cancelBg/20",
+        Pending: "text-pendingBg bg-pendingBg/20",
+        default: "text-gray-500 bg-gray-200",
+    };
+
+    const getNamedColor = (colorCode) => {
+        try {
+            const namedColors = namer(colorCode);
+            return namedColors.pantone[0].name || "Unknown Color";
+        } catch (error) {
+            console.error("Invalid color code:", error);
+            return "Invalid Color";
+        }
+    };
+
+    useEffect(() => {
+        const fetchUserOrders = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/order/view/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
+                    }
+                })
+                setUserOrders(response.data.orders)
+                setIsLoading(false)
+                console.log(response.data.orders);
+
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false)
+            }
+        }
+        fetchUserOrders();
+    }, [])
+
     return (
         <>
             <div>
-                <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-2'>
-                    <Card className='p-4'>
-                        <div className='flex justify-between'>
-                            <div className='flex gap-5'>
-                                <div className='w-32 h-32'>
-                                    <img src="/p1.jpg" alt="" className='w-full h-full object-cover rounded-lg' />
-                                </div>
-                                <div>
-                                    <h1 className='text-secondary font-medium text-base xl:text-lg lg:text-lg'>Red designed kurti</h1>
-                                    <p className='text-gray-700 text-sm'>Well designed kurti in this category.</p>
-                                    <ul className='mt-3'>
-                                        <li className='text-secondary space-x-2'>
-                                            <span>Color :</span>
-                                            <span>Red</span>
-                                        </li>
-                                        <li className='text-secondary space-x-2'>
-                                            <span>Size :</span>
-                                            <span>XL</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            {/* price */}
-                            <div className='flex flex-col justify-between items-end'>
-                                <Chip value='delivered' className='text-xs font-normal capitalize'/>
-                                <p className='text-secondary font-bold text-2xl'>₹1500</p>
-                            </div>
+                <div className='grid grid-cols-1 xl:grid-cols-2 lg:grid-cols-2 gap-5'>
+                    {isLoading ? (
+                        <div className="col-span-2 flex justify-center items-center h-[50vh]">
+                            <AppLoader />
                         </div>
-                    </Card>
+                    ) : userOrders.length === 0 ? (
+                        <p className='col-span-2 flex justify-center items-center h-[50vh]'>No orders placed yet!</p>
+                    ) : (
+                        userOrders.map((usrOrder) => (
+                            <Card className='p-4' key={usrOrder._id}>
+                                <div className='flex justify-between'>
+                                    <div className='flex gap-5'>
+                                        <div className='w-20 h-32 xl:w-24 lg:w-24'>
+                                            <img
+                                                src={usrOrder.products[0]?.productId?.images[0]}
+                                                alt="Product"
+                                                className='w-full h-full object-cover rounded-lg'
+                                                onError={(e) => e.target.src = '/no-image.jpg'} />
+                                        </div>
+                                        <div>
+                                            <h1 className='text-secondary font-medium capitalize truncate overflow-hidden 
+                                            whitespace-nowrap w-28 xl:w-36 lg:w-36 text-base xl:text-lg lg:text-lg'>
+                                                {usrOrder.products[0]?.productId?.title || "Product Title Unavailable"}
+                                            </h1>
+                                            <p className='text-gray-700 text-sm truncate overflow-hidden 
+                                            whitespace-nowrap w-28 xl:w-36 lg:w-36'>{usrOrder.products[0]?.productId?.description || "No Description Available"}</p>
+                                            <ul className='mt-3'>
+                                                <li className='text-secondary space-x-2'>
+                                                    <span>Color :</span>
+                                                    <span className='font-semibold'>{getNamedColor(usrOrder.products[0]?.color)}</span>
+                                                </li>
+                                                <li className='text-secondary space-x-2'>
+                                                    <span>Size :</span>
+                                                    <span className='uppercase font-semibold'>{usrOrder.products[0]?.size}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    {/* price */}
+                                    <div className='flex flex-col justify-between items-end'>
+                                        <Chip
+                                            value={usrOrder.status}
+                                            className={`text-xs font-normal capitalize ${statusColors[usrOrder.status] || statusColors.default}`}
+                                        />
+                                        <p className='text-secondary font-bold text-2xl'>₹{usrOrder.finalPayableAmount}</p>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))
+                    )}
+
                 </div>
             </div>
         </>

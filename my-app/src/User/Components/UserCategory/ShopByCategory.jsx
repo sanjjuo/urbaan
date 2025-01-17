@@ -2,7 +2,6 @@ import React from 'react'
 import { useContext } from 'react';
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../../StoreContext/StoreContext';
-import { categories } from '../../../data';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';

@@ -17,7 +17,7 @@ const OrderFilter = ({ setOrderList }) => {
         startDate: '',
         endDate: '',
         status: '',
-        category: ''
+        categoryIds: ''
     });
 
     const token = localStorage.getItem('token')
@@ -36,6 +36,7 @@ const OrderFilter = ({ setOrderList }) => {
                     }
                 });
                 setOrderList(response.data?.filteredOrders);
+                console.log(response.data.filteredOrders);
             } catch (error) {
                 console.error("Error fetching filtered orders:", error);
             }

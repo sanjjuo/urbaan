@@ -19,7 +19,7 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
         const fetchAdminCarousel = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/admin/slider`);
-                setAdminCarousel(response.data);
+                setAdminCarousel(response.data || []);
                 setIsLoading(false)
                 console.log(response.data);
             } catch (error) {
@@ -27,7 +27,7 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
             }
         }
         fetchAdminCarousel();
-    }, [BASE_URL])
+    }, [BASE_URL, adminCarousel])
 
     // handle delete
 
@@ -86,7 +86,6 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
                     <>
                         {Array.isArray(currentAdminCarousel) && currentAdminCarousel.map((carousel) => (
                             <Card className="p-5 relative" key={carousel._id}>
-                                {/* carousel image */}
                                 <div className='w-full h-72'>
                                     <img
                                         src={carousel?.image}
@@ -97,7 +96,6 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
 
                                 <div className='flex justify-between items-end'>
                                     <ul className="mt-5 space-y-2">
-                                        {/* <li className='text-secondary font-bold capitalize text-2xl'>{carousel.category}</li> */}
                                         <li className="flex items-center text-secondary">
                                             <span className="font-semibold w-24">Label:</span>
                                             <span className='capitalize'>{carousel?.label || 'null'}</span>
@@ -108,13 +106,15 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
                                         </li>
                                     </ul>
                                     <div className="flex gap-2 text-sm">
-                                        <Button
-                                            className={`text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl
-                                            ${carousel?.isActive === true ? 'bg-shippedBg text-white' : 'bg-cancelBg text-white'}
-                                            `}
-                                        >
-                                            {carousel?.isActive === true ? 'Active' : 'Inactive'}
-                                        </Button>
+                                        {carousel?.isActive === true ? (
+                                            <Button className="bg-green-500 text-white text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl">
+                                                Active
+                                            </Button>
+                                        ) : (
+                                            <Button className="bg-red-500 text-white text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl">
+                                                Inactive
+                                            </Button>
+                                        )}
 
                                         <button
                                             onClick={() => {

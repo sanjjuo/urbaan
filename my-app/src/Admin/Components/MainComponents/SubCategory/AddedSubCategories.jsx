@@ -20,14 +20,14 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
             try {
                 const response = await axios.get(`${BASE_URL}/admin/Subcategory/get`);
                 setSubCategory(response.data);
-                console.log(response.data);
+                // console.log(response.data);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);
             }
         };
         fetchSubCategory();
-    }, []);
+    }, [BASE_URL, subCategory]);
 
     const handleSubCategoryDelete = async (subCategoryId) => {
         try {
@@ -111,15 +111,22 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
                                                     </div>
                                                 </td>
                                                 <td className={classes}>
-                                                        <Typography variant="small" className="font-normal capitalize font-custom text-sm">
-                                                            {subCat.MainCategory.name}
-                                                        </Typography>
+                                                    <Typography variant="small" className="font-normal capitalize font-custom text-sm">
+                                                        {subCat.MainCategory.name}
+                                                    </Typography>
                                                 </td>
                                                 <td className={classes}>
-                                                    <Button className={`${subCat?.isActive ? "bg-green-500 text-white" : "bg-red-500 text-white"} text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl`}>
-                                                        {subCat?.isActive === true ? "Active" : "Inactive"}
-                                                    </Button>
+                                                    {subCat?.isActive === true ? (
+                                                        <Button className="bg-green-500 text-white text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl">
+                                                            Active
+                                                        </Button>
+                                                    ) : (
+                                                        <Button className="bg-red-500 text-white text-sm font-custom capitalize font-normal py-1 px-3 rounded-3xl">
+                                                            Inactive
+                                                        </Button>
+                                                    )}
                                                 </td>
+
                                                 <td className={classes}>
                                                     <div className="flex justify-center gap-2 text-sm">
                                                         <button onClick={() => { handleEditCategory(subCat); setSelectedCatId(subCat.id); }} className={`text-buttonBg bg-editBg w-14 h-7 flex justify-center items-center rounded-md hover:bg-buttonBg hover:text-editBg ${createEditSub === "editSub" && selectedCatId === subCat.id ? "!bg-buttonBg text-editBg" : ""}`}>

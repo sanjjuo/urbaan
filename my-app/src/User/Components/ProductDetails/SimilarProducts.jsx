@@ -35,7 +35,7 @@ const SimilarProducts = ({ similarProducts }) => {
 
             const response = await axios.post(`${BASE_URL}/user/wishlist/add`, payload);
             console.log(response.data);
-            
+
             setHeartIcons(prevState => ({
                 ...prevState,
                 [productId]: !isInWishlist,
@@ -60,6 +60,7 @@ const SimilarProducts = ({ similarProducts }) => {
         }
     };
 
+
     return (
         <>
             <h1 className='text-secondary text-lg xl:text-2xl lg:text-2xl font-semibold text-center mb-10'>Similar Products</h1>
@@ -75,6 +76,7 @@ const SimilarProducts = ({ similarProducts }) => {
                                     categoryId: product.category // Pass the category ID
                                 }}
                                 className="cursor-pointer"
+                                // onClick={handleClick}
                             >
                                 <div className='w-full h-52 xl:h-80 lg:h-80 relative rounded-xl overflow-hidden'>
                                     <img

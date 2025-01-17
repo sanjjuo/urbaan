@@ -50,7 +50,7 @@ const OrderTable = ({ orderList, setOrderList }) => {
       }
     };
     fetchOrderList();
-  }, []);
+  }, [BASE_URL, orderList]);
 
 
   const handleStatusChange = async (statusId, newStatus) => {
@@ -195,7 +195,7 @@ const OrderTable = ({ orderList, setOrderList }) => {
                         )}
                         <td className={classes}>
                           <Typography variant="small" className="font-normal font-custom text-sm">
-                            {order.orderId}
+                            {order?.orderId}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -205,7 +205,7 @@ const OrderTable = ({ orderList, setOrderList }) => {
                         </td>
                         <td className={classes}>
                           <Typography variant="small" className="font-normal font-custom text-sm capitalize">
-                            {order.addressId.address || ""}
+                            {order?.addressId?.address}
                           </Typography>
                         </td>
                         <td className={classes}>
@@ -273,7 +273,7 @@ const OrderTable = ({ orderList, setOrderList }) => {
                 <Button onClick={handleOpenOrderStatus} className='bg-buttonBg font-custom capitalize font-normal text-sm'>Change Status</Button>
               </div>
             )}
-            
+
             <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4 mt-10">
               <Button
                 variant="outlined"

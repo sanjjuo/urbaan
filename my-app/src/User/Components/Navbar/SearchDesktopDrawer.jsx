@@ -103,7 +103,14 @@ export function SearchDesktopDrawer({ open, closeSearchDrawer }) {
                                 const isInWishlist = favProduct?.items?.some(item => item.productId?._id === product._id)
                                 return (
                                     <div className='group relative' key={product._id}>
-                                        <Link to="/product-details" state={{ productId: product._id }} onClick={closeSearchDrawer} className="cursor-pointer">
+                                        <Link
+                                            to="/product-details"
+                                            state={{
+                                                productId: product._id,
+                                                categoryId: product.category._id
+                                            }}
+                                            onClick={closeSearchDrawer}
+                                            className="cursor-pointer">
                                             <div className='w-full h-52 xl:h-80 lg:h-80 rounded-xl overflow-hidden'>
                                                 <img
                                                     src={product.images[0]}

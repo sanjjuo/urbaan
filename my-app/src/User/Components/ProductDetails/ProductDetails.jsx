@@ -79,32 +79,34 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/user/products/product/${productId}`)
-                setProductDetails(response.data)
-                console.log(response.data);
+                const response = await axios.get(`${BASE_URL}/user/products/product/${productId}`);
+                setProductDetails(response.data);
+                console.log('Product Details:', response.data);
             } catch (error) {
-                console.log(error);
+                console.error('Error fetching product details:', error);
             }
-        }
-        fetchProductDetails()
-    }, []);
+        };
 
-    console.log(productDetails);
-    console.log("id", productId);
-
-    // fetch similar products based on category id
-    useEffect(() => {
         const fetchSimilarProducts = async () => {
-            try {
-                const response = await axios.get(`${BASE_URL}/user/products/products/category/${categoryId}`)
-                setSimilarProducts(response.data)
-                console.log(response.data);
-            } catch (error) {
-                console.log(error);
+            if (!categoryId || !categoryId._id) {
+                console.warn('Invalid categoryId:', categoryId);
+                return;
             }
+
+            try {
+                const response = await axios.get(`${BASE_URL}/user/products/products/category/${categoryId._id}`);
+                setSimilarProducts(response.data);
+                console.log('Similar Products:', response.data);
+            } catch (error) {
+                console.error('Error fetching similar products:', error);
+            }
+        };
+
+        if (productId && categoryId) {
+            fetchProductDetails();
+            fetchSimilarProducts();
         }
-        fetchSimilarProducts()
-    }, [])
+    }, [productId, categoryId]);
 
 
     const getContrastYIQ = (color) => {
@@ -418,8 +420,8 @@ const ProductDetails = () => {
                 </div>
 
                 {/* similar products */}
-                <div className='mt-10 xl:mt-20 lg:mt-10'>
-                    <SimilarProducts similarProducts={similarProducts}/>
+                <div className='mt-10 xl:mt-32 lg:mt-32'>
+                    <SimilarProducts similarProducts={similarProducts} />
                 </div>
 
                 <div className="bg-white shadow-md fixed bottom-0 inset-x-0 z-50 w-full p-4 xl:hidden lg:hidden">

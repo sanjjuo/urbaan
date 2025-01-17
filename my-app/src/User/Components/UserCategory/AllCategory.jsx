@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import FilterBySize from './FilterBySize';
 import FilterByMaterial from './FilterByMaterial';
@@ -12,10 +12,12 @@ import { RiHeart3Fill, RiHeart3Line } from 'react-icons/ri';
 import toast from 'react-hot-toast';
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 import FilterBySubCategory from './FilterBySubCategory';
+import { IoIosArrowBack } from 'react-icons/io';
 
 
 const AllCategory = () => {
     const location = useLocation()
+    const navigate = useNavigate()
     const productsCategory = location.state?.category || []
     const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext);
     const [products, setProducts] = useState([])
@@ -40,17 +42,22 @@ const AllCategory = () => {
 
     const handleSubCategory = async (subCategoryId) => {
         try {
-            setIsLoading(true);
-            const response = await axios.get(`${BASE_URL}/user/subCategory/get/${subCategoryId}`);
-            setProducts(response.data)
+            // Fetch all products again when changing subcategory to reset the list
+            const response = await axios.get(`${BASE_URL}/user/products/products/category/${productsCategory.id}`);
+            setProducts(response.data);  // Set all products again
 
-            const filterSubCategory = products.filter(product => product.subcategory._id === subCategoryId)
-            setProducts(filterSubCategory);
+            if (subCategoryId) {
+                // Filter products by the selected subcategory
+                const filterSubCategory = response.data.filter(product => product.subcategory._id === subCategoryId);
+                setProducts(filterSubCategory);
+            }
+
             setIsLoading(false);
         } catch (error) {
             console.error("Error fetching filtered products:", error.response || error.message);
         }
     };
+
 
 
     const handlePriceFilter = (priceRange) => {
@@ -126,8 +133,12 @@ const AllCategory = () => {
                 <div className='w-full h-44 relative'>
                     <img src="/banner.jpeg" alt="" className='w-full h-full object-cover' />
                     <div className='absolute inset-0 bg-primary/70'></div>
-                    <h1 className='absolute inset-0 flex items-end justify-center text-white text-4xl font-medium
-                        mb-5 capitalize'>{productsCategory.name}</h1>
+                    <div className='absolute inset-0 flex items-end justify-center mb-5'>
+                        <h1 className='text-white text-4xl font-medium capitalize flex items-center gap-5'>
+                            <IoIosArrowBack onClick={() => navigate(-1)} className="text-white text-3xl cursor-pointer" />
+                            {productsCategory.name}
+                        </h1>
+                    </div>
                 </div>
                 <div className="px-4 py-10 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg">
                     <ul className='space-y-3 xl:flex xl:items-center xl:space-y-0 xl:gap-5 xl:justify-center
