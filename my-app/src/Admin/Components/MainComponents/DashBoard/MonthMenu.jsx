@@ -7,36 +7,85 @@ import {
     Button,
     MenuItem,
 } from "@material-tailwind/react";
+import { useContext } from "react";
+import { AppContext } from "../../../../StoreContext/StoreContext";
+import axios from "axios";
+import { useEffect } from "react";
 
 const months = [
     "All",
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
+    "January",
+    "February",
+    "March",
+    "April",
     "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
 ];
 
-export default function MonthMenu({ onSelectMonth }) {
+export default function MonthMenu({ setGraphData }) {
     const [selectedMonth, setSelectedMonth] = useState("Month");
+    const { BASE_URL } = useContext(AppContext)
 
     // Handle month selection
     const handleMonthSelect = (month) => {
         setSelectedMonth(month);
-        onSelectMonth(month);
     };
 
     // Prevent the click event from propagating to the Menu component
     const handleClickInside = (event) => {
         event.stopPropagation();
     };
+
+    useEffect(() => {
+        const fetchGraphMonth = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    console.error("Token is missing");
+                    return;
+                }
+
+                const startMonth =
+                    selectedMonth === "All"
+                        ? null
+                        : months.indexOf(selectedMonth); // Adjust to 1-based index
+                const endMonth = startMonth;
+
+                let url = `${BASE_URL}/admin/dashboard/view-graph`;
+                if (selectedMonth !== "All") {
+                    url += `?startMonth=${startMonth}&endMonth=${endMonth}`;
+                }
+
+                const response = await axios.get(url, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (response.data?.data?.length) {
+                    const formattedData = response.data.data.map((item) => ({
+                        x: item?.monthName,
+                        y: item?.totalRevenue,
+                    }));
+                    setGraphData(formattedData);
+                } else {
+                    setGraphData([]);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchGraphMonth();
+    }, [selectedMonth, BASE_URL, setGraphData]);
+
+
 
     return (
         <Menu placement='bottom-end' closeOnClick={false}>

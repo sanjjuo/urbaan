@@ -13,7 +13,7 @@ import axios from 'axios';
 const FilterBySubCategory = ({ categoryId, handleSubCategory }) => {
     const { BASE_URL } = useContext(AppContext);
     const [subCategories, setSubCategories] = useState([]);
-    const [selectedSubCategoryName, setSelectedSubCategoryName] = useState("All Subcategories");
+    const [selectedSubCategoryName, setSelectedSubCategoryName] = useState("");
 
     useEffect(() => {
         const fetchSubCategories = async () => {
@@ -34,7 +34,7 @@ const FilterBySubCategory = ({ categoryId, handleSubCategory }) => {
     }, [categoryId]); // Re-run when the category ID changes
 
     const handleCategorySelection = (subCategory) => {
-        setSelectedSubCategoryName(subCategory.title || "All Subcategories");
+        setSelectedSubCategoryName(subCategory.title);
         console.log("Selected Subcategory:", subCategory); // Debugging log
         handleSubCategory(subCategory.id); // Trigger the parent handler with the subcategory ID
     };

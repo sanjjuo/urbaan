@@ -11,7 +11,7 @@ import ApplyCouponModal from './ApplyCouponModal';
 import AppLoader from '../../../Loader';
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup';
 
-const CartDetails = ({ viewCart }) => {
+const CartDetails = ({ viewCart, setCartItems, setViewCart }) => {
     const navigate = useNavigate();
     const location = useLocation()
     const { selectedAddress } = location.state || {};
@@ -85,6 +85,29 @@ const CartDetails = ({ viewCart }) => {
         fetchDefaultAddress();
     }, []);
 
+    const fetchCartItems = async () => {
+        try {
+            if (token && userId) {
+                const response = await axios.get(`${BASE_URL}/user/cart/view-cart/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setViewCart(response.data);
+                setCartItems(response.data.items);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    useEffect(() => {
+        fetchCartItems();
+    }, [BASE_URL]);
+    
+
 
 
     // Find the address with defaultAddress set to true
@@ -122,7 +145,7 @@ const CartDetails = ({ viewCart }) => {
                         <span className='font-normal text-sm'>Discount</span>
                         <span className='text-secondary font-medium text-sm'>
                             {viewCart?.coupenAmount || 0.00}
-                            {viewCart?.coupenAmount === 'percentage' ? '%' : '₹'}
+                            {viewCart?.discountType === 'percentage' ? '%' : '₹'}
                         </span>
                     </li>
                 </ul>
@@ -187,6 +210,7 @@ const CartDetails = ({ viewCart }) => {
             <ApplyCouponModal
                 handleCouponModalOpen={handleCouponModalOpen}
                 openCoupon={openCoupon}
+                fetchCartItems={fetchCartItems}
             />
 
             <UserNotLoginPopup

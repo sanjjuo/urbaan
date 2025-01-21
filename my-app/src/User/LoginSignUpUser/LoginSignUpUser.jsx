@@ -83,6 +83,17 @@ export function LoginSignUpUser() {
         }
     };
 
+    //handleGoogleSignUp
+
+    const handleGoogleSignUp = async () => {
+        try {
+            const response = await axios.post(`${BASE_URL}/user/auth/google`)
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="lg:flex lg:justify-center lg:items-center min-h-screen lg:h-screen bg-userBg px-4 py-20 lg:py-0">
             <Card color="transparent" shadow={false}>
@@ -172,7 +183,7 @@ export function LoginSignUpUser() {
                         {loginSignUpUser !== "login" && (
                             <div className="flex items-center">
                                 <Checkbox
-                                color='pink'
+                                    color='pink'
                                     checked={isWalkIn}
                                     onChange={handleCheckboxChange}
                                     className="h-4 w-4 rounded-sm"
@@ -231,17 +242,11 @@ export function LoginSignUpUser() {
                         <Typography className="font-custom font-medium text-secondary text-sm">
                             Or continue with
                         </Typography>
-                        <ul className="flex items-center gap-3">
-                            <li className="bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
-                                <RiGoogleFill />
-                            </li>
-                            <li className="bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
-                                <FaFacebook />
-                            </li>
-                            <li className="bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
-                                <GrApple />
-                            </li>
-                        </ul>
+                        <div
+                            onClick={handleGoogleSignUp}
+                            className="bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
+                            <RiGoogleFill />
+                        </div>
                     </div>
                 </form>
             </Card>

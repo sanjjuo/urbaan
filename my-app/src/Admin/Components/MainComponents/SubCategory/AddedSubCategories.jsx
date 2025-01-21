@@ -27,7 +27,7 @@ const AddedSubCategories = ({ createEditSub, handleEditCategory, subCategory, se
             }
         };
         fetchSubCategory();
-    }, [BASE_URL, subCategory]);
+    }, [BASE_URL]);
 
     const handleSubCategoryDelete = async (subCategoryId) => {
         try {

@@ -12,7 +12,7 @@ import { AppContext } from "../../../StoreContext/StoreContext";
 import axios from 'axios'
 import toast from 'react-hot-toast'
 
-const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon }) => {
+const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon, fetchCartItems }) => {
     const [couponCode, setCouponCode] = useState('');
     const { BASE_URL } = useContext(AppContext)
 
@@ -36,16 +36,13 @@ const ApplyCouponModal = ({ handleCouponModalOpen, openCoupon }) => {
                 }
             })
             console.log(response.data);
-            // const couponData = response.data;
-            // setCouponDiscountTotalPrice(couponData); // for getting discount and previous amount value
-            // localStorage.setItem('couponDiscountTotalPrice', JSON.stringify(couponData));
             handleCouponModalOpen()
             toast.success('Coupon is applied')
+            await fetchCartItems();
         } catch (error) {
             console.error('Error:', error.response?.data || error.message);
             const errorMessage = error.response?.data?.message || 'Failed to apply coupon';
             toast.error(errorMessage);
-            handleCouponModalOpen();  // Close modal even if error occurs
         }
     }
 

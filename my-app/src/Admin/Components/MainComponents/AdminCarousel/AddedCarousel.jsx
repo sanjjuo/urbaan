@@ -27,7 +27,7 @@ const AddedCarousel = ({ createEditCarousel, handleEditCarousel, adminCarousel, 
             }
         }
         fetchAdminCarousel();
-    }, [BASE_URL, adminCarousel])
+    }, [BASE_URL])
 
     // handle delete
 

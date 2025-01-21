@@ -34,6 +34,8 @@ const ProductDetails = () => {
     const [similarProducts, setSimilarProducts] = useState([])
 
 
+    console.log("categry", categoryId);
+    
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -88,13 +90,13 @@ const ProductDetails = () => {
         };
 
         const fetchSimilarProducts = async () => {
-            if (!categoryId || !categoryId._id) {
+            if (!categoryId) {
                 console.warn('Invalid categoryId:', categoryId);
                 return;
             }
 
             try {
-                const response = await axios.get(`${BASE_URL}/user/products/products/category/${categoryId._id}`);
+                const response = await axios.get(`${BASE_URL}/user/products/products/category/${categoryId}`);
                 setSimilarProducts(response.data);
                 console.log('Similar Products:', response.data);
             } catch (error) {
@@ -335,7 +337,7 @@ const ProductDetails = () => {
                             <div className='mt-4'>
                                 <div className='flex items-center justify-between xl:justify-normal lg:justify-normal xl:gap-32 lg:gap-32 mb-2'>
                                     <h4 className='font-medium text-sm xl:text-base lg:text-base'>Select Size</h4>
-                                    <h4 onClick={handleOpenSizeDrawer} className='text-primary underline font-medium text-xs xl:text-sm lg:text-sm cursor-pointer'>Size chart</h4>
+                                    {/* <h4 onClick={handleOpenSizeDrawer} className='text-primary underline font-medium text-xs xl:text-sm lg:text-sm cursor-pointer'>Size chart</h4> */}
                                 </div>
                                 {/* Hint message */}
                                 {!selectedColor && (

@@ -27,6 +27,8 @@ const UserCart = () => {
                     <div className='xl:col-span-2 space-y-5'>
                         <CartDetails
                             viewCart={viewCart}
+                            setViewCart={setViewCart}
+                            setCartItems={setCartItems}
                         />
                     </div>
                 </div>

@@ -5,18 +5,18 @@ import MonthMenu from './MonthMenu';
 import axios from 'axios';
 import { AppContext } from '../../../../StoreContext/StoreContext';
 import AppLoader from '../../../../Loader';
+import { BarChart } from '@mui/x-charts';
 
 const SalesGraph = () => {
     const [graphData, setGraphData] = useState([]);
     const { BASE_URL } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(true)
-    const [selectedMonthGraph, setSelectedMonthGraph] = useState(12);
 
     useEffect(() => {
         const fetchGraphDetails = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`${BASE_URL}/admin/dashboard/view-graph?month=${selectedMonthGraph}`, {
+                const response = await axios.get(`${BASE_URL}/admin/dashboard/view-graph`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -58,9 +58,9 @@ const SalesGraph = () => {
                     <h1 className="text-2xl font-medium mb-0 text-secondary">Sales Details</h1>
                 </div>
                 <ul className="flex items-center gap-2">
-                    <li><PlaceMenu /></li>
+                    <li><PlaceMenu setGraphData={setGraphData} /></li>
                     <li>
-                        <MonthMenu onSelectMonth={(month) => setSelectedMonthGraph(month)} />
+                        <MonthMenu setGraphData={setGraphData} />
                     </li>
                 </ul>
             </div>
@@ -68,14 +68,18 @@ const SalesGraph = () => {
                 <div className="col-span-2 flex justify-center items-center h-[70vh]">
                     <AppLoader />
                 </div>
+            ) : graphData.length === 0 ? (
+                <div className="text-center text-gray-500">
+                    No data available for the selected filter.
+                </div>
             ) : (
                 <>
                     <div className='w-[100%]'>
-                        <LineChart
+                        <BarChart
                             xAxis={[{
                                 data: graphData.map(item => formatMonth(item.x)),
                                 tickNumber: 12,
-                                scaleType: 'point',
+                                scaleType: 'band',
                                 valueFormatter: (value) => value,
                             }]}
                             yAxis={[{
@@ -86,8 +90,7 @@ const SalesGraph = () => {
                             series={[{
                                 data: graphData.map(item => item.y),
                                 curve: 'linear',
-                                area: true,
-                                color: '#A3BDF533',
+                                color: '#A3BDF5',
                             }]}
                             className="w-full"
                             height={500}

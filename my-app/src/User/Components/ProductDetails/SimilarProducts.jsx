@@ -12,6 +12,9 @@ const SimilarProducts = ({ similarProducts }) => {
     const { BASE_URL, favProduct, setOpenUserNotLogin, setFav } = useContext(AppContext)
     const [heartIcons, setHeartIcons] = useState({});
 
+    console.log(similarProducts);
+    
+
     const handleWishlist = async (productId, productTitle) => {
         try {
             const userId = localStorage.getItem('userId');

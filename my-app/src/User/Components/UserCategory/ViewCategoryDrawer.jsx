@@ -24,6 +24,7 @@ export function ViewCategoryDrawer({ setFilteredProducts, allProducts, setNoProd
     const [filterBy, setFilterBy] = useState("Price");
     const [categories, setCategories] = useState([]);
     const [sizes, setSizes] = useState([]);
+    const [materials, setMaterials] = useState([])
 
     // Fetch categories from API
     useEffect(() => {
@@ -63,6 +64,25 @@ export function ViewCategoryDrawer({ setFilteredProducts, allProducts, setNoProd
         fetchAllProductSize();
     }, [BASE_URL]);
 
+    useEffect(() => {
+        const fetchAllMaterials = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/products/view-products`);
+                const products = response.data; // Assuming this contains the product data
+
+                // Extract materials and get unique values
+                const extractedMaterials = [
+                    ...new Set(products.map((product) => product.features.material))
+                ];
+
+                setMaterials(extractedMaterials);
+            } catch (error) {
+                console.error("Error fetching materials:", error);
+            }
+        }
+        fetchAllMaterials()
+    }, [BASE_URL])
+
     // Handle Checkbox Changes
     const handleFilterChange = (type, value) => {
         setSelectedFilters((prevFilters) => {
@@ -86,17 +106,14 @@ export function ViewCategoryDrawer({ setFilteredProducts, allProducts, setNoProd
             console.log(`Checking if ${price} is under ${upperLimit}`);
             return price <= upperLimit;
         }
-        
+
         // Handle regular range case "₹X - ₹Y"
         const [min, max] = range.split(" - ").map(val => parseInt(val.replace("₹", "")));
         console.log(`Checking if ${price} is between ${min} and ${max}`);
         return price >= min && price <= max;
     };
-    
+
     const applyFilters = () => {
-        console.log("Selected Filters:", selectedFilters);
-        console.log("All Products:", allProducts);
-    
         const filtered = allProducts.filter((product) => {
             const priceMatch = selectedFilters.price.length > 0
                 ? selectedFilters.price.some((range) => {
@@ -105,30 +122,24 @@ export function ViewCategoryDrawer({ setFilteredProducts, allProducts, setNoProd
                     return matches;
                 })
                 : true;
-    
+
             const categoryMatch = selectedFilters.category.length > 0
                 ? selectedFilters.category.includes(product.category.name)
                 : true;
-    
+
             const sizeMatch = selectedFilters.size.length > 0
                 ? product.colors.some((color) =>
                     color.sizes.some((s) => selectedFilters.size.includes(s.size))
                 )
                 : true;
-    
-            if (!priceMatch || !categoryMatch || !sizeMatch) {
-                console.log(`Product ${product.title} filtered out:`, {
-                    price: product.offerPrice,
-                    priceMatch,
-                    category: product.category.name,
-                    categoryMatch,
-                    sizeMatch
-                });
-            }
-    
-            return priceMatch && categoryMatch && sizeMatch;
+
+            const materialMatch = selectedFilters.material.length > 0
+                ? selectedFilters.material.includes(product.features.material)
+                : true;
+
+            return priceMatch && categoryMatch && sizeMatch && materialMatch;
+
         });
-    
         console.log("Filtered Products:", filtered);
         setFilteredProducts(filtered);
         handleCloseBottomDrawer()
@@ -149,7 +160,7 @@ export function ViewCategoryDrawer({ setFilteredProducts, allProducts, setNoProd
                         Filters
                     </Typography>
                     <ul className="mt-5 space-y-3">
-                        {["Price", "Category", "Size"].map((label) => (
+                        {["Price", "Category", "Size", "Material"].map((label) => (
                             <li
                                 key={label}
                                 onClick={() => setFilterBy(label)}
@@ -200,6 +211,18 @@ export function ViewCategoryDrawer({ setFilteredProducts, allProducts, setNoProd
                                 />
                             </li>
                         ))}
+                        {filterBy === "Material" && materials.map((material, index) => (
+                            <li key={index}
+                                className='capitalize text-sm'>
+                                <Checkbox
+                                    checked={selectedFilters?.material?.includes(material)}
+                                    onChange={() => handleFilterChange("material", material)}
+                                    label={material}
+                                    color='pink'
+                                    className='rounded-sm'
+                                />
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
@@ -208,7 +231,8 @@ export function ViewCategoryDrawer({ setFilteredProducts, allProducts, setNoProd
                 <div className="flex justify-center items-center gap-3">
                     <Button
                         className='bg-secondary w-full font-custom capitalize text-sm font-normal'
-                        onClick={() => setSelectedFilters({ price: [], category: [], size: [] })}>
+                        onClick={() => setSelectedFilters({ price: [], category: [], size: [], material: [] })}
+                    >
                         Clear All
                     </Button>
                     <Button

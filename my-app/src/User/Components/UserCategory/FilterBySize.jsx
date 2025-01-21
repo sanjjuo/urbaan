@@ -56,7 +56,7 @@ const FilterBySize = ({ handleSizeFilter }) => {
                 >
                     Filter by size
                     <span className="text-xs uppercase bg-primary ml-5 px-2 text-white rounded-md">
-                        {selectedSize || "All"}
+                        {selectedSize}
                     </span>
                     <IoIosArrowDown className="text-lg text-gray-400" />
                 </Button>

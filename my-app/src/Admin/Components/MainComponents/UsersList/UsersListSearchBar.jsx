@@ -10,11 +10,17 @@ const UsersListSearchBar = ({ setUserList }) => {
     const [searchUser, setSearchUser] = useState('')
     const { BASE_URL } = useContext(AppContext);
 
+    const token = localStorage.getItem('token')
+
     //handle search
     useEffect(() => {
         const handleUserSearch = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/admin/users/search?email=${searchUser}`);
+                const response = await axios.get(`${BASE_URL}/admin/users/search?email=${searchUser}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 setUserList(response.data.users)
             } catch (error) {
                 console.log(error);
