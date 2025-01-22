@@ -53,7 +53,7 @@ const EditProduct = () => {
         if (initialProducts) {
             setEditProdTitle(initialProducts.title);
             setEditProdCategory(initialProducts.category._id);
-            setEditProdSubCategory(initialProducts.subcategory);
+            setEditProdSubCategory(initialProducts.subcategory?._id);
             setEditProdActualPrice(initialProducts.actualPrice);
             setEditProdDiscount(initialProducts.discount);
             setEditProdOfferPrice(initialProducts.offerPrice);
@@ -155,7 +155,6 @@ const EditProduct = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/admin/category/get`);
                 setCategories(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.log(error, ": Error fetching data");
             }
@@ -169,7 +168,6 @@ const EditProduct = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/admin/Subcategory/get`);
                 setSubCategories(response.data)
-                console.log(response.data);
             } catch (error) {
                 console.log(error, ": error fetching sub categories");
             }
@@ -346,34 +344,40 @@ const EditProduct = () => {
 
     // handleDeleteImg
     const handleDeleteImg = async (image) => {
+        if (editProdImage.length === 1) {
+            toast.error("At least one image must be present. Cannot delete the last image.");
+            return;
+        }
         try {
-            if (editProdImage.length === 1) {
-                toast.error("At least one image must be present. Cannot delete the last image.");
-                return;
-            }
-            const token = localStorage.getItem('token')
-            const imagePayload = {
-                imageName: image
-            }
-            console.log(imagePayload);
-            console.log(`${BASE_URL}/admin/products/delete-product-image/${initialProducts._id}`);
+            setEditProdImage((prevImages) => prevImages.filter((img) => img !== image)); // Optimistic update
 
-            const response = await axios.post(`${BASE_URL}/admin/products/delete-product-image/${initialProducts._id}`, imagePayload, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            const token = localStorage.getItem("token");
+            const imagePayload = { imageName: image };
+
+            const response = await axios.post(
+                `${BASE_URL}/admin/products/delete-product-image/${initialProducts._id}`,
+                imagePayload,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
                 }
-            })
-            console.log(response.data);
-            if (response.data.success) {
-                setEditProdImage((prevImages) => prevImages.filter((img) => img !== image));
-                toast.success('product image is deleted')
+            );
+
+            console.log("Server Response:", response.data);
+
+            // Handle success based on the actual response
+            if (response.data.message === "Image deleted successfully") {
+                toast.success("Product image is deleted");
+                // Update the images if the backend returns them
+                // setEditProdImage(initialProducts.images || []);
             } else {
-                console.error('Failed to delete the image on the server.');
+                console.error("Failed to delete the image on the server.");
+                toast.error("Failed to delete the image on the server.");
             }
         } catch (error) {
-            console.log(error);
+            console.error("Error during deletion:", error);
+            toast.error("An error occurred while deleting the image.");
         }
-    }
+    };
 
 
     return (
@@ -398,7 +402,7 @@ const EditProduct = () => {
                                 onChange={(e) => setEditProdTitle(e.target.value)}
                                 id=""
                                 placeholder='Enter Product title'
-                                className='border-[1px] 
+                                className='border-[1px] capitalize
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                      focus:outline-none'/>
                         </div>
@@ -429,7 +433,7 @@ const EditProduct = () => {
                                     name="selectField"
                                     value={editProdSubCategory}
                                     onChange={(e) => setEditProdSubCategory(e.target.value)}
-                                    className="w-full text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
+                                    className="w-full capitalize text-sm text-secondary font-light bg-gray-100/50 border p-2 rounded focus:outline-none focus:cursor-pointer"
                                 >
                                     <option value="Option 1">Select SubCategory</option>
                                     {
@@ -520,7 +524,7 @@ const EditProduct = () => {
                                     value={editSpecifications.netWeight}
                                     onChange={(e) => handleSpecificationChange(e, 'netWeight')}
                                     placeholder='value'
-                                    className='border-[1px] w-full 
+                                    className='border-[1px] w-full capitalize
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                     focus:outline-none'
                                 />
@@ -534,7 +538,7 @@ const EditProduct = () => {
                                     value={editSpecifications.fit}
                                     onChange={(e) => handleSpecificationChange(e, 'fit')}
                                     placeholder='value'
-                                    className='border-[1px] w-full 
+                                    className='border-[1px] w-full capitalize 
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                     focus:outline-none'
                                 />
@@ -548,7 +552,7 @@ const EditProduct = () => {
                                     value={editSpecifications.sleevesType}
                                     onChange={(e) => handleSpecificationChange(e, 'sleevesType')}
                                     placeholder='value'
-                                    className='border-[1px] w-full 
+                                    className='border-[1px] w-full capitalize  
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                     focus:outline-none'
                                 />
@@ -562,7 +566,7 @@ const EditProduct = () => {
                                     value={editSpecifications.Length}
                                     onChange={(e) => handleSpecificationChange(e, 'Length')}
                                     placeholder='value'
-                                    className='border-[1px] w-full 
+                                    className='border-[1px] w-full capitalize  
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                     focus:outline-none'
                                 />
@@ -576,7 +580,7 @@ const EditProduct = () => {
                                     value={editSpecifications.occasion}
                                     onChange={(e) => handleSpecificationChange(e, 'occasion')}
                                     placeholder='value'
-                                    className='border-[1px] w-full 
+                                    className='border-[1px] w-full capitalize  
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                     focus:outline-none'
                                 />
@@ -590,7 +594,7 @@ const EditProduct = () => {
                                     value={editSpecifications.innerLining}
                                     onChange={(e) => handleSpecificationChange(e, 'innerLining')}
                                     placeholder='value'
-                                    className='border-[1px] w-full 
+                                    className='border-[1px] w-full capitalize  
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                     focus:outline-none'
                                 />
@@ -604,7 +608,7 @@ const EditProduct = () => {
                                     value={editSpecifications.material}
                                     onChange={(e) => handleSpecificationChange(e, 'material')}
                                     placeholder='value'
-                                    className='border-[1px] w-full 
+                                    className='border-[1px] w-full capitalize  
                                     bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                                     focus:outline-none'
                                 />
@@ -636,11 +640,11 @@ const EditProduct = () => {
                     <div className='flex items-center gap-2'>
                         {editProdImage.length > 0 ? (
                             editProdImage.map((image, index) => (
-                                <div key={index} className='w-32 h-32 relative'>
+                                <div key={index} className="w-32 h-32 relative">
                                     <img
                                         src={image}
-                                        alt={`Product image ${index + 1}`}
-                                        className='w-full h-full rounded-md'
+                                        alt=''
+                                        className="w-full h-full rounded-md"
                                     />
                                     <MdDelete
                                         onClick={() => handleDeleteImg(image)}
@@ -649,7 +653,7 @@ const EditProduct = () => {
                                 </div>
                             ))
                         ) : (
-                            <p>No images available</p>
+                            <p className="text-gray-500">No images available</p> // Meaningful fallback
                         )}
                     </div>
                     <div className='flex gap-5'>
@@ -677,21 +681,31 @@ const EditProduct = () => {
                                 newImage.map((image, index) => {
                                     if (image instanceof File) {
                                         return (
-                                            <li key={index} className="flex items-start justify-between bg-primary/15 rounded-md p-2">
+                                            <li
+                                                key={index}
+                                                className="flex items-start justify-between bg-primary/15 rounded-md p-2"
+                                            >
                                                 <div className="flex gap-3 items-start">
                                                     <div className="w-[60px] h-[60px]">
-                                                        <img src={URL.createObjectURL(image)} alt="" className="w-full h-full object-cover rounded-md" />
+                                                        <img
+                                                            src={URL.createObjectURL(image)}
+                                                            alt={`Image ${index}`}
+                                                            className="w-full h-full object-cover rounded-md"
+                                                        />
                                                     </div>
                                                 </div>
                                                 <MdDelete
-                                                    onClick={() => setEditProdImage((prevImages) =>
-                                                        prevImages.filter((_, imgIndex) => imgIndex !== index))}
+                                                    onClick={() =>
+                                                        setNewImage((prevImages) =>
+                                                            prevImages.filter((_, imgIndex) => imgIndex !== index)
+                                                        )
+                                                    }
                                                     className="text-deleteBg text-lg cursor-pointer hover:text-primary"
                                                 />
                                             </li>
                                         );
                                     }
-                                    return null; // Added a return null to ensure the map doesn't break for non-File objects
+                                    return null;
                                 })
                             )}
                         </ul>
@@ -707,7 +721,7 @@ const EditProduct = () => {
                             onChange={(e) => setEditProdManuName(e.target.value)}
                             id=""
                             placeholder='Enter Manufacturer Name'
-                            className='border-[1px] 
+                            className='border-[1px] capitalize
                         bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                             focus:outline-none'/>
                     </div>
@@ -722,7 +736,7 @@ const EditProduct = () => {
                             onChange={(e) => setEditProdManuBrand(e.target.value)}
                             id=""
                             placeholder='Enter Manufacturer Brand'
-                            className='border-[1px] 
+                            className='border-[1px] capitalize 
                         bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                             focus:outline-none'/>
                     </div>
@@ -737,7 +751,7 @@ const EditProduct = () => {
                             onChange={(e) => setEditProdManuAddress(e.target.value)}
                             id=""
                             placeholder='Enter Manufacturer Address'
-                            className='border-[1px] 
+                            className='border-[1px] capitalize 
                         bg-gray-100/50 p-2 rounded-md placeholder:text-sm placeholder:font-light placeholder:text-gray-500
                             focus:outline-none'/>
                     </div>

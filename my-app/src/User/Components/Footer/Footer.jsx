@@ -16,9 +16,6 @@ const Footer = () => {
             <p className='text-xs xl:text-sm lg:text-sm md:text-sm font-light mt-5 leading-normal cursor-default'><strong className='text-primary font-bold uppercase'>Urbaan</strong> is your one-stop shop for stylish and comfortable women's fashion. We offer a wide range of Kurtis,
               Kurti sets, bottoms, nightwear, home wear, maternity wear, accessories, and kidswear, blending elegance with
               everyday comfort. Discover fashion that fits every occasion at Urbaan!</p>
-            <div className="w-36 mt-10">
-              <img src="/logo.png" alt="" className='w-full object-contain' />
-            </div>
           </div>
 
           {/* sitemap */}
@@ -26,16 +23,13 @@ const Footer = () => {
             <h1 className='text-lg xl:text-2xl lg:text-2xl font-semibold'>Sitemap</h1>
             <ul className='mt-5 space-y-5'>
               <li className='font-light text-xs xl:text-sm lg:text-sm md:text-sm'>
-                <Link className='hover:text-primary'>Home</Link>
+                <Link to='/' className='hover:text-primary'>Home</Link>
               </li>
               <li className='font-light text-xs xl:text-sm lg:text-sm md:text-sm'>
-                <Link className='hover:text-primary'>About us</Link>
+                <Link to='/view-all-category' className='hover:text-primary'>Categories</Link>
               </li>
               <li className='font-light text-xs xl:text-sm lg:text-sm md:text-sm'>
-                <Link className='hover:text-primary'>Growers</Link>
-              </li>
-              <li className='font-light text-xs xl:text-sm lg:text-sm md:text-sm'>
-                <Link className='hover:text-primary'>Contact</Link>
+                <Link to='/orders-tracking' className='hover:text-primary'>Track Order</Link>
               </li>
             </ul>
           </div>

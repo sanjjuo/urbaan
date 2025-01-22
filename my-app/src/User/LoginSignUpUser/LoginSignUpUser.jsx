@@ -6,10 +6,9 @@ import {
     Typography,
     Checkbox,
 } from "@material-tailwind/react";
-import { FaFacebook, FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { RiGoogleFill } from "react-icons/ri";
-import { GrApple } from "react-icons/gr";
 import { AppContext } from "../../StoreContext/StoreContext";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -83,16 +82,6 @@ export function LoginSignUpUser() {
         }
     };
 
-    //handleGoogleSignUp
-
-    const handleGoogleSignUp = async () => {
-        try {
-            const response = await axios.post(`${BASE_URL}/user/auth/google`)
-            console.log(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     return (
         <div className="lg:flex lg:justify-center lg:items-center min-h-screen lg:h-screen bg-userBg px-4 py-20 lg:py-0">
@@ -242,11 +231,11 @@ export function LoginSignUpUser() {
                         <Typography className="font-custom font-medium text-secondary text-sm">
                             Or continue with
                         </Typography>
-                        <div
-                            onClick={handleGoogleSignUp}
-                            className="bg-loginIconBg text-primary hover:bg-primary hover:text-loginIconBg text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
+                        <Link
+                           to={`${BASE_URL}/user/auth/google`}
+                            className="bg-loginIconBg text-primary hover:bg-gray-300 text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
                             <RiGoogleFill />
-                        </div>
+                        </Link>
                     </div>
                 </form>
             </Card>
