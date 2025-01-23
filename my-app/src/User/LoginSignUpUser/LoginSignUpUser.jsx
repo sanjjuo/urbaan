@@ -182,7 +182,7 @@ export function LoginSignUpUser() {
                                 </Typography>
                             </div>
                         )}
-                        <Link>
+                        <Link to='/forget-password'>
                             <Typography className="font-custom text-sm text-primary font-medium text-right">
                                 Forgot Password?
                             </Typography>

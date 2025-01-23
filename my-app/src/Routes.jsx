@@ -39,6 +39,9 @@ import UserOrders from './User/Components/UserProfile/UserOrders';
 import Delivery from './Admin/Components/MainComponents/Delivery/Delivery';
 import Checkout from './User/Components/Checkout/Checkout';
 import OrderPlaced from './User/Components/Order.jsx/OrderPlaced';
+import EnterNumber from './User/Components/ResetPassword/EnterNumber';
+import { ResetOtp } from './User/Components/ResetPassword/ResetOtp';
+import NewPassword from './User/Components/ResetPassword/NewPassword';
 
 const FullRoutes = () => {
     return (
@@ -83,6 +86,9 @@ const RoutesWithLocation = () => {
                 <Route path='/edit-delivery-address' element={<EditUserAddress />} />
                 <Route path='/select-delivery-address' element={<SelectUserAddress />} />
                 <Route path='/orders-tracking' element={<OrdersTracking />} />
+                <Route path='/forget-password' element={<EnterNumber />} />
+                <Route path='/reset-otp' element={<ResetOtp/>}/>
+                <Route path='/new-password' element={<NewPassword/>}/>
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />

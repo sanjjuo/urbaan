@@ -39,6 +39,10 @@ export function Otp() {
   // verify otp
   const verifyOtp = async () => {
     const otpValue = otp.join("");
+    if (otpValue.length !== 6) {
+      toast.error("Please enter the complete OTP.");
+      return;
+    }
     try {
       const otpPayload = {
         phone: phone,
