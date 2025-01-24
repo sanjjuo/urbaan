@@ -9,7 +9,7 @@ import axios from 'axios';
 import AppLoader from '../../../Loader';
 
 const UserCarousel = () => {
-  const { setSelectedCategory, BASE_URL } = useContext(AppContext);
+  const { BASE_URL } = useContext(AppContext);
   const [carousel, setCarousel] = useState([])
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,9 +27,6 @@ const UserCarousel = () => {
     fetchCarousel()
   }, [])
 
-  const handleCarouselCategory = (cat) => {
-    setSelectedCategory(cat)
-  }
 
   const settings = {
     dots: true,
@@ -80,7 +77,15 @@ const UserCarousel = () => {
                       {slider.label}
                     </motion.p>
 
-                    <Link onClick={() => handleCarouselCategory(slider.category)} to='/all-category'>
+                    <Link to={{
+                      pathname: "/all-category",
+                    }}
+                      state={{
+                        category: {
+                          id: slider?.category,
+                          name: slider?.title, // Pass the title or name if available
+                        },
+                      }}>
                       <motion.button
                         initial={{ scale: 0, opacity: 0 }}
                         whileInView={{ scale: 1, opacity: 1 }}

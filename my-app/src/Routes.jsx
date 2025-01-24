@@ -42,6 +42,8 @@ import OrderPlaced from './User/Components/Order.jsx/OrderPlaced';
 import EnterNumber from './User/Components/ResetPassword/EnterNumber';
 import { ResetOtp } from './User/Components/ResetPassword/ResetOtp';
 import NewPassword from './User/Components/ResetPassword/NewPassword';
+import PrivacyPolicy from './User/Components/Footer/PrivacyPolicy';
+import TermsConditions from './User/Components/Footer/Terms&Conditions';
 
 const FullRoutes = () => {
     return (
@@ -87,8 +89,10 @@ const RoutesWithLocation = () => {
                 <Route path='/select-delivery-address' element={<SelectUserAddress />} />
                 <Route path='/orders-tracking' element={<OrdersTracking />} />
                 <Route path='/forget-password' element={<EnterNumber />} />
-                <Route path='/reset-otp' element={<ResetOtp/>}/>
-                <Route path='/new-password' element={<NewPassword/>}/>
+                <Route path='/reset-otp' element={<ResetOtp />} />
+                <Route path='/new-password' element={<NewPassword />} />
+                <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+                <Route path='/terms-conditions' element={<TermsConditions />} />
 
                 {/* Routes of admin section */}
                 <Route path='/admin-login' element={<LoginSignUp />} />

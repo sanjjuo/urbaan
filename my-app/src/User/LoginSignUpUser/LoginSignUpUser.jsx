@@ -67,6 +67,11 @@ export function LoginSignUpUser() {
                 toast.success("Login Success");
             }
 
+            //handle coupon
+            if (loginSignUpUser === "signUp" && response.data.coupon) {
+                localStorage.setItem("userCoupon", response.data.coupon);
+            }
+
             // Handle sign-up response
             if (!isLogin) {
                 navigate('/otp', { state: { phone: loginFormData.phone } });
@@ -169,25 +174,41 @@ export function LoginSignUpUser() {
                                 )}
                             </div>
                         </div>
-                        {loginSignUpUser !== "login" && (
-                            <div className="flex items-center">
-                                <Checkbox
-                                    color='pink'
-                                    checked={isWalkIn}
-                                    onChange={handleCheckboxChange}
-                                    className="h-4 w-4 rounded-sm"
-                                />
-                                <Typography className="font-custom text-sm text-secondary">
-                                    Are you a walk-in customer?
+                        {loginSignUpUser !== "signUp" && (
+                            <Link to='/forget-password'>
+                                <Typography className="font-custom text-sm text-primary font-medium text-right">
+                                    Forgot Password?
                                 </Typography>
-                            </div>
+                            </Link>
                         )}
-                        <Link to='/forget-password'>
-                            <Typography className="font-custom text-sm text-primary font-medium text-right">
-                                Forgot Password?
-                            </Typography>
-                        </Link>
                     </div>
+                    {loginSignUpUser !== "login" && (
+                        <div className="flex items-center">
+                            <Checkbox
+                                color='pink'
+                                checked={isWalkIn}
+                                onChange={handleCheckboxChange}
+                                className="h-4 w-4 rounded-sm"
+                            />
+                            <Typography className="font-custom text-sm text-secondary">
+                                Are you a walk-in customer?
+                            </Typography>
+                        </div>
+                    )}
+                    {loginSignUpUser !== "login" && (
+                        <div className="flex items-center">
+                            <Checkbox
+                                color='pink'
+                                // checked={isWalkIn}
+                                // onChange={handleCheckboxChange}
+                                className="h-4 w-4 rounded-sm"
+                            />
+                            <Typography className="font-custom text-sm text-secondary">
+                                I accept the <Link to='/terms-conditions' className='underline text-buttonBg'>Terms and
+                                    conditions</Link> and <Link to='/privacy-policy' className='underline text-buttonBg'>Privacy policy</Link>
+                            </Typography>
+                        </div>
+                    )}
                     <Button
                         type="submit"
                         className="mt-6 bg-primary font-custom text-sm font-normal capitalize hover:bg-secondary"
@@ -232,7 +253,7 @@ export function LoginSignUpUser() {
                             Or continue with
                         </Typography>
                         <Link
-                           to={`${BASE_URL}/user/auth/google`}
+                            to={`${BASE_URL}/user/auth/google`}
                             className="bg-loginIconBg text-primary hover:bg-gray-300 text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
                             <RiGoogleFill />
                         </Link>

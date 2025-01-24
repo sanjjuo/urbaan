@@ -1,9 +1,9 @@
 import React from 'react'
-import { GrLocation } from "react-icons/gr";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FiPhone } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { GrLocation } from "react-icons/gr";
 
 const Footer = () => {
   return (
@@ -40,20 +40,20 @@ const Footer = () => {
             <ul className='mt-5 space-y-5'>
               <li>
                 <Link className='flex items-center gap-2 font-light text-xs xl:text-sm lg:text-sm md:text-sm hover:text-primary'>
-                  <FiPhone className='text-sm xl:text-lg lg:text-lg md:text-lg' />
-                  +91 1234567890
+                  <GrLocation className='text-xl xl:text-4xl lg:text-4xl md:text-lg' />
+                  3rd Floor, Oberon Mall, Edappally,Ernakulam, Kerala - 682024
                 </Link>
               </li>
               <li>
                 <Link className='flex items-center gap-2 font-light text-xs xl:text-sm lg:text-sm md:text-sm hover:text-primary'>
-                  <FaWhatsapp className='text-sm xl:text-lg lg:text-lg md:text-lg' />
-                  Whatsapp
+                  <FiPhone className='text-sm xl:text-lg lg:text-lg md:text-lg' />
+                  +91 9847820705
                 </Link>
               </li>
               <li>
                 <Link className='flex items-center gap-2 font-light text-xs xl:text-sm lg:text-sm md:text-sm hover:text-primary'>
                   <FaRegEnvelope className='text-sm xl:text-lg lg:text-lg md:text-lg' />
-                  support@gmail.com
+                  chimsuc@gmail.com
                 </Link>
               </li>
             </ul>
@@ -65,10 +65,12 @@ const Footer = () => {
         <div className='space-y-10'>
           <ul className='flex flex-col lg:flex-row xl:flex-row lg:items-center xl:items-center justify-center
             xl:gap-20 lg:gap-20 gap-5 mt-20'>
-            <li className='text-xs xl:text-sm lg:text-sm md:text-sm font-light cursor-pointer'>Privacy Policy</li>
-            <li className='text-xs xl:text-sm lg:text-sm md:text-sm font-light cursor-pointer'>Terms of Use</li>
-            <li className='text-xs xl:text-sm lg:text-sm md:text-sm font-light cursor-pointer'>Refunds</li>
-            <li className='text-xs xl:text-sm lg:text-sm md:text-sm font-light cursor-pointer'>Legal</li>
+            <li className='text-xs xl:text-sm lg:text-sm md:text-sm font-light cursor-pointer'>
+              <Link to='/privacy-policy'>Privacy Policy</Link>
+            </li>
+            <li className='text-xs xl:text-sm lg:text-sm md:text-sm font-light cursor-pointer'>
+              <Link to='/terms-conditions'>Terms & Conditions</Link>
+            </li>
           </ul>
 
           {/* copyright */}
