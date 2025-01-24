@@ -74,7 +74,7 @@ const Footer = () => {
           </ul>
 
           {/* copyright */}
-          <p className='text-xs xl:text-sm lg:text-sm md:text-sm font-light text-center cursor-pointer'>Copyright &copy; {new Date().getFullYear()} • Lift Media Inc.</p>
+          <p className='text-xs xl:text-sm lg:text-sm md:text-sm font-light text-center cursor-pointer'>Copyright &copy; {new Date().getFullYear()} • URBAAN COLLECTIONS.</p>
         </div>
       </div>
     </>
