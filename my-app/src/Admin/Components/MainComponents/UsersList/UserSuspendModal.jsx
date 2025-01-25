@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
-export function UserSuspendModal({ open, handleOpen }) {
+export function UserSuspendModal({ open, handleOpen, userId, handleSuspend, setIsSuspend }) {
     return (
         <>
             <Dialog open={open} handler={handleOpen} size='sm' className='rounded-none'>
@@ -18,7 +18,7 @@ export function UserSuspendModal({ open, handleOpen }) {
                         Do you want to suspend this ?
                     </Typography>
                     <Typography className='font-custom text-base text-gray-500 font-light text-center'>
-                    You can reactivate it later
+                        You can reactivate it later
                     </Typography>
                     <div className='flex items-center space-x-2'>
                         <Button
@@ -27,8 +27,13 @@ export function UserSuspendModal({ open, handleOpen }) {
                         >
                             <span>Close</span>
                         </Button>
-                        <Button className='bg-processingBg text-white font-custom capitalize text-sm tracking-wider font-normal w-36'
-                            onClick={handleOpen}>
+                        <Button
+                            className='bg-processingBg text-white font-custom capitalize text-sm tracking-wider font-normal w-36'
+                            onClick={async () => {
+                                await handleSuspend(userId);
+                                setIsSuspend(false); // State update after API call
+                            }}
+                        >
                             <span>Suspend</span>
                         </Button>
                     </div>

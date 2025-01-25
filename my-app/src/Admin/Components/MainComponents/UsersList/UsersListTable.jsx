@@ -7,6 +7,7 @@ import AppLoader from '../../../../Loader';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { DeleteModal } from '../../DeleteModal/DeleteModal';
+import { RiHeart3Fill } from 'react-icons/ri';
 
 const TABLE_HEAD = ["user name", "mobile", "email", "address", "city", "state", "pincode", "Action"];
 
@@ -16,6 +17,9 @@ const UsersListTable = ({ userList, setUserList }) => {
     const [selectedUserId, setSelectedUserId] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+
+    console.log(userList);
+
 
     const token = localStorage.getItem('token')
 
@@ -56,6 +60,11 @@ const UsersListTable = ({ userList, setUserList }) => {
 
     // handle delete user
     const handleDeleteUser = async (UserId) => {
+        if (!UserId) {
+            console.error("UserId is undefined. Cannot delete user.");
+            toast.error("User ID is missing.");
+            // return;
+        }
         try {
             const response = await axios.delete(`${BASE_URL}/admin/users/delete/${UserId}`, {
                 headers: {
@@ -65,11 +74,13 @@ const UsersListTable = ({ userList, setUserList }) => {
             console.log(response.data);
             setUserList((prevUserList) => prevUserList.filter(user => user.id !== UserId));
             handleOpen();
+            setSelectedUserId(null);
             toast.success("User is deleted")
         } catch (error) {
             console.log(error);
         }
     }
+
 
     return (
         <>
@@ -87,7 +98,7 @@ const UsersListTable = ({ userList, setUserList }) => {
                                         <th
                                             key={index}
                                             className="border-b border-gray-300 px-4 py-3 text-center text-sm font-semibold text-secondary uppercase w-[150px]"
-                                            // style={{ minWidth: "120px" }} // Adjust minWidth to ensure uniformity
+                                        // style={{ minWidth: "120px" }} // Adjust minWidth to ensure uniformity
                                         >
                                             {head}
                                         </th>
@@ -97,18 +108,22 @@ const UsersListTable = ({ userList, setUserList }) => {
                             <tbody>
                                 {currentUserList.map((user, index) => {
                                     const isLast = index === currentUserList.length - 1;
-                                    const classes = `${isLast ? "p-4" : "p-4 border-b border-gray-300"} text-center w-[150px] truncate`;
+                                    const classes = `${isLast ? "p-4 relative" : "p-4 border-b border-gray-300 relative"} text-center w-[150px] truncate`;
                                     const firstAddress = user.addresses?.[0] || {}; // Safely access the first address
-
                                     return (
-                                        <tr key={user.id}>
+                                        <tr key={user._id}>
                                             <td className={classes}>
                                                 <Typography
                                                     variant="small"
-                                                    className="font-normal capitalize font-custom text-sm"
+                                                    className="font-normal flex items-center gap-1 capitalize font-custom text-sm"
                                                 >
                                                     {user.name}
+                                                    {user.isFavorite === true && user.status === true ? <RiHeart3Fill className='text-primary' /> : null}
                                                 </Typography>
+                                                {user.status === false && (
+                                                    <p className='text-xs tracking-wider text-primary font-bold absolute inset-0 flex
+                                                         justify-center items-end'>*suspended</p>
+                                                )}
                                             </td>
                                             <td className={classes}>
                                                 <Typography
@@ -174,15 +189,19 @@ const UsersListTable = ({ userList, setUserList }) => {
                                                         >
                                                             <MenuItem className="font-custom text-buttonBg hover:!text-buttonBg">View</MenuItem>
                                                         </Link>
-                                                        <MenuItem className="font-custom text-processingBg hover:!text-processingBg">
+                                                        {/* <MenuItem className="font-custom text-processingBg hover:!text-processingBg">
                                                             Suspend
-                                                        </MenuItem>
-                                                        <MenuItem onClick={() => {
-                                                            handleOpen("deleteModal");
-                                                            setSelectedUserId(user.id)
-                                                        }} className="text-deleteBg font-custom">
+                                                        </MenuItem> */}
+                                                        <MenuItem
+                                                            onClick={() => {
+                                                                setSelectedUserId(user._id || user.id); // Set the selected user's ID
+                                                                handleOpen("deleteModal"); // Open the modal
+                                                            }}
+                                                            className="text-deleteBg font-custom"
+                                                        >
                                                             Delete
                                                         </MenuItem>
+
                                                     </MenuList>
                                                 </Menu>
                                             </td>

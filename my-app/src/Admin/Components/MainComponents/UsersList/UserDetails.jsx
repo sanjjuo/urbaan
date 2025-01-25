@@ -1,7 +1,7 @@
 import React from 'react'
 
-const UserDetails = ({ userDetails }) => {
-    const primaryAddress = userDetails.addresses?.[0] || {};
+const UserDetails = ({ user }) => {
+    const primaryAddress = user.addresses?.[0] || {};
     return (
         <>
             <div className='bg-white rounded-xl shadow-md sticky top-5 transition-all duration-300 ease-in-out'>
@@ -16,7 +16,7 @@ const UserDetails = ({ userDetails }) => {
                             <label htmlFor="" className='font-normal text-base'>User Name</label>
                             <input
                                 type="text"
-                                value={userDetails.name}
+                                value={user.name}
                                 name="name"
                                 id=""
                                 placeholder=''
@@ -31,7 +31,7 @@ const UserDetails = ({ userDetails }) => {
                             <input
                                 type="text"
                                 name="name"
-                                value={userDetails.phone}
+                                value={user.phone}
                                 id=""
                                 placeholder=''
                                 className='order-[1px] text-gray-600  

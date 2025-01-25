@@ -200,7 +200,7 @@ const OrderTable = ({ orderList, setOrderList }) => {
                         </td>
                         <td className={classes}>
                           <Typography variant="small" className="font-normal font-custom text-sm capitalize">
-                            {order.userId.name || ""}
+                            {order.userId?.name || ""}
                           </Typography>
                         </td>
                         <td className={classes}>

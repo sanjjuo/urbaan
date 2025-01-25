@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 
-export function UserReactivateModal({ open, handleOpen }) {
+export function UserReactivateModal({ open, handleOpen, userId, handleActivate, setIsActive }) {
 
     return (
         <>
@@ -16,10 +16,10 @@ export function UserReactivateModal({ open, handleOpen }) {
                         <img src="/checkmark.png" alt="" className='w-full h-full object-cover' />
                     </div>
                     <Typography className='font-custom text-2xl text-secondary font-semibold'>
-                    Do you want to reactivate this ?
+                        Do you want to reactivate this ?
                     </Typography>
                     <Typography className='font-custom text-base text-gray-500 font-light text-center'>
-                    All permissions will be restored
+                        All permissions will be restored
                     </Typography>
                     <div className='flex items-center space-x-2'>
                         <Button
@@ -28,8 +28,13 @@ export function UserReactivateModal({ open, handleOpen }) {
                         >
                             <span>Close</span>
                         </Button>
-                        <Button className='bg-shippedBg text-white font-custom capitalize text-sm tracking-wider font-normal w-36'
-                            onClick={handleOpen}>
+                       <Button
+                            className='bg-shippedBg text-white font-custom capitalize text-sm tracking-wider font-normal w-36'
+                            onClick={async () => {
+                                await handleActivate(userId);
+                                setIsActive(true); // State update after API call
+                            }}
+                        >
                             <span>Reactivate</span>
                         </Button>
                     </div>

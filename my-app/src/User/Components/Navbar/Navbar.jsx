@@ -141,6 +141,25 @@ const UserNavbar = () => {
         fetchWishlistProducts();
     }, []);
 
+    // useEffect(() => {
+    //     // Extract query parameters from the URL
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const token = urlParams.get('Token');
+    //     const role = urlParams.get('role');
+    //     const userId = urlParams.get('userId');
+    //     const name = urlParams.get('name');
+
+    //     // Store these details in local storage if they exist
+    //     if (token && role && userId && name) {
+    //         localStorage.setItem('userDetails', JSON.stringify({
+    //             token,
+    //             role,
+    //             userId,
+    //             name,
+    //         }));
+    //     }
+    // }, []);
+
 
     // pages where navbar don't visible
     const noNavbar = ["/customer-reviews", "/write-review", "/add-delivery-address", "/edit-delivery-address", "/select-delivery-address",

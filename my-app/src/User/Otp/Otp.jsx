@@ -59,7 +59,7 @@ export function Otp() {
         localStorage.setItem("userToken", response.data.token);
         localStorage.setItem('userId', response.data.user.userId || '');
         toast.success("Account created successfully");
-        navigate('/');
+        // navigate('/');
       }
     } catch (error) {
       console.log(error);

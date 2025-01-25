@@ -32,9 +32,11 @@ export function DeleteModal({ open, handleOpen, title, description, handleDelete
                             onClick={() => {
                                 if (modalType === "categories") {
                                     handleDelete(catId);
-                                } else if (modalType === "subcategories") {
+                                } 
+                                else if (modalType === "subcategories") {
                                     handleDelete(SubCatId);
-                                } else if (modalType === "carousel") {
+                                } 
+                                else if (modalType === "carousel") {
                                     handleDelete(carouselId);
                                 }
                                 else if (modalType === "coupon") {
@@ -49,7 +51,6 @@ export function DeleteModal({ open, handleOpen, title, description, handleDelete
                                 else if (modalType === "user") {
                                     handleDelete(UserId);
                                 }
-
 
                             }}
                         >

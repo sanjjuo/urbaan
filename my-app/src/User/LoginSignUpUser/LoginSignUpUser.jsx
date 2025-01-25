@@ -252,12 +252,14 @@ export function LoginSignUpUser() {
                         <Typography className="font-custom font-medium text-secondary text-sm">
                             Or continue with
                         </Typography>
-                        <Link
-                            to={`${BASE_URL}/user/auth/google`}
-                            className="bg-loginIconBg text-primary hover:bg-gray-300 text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer">
+                        <a
+                            href={`${BASE_URL}/user/auth/google`}
+                            className="bg-loginIconBg text-primary hover:bg-gray-300 text-xl w-12 h-10 p-1 rounded-md flex justify-center items-center cursor-pointer"
+                        >
                             <RiGoogleFill />
-                        </Link>
+                        </a>
                     </div>
+
                 </form>
             </Card>
         </div>
