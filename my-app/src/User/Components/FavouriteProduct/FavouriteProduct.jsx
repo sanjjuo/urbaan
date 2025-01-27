@@ -14,7 +14,6 @@ const FavouriteProduct = () => {
     const { BASE_URL, setFav } = useContext(AppContext);
     const [wishlist, setWishlist] = useState([])
     const [isLoading, setIsLoading] = useState(true);
-    const wishlistProducts = wishlist?.items || [];
 
     const userId = localStorage.getItem('userId');
 
@@ -24,7 +23,7 @@ const FavouriteProduct = () => {
             try {
                 if (userId) {
                     const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
-                    setWishlist(response.data || {});
+                    setWishlist(response.data?.items);
                 }
             } catch (error) {
                 console.error('Error fetching wishlist:', error);
@@ -92,7 +91,7 @@ const FavouriteProduct = () => {
                 <div className='col-span-2 flex justify-center items-center h-[50vh]'>
                     <AppLoader />
                 </div>
-            ) : wishlistProducts.length === 0 ? (
+            ) : wishlist.length === 0 ? (
                 <div className='flex flex-col justify-center items-center !mt-0 mb-20'>
                     <div className='w-64 h-64 xl:w-72 xl:h-72 lg:w-72 lg:h-72'>
                         <img src="/favourite.png" alt="Empty Wishlist" className='w-full h-full object-cover' />
@@ -111,7 +110,7 @@ const FavouriteProduct = () => {
                 </div>
             ) : (
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 lg:grid-cols-5 gap-x-5 gap-y-10 !mt-16'>
-                    {wishlistProducts.map((product) => (
+                    {wishlist.map((product) => (
                         product.productId ? (
                             <div key={product._id} className='relative'>
                                 <RiDeleteBin5Line

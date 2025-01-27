@@ -19,7 +19,6 @@ const UserCarousel = () => {
         const response = await axios.get(`${BASE_URL}/user/slider/view-sliders`)
         setCarousel(response.data)
         setIsLoading(false)
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }

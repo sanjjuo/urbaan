@@ -58,8 +58,9 @@ export function Otp() {
       if (response.data.token && response.data.user.userId) {
         localStorage.setItem("userToken", response.data.token);
         localStorage.setItem('userId', response.data.user.userId || '');
+        localStorage.setItem('userCoupon', response.data.coupon);
         toast.success("Account created successfully");
-        // navigate('/');
+        navigate('/');
       }
     } catch (error) {
       console.log(error);

@@ -134,7 +134,7 @@ const CustomerReviews = () => {
                                     </ul>
                                     <div className="flex items-center gap-3">
                                         <p className="text-gray-600 font-bold text-xs capitalize">
-                                            {review.userId.name}
+                                            {review.userId?.name}
                                         </p>
                                         <p className="text-gray-600 font-normal text-xs capitalize">
                                             {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}

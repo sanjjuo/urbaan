@@ -141,24 +141,38 @@ const UserNavbar = () => {
         fetchWishlistProducts();
     }, []);
 
-    // useEffect(() => {
-    //     // Extract query parameters from the URL
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const token = urlParams.get('Token');
-    //     const role = urlParams.get('role');
-    //     const userId = urlParams.get('userId');
-    //     const name = urlParams.get('name');
 
-    //     // Store these details in local storage if they exist
-    //     if (token && role && userId && name) {
-    //         localStorage.setItem('userDetails', JSON.stringify({
-    //             token,
-    //             role,
-    //             userId,
-    //             name,
-    //         }));
-    //     }
-    // }, []);
+    useEffect(() => {
+        // Extract query parameters from the URL
+        const urlParams = new URLSearchParams(location.search);
+        const token = urlParams.get('Token');
+        const role = urlParams.get('role');
+        const userId = urlParams.get('userId');
+        const name = urlParams.get('name');
+
+        // Add more detailed console logging
+        console.log('URL Params:', {
+            token,
+            role,
+            userId,
+            name,
+            fullSearch: location.search
+        });
+
+        // Store these details in local storage if they exist
+        if (token && role && userId && name) {
+            localStorage.setItem('userDetails', JSON.stringify({
+                token,
+                role,
+                userId,
+                name,
+            }));
+            console.log('User details stored in localStorage');
+        } else {
+            console.log('Missing some parameters, not storing');
+        }
+    }, [location.search]);
+
 
 
     // pages where navbar don't visible
@@ -176,7 +190,7 @@ const UserNavbar = () => {
             <div className='hidden sticky top-0 w-full z-50 xl:block lg:block bg-white shadow-lg'>
                 <Navbar className="mx-auto max-w-screen-xl py-6 px-0 shadow-none rounded-none">
                     <div className="flex items-center justify-between text-blue-gray-900">
-                        <div className="w-28">
+                        <div className="!w-28">
                             <Link to='/'>
                                 <img src="/logo.png" alt="" className='w-full object-contain' />
                             </Link>

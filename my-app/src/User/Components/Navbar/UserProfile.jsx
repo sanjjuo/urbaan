@@ -5,6 +5,7 @@ import {
     MenuItem,
     Avatar,
     Typography,
+    Chip,
 } from "@material-tailwind/react";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { IoMdSettings } from "react-icons/io";
@@ -22,6 +23,8 @@ export function UserProfile() {
         toast.success("Logout successfully")
     }
 
+    const userCoupon = localStorage.getItem('userCoupon')
+
     return (
         <Menu>
             <MenuHandler>
@@ -36,8 +39,9 @@ export function UserProfile() {
                 <Link to='/user-profile' className='outline-none'>
                     <MenuItem className="flex items-center gap-2 text-xl hover:!text-primary">
                         <HiMiniUserCircle />
-                        <Typography variant="small" className="font-medium font-custom">
+                        <Typography variant="small" className="font-medium font-custom flex items-center gap-2">
                             My Profile
+                            {userCoupon && (<div className='w-3 h-3 bg-primary rounded-full'></div>)}
                         </Typography>
                     </MenuItem>
                 </Link>
