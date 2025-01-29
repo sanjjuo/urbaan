@@ -107,6 +107,43 @@ const UserNavbar = () => {
 
     const token = localStorage.getItem("userToken")
     const userId = localStorage.getItem('userId');
+    const googleToken = localStorage.getItem('googleToken')
+
+
+    //extract details from url for google sign up
+    useEffect(() => {
+        // Extract query parameters from the URL
+        const urlParams = new URLSearchParams(location.search);
+        const googleToken = urlParams.get('googleToken');
+        const googleRole = urlParams.get('googleRole');
+        const googleUserId = urlParams.get('googleUserId');
+        const googleName = urlParams.get('googleName');
+
+        // Add more detailed console logging
+        console.log('URL Params:', {
+            googleToken,
+            googleRole,
+            googleUserId,
+            googleName,
+            fullSearch: location.search
+        });
+
+        // Store these details in local storage if they exist
+        if (googleToken) localStorage.setItem('googleToken', googleToken);
+        if (googleRole) localStorage.setItem('googleRole', googleRole);
+        if (googleUserId) localStorage.setItem('googleUserId', googleUserId);
+        if (googleName) localStorage.setItem('googleName', googleName);
+
+        // Confirm what was stored
+        console.log('Stored in localStorage:', {
+            googleToken: localStorage.getItem('googleToken'),
+            googleRole: localStorage.getItem('googleRole'),
+            googleUserId: localStorage.getItem('googleUserId'),
+            googleName: localStorage.getItem('googleName'),
+        });
+    }, [location.search]);
+
+
 
     // fetching cart items and fav items for identifying the length initially
     useEffect(() => {
@@ -141,40 +178,6 @@ const UserNavbar = () => {
         fetchWishlistProducts();
     }, []);
 
-
-    useEffect(() => {
-        // Extract query parameters from the URL
-        const urlParams = new URLSearchParams(location.search);
-        const token = urlParams.get('Token');
-        const role = urlParams.get('role');
-        const userId = urlParams.get('userId');
-        const name = urlParams.get('name');
-
-        // Add more detailed console logging
-        console.log('URL Params:', {
-            token,
-            role,
-            userId,
-            name,
-            fullSearch: location.search
-        });
-
-        // Store these details in local storage if they exist
-        if (token && role && userId && name) {
-            localStorage.setItem('userDetails', JSON.stringify({
-                token,
-                role,
-                userId,
-                name,
-            }));
-            console.log('User details stored in localStorage');
-        } else {
-            console.log('Missing some parameters, not storing');
-        }
-    }, [location.search]);
-
-
-
     // pages where navbar don't visible
     const noNavbar = ["/customer-reviews", "/write-review", "/add-delivery-address", "/edit-delivery-address", "/select-delivery-address",
         "/select-tracking", "/order", '/forget-password', '/reset-otp', '/new-password', '/terms-conditions', '/privacy-policy']
@@ -204,7 +207,7 @@ const UserNavbar = () => {
                                     <RiSearch2Line onClick={handleOpenSearchDrawer} className='text-secondary text-3xl cursor-pointer hover:text-primary' />
                                 </li>
                                 <li>
-                                    {token ? (
+                                    {token || googleToken ? (
                                         <UserProfile />
                                     ) : (
                                         <Link to='/login-user'><Button className='bg-primary font-custom font-normal

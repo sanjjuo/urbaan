@@ -15,7 +15,9 @@ const UserLogout = ({ setUserDash }) => {
 
     const handleLogout = () => {
         localStorage.removeItem("userToken");
-        localStorage.removeItem('userId')
+        localStorage.removeItem('userId');
+        localStorage.removeItem('googleToken');
+        localStorage.removeItem('googleUserId');
         navigate("/login-user")
         toast.success("Logout successfully")
     }

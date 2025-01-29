@@ -136,7 +136,7 @@ const UsersListTable = ({ userList, setUserList }) => {
                                             <td className={classes}>
                                                 <Typography
                                                     variant="small"
-                                                    className="font-normal capitalize font-custom text-sm"
+                                                    className="font-normal font-custom text-sm"
                                                 >
                                                     {user.email || "N/A"}
                                                 </Typography>
