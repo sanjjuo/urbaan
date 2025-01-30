@@ -114,35 +114,34 @@ const UserNavbar = () => {
     useEffect(() => {
         // Extract query parameters from the URL
         const urlParams = new URLSearchParams(location.search);
-        const googleToken = urlParams.get('googleToken');
-        const googleRole = urlParams.get('googleRole');
-        const googleUserId = urlParams.get('googleUserId');
-        const googleName = urlParams.get('googleName');
+        const googleToken = urlParams.get("Token");
+        const googleRole = urlParams.get("role");
+        const googleUserId = urlParams.get("userId");
+        const googleName = urlParams.get("name");
 
-        // Add more detailed console logging
-        console.log('URL Params:', {
+        // Debugging: Log extracted values
+        console.log("URL Params:", {
             googleToken,
             googleRole,
             googleUserId,
             googleName,
-            fullSearch: location.search
+            fullSearch: location.search,
         });
 
         // Store these details in local storage if they exist
-        if (googleToken) localStorage.setItem('googleToken', googleToken);
-        if (googleRole) localStorage.setItem('googleRole', googleRole);
-        if (googleUserId) localStorage.setItem('googleUserId', googleUserId);
-        if (googleName) localStorage.setItem('googleName', googleName);
+        if (googleToken) localStorage.setItem("googleToken", googleToken);
+        if (googleRole) localStorage.setItem("googleRole", googleRole);
+        if (googleUserId) localStorage.setItem("googleUserId", googleUserId);
+        if (googleName) localStorage.setItem("googleName", googleName);
 
         // Confirm what was stored
-        console.log('Stored in localStorage:', {
-            googleToken: localStorage.getItem('googleToken'),
-            googleRole: localStorage.getItem('googleRole'),
-            googleUserId: localStorage.getItem('googleUserId'),
-            googleName: localStorage.getItem('googleName'),
+        console.log("Stored in localStorage:", {
+            googleToken: localStorage.getItem("googleToken"),
+            googleRole: localStorage.getItem("googleRole"),
+            googleUserId: localStorage.getItem("googleUserId"),
+            googleName: localStorage.getItem("googleName"),
         });
     }, [location.search]);
-
 
 
     // fetching cart items and fav items for identifying the length initially
