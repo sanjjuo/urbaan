@@ -17,7 +17,6 @@ const UserProfile = () => {
   const [userDash, setUserDash] = useState('dashboard')
 
   const token = localStorage.getItem('userToken');
-  const googleToken = localStorage.getItem('googleToken')
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -42,7 +41,7 @@ const UserProfile = () => {
   return (
     <>
       <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto hide-scrollbar">
-        {!token && !googleToken ? (
+        {!token ? (
           <>
             <div className='flex justify-center items-center h-[50vh]'>
               <div className='flex flex-col justify-center items-center space-y-1'>

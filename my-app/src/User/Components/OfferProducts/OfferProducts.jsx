@@ -33,15 +33,14 @@ const OfferProducts = () => {
     const handleWishlist = async (productId, productTitle) => {
         try {
             const userId = localStorage.getItem('userId');
-            const googleUserId = localStorage.getItem('googleUserId');
 
-            if (!userId || !googleUserId) {
+            if (!userId) {
                 setOpenUserNotLogin(true);
                 return;
             }
 
             const payload = {
-                userId: userId || googleUserId,
+                userId: userId,
                 productId: productId
             };
 

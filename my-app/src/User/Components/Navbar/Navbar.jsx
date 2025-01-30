@@ -107,8 +107,6 @@ const UserNavbar = () => {
 
     const token = localStorage.getItem("userToken")
     const userId = localStorage.getItem('userId');
-    const googleToken = localStorage.getItem('googleToken')
-
 
     //extract details from url for google sign up
     useEffect(() => {
@@ -129,17 +127,17 @@ const UserNavbar = () => {
         });
 
         // Store these details in local storage if they exist
-        if (googleToken) localStorage.setItem("googleToken", googleToken);
-        if (googleRole) localStorage.setItem("googleRole", googleRole);
-        if (googleUserId) localStorage.setItem("googleUserId", googleUserId);
-        if (googleName) localStorage.setItem("googleName", googleName);
+        if (googleToken) localStorage.setItem("userToken", googleToken);
+        if (googleRole) localStorage.setItem("role", googleRole);
+        if (googleUserId) localStorage.setItem("userId", googleUserId);
+        if (googleName) localStorage.setItem("name", googleName);
 
         // Confirm what was stored
         console.log("Stored in localStorage:", {
-            googleToken: localStorage.getItem("googleToken"),
-            googleRole: localStorage.getItem("googleRole"),
-            googleUserId: localStorage.getItem("googleUserId"),
-            googleName: localStorage.getItem("googleName"),
+            googleToken: localStorage.getItem("userToken"),
+            googleRole: localStorage.getItem("role"),
+            googleUserId: localStorage.getItem("userId"),
+            googleName: localStorage.getItem("name"),
         });
     }, [location.search]);
 
@@ -206,7 +204,7 @@ const UserNavbar = () => {
                                     <RiSearch2Line onClick={handleOpenSearchDrawer} className='text-secondary text-3xl cursor-pointer hover:text-primary' />
                                 </li>
                                 <li>
-                                    {token || googleToken ? (
+                                    {token ? (
                                         <UserProfile />
                                     ) : (
                                         <Link to='/login-user'><Button className='bg-primary font-custom font-normal

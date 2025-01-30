@@ -6,8 +6,8 @@ import { VscSignOut } from 'react-icons/vsc'
 
 const UserDash = ({ profile, setUserDash }) => {
     const userCoupon = localStorage.getItem('userCoupon')
-    const googleName = localStorage.getItem('googleName')
-    const googleToken = localStorage.getItem('googleToken')
+    const googleName = localStorage.getItem('name')
+    const token = localStorage.getItem('userToken')
 
     return (
         <>
@@ -40,7 +40,7 @@ const UserDash = ({ profile, setUserDash }) => {
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center space-y-5 mt-10'>
-                {googleToken && (<><p className='underline text-primary'>Create coupon code</p></>)}
+                {token && (<><p className='underline text-primary'>Create coupon code</p></>)}
                 <h1>Your coupon code:</h1>
                 <p className='text-3xl xl:text-4xl lg:text-4xl tracking-widest font-thin text-primary'>{userCoupon}</p>
             </div>
