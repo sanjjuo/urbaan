@@ -17,10 +17,11 @@ const UserProfile = () => {
   const [userDash, setUserDash] = useState('dashboard')
 
   const token = localStorage.getItem('userToken');
+  const googleToken = localStorage.getItem('googleToken')
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!token) {
+      if (!token || !googleToken) {
         return;
       }
       try {
@@ -41,7 +42,7 @@ const UserProfile = () => {
   return (
     <>
       <div className="p-4 xl:py-16 xl:px-32 lg:py-16 lg:px-32 bg-userBg h-[calc(100vh-4rem)] pb-20 overflow-y-auto hide-scrollbar">
-        {!token ? (
+        {!token && !googleToken ? (
           <>
             <div className='flex justify-center items-center h-[50vh]'>
               <div className='flex flex-col justify-center items-center space-y-1'>
@@ -72,11 +73,11 @@ const UserProfile = () => {
                 </ul>
               </div>
               <div className='col-span-2 h-[calc(100vh-4rem)] pb-0 xl:pb-20 lg:pb-20 overflow-y-auto hide-scrollbar'>
-                {userDash === 'dashboard' && <UserDash profile={profile} setUserDash={setUserDash}/>}
+                {userDash === 'dashboard' && <UserDash profile={profile} setUserDash={setUserDash} />}
                 {userDash === 'orders' && <UserOrders />}
                 {userDash === 'address' && <UserAddress />}
                 {userDash === 'wishlist' && <UserWishlist />}
-                {userDash === 'logout' && <UserLogout setUserDash={setUserDash}/>}
+                {userDash === 'logout' && <UserLogout setUserDash={setUserDash} />}
               </div>
             </div>
           </>

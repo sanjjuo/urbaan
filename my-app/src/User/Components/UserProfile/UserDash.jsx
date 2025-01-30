@@ -6,9 +6,12 @@ import { VscSignOut } from 'react-icons/vsc'
 
 const UserDash = ({ profile, setUserDash }) => {
     const userCoupon = localStorage.getItem('userCoupon')
+    const googleName = localStorage.getItem('googleName')
+    const googleToken = localStorage.getItem('googleToken')
+
     return (
         <>
-            <h1 className='font-semibold text-2xl capitalize'>Hello {profile?.name || 'User'} !</h1>
+            <h1 className='font-semibold text-2xl capitalize'>Hello {profile?.name || googleName} !</h1>
             <p className='mt-3 text-gray-700 text-sm '>
                 Welcome to your account dashboard! Easily manage your orders, addresses, and wishlist all in one place.
                 Track your purchases, update delivery details, and save your favorite items for later. We're here to help
@@ -37,6 +40,7 @@ const UserDash = ({ profile, setUserDash }) => {
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center space-y-5 mt-10'>
+                {googleToken && (<><p className='underline text-primary'>Create coupon code</p></>)}
                 <h1>Your coupon code:</h1>
                 <p className='text-3xl xl:text-4xl lg:text-4xl tracking-widest font-thin text-primary'>{userCoupon}</p>
             </div>

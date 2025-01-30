@@ -35,7 +35,7 @@ const ProductDetails = () => {
 
 
     console.log("categry", categoryId);
-    
+
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -123,6 +123,8 @@ const ProductDetails = () => {
 
     const userId = localStorage.getItem('userId')
     const userToken = localStorage.getItem('userToken');
+    const googleToken = localStorage.getItem('googleToken');
+    const googleUserId = localStorage.getItem('googleUserId');
 
     const addToCart = async () => {
         try {
@@ -131,7 +133,7 @@ const ProductDetails = () => {
                 return;
             }
 
-            if (!userId && !userToken) {
+            if ((!userId && !googleUserId) || (!userToken && !googleToken)) {
                 setModalTitle('You are not logged in');
                 setModalDescription('To add items to your cart and complete your purchase, please log in or create an account.');
                 setOpenUserNotLogin(true);
@@ -140,7 +142,7 @@ const ProductDetails = () => {
 
 
             const payload = {
-                userId: userId,
+                userId: userId || googleUserId,
                 productId: productDetails._id,
                 quantity: 1, // Default quantity
                 color: selectedColor,
@@ -152,7 +154,7 @@ const ProductDetails = () => {
 
             const response = await axios.post(`${BASE_URL}/user/cart/add`, payload, {
                 headers: {
-                    Authorization: `Bearer ${userToken}`,
+                    Authorization: `Bearer ${userToken || googleToken}`,
                 },
             });
 
@@ -207,7 +209,7 @@ const ProductDetails = () => {
 
     const handleWishlist = async (productId, productTitle) => {
         try {
-            const payload = { userId: userId, productId: productId };
+            const payload = { userId: userId || googleUserId, productId: productId };
 
             const isInWishlist = favProduct?.items?.some(item => item.productId._id === productId);
 
@@ -402,7 +404,7 @@ const ProductDetails = () => {
                                             Customer Reviews ({totalReviews})
                                         </h4>
                                         <p className='text-gray-600 flex justify-center items-center py-5 text-sm'>No reviews for this product</p>
-                                        <Link to={!userToken && !userId ? '/login-user' : '/write-review'}
+                                        <Link to={(!userToken && !userId) || (!googleToken && !googleUserId) ? '/login-user' : '/write-review'}
                                             state={{ productId }}
                                             className='flex items-center justify-center cursor-pointer'>
                                             <Button className='bg-primary font-normal capitalize font-custom py-2 px-4'>Add Review</Button>

@@ -31,16 +31,18 @@ const LatestProducts = () => {
   const handleWishlist = async (productId, productTitle) => {
     try {
       const userId = localStorage.getItem('userId');
+      const googleUserId = localStorage.getItem('googleUserId');
 
-      if (!userId) {
+      if (!userId || !googleUserId) {
         setOpenUserNotLogin(true);
         return;
       }
 
       const payload = {
-        userId: userId,
+        userId: userId || googleUserId,
         productId: productId
       };
+
 
       // Check if product is already in wishlist
       const isInWishlist = favProduct?.items?.some(item => item.productId?._id === productId);
@@ -107,7 +109,7 @@ const LatestProducts = () => {
                     state={{
                       productId: product._id,
                       categoryId: product.category._id
-                  }}
+                    }}
                     className="cursor-pointer"
                   >
                     <div className='w-full h-52 xl:h-80 lg:h-80 rounded-xl overflow-hidden'>

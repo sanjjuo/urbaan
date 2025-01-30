@@ -37,8 +37,9 @@ const FeaturedProducts = () => {
     const handleWishlist = async (productId, productTitle) => {
         try {
             const userId = localStorage.getItem('userId');
+            const googleUserId = localStorage.getItem('googleUserId');
 
-            if (!userId) {
+            if (!userId || !googleUserId) {
                 setOpenUserNotLogin(true);
                 return;
             }
@@ -53,7 +54,7 @@ const FeaturedProducts = () => {
             }
 
             const payload = {
-                userId: userId,
+                userId: userId || googleUserId,
                 productId: productId
             };
 
