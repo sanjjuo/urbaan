@@ -67,11 +67,6 @@ export function LoginSignUpUser() {
                 toast.success("Login Success");
             }
 
-            //handle coupon
-            if (loginSignUpUser === "signUp" && response.data.coupon) {
-                localStorage.setItem("userCoupon", response.data.coupon);
-            }
-
             // Handle sign-up response
             if (!isLogin) {
                 navigate('/otp', { state: { phone: loginFormData.phone } });

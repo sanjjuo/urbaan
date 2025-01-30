@@ -167,9 +167,19 @@ const UserNavbar = () => {
             if (!userId) return;
             try {
                 const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
-                setFav(response.data.items || []);
+                if (response.status === 200 && response.data.items) {
+                    setFav(response.data.items);
+                } else {
+                    console.warn("Wishlist is empty. Setting an empty array.");
+                    setFav([]); // Ensure fav list is not undefined
+                }
             } catch (error) {
-                console.error('Error fetching wishlist:', error);
+                if (error.response?.status === 404 && error.response.data?.message === "Wishlist not found") {
+                    console.warn("Wishlist not found, setting an empty array.");
+                    setFav([]); // Handle empty wishlist without an error
+                } else {
+                    console.error("Error fetching wishlist:", error);
+                }
             }
         };
         fetchWishlistProducts();
@@ -243,7 +253,7 @@ const UserNavbar = () => {
                 </ul>
             </div>
 
-            <BottomBar cartView={cartView} favView={favView} setCart={setCart} setFav={setFav} token={token} userId={userId} />
+            <BottomBar cartView={cartView} favView={favView} setCart={setCart} setFav={setFav} />
             <MobileSidebar
                 openDrawer={openDrawer}
                 handleCloseDrawer={handleCloseDrawer}

@@ -13,7 +13,7 @@ const UserHome = () => {
             <div className='bg-userBg p-4 xl:p-16 lg:p-16 space-y-8 xl:space-y-14 lg:space-y-14'>
                 <UserCarousel />
                 <ShopByCategory />
-                <OfferProducts/>
+                <OfferProducts />
                 <LatestProducts />
                 <FeaturedProducts />
             </div>

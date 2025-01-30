@@ -11,7 +11,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../../StoreContext/StoreContext';
 import axios from 'axios';
 
-const BottomBar = ({ cartView, favView, setCart, setFav, token, userId }) => {
+const BottomBar = ({ cartView, favView, setCart, setFav }) => {
     const { BASE_URL } = useContext(AppContext)
     const location = useLocation();
     const [iconActive, setIconActive] = useState(() => {
@@ -31,6 +31,8 @@ const BottomBar = ({ cartView, favView, setCart, setFav, token, userId }) => {
         if (path === '/user-profile') setIconActive("profile");
     }, [location]);
 
+    const token = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
 
     //  fetching cart items for identifying the length initially
     useEffect(() => {
@@ -53,12 +55,25 @@ const BottomBar = ({ cartView, favView, setCart, setFav, token, userId }) => {
 
     useEffect(() => {
         const fetchWishlistProducts = async () => {
-            if (!userId) return;
+            if (!userId) {
+                console.warn("User ID is missing");
+                return;
+            }
             try {
                 const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
-                setFav(response.data.items || []);
+                if (response.status === 200 && response.data.items) {
+                    setFav(response.data.items);
+                } else {
+                    console.warn("Wishlist is empty. Setting an empty array.");
+                    setFav([]); // Ensure fav list is not undefined
+                }
             } catch (error) {
-                console.error('Error fetching wishlist:', error);
+                if (error.response?.status === 404 && error.response.data?.message === "Wishlist not found") {
+                    console.warn("Wishlist not found, setting an empty array.");
+                    setFav([]); // Handle empty wishlist without an error
+                } else {
+                    console.error("Error fetching wishlist:", error);
+                }
             }
         };
         fetchWishlistProducts();

@@ -3,11 +3,51 @@ import { GrMapLocation } from 'react-icons/gr'
 import { AiOutlineFileText } from "react-icons/ai";
 import { RiHeart3Line } from 'react-icons/ri'
 import { VscSignOut } from 'react-icons/vsc'
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useContext } from 'react';
+import { AppContext } from '../../../StoreContext/StoreContext';
+import { useState } from 'react';
 
 const UserDash = ({ profile, setUserDash }) => {
-    const userCoupon = localStorage.getItem('userCoupon')
+    const { BASE_URL } = useContext(AppContext)
+    const [userCoupon, setUserCoupon] = useState('')
     const googleName = localStorage.getItem('name')
     const token = localStorage.getItem('userToken')
+    const userId = localStorage.getItem('userId')
+
+    useEffect(() => {
+        const displayCoupon = async () => {
+            try {
+                console.log(`${BASE_URL}/walkin/coupon/view/${userId}`);
+
+                const response = await axios.get(`${BASE_URL}/walkin/coupon/view/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                setUserCoupon(response.data?.coupon?.code)
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        displayCoupon()
+    }, [])
+
+
+    const createWalkinCoupon = async () => {
+        try {
+            const response = await axios.post(`${BASE_URL}/walkin/coupon/create/${userId}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -40,9 +80,17 @@ const UserDash = ({ profile, setUserDash }) => {
                 </div>
             </div>
             <div className='flex flex-col justify-center items-center space-y-5 mt-10'>
-                {token && (<><p className='underline text-primary'>Create coupon code</p></>)}
-                <h1>Your coupon code:</h1>
-                <p className='text-3xl xl:text-4xl lg:text-4xl tracking-widest font-thin text-primary'>{userCoupon}</p>
+                {userCoupon ? (
+                    <>
+                        <h1>Your coupon code:</h1>
+                        <p className='text-3xl xl:text-4xl lg:text-4xl tracking-widest font-thin text-primary'>{userCoupon}</p>
+                    </>
+                ) : (
+                    <>
+                        <p onClick={createWalkinCoupon} className='underline cursor-pointer text-primary'>Create walkin coupon</p>
+                        <p>No Walkin Coupon Available</p>
+                    </>
+                )}
             </div>
         </>
     )

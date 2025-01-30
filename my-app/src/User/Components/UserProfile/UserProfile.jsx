@@ -20,7 +20,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!token || !googleToken) {
+      if (!token) {
         return;
       }
       try {

@@ -48,14 +48,25 @@ const StoreContext = ({ children }) => {
 
     // fetch favourite for enabling the heart icon filled
     const userId = localStorage.getItem('userId');
+
     useEffect(() => {
         const fetchWishlistProducts = async () => {
             if (!userId) return;
             try {
                 const response = await axios.get(`${BASE_URL}/user/wishlist/view/${userId}`);
-                setFavproduct(response.data || []);
+                if (response.data && response.data.items) {
+                    setFavproduct(response?.data || []);
+                } else {
+                    console.warn("Wishlist is empty. Setting an empty array.");
+                    setFavproduct([]); // Ensure fav list is not undefined
+                }
             } catch (error) {
-                console.error('Error fetching wishlist:', error);
+                if (error.response?.status === 404 && error.response.data?.message === "Wishlist not found") {
+                    console.warn("Wishlist not found, setting an empty array.");
+                    setFavproduct([]); // Handle empty wishlist without an error
+                } else {
+                    console.error("Error fetching wishlist:", error);
+                }
             }
         };
 
