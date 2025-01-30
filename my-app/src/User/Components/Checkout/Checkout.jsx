@@ -346,12 +346,12 @@ const Checkout = () => {
                                             />
                                             <Radio
                                                 name="type"
-                                                label="Credit Card"
+                                                label="Razorpay"
                                                 color='pink'
-                                                checked={paymentMethod === 'Credit Card'}
-                                                onChange={() => setPaymentMethod('Credit Card')} // Explicitly setting the value
+                                                checked={paymentMethod === 'Razorpay'}
+                                                onChange={() => setPaymentMethod('Razorpay')} // Explicitly setting the value
                                             />
-
+{/* 
                                             <Radio
                                                 name="type"
                                                 label="UPI"
@@ -366,7 +366,7 @@ const Checkout = () => {
                                                 color='pink'
                                                 checked={paymentMethod === 'Net Banking'}
                                                 onChange={() => setPaymentMethod('Net Banking')} // Explicitly setting the value
-                                            />
+                                            /> */}
 
 
                                         </div>
