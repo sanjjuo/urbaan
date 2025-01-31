@@ -7,6 +7,7 @@ import namer from 'color-namer'; // Import the color-namer library
 import { AppContext } from '../../../StoreContext/StoreContext'
 import AppLoader from '../../../Loader'
 import { UserNotLoginPopup } from '../UserNotLogin/UserNotLoginPopup'
+import toast from 'react-hot-toast'
 
 const Checkout = () => {
     const navigate = useNavigate()
@@ -50,6 +51,8 @@ const Checkout = () => {
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching checkout details:', error);
+            } finally{
+                setIsLoading(false)
             }
         };
         fetchCheckoutDetails();
@@ -88,6 +91,49 @@ const Checkout = () => {
         return subtotal + deliveryFee;
     };
 
+    // handle razorpay
+    const handleRazorpayPayment = (orderResponse) => {
+        const options = {
+            key: "rzp_test_eYaMViHa2ySMIW",
+            amount: orderResponse.amount,
+            currency: orderResponse.currency,
+            name: "URBAAN COLLECTIONS",
+            description: "Welcome to URBAAN COLLECTIONS, a fashion and lifestyle e-commerce platform located at 3rd Floor, Oberon Mall, Edappally, Ernakulam, Kerala - 682024. By accessing or using our website and/or purchasing from us, you agree to abide by the following Terms and Conditions.",
+            image: "/logo.png",
+            order_id: orderResponse.razorpayOrderId,
+            handler: async function (response) {
+                toast.success("Payment Successful!");
+                console.log("Razorpay Response:", response);
+
+                // Call backend API to update payment status
+                try {
+                    await axios.post(`${BASE_URL}/webhook/razorpay`, {
+                        orderId: orderResponse.razorpayOrderId,
+                        paymentId: response.razorpay_payment_id,
+                        signature: response.razorpay_signature,
+                    });
+
+                    toast.success("Order confirmed!");
+                } catch (error) {
+                    console.error("Payment update failed:", error);
+                    alert("Payment success, but order update failed.");
+                }
+            },
+            prefill: {
+                name: checkoutDetails?.addressId?.name, // Replace with actual user data
+                email: checkoutDetails?.addressId?.name,
+                contact: checkoutDetails?.addressId?.number,
+            },
+            theme: {
+                color: "#C21E56",
+            },
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+    };
+
+
     // handleSubmitOrder
     const handleSubmitOrder = async () => {
         try {
@@ -107,10 +153,11 @@ const Checkout = () => {
                 }
             })
             console.log(response.data);
-            if (response.status === 200 || response.status === 201) {
-                navigate('/order');
+            if (orderPayload.paymentMethod === 'UPI' && response.data.razorpayOrderId) {
+                handleRazorpayPayment(response)
             } else {
-                alert("Failed to place the order. Please try again.");
+                // alert(response.message);
+                navigate('/order')
             }
         } catch (error) {
             console.error("Order submission error:", error);
@@ -132,7 +179,7 @@ const Checkout = () => {
                         <div className="col-span-2 flex justify-center items-center h-[50vh]">
                             <AppLoader />
                         </div>
-                    ) : checkoutDetails === '' ? (
+                    ) : checkoutDetails === 0 ? (
                         <div className="flex flex-col items-center justify-center h-[50vh] text-center">
                             <Typography variant="h6" className="text-gray-700 font-semibold">
                                 No orders available.
@@ -346,29 +393,11 @@ const Checkout = () => {
                                             />
                                             <Radio
                                                 name="type"
-                                                label="Razorpay"
-                                                color='pink'
-                                                checked={paymentMethod === 'Razorpay'}
-                                                onChange={() => setPaymentMethod('Razorpay')} // Explicitly setting the value
-                                            />
-{/* 
-                                            <Radio
-                                                name="type"
-                                                label="UPI"
+                                                label=" UPI"
                                                 color='pink'
                                                 checked={paymentMethod === 'UPI'}
                                                 onChange={() => setPaymentMethod('UPI')} // Explicitly setting the value
                                             />
-
-                                            <Radio
-                                                name="type"
-                                                label="Net Banking"
-                                                color='pink'
-                                                checked={paymentMethod === 'Net Banking'}
-                                                onChange={() => setPaymentMethod('Net Banking')} // Explicitly setting the value
-                                            /> */}
-
-
                                         </div>
                                     </div>
                                     {/* <Link to='/order'> */}
